@@ -1,6 +1,6 @@
 let data;let market='mx';let page='overview';let period='event';let channel='all';
 const $=s=>document.querySelector(s),sum=(a,k)=>a.reduce((v,r)=>v+(r[k]??0),0),fmt=(n,d=0)=>n==null?'—':n.toLocaleString('zh-CN',{minimumFractionDigits:d,maximumFractionDigits:d}),pct=(n,d=2)=>n==null?'—':fmt(n*100,d)+'%';
-const names={analysis:['经营分析','比较转化、广告、销售和库存，明确下一步动作。'],calendar:['年度促销与节日','查看官方活动期、节日日历和待确认窗口。'],competitors:['竞品观察','按品类和渠道核对价格、配置与本地服务。'],overview:['经营总览','查看销售、流量与库存。'],products:['SKU 表现','按产品查看销量、转化与广告投入。'],inventory:['库存监控','区分可用库存与已分配库存，跟踪销售节奏。'],tasks:['运营任务','跟踪计划、进度与复盘结果。'],targets:['阶段目标','查看经营目标和实际进展。'],data:['数据管理','查看已导入报表、统计期间与缺失字段。'],access:['访问设置','管理编辑和查看权限。']};
+const names={analysis:['经营分析','比较转化、广告、销售和库存，明确下一步动作。'],calendar:['促销日历','查看重要活动、节日和准备时间。'],competitors:['竞品观察','按品类和渠道核对价格、配置与本地服务。'],overview:['经营总览','查看销售、流量与库存。'],products:['SKU 表现','按产品查看销量、转化与广告投入。'],inventory:['库存监控','区分可用库存与已分配库存，跟踪销售节奏。'],tasks:['运营任务','跟踪计划、进度与复盘结果。'],targets:['阶段目标','查看经营目标和实际进展。'],data:['数据管理','查看已导入报表、统计期间与缺失字段。'],access:['访问设置','管理编辑和查看权限。']};
 const categories={M600:'除螨仪',Y100:'布艺清洗机',D600:'洗地机',V500:'无线吸尘器',D800:'洗地机'};
 const stock=sku=>data.inventory.find(r=>r.sku===sku);
 function salesRows(){return data.sales.filter(r=>(channel==='all'||r.channel===channel)&&(period==='sep'?r.date.startsWith('2026-09'):period==='oct'?r.date.startsWith('2026-10'):true));}
