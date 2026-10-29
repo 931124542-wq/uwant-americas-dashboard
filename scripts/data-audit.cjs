@@ -11,7 +11,7 @@ const H=ctx.window.REVIEW_HISTORY,D=ctx.window.REVIEW_DATA,F=ctx.window.FOCUS_BR
 const records=[],checks=[],summary={asOf:'2026-10-29',commit:cp.execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim()};
 function check(name,ok,details){checks.push({name,status:ok?'PASS':'FAIL',details});}
 function issue(id,r,reason,extra={}){records.push({issue:id,country:r.country,asin:r.asin||r.product_id||'',month:r.month||'',category:r.category||'',parentAsin:r.parentAsin||'',parentBasis:r.parentBasis||'',...extra,reason});}
-function csv(file,rows){if(!rows.length){fs.writeFileSync(path.join(out,file),'');return;}const fields=[...new Set(rows.flatMap(Object.keys))],q=v=>'"'+String(v??'').replaceAll('"','""')+'"';fs.writeFileSync(path.join(out,file),'\uFEFF'+[fields,...rows.map(r=>fields.map(k=>typeof r[k]==='object'?JSON.stringify(r[k]):r[k]))].map(a=>a.map(q).join(',')).join('\r\n'));}
+function csv(file,rows){if(!rows.length){fs.writeFileSync(path.join(out,file),'');return;}const fields=[...new Set(rows.flatMap(Object.keys))],q=v=>'"'+String(v??'').replaceAll('"','""')+'"';fs.writeFileSync(path.join(out,file),'\uFEFF'+[fields,...rows.map(r=>fields.map(k=>typeof r[k]==='object'?JSON.stringify(r[k]):r[k]))].map(a=>a.map(q).join(',')).join('\n'));}
 const key=r=>[r.country,r.asin,r.month].join('|'),currencies={US:'USD',CA:'CAD',MX:'MXN',BR:'BRL'},seen=new Set;
 for(const r of H.rows){
  if(seen.has(key(r)))issue('RAW-DUPLICATE',r,'国家/ASIN/月重复');seen.add(key(r));
