@@ -36,9 +36,10 @@ function biContext(){
 }
 
 function biCanMetric(c,key){return key==='count'||c.listing&&c.prices.length===c.rows.length&&(key==='units'?c.units!==null:c.revenue!==null);}
+const biPriceSteps={us:100,ca:100,mx:1000,br:100};
 function biBins(c,metric=biMetric){
- const step=market==='us'?100:1000,max=Math.max(0,...c.prices.map(r=>r.price)),ranges=Array.from({length:Math.floor(max/step)+2},(_,i)=>i*step);
- return ranges.slice(0,-1).map((lo,i)=>({label:Number.isFinite(ranges[i+1])?`${biNum(lo)}–<${biNum(ranges[i+1])}`:`≥${biNum(lo)}`,value:c.prices.filter(r=>r.price>=lo&&r.price<ranges[i+1]).reduce((n,r)=>n+(metric==='count'?1:r[metric]||0),0)}));
+ const step=biPriceSteps[market],max=Math.max(0,...c.prices.map(r=>r.price)),ranges=Array.from({length:Math.floor(max/step)+2},(_,i)=>i*step);
+ return ranges.slice(0,-1).map((lo,i)=>({label:`${lo}–${ranges[i+1]-1}`,value:c.prices.filter(r=>r.price>=lo&&r.price<ranges[i+1]).reduce((n,r)=>n+(metric==='count'?1:r[metric]||0),0)}));
 }
 function biBrandValues(c,metric='count'){const input=metric==='units'?c.unitRows:metric==='revenue'?c.revenueRows:c.rows;return [...input.reduce((m,r)=>m.set(r.brand,(m.get(r.brand)||0)+(metric==='count'?1:r[metric]||0)),new Map())].map(([label,value])=>({label,value})).sort((a,b)=>b.value-a.value);}
 function biPrevious(c){if(!c.chosen||c.chosen.first.origin!=='import')return null;const now=c.chosen.first;return biDatasets().filter(g=>g.first.origin==='import'&&g.first.snapshot<now.snapshot&&['country','platform','category','dataset','rank_scope','method'].every(k=>g.first[k]===now[k])).sort((a,b)=>b.first.snapshot.localeCompare(a.first.snapshot))[0]||null;}

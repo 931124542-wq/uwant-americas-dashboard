@@ -21,7 +21,7 @@ function operationPage(){
  const frame=$('operations-frame');
  if(!frame.dataset.started){
   frame.dataset.started='true';
-  if(typeof window.REVIEW_OPERATIONS_HTML==='string')frame.srcdoc=window.REVIEW_OPERATIONS_HTML;else frame.src='operations/index.html?v=20261029-monthly&country='+state.country.toLowerCase()+'#'+state.page;frameRoute=state.page;
+  if(typeof window.REVIEW_OPERATIONS_HTML==='string')frame.srcdoc=window.REVIEW_OPERATIONS_HTML;else frame.src='operations/index.html?v=20261029-price-bands&country='+state.country.toLowerCase()+'#'+state.page;frameRoute=state.page;
   operationsTimer=setTimeout(()=>{if(!operationsReady){$('operations-status').textContent='加载尚未完成，请重试。';$('operations-retry').hidden=false;}},15000);
  }else if(operationsReady){frame.contentWindow.postMessage(operationPayload(),location.origin==='null'?'*':location.origin);frameRoute=state.page;}
  return true;

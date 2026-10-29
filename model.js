@@ -1,8 +1,9 @@
 (function(root){
  const countries={MX:{name:'墨西哥',currency:'MXN',domain:'amazon.com.mx'},CA:{name:'加拿大',currency:'CAD',domain:'amazon.ca'},US:{name:'美国',currency:'USD',domain:'amazon.com'},BR:{name:'巴西',currency:'BRL',domain:'amazon.com.br'}};
  const defaults={page:'brands',country:'MX',platform:'amazon',category:'vacuum',dataset:'archive',q:'',brand:'',band:'',tier:'all',mode:'all',own:'V500',sort:'sales',offset:'0',picked:[],detail:''};
- const priceStep=country=>country==='US'?100:1000;
- const bandLabel=(index,country)=>{const step=priceStep(country),lo=Number(index)*step;return `${country==='US'?lo:String(lo).padStart(3,'0')}–${lo+step-1}`;};
+ const priceSteps={US:100,CA:100,MX:1000,BR:100};
+ const priceStep=country=>priceSteps[country]||100;
+ const bandLabel=(index,country)=>{const step=priceStep(country),lo=Number(index)*step;return `${lo}–${lo+step-1}`;};
  const isHistory=dataset=>/^2026-(0[1-9]|1[0-2])$/.test(dataset);
  function reject(r){const t=r.title||'';return /robot(?:ic)?|robo[tô]|shop.?vac|wet.?dry|commercial|industrial|canister|gallon|ProHeat|carpet cleaner|limpiadora.*alfombra|accessor(?:y|ies)|replacement filter/i.test(t);}
  function normalize(data,s){
