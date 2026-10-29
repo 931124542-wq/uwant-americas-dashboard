@@ -1,0 +1,4 @@
+US: step 100; 0–99 / 100–199 / 200–299; boundary and null checks passed
+CA: step 100; 0–99 / 100–199 / 200–299; boundary and null checks passed
+MX: step 1000; 0–999 / 1000–1999 / 2000–2999; boundary and null checks passed
+BR: step 100; 0–99 / 100–199 / 200–299; boundary and null checks passed

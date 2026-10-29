@@ -1,16 +1,17 @@
 {
-  "version": "2026-10-29-workspace",
+  "version": "2026-10-29-data-audit",
   "dataAsOf": "2026-10-28",
-  "baseCommit": "cd4fb24ec9d29a1e0bf7b2e557d95c81f132a579",
+  "baseCommit": "4a4cb86bd6ffd3adf77b9592a25bdf2c3cff6386",
   "products": 466,
   "observedMonthlyRows": 3518,
   "features": [
-    "market-workspace",
-    "currency-price-distribution",
-    "shared-confirmed-parent-metrics",
-    "research-view-deep-links",
-    "responsive-workspace",
-    "operations-diagnostic-queue",
-    "wide-product-comparison"
-  ]
+    "brand-research",
+    "product-comparison",
+    "2026-monthly-history",
+    "audited-metric-contracts"
+  ],
+  "auditBaseline": "4a4cb86",
+  "auditReport": "docs/data-audit-2026-10-29.md",
+  "auditCheckpoint": "ffafdce8be300ed104c5db299f249c25c2053929",
+  "operationsRevision": "9b96af9bd335"
 }

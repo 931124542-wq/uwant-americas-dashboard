@@ -1,0 +1,133 @@
+{
+  "commit": "ffafdce8be300ed104c5db299f249c25c2053929",
+  "history": {
+    "US": {
+      "vacuum": 147,
+      "wash": 48,
+      "fabric": 6,
+      "mattress": 0
+    },
+    "CA": {
+      "vacuum": 106,
+      "wash": 34,
+      "fabric": 2,
+      "mattress": 0
+    },
+    "MX": {
+      "vacuum": 97,
+      "wash": 12,
+      "fabric": 0,
+      "mattress": 0
+    },
+    "BR": {
+      "vacuum": 10,
+      "wash": 4,
+      "fabric": 0,
+      "mattress": 0
+    }
+  },
+  "issues": {
+    "PARENT-AMBIGUOUS": 1356,
+    "PARENT-MISSING": 405,
+    "BRAND-CONFLICT": 1,
+    "PARENT-VALUE-CONFLICT": 18
+  },
+  "checks": [
+    {
+      "name": "历史主键、类型、国家币种和日期",
+      "status": "PASS",
+      "details": "4660 rows"
+    },
+    {
+      "name": "双份历史JSON逐字段相同",
+      "status": "PASS",
+      "details": "history-data.js vs year-2026/history.json"
+    },
+    {
+      "name": "全部促销日历结构/日期/来源和假日基线",
+      "status": "PASS",
+      "details": []
+    },
+    {
+      "name": "库存明细可用+分配=总库存",
+      "status": "PASS",
+      "details": {
+        "rows": 5,
+        "available": 472,
+        "allocated": 6,
+        "total": 478
+      }
+    },
+    {
+      "name": "活动明细对控制合计",
+      "status": "PASS",
+      "details": {
+        "units": 4,
+        "sessions": 12684,
+        "revenue": 8221.05,
+        "spend": 445.14,
+        "adRevenue": 0
+      }
+    },
+    {
+      "name": "库存EAN13校验位",
+      "status": "PASS",
+      "details": [
+        {
+          "sku": "D600",
+          "ean": "6978934861384"
+        },
+        {
+          "sku": "D800",
+          "ean": "6978934861391"
+        },
+        {
+          "sku": "Y100",
+          "ean": "6978934861407"
+        },
+        {
+          "sku": "V500",
+          "ean": "6978934861438"
+        },
+        {
+          "sku": "M600",
+          "ean": "6978934861445"
+        }
+      ]
+    },
+    {
+      "name": "原表商品国家/SKU与报价类型范围",
+      "status": "PASS",
+      "details": []
+    },
+    {
+      "name": "全部公开报价币种/平台、无伪造销量",
+      "status": "PASS",
+      "details": {
+        "rows": 68,
+        "byCountry": {
+          "us": 0,
+          "ca": 13,
+          "mx": 17,
+          "br": 38
+        },
+        "brazilSourcesReverified": false
+      }
+    },
+    {
+      "name": "原始MCP缓存对历史字段",
+      "status": "PASS",
+      "details": {
+        "products": 466,
+        "fieldComparisons": 37280,
+        "mismatches": 0,
+        "missing": []
+      }
+    },
+    {
+      "name": "采集名单与页面商品/分类/品牌/当前父体一致",
+      "status": "PASS",
+      "details": 466
+    }
+  ]
+}

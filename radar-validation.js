@@ -19,11 +19,13 @@
    if(!/^https?:\/\/[^\s]+$/i.test(r.source))fail('来源须为有效http/https链接');
    if(r.platform==='amazon'){
     const host=new URL(r.source).hostname.toLowerCase(),suffix={us:'amazon.com',mx:'amazon.com.mx',ca:'amazon.ca',br:'amazon.com.br'}[r.country];
-    if(host!==suffix&&!host.endsWith('.'+suffix)||!/^[A-Z0-9]{10}$/.test(r.product_id))fail('Amazon商品须使用对应国家来源和10位ASIN');
+    const linked=new URL(r.source).pathname.match(/\/(?:dp|gp\/product)\/([A-Z0-9]{10})(?:\/|$)/i)?.[1];
+    if(host!==suffix&&!host.endsWith('.'+suffix)||!/^[A-Z0-9]{10}$/.test(r.product_id)||linked!==r.product_id)fail('Amazon商品须使用对应国家、对应ASIN的商品链接');
    }
    if(r.platform==='ml'){
     const suffix={mx:'mercadolibre.com.mx',br:'mercadolivre.com.br'}[r.country],host=new URL(r.source).hostname.toLowerCase();
-    if(!suffix||host!==suffix&&!host.endsWith('.'+suffix)||!/^ML[MB][A-Z]?-?\d+$/.test(r.product_id))fail('美客多商品须使用MX或BR当地链接和MLM/MLB商品ID');
+    const linked=new URL(r.source).pathname.match(/ML[MB][A-Z]?-?\d+/i)?.[0]?.replace('-','');
+    if(linked!==r.product_id.replace('-','')||!suffix||host!==suffix&&!host.endsWith('.'+suffix)||!/^ML[MB][A-Z]?-?\d+$/.test(r.product_id))fail('美客多商品须使用MX或BR当地链接和MLM/MLB商品ID');
    }
    if(!date(r.snapshot)||r.snapshot>today)fail('快照日期无效或晚于今天');
    if(r.release_date&&(!date(r.release_date)||r.release_date>r.snapshot))fail('上架日期无效');
@@ -34,6 +36,7 @@
    if(r.rating!==null&&r.rating>5)fail('评分不得超过5');
    if(r.method==='observation'&&(r.units!==null||r.revenue!==null))fail('公开观察不能填写销量或销售额；请选择实际或估算');
    if(r.units!==null||r.revenue!==null||r.period_start||r.period_end){if(!date(r.period_start)||!date(r.period_end)||r.period_start>r.period_end||r.period_end>r.snapshot)fail('须提供不晚于快照的完整统计期间');}
+   if(r.platform==='amazon'&&r.parent_id&&!/^[A-Z0-9]{10}$/.test(r.parent_id))fail('Amazon父体ID须为10位ASIN');
    if(r.sales_scope==='family'&&!r.parent_id)fail('家族销量须填写parent_id');
    const g=group(r),key=g+'|'+r.product_id;
    if(seen.has(key))fail('同一数据组的商品ID重复');seen.add(key);

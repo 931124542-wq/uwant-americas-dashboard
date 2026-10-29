@@ -1,0 +1,16 @@
+{
+  "fileName": "UWANT_CA_comparison.csv",
+  "rows": 1,
+  "records": [
+    {
+      "country": "CA",
+      "period": "2026-02",
+      "asin": "B0D8J8P1L2",
+      "parentSales": "5",
+      "parentSalesAmount": "4843.35",
+      "childSales": "",
+      "price": "999.99"
+    }
+  ],
+  "passed": true
+}

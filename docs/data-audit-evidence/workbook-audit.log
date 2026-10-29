@@ -1,0 +1,31 @@
+{
+  "readOnly": true,
+  "sheets": [
+    {
+      "name": "月度明细",
+      "csv": "2026-monthly.csv",
+      "rows": 5592,
+      "mappedColumns": 22,
+      "formulas": 0,
+      "mismatches": 0
+    },
+    {
+      "name": "收录情况",
+      "csv": "product-coverage.csv",
+      "rows": 466,
+      "mappedColumns": 9,
+      "formulas": 0,
+      "mismatches": 0
+    },
+    {
+      "name": "父体变更",
+      "csv": "parent-changes.csv",
+      "rows": 548,
+      "mappedColumns": 4,
+      "formulas": 0,
+      "mismatches": 0
+    }
+  ],
+  "errors": [],
+  "passed": true
+}

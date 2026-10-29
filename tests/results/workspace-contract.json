@@ -1,7 +1,7 @@
 {
   "passed": true,
   "scopes": 160,
-  "priceFilteredScopes": 320,
+  "priceFilteredScopes": 1030,
   "views": 9,
   "checks": [
     "市场与品牌同范围合计一致",

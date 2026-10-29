@@ -1,0 +1,45 @@
+[
+  {
+    "name": "market-mx-february",
+    "url": "#page=market&dataset=2026-02",
+    "kpis": [
+      "商品记录9768 条有返回指标 · 49 个品牌期末价格中位数 / MXN3,374.5568 / 97 条 · 70.1% 有价格"
+    ],
+    "hasInvalidNumber": false,
+    "month": "2026-02"
+  },
+  {
+    "name": "market-ca-fabric",
+    "url": "#page=market&country=CA&category=fabric&dataset=2026-02",
+    "kpis": [
+      "商品记录21 条有返回指标 · 2 个品牌期末价格中位数 / CAD999.991 / 2 条 · 50.0% 有价格"
+    ],
+    "hasInvalidNumber": false,
+    "month": "2026-02"
+  },
+  {
+    "name": "market-ca-wash",
+    "url": "#page=market&country=CA&category=wash&dataset=2026-02",
+    "kpis": [
+      "商品记录3425 条有返回指标 · 4 个品牌期末价格中位数 / CAD449.9925 / 34 条 · 73.5% 有价格已知样本销量 / 台2742 个去重销量单位 · 非完整总量已知样本销售额 / CAD10.09万2 个去重销售额单位 · 来源值"
+    ],
+    "hasInvalidNumber": false,
+    "month": "2026-02"
+  },
+  {
+    "name": "market-br-missing",
+    "url": "#page=market&country=BR&category=wash&dataset=2026-02",
+    "kpis": [
+      "商品记录41 条有返回指标 · 2 个品牌"
+    ],
+    "hasInvalidNumber": false,
+    "month": "2026-02"
+  },
+  {
+    "name": "data-management",
+    "url": "#page=market&country=CA&category=wash&dataset=2026-02&view=data",
+    "kpis": [],
+    "hasInvalidNumber": false,
+    "month": "2026-02"
+  }
+]

@@ -1,0 +1,107 @@
+{
+  "baseline": "4a4cb86",
+  "csvLineEndingsNormalized": true,
+  "passed": true,
+  "files": [
+    {
+      "file": "data.json",
+      "unchanged": true,
+      "sha256": "2cacf5b7313f71caff198e22096258fed71b018d9464062a0b2f5a1ad14ad549"
+    },
+    {
+      "file": "history-data.js",
+      "unchanged": true,
+      "sha256": "b5e89034dd0526ddd42d8250cfa2016eb6e97907902d54db75465b7baf8182e7"
+    },
+    {
+      "file": "review-data.js",
+      "unchanged": true,
+      "sha256": "456387840edff93a17143538172493297f36b71f95c114c297760f3e6e85b1ca"
+    },
+    {
+      "file": "own-data.js",
+      "unchanged": true,
+      "sha256": "a7fbfcb2dc94eb34335ffd16c564c666cdfae5153bf25525a1bee54602487555"
+    },
+    {
+      "file": "focus-brands-data.js",
+      "unchanged": true,
+      "sha256": "c51ab5cbdc9391811b659847869e6ec05453c5e5b3022d1c58df366ea3716cde"
+    },
+    {
+      "file": "focus-brands-audit.json",
+      "unchanged": true,
+      "sha256": "8d6b7f0bb453367c932db044812a61851b3288aaa9afd6a5f475d9d5ea95fd53"
+    },
+    {
+      "file": "competitor-data.js",
+      "unchanged": true,
+      "sha256": "2ea81d4157cada6e4049ff20d925ff320752bf171e7b0c6dda4eeb27afa94c68"
+    },
+    {
+      "file": "attached-matrix-data.js",
+      "unchanged": true,
+      "sha256": "ec9a6ee5eaaf9fcc282797ae740b7f27b43da4decbab090310289d78445fa2fb"
+    },
+    {
+      "file": "research-data.js",
+      "unchanged": true,
+      "sha256": "75f2ae5346dd7cb6c30ff79dc2a517ca0d1b6a0bbcef3b8c3dc4a89827d7470d"
+    },
+    {
+      "file": "brazil-data.js",
+      "unchanged": true,
+      "sha256": "7c25440106594db0d920d8550fc12531772b06ae67cfb9a3ad2eedceb2ee54a1"
+    },
+    {
+      "file": "sellersprite-live-data.js",
+      "unchanged": true,
+      "sha256": "a843317ead5523563dd06300e830c7baab7a49f2558493b24a548fcf0d768664"
+    },
+    {
+      "file": "sellersprite-products-data.js",
+      "unchanged": true,
+      "sha256": "5183274c59fc958b0cd27290598a2884014ea07833b5f4823cd282ebf9803c46"
+    },
+    {
+      "file": "year-2026/product-coverage.csv",
+      "unchanged": true,
+      "sha256": "96794aac7d68a47c9214bdffbadc2ec8661636132c930c24973e4ec269c62e83"
+    },
+    {
+      "file": "year-2026/history.json",
+      "unchanged": true,
+      "sha256": "18d5e6e272abbb0433b073788d0e9ca2b86279d2f2f10036aca0d49877af8dea"
+    },
+    {
+      "file": "year-2026/validation.json",
+      "unchanged": true,
+      "sha256": "8b48c8862ab9689d24f8d47c4487554f52111ed707a9978f17ab68b23653e020"
+    },
+    {
+      "file": "year-2026/parent-changes.csv",
+      "unchanged": true,
+      "sha256": "37d3320cd4f23e9b209913278b28ae5ebee48a39d4a90227b6eb89c605e7df57"
+    },
+    {
+      "file": "year-2026/UWANT_2026_\u4ea7\u54c1\u6708\u5ea6\u6570\u636e.xlsx",
+      "unchanged": true,
+      "sha256": "3724bb2a2295ee760300c5298e1191d88756802dbedadf9523f7e130353f3961"
+    },
+    {
+      "file": "year-2026/2026-monthly.csv",
+      "unchanged": true,
+      "sha256": "e73c2558168d40ca044fded0ee137de98bd799f45f384e33e534d0a552475a25"
+    },
+    {
+      "file": "year-2026/recent-30-days.csv",
+      "unchanged": true,
+      "sha256": "9686230c74bdc9a64d32f318a4e8b5c69eb30877bb9335bb6c3f8e9101c6e38a"
+    },
+    {
+      "file": "year-2026/model-validation.json",
+      "unchanged": true,
+      "sha256": "b4baad71eeeceb6840152ffa6ead40d7d33411a42508da72fd308acae42ad444"
+    }
+  ]
+}

@@ -4,7 +4,7 @@ const ssDomains={US:'amazon.com',CA:'amazon.ca',MX:'amazon.com.mx',BR:'amazon.co
 const ssCurrency={US:'USD',CA:'CAD',MX:'MXN',BR:'BRL'};
 const ssCountry={US:'美国',CA:'加拿大',MX:'墨西哥',BR:'巴西'};
 function ssClean(value){return String(value??'').replaceAll('&amp;','&').replaceAll('&quot;','"').replaceAll('&#39;',"'").replaceAll('&nbsp;',' ');}
-function ssTierLabel(value){return value?.startsWith('T1')?'T1 核心自集尘':value?.startsWith('T2')?'T2 同价位':value?.startsWith('T3')?'T3 白牌':value||'—';}
+function ssTierLabel(value){return value?.startsWith('T1')?'T1 核心自集尘':value?.startsWith('T2')?'T2 同价位':value?.startsWith('T3')?'T3 白牌（分组待核）':value||'—';}
 function ssRows(){const code=market.toUpperCase();let rows=(window.ssProducts||[]).filter(x=>x.market===code);if(ssTier!=='all')rows=rows.filter(x=>x.tier.startsWith(ssTier));if(ssBrand!=='all')rows=rows.filter(x=>x.brand.toLowerCase()===ssBrand);const q=ssSearch.trim().toLowerCase();if(q)rows=rows.filter(x=>`${x.brand} ${ssClean(x.title)} ${x.asin}`.toLowerCase().includes(q));const value=x=>ssSort==='revenue'?x.revenue:ssSort==='price'?x.price:ssSort==='rating'?x.rating:ssSort==='rank'?-x.rank:x.units;return [...rows].sort((a,b)=>(value(b)??-Infinity)-(value(a)??-Infinity)||a.rank-b.rank);}
 function ssMoney(value,code){return value==null?'—':`${fmt(value,0)} ${ssCurrency[code]}`;}
 function ssMetric(label,value,detail){return `<div class="ss-metric"><span>${label}</span><strong>${value}</strong><small>${detail}</small></div>`;}

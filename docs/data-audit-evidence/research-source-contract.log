@@ -1,0 +1,1 @@
+{"passed":true,"scopes":48,"archiveCrossPageScopes":3,"checks":["非历史原始父体估算/金额/价格不改写","ASIN档案不按父体删除","按父体去重后的KPI和品牌合计一致","价格带守恒","归档及精选缺历史归属不自动累加","7个历史采集名单缺口单列，不复制兄弟记录","同月已缓存Top100与市场来源20条先核重叠再复用，三国品牌/商品/价格一致"],"unresolvedHistoryRosterGaps":["US:B082VR2BX1","US:B0FKM65DLZ","US:B0G4LX2948","US:B0BLGR4ZL7","US:B0CW61BSFF","CA:B09JF3BR78","CA:B0C2P8SS2Y"]}

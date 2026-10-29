@@ -87,4 +87,85 @@
 
 ## 第二、三阶段：修复与实际验收
 
-待修复完成后记录：修改文件、各问题修复规则、影响范围、自动及浏览器实测结果、外部无法核实项。此处不预填“全部通过”。
+### 已完成修复
+
+第一阶段报告及修改前证据单独提交为 `ffafdce`，业务修复在该提交之后进行。原始数据不改写；修复的是适配、校验、汇总、导出和展示。
+
+| 问题 | 实际修改 | 验证 |
+|---|---|---|
+| A01/A04 | 共享销量单位以国家、币种、平台、数据组、期间及父体/Listing ID去重；冲突判断使用筛选前来源范围。搜索、品牌和价格带不能解除冲突；销量和销售额分别判断 | US B0H29F2FM7 搜索后原1635不再计入，原始值仍保留；同ID跨国跨月独立；零销量保留；相同值仅计一次 |
+| A02 | 价格带销量/销售额要求对应单商品字段及价格完整覆盖，否则不可绘制；禁止缺失值以`||0`进入柱状值。已知样本KPI继续保留 | 部分覆盖反例通过；4国价格边界含99.99/100/199.99/200及MX999.99/1000通过；无价格返回紧凑状态 |
+| A03/A08 | ASIN档案仅按ASIN去重，父体指标另行去重；focus保留来源原值，归档/精选缺历史归属证据时不加总。单件详情和比较表明确“父体原值，归属或数值待核”。移除近30天KPI中的9月Top3 | 48种非历史范围；原始价格/父体估算/金额逐件保留；归档有真实商品明细但合计未核时显示空，不再用原始相加制造合计 |
+| A05/A06 | URL按hostname识别，TSC→retail，已知品牌/分销域名明确映射，未知→unknown；标准与旧模板核对Amazon国家及链接ASIN；标准模板同时检查父体ID格式、ML商品链接ID | ca-28留在CAD零售样本，未知及伪装路径不被识别官方；错误国家、币种、日期、重复、链接错ASIN被拒绝，原输入保留 |
+| A10 | 总览/SKU广告和库存核心数值从明细计算；销售额对照须与同范围日表一致且覆盖完整。未记录SKU为空；转化率严格验证分子分母；历史期不显示活动结论 | MX活动8221.05收入/4台/12684访问/445.14 SP保持一致；9月Amazon总览、SKU与导出均11台；模拟字段缺失不变零；库存变化会反映到KPI |
+| A11/A13/A14 | 排名四态区分，同榜单范围才算齐全；清洗后的名次保留来源且说明不连续。明细搜索明确局部作用；来源及数据完整度可访问；纠正共享保存文案 | 月度和公开价无排名时“不适用”；多个榜单不能拼Top10；当前站明确公开、无登录权限、文件备份 |
+
+### 后续交叉核对发现并处理的问题
+
+- **A15 P1 数据版本/范围：** `sellersprite-live-data.js`仅缓存每国20条归档商品，而`review-data.js`已缓存US/CA100、MX65。先验证dataMonth相同且20条重叠ASIN的销量、收入、均价、名次全部一致，再复用外层完整缓存、采用同一家用机型排除规则和品牌档案。US/CA/MX三国逐条一致性测试通过。没有新增MCP查询，不能称为完整市场；“来源品牌聚合”仍单独展示，不随商品范围变化。
+- **A16 P1 跨页品牌别名：** MX/CA的Dreame/dreame、US的Roborock/roborock原先可能分成不同品牌；统一显示/聚合名，保留sourceBrandName/sourceBrand原字段。月度160个范围逐品牌商品数及合计一致。
+- **A17 P1 状态与缓存：** 经营统计期/渠道/选中SKU原先不进URL；新增独立`opsPeriod/opsChannel/opsSku`，不冒用研究dataset。刷新验证sep/Amazon保留。iframe原来固定缓存版本，改为生成内容哈希；浏览器完整刷新后从旧帧切到新帧，避免外层更新、内层仍旧逻辑。
+- **A18 P1 导出：** 来源榜单品牌页的全局导出原本会导出未筛选的类目品牌聚合。全局导出现在使用当前样本；独立“导出来源品牌聚合”按钮继续保留，明确不同分母和统计期。
+- **A19 P1 采集名单边界（未补采）：** 161条focus档案中7个ASIN未进入466历史名单，均有同父体的已跟踪兄弟商品。清单见`roster-gaps.csv`：US B082VR2BX1、B0FKM65DLZ、B0G4LX2948、B0BLGR4ZL7、B0CW61BSFF；CA B09JF3BR78、B0C2P8SS2Y。不是品类为零或市场不存在，不复制兄弟的历史、不扩大付费查询。
+- **A20 P1 人工分组（待确认）：** 原34条T3人工分组中包含8条Dyson、BLACK+DECKER、BISSELL、Levoit、Xiaomi、Electrolux品牌记录。没有白牌/OEM身份依据，界面改为“T3 白牌（分组待核）”，保留原分组，不自动改成T1/T2。每条ASIN见`tier-manual-review.csv`；需要业务重新确认分组含义和归属。
+- **A21 P1 交易重复候选（待确认）：** Sell Out有11个“同日/渠道/SKU重复”的候选行（源数组1起算6、21、29、31、36、37、41、50、55、67、78），没有订单ID，不能判定为重复订单并删除。`internal-duplicate-candidates.csv`保留主键与行号；原86行87台没有擅自改动。
+- 标题初筛曾将11条Roborock误匹配为robot，是审计脚本正则误报，已修正单词边界，**没有修改任何商品分类**。这不代表全部实物型号及类目经过外部证明。
+
+- **A22 P1 价格/销量异期：** 单商品导入虽有完整价格和销量，也可能是当前快照价与历史销量。价格带销量图及散点现在要求采价快照日与统计结束日一致；异期仍可分别查看原始价格和销量，但不混画关系图。新增已知输入测试，通过。
+
+### 修改文件
+
+业务：`history-metrics.js`、`model.js`、`review.js`、`market-radar-data.js`、`market-radar-ui.js`、`radar-validation.js`、`sellersprite-bi.js`、`sellersprite-products.js`、`research-deep.js`、`app.js`、`refined.js`、`analysis.js`、`operations.js`。
+构建与缓存：`scripts/build-operations.mjs`、`operations/index.html`（生成）、`index.html`（资源哈希）、`release.json`、`release-notes.md`。
+审计与测试：本报告、`docs/data-audit-evidence/`、`scripts/data-audit.cjs`、`scripts/audit-workbook.py`、`scripts/verify-data.cjs`、`tests/data-audit-contract.cjs`、`tests/operational-data-contract.cjs`、`tests/research-source-contract.cjs`、扩充后的`tests/workspace-contract.cjs`及结果文件。
+
+### 实际自动化结果
+
+`docs/data-audit-evidence/test-run.json`：8个执行组全部通过，运行本身0次网络/MCP调用。
+
+| 执行组 | 实际通过内容 |
+|---|---|
+| data-audit-contract | 修改前7通过/9失败；修改后17通过/0失败 |
+| operational-data-contract | 9项，包含9种期间/渠道组合、真实导出、空/0、单台利润、补货、旧模板来源、经营URL |
+| research-source-contract | 48范围，3国归档跨页逐件一致，7个历史名单缺口明确保留 |
+| market-monthly | 160国家/品类/月度组合；2月覆盖对validation匹配；空值、父体、导入、语法校验 |
+| price-bands | USD/CAD/BRL100一档、MXN1000一档；边界无遗漏/重叠，价格为小数时不进错误档 |
+| workspace-contract | 160范围，1030价格带筛选，9子视图；品牌名称/商品数/销量/销售额、KPI与导出一致；同币种范围保留 |
+| source-audit | 466原始缓存、37280字段、双历史文件一致、名单映射、271日历节点/93来源结构、5库存EAN、活动控制、14原表SKU页190条报价、68公开观察/配置记录的空销量与币种；10项检查通过 |
+| workbook-audit | Excel月度5592×22映射列、收录466×9列、父体变更548×4列对CSV；差异0；工作簿只读，无公式 |
+
+20份原始数据文件与基线保持相同（CSV仅换行符归一后比较），见`source-integrity.json`。**通过的是字段传递、范围与计算一致性，不是SellerSprite估算准确率、真实库存或完整经营利润的外部认证。**
+
+离线复跑：
+
+```sh
+node scripts/verify-data.cjs
+# 有授权本地原始缓存时：
+UWANT_AUDIT_CACHE=../year-2026 node scripts/verify-data.cjs
+```
+
+未设置缓存时，原始缓存对照会明确记录NOT_EXECUTED；不会自动调用MCP。需要Python3用于只读OOXML校验，可用UWANT_AUDIT_PYTHON指定解释器。
+
+### 外部核验结果与未核实清单
+
+`external-public-quotes.csv`逐条记录30个链接：25页可读取，5页无法读取（mx-4、mx-9、mx-13、mx-14、mx-17；后三条403）。界面在数据说明中保留本轮访问失败日期与原因。可读取只支持当前来源页标题/渠道核对；**30条10-13历史报价均未取得独立历史存档，不能声称全部历史到手价已核实**。TSC来源确认是零售页，具体型号后缀仍未确认。巴西38条公开候选/配置、宏观报告和93个日历来源没有在本轮全部重新外部打开；结构检查与外部真实性分开记录。
+
+MCP本次共2次、2单位，最近剩余163：MX B09YVGD2ZP当前仍是Midea标题/EUREKA品牌冲突；CA B0D8J8P1L2二月5台/4843.35 CAD/期末999.99且parentChangeHis为空。两份裁剪后的源响应已归档，未包含密钥或计费对象。没有批量重抓历史，没有把接口估算称为Amazon真实成交。
+
+父体1356条歧义、405条缺ID及18条“记录×冲突指标”证据保留。18条并非18个独立父体；其中销售额在US 2026-08 B0HG1XM6VL也有冲突，销量相同不代表金额可以相加。仍缺原始经营Excel/订单ID、平台广告及Attribution成熟归因、平台可售库存、成本税费退货、完整历史父体顺序、7个ASIN补采授权范围，以及T3分组确认。没有这些证据的指标继续标待核/待补，不输出确定市场份额、实际利润或采购指令。
+
+### 浏览器回归与截图
+
+已在真实Chrome运行本地站点：直接2月入口、CA fabric与wash、BR缺失、ML不支持、TSC零售、品牌搜索焦点、品牌详情、浏览器返回、选择商品/差异对比、真实CSV下载、经营期/渠道刷新、利润已知输入100−40−10−5−20−2=23，以及390px移动端（根页面和iframe均390px，无横向页面溢出）。UI利润输入为明确标注的会话测试情景，未作为实际业务数据保存。
+
+实际下载的CA商品对比CSV为1条B0D8J8P1L2，parentSales=5、childSales为空、price=999.99、期间2026-02，见`browser-export-validation.json`。本轮浏览器文件上传未执行；已有Chrome扩展文件URL权限限制，未改变浏览器权限。标准/旧模板解析、合并失败不覆盖原值的逻辑已通过自动测试；不将解析测试冒称为浏览器上传成功。
+
+截图见 `data-audit-screenshots/`，主要对照为：
+
+- `before-filtered-conflict.png` / `after-filtered-conflict.png`：同一US商品、同月搜索，原1635/190494不再作为可信合计。
+- `before-operations.png` / `after-operations.png`：活动原值不变，改为明细计算及可解释覆盖；`after-operations-september.png`显示9月Amazon11台。
+- `market-ca-fabric.png`：2档案/1价格，父体5保持待核；`market-ca-wash.png`：34档案/25价格、274已知父体样本。
+- `market-br-missing.png`、`market-ml-unsupported.png`：缺失不补零、平台不借用Amazon；`public-tsc-retail.png`：TSC保留279.99历史价且归零售。
+- `comparison-export.png`、`data-management.png`、`market-mobile.png`：对比、数据管理、移动端。
+
+浏览器中途一次选项值使用US而实际选项为us，属于测试输入错误，改用实际value后切换及刷新通过。曾发现同一SPA标签未完整刷新而仍运行旧资源；完整刷新并验证iframe哈希后，归档市场与品牌均为100件/61品牌。这两项没有被当作应用通过证据跳过。

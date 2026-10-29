@@ -1,0 +1,32 @@
+[
+  {
+    "page": "analysis",
+    "country": "CA",
+    "passed": true,
+    "hasInvalidNumber": false
+  },
+  {
+    "page": "inventory",
+    "country": "MX",
+    "passed": true,
+    "hasInvalidNumber": false
+  },
+  {
+    "page": "calendar",
+    "country": "MX",
+    "passed": true,
+    "hasInvalidNumber": false
+  },
+  {
+    "page": "tasks",
+    "country": "MX",
+    "passed": true,
+    "hasInvalidNumber": false
+  },
+  {
+    "page": "access",
+    "country": "MX",
+    "passed": true,
+    "hasInvalidNumber": false
+  }
+]

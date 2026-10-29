@@ -1,0 +1,48 @@
+{
+  "asOf": "2026-10-29",
+  "networkRequests": 0,
+  "sellerSpriteCalls": 0,
+  "checks": [
+    {
+      "name": "data-audit-contract",
+      "status": "PASS",
+      "exitCode": 0
+    },
+    {
+      "name": "operational-data-contract",
+      "status": "PASS",
+      "exitCode": 0
+    },
+    {
+      "name": "research-source-contract",
+      "status": "PASS",
+      "exitCode": 0
+    },
+    {
+      "name": "market-monthly",
+      "status": "PASS",
+      "exitCode": 0
+    },
+    {
+      "name": "price-bands",
+      "status": "PASS",
+      "exitCode": 0
+    },
+    {
+      "name": "workspace-contract",
+      "status": "PASS",
+      "exitCode": 0
+    },
+    {
+      "name": "source-audit",
+      "status": "PASS",
+      "exitCode": 0
+    },
+    {
+      "name": "workbook-audit",
+      "status": "PASS",
+      "exitCode": 0
+    }
+  ],
+  "passed": true
+}

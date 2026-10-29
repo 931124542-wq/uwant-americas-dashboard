@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 const source=fileURLToPath(new URL('../',import.meta.url)),out=source+'/operations';fs.mkdirSync(out,{recursive:true});
 const sourceEntry=fs.existsSync(source+'/operations/source-entry.txt')?source+'/operations/source-entry.txt':source+'/index.html';
@@ -25,9 +26,14 @@ const embeddedCountry=new URLSearchParams(location.search).get('country')||embed
 if(['mx','ca','ar','br','us'].includes(String(embeddedCountry).toLowerCase()))market=String(embeddedCountry).toLowerCase();
 const embeddedPage=embeddedInitial.get('page');
 let embeddedDesired=embeddedPages.has(location.hash.slice(1))?location.hash.slice(1):embeddedPages.has(embeddedPage)?embeddedPage:'overview';
-function embeddedScopeKey(){return JSON.stringify([biPlatform,biCategory,biDataset,biTab,biBand,biOwnSku,biSearch,biSort,biPage,biTop]);}
+function embeddedScopeKey(){return JSON.stringify([biPlatform,biCategory,biDataset,biTab,biBand,biOwnSku,biSearch,biSort,biPage,biTop,period,channel,analysisSku]);}
 function embeddedHistoryKey(){return [biHistorySlice.length,biHistorySlice[0]?.country,biHistorySlice[0]?.category,biHistorySlice[0]?.month,biHistorySlice.at(-1)?.asin].join('|');}
 function embeddedApplyScope(route){
+ if(['event','all','sep','oct'].includes(route.opsPeriod))period=route.opsPeriod;
+ if(['all','Amazon','Mercado Libre'].includes(route.opsChannel))channel=period==='event'?'all':route.opsChannel;
+ if(['all','D600','D800','Y100','V500','M600'].includes(route.opsSku))analysisSku=route.opsSku;
+ if(document.querySelector('#period'))document.querySelector('#period').value=period;
+ if(document.querySelector('#channel'))document.querySelector('#channel').value=channel;
  if(typeof route.marketQuery==='string')biSearch=route.marketQuery.slice(0,100);
  if(['rank','price','units','revenue'].includes(route.marketSort))biSort=route.marketSort;
  if(/^[0-9]+$/.test(route.marketOffset))biPage=Math.min(500,Number(route.marketOffset));
@@ -35,7 +41,7 @@ function embeddedApplyScope(route){
  if(typeof route.own==='string')biOwnSku=route.own;
  if(['overview','macro','products','brands','competitors','opportunities','coverage','changes','data'].includes(route.view))biTab=route.view;
  if(typeof route.priceBand==='string'&&/^(?:|[0-9]+)$/.test(route.priceBand))biBand=route.priceBand;
- if(route.platform&&['amazon','ml','all','bestbuy','official','retail'].includes(route.platform))biPlatform=route.platform;
+ if(route.platform&&['amazon','ml','all','bestbuy','official','retail','unknown'].includes(route.platform))biPlatform=route.platform;
  if(Object.hasOwn(biCategories,route.category))biCategory=route.category;
  if(typeof route.dataset==='string')biDataset=route.dataset;
  biHistorySlice=Array.isArray(route.historyRows)?route.historyRows:(parent.REVIEW_HISTORY?.rows||[]).filter(r=>r.country.toLowerCase()===market&&r.category===biCategory&&r.month===biDataset);
@@ -46,7 +52,7 @@ const embeddedBefore=render;render=function(){
  embeddedBefore();if(!data)return;
  const positionKey=page==='market'?page+':'+biTab:page;
  if(embeddedLast!==positionKey){if(embeddedLast)embeddedScroll.set(embeddedLast,window.scrollY);embeddedLast=positionKey;window.scrollTo(0,embeddedScroll.get(positionKey)||0);}
- if(embeddedStarted&&!embeddedControlled)embeddedSend('uwant:route',{page,country:market,...(page==='market'?{platform:biPlatform,category:biCategory,dataset:biDataset,view:biTab,priceBand:biBand,marketQuery:biSearch,marketSort:biSort,marketOffset:String(biPage),marketTop:String(biTop),...(biOwnSku?{own:biOwnSku}:{})}:{})});
+ if(embeddedStarted&&!embeddedControlled)embeddedSend('uwant:route',{page,country:market,...(page==='market'?{platform:biPlatform,category:biCategory,dataset:biDataset,view:biTab,priceBand:biBand,marketQuery:biSearch,marketSort:biSort,marketOffset:String(biPage),marketTop:String(biTop),...(biOwnSku?{own:biOwnSku}:{})}:{opsPeriod:period,opsChannel:channel,opsSku:analysisSku})});
 };
 window.addEventListener('message',event=>{
  if(event.source!==parent||event.origin!==location.origin||event.data?.type!=='uwant:navigate'||!embeddedPages.has(event.data.page))return;
@@ -59,4 +65,8 @@ document.addEventListener('click',event=>{const link=event.target.closest('a[hre
 appReady().then(()=>{page=embeddedDesired;embeddedStarted=true;render();embeddedSend('uwant:ready');});
 `;
 html=html.replace('</body>','<script>'+bridge+'</script></body>');
-fs.writeFileSync(out+'/index.html',html);console.log('Preserved original main modules in preview ('+Buffer.byteLength(html)+' bytes)');
+fs.writeFileSync(out+'/index.html',html);
+// The iframe is cached independently of the outer workbench scripts.
+const revision=createHash('sha256').update(html).digest('hex').slice(0,12),reviewFile=source+'/review.js';
+if(fs.existsSync(reviewFile)){const review=fs.readFileSync(reviewFile,'utf8');fs.writeFileSync(reviewFile,review.replace(/operations\/index\.html\?v=[^&'\"]+/g,'operations/index.html?v='+revision));}
+console.log('Preserved original main modules in preview ('+Buffer.byteLength(html)+' bytes; frame '+revision+')');

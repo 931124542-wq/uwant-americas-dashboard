@@ -1,0 +1,819 @@
+{
+  "asOf": "2026-10-29",
+  "commit": "ffafdce8be300ed104c5db299f249c25c2053929",
+  "history": {
+    "products": 466,
+    "rows": 4660,
+    "available": 3518,
+    "parentSales": 3440,
+    "ambiguous": 1356,
+    "missingParent": 405,
+    "zeroMetrics": {
+      "parentSales": 270,
+      "childSales": 0,
+      "parentSalesAmount": 260,
+      "childSalesAmount": 4,
+      "price": 1,
+      "bsr": 0,
+      "rating": 0,
+      "reviews": 0
+    },
+    "categories": {
+      "US": {
+        "vacuum": 147,
+        "wash": 48,
+        "fabric": 6,
+        "mattress": 0
+      },
+      "CA": {
+        "vacuum": 106,
+        "wash": 34,
+        "fabric": 2,
+        "mattress": 0
+      },
+      "MX": {
+        "vacuum": 97,
+        "wash": 12,
+        "fabric": 0,
+        "mattress": 0
+      },
+      "BR": {
+        "vacuum": 10,
+        "wash": 4,
+        "fabric": 0,
+        "mattress": 0
+      }
+    },
+    "february": [
+      {
+        "country": "US",
+        "category": "vacuum",
+        "catalog": 147,
+        "available": 68,
+        "prices": 67,
+        "parentSales": 68,
+        "parentRevenue": 67,
+        "confirmedUnits": 7,
+        "knownSales": 22740,
+        "knownRevenue": 2813617.6730000004
+      },
+      {
+        "country": "US",
+        "category": "wash",
+        "catalog": 48,
+        "available": 40,
+        "prices": 39,
+        "parentSales": 40,
+        "parentRevenue": 39,
+        "confirmedUnits": 4,
+        "knownSales": 1141,
+        "knownRevenue": 570701.88
+      },
+      {
+        "country": "US",
+        "category": "fabric",
+        "catalog": 6,
+        "available": 3,
+        "prices": 3,
+        "parentSales": 3,
+        "parentRevenue": 3,
+        "confirmedUnits": 0,
+        "knownSales": null,
+        "knownRevenue": null
+      },
+      {
+        "country": "US",
+        "category": "mattress",
+        "catalog": 0,
+        "available": 0,
+        "prices": 0,
+        "parentSales": 0,
+        "parentRevenue": 0,
+        "confirmedUnits": 0,
+        "knownSales": null,
+        "knownRevenue": null
+      },
+      {
+        "country": "CA",
+        "category": "vacuum",
+        "catalog": 106,
+        "available": 49,
+        "prices": 49,
+        "parentSales": 49,
+        "parentRevenue": 49,
+        "confirmedUnits": 4,
+        "knownSales": 3069,
+        "knownRevenue": 414281.5800000001
+      },
+      {
+        "country": "CA",
+        "category": "wash",
+        "catalog": 34,
+        "available": 25,
+        "prices": 25,
+        "parentSales": 25,
+        "parentRevenue": 25,
+        "confirmedUnits": 2,
+        "knownSales": 274,
+        "knownRevenue": 100854.29999999999
+      },
+      {
+        "country": "CA",
+        "category": "fabric",
+        "catalog": 2,
+        "available": 1,
+        "prices": 1,
+        "parentSales": 1,
+        "parentRevenue": 1,
+        "confirmedUnits": 0,
+        "knownSales": null,
+        "knownRevenue": null
+      },
+      {
+        "country": "CA",
+        "category": "mattress",
+        "catalog": 0,
+        "available": 0,
+        "prices": 0,
+        "parentSales": 0,
+        "parentRevenue": 0,
+        "confirmedUnits": 0,
+        "knownSales": null,
+        "knownRevenue": null
+      },
+      {
+        "country": "MX",
+        "category": "vacuum",
+        "catalog": 97,
+        "available": 68,
+        "prices": 68,
+        "parentSales": 68,
+        "parentRevenue": 68,
+        "confirmedUnits": 0,
+        "knownSales": null,
+        "knownRevenue": null
+      },
+      {
+        "country": "MX",
+        "category": "wash",
+        "catalog": 12,
+        "available": 11,
+        "prices": 11,
+        "parentSales": 11,
+        "parentRevenue": 11,
+        "confirmedUnits": 1,
+        "knownSales": 64,
+        "knownRevenue": 652416
+      },
+      {
+        "country": "MX",
+        "category": "fabric",
+        "catalog": 0,
+        "available": 0,
+        "prices": 0,
+        "parentSales": 0,
+        "parentRevenue": 0,
+        "confirmedUnits": 0,
+        "knownSales": null,
+        "knownRevenue": null
+      },
+      {
+        "country": "MX",
+        "category": "mattress",
+        "catalog": 0,
+        "available": 0,
+        "prices": 0,
+        "parentSales": 0,
+        "parentRevenue": 0,
+        "confirmedUnits": 0,
+        "knownSales": null,
+        "knownRevenue": null
+      },
+      {
+        "country": "BR",
+        "category": "vacuum",
+        "catalog": 10,
+        "available": 9,
+        "prices": 0,
+        "parentSales": 0,
+        "parentRevenue": 0,
+        "confirmedUnits": 0,
+        "knownSales": null,
+        "knownRevenue": null
+      },
+      {
+        "country": "BR",
+        "category": "wash",
+        "catalog": 4,
+        "available": 1,
+        "prices": 0,
+        "parentSales": 0,
+        "parentRevenue": 0,
+        "confirmedUnits": 0,
+        "knownSales": null,
+        "knownRevenue": null
+      },
+      {
+        "country": "BR",
+        "category": "fabric",
+        "catalog": 0,
+        "available": 0,
+        "prices": 0,
+        "parentSales": 0,
+        "parentRevenue": 0,
+        "confirmedUnits": 0,
+        "knownSales": null,
+        "knownRevenue": null
+      },
+      {
+        "country": "BR",
+        "category": "mattress",
+        "catalog": 0,
+        "available": 0,
+        "prices": 0,
+        "parentSales": 0,
+        "parentRevenue": 0,
+        "confirmedUnits": 0,
+        "knownSales": null,
+        "knownRevenue": null
+      }
+    ],
+    "parentBases": {
+      "当前商品档案，历史关系未确认": 1840,
+      "同日多个父体，先后未提供；使用当前档案": 1356,
+      "未提供": 410,
+      "当前父体（该月历史关系未提供）": 792,
+      "历史父体变更记录": 262
+    }
+  },
+  "internalDuplicateCandidates": [
+    {
+      "table": "sales",
+      "row": 6,
+      "key": "[\"2026-05-26\",\"Mercado Libre\",\"Y100\"]"
+    },
+    {
+      "table": "sales",
+      "row": 21,
+      "key": "[\"2026-07-25\",\"Mercado Libre\",\"Y100\"]"
+    },
+    {
+      "table": "sales",
+      "row": 29,
+      "key": "[\"2026-08-07\",\"Amazon\",\"V500\"]"
+    },
+    {
+      "table": "sales",
+      "row": 31,
+      "key": "[\"2026-08-07\",\"Amazon\",\"D600\"]"
+    },
+    {
+      "table": "sales",
+      "row": 36,
+      "key": "[\"2026-08-15\",\"Amazon\",\"M600\"]"
+    },
+    {
+      "table": "sales",
+      "row": 37,
+      "key": "[\"2026-08-15\",\"Amazon\",\"M600\"]"
+    },
+    {
+      "table": "sales",
+      "row": 41,
+      "key": "[\"2026-08-15\",\"Mercado Libre\",\"Y100\"]"
+    },
+    {
+      "table": "sales",
+      "row": 50,
+      "key": "[\"2026-08-26\",\"Amazon\",\"M600\"]"
+    },
+    {
+      "table": "sales",
+      "row": 55,
+      "key": "[\"2026-08-28\",\"Mercado Libre\",\"Y100\"]"
+    },
+    {
+      "table": "sales",
+      "row": 67,
+      "key": "[\"2026-07-20\",\"Mercado Libre\",\"Y100\"]"
+    },
+    {
+      "table": "sales",
+      "row": 78,
+      "key": "[\"2026-09-29\",\"Amazon\",\"Y100\"]"
+    }
+  ],
+  "calendar": {
+    "rows": 271,
+    "sources": 93,
+    "countries": [
+      "ar",
+      "br",
+      "ca",
+      "mx",
+      "us"
+    ],
+    "states": {
+      "official": 124,
+      "calendar": 87,
+      "pending": 58,
+      "conflict": 2
+    },
+    "externalVerification": "not reverified in this audit"
+  },
+  "rosterGaps": [
+    {
+      "country": "US",
+      "asin": "B082VR2BX1",
+      "category": "wash",
+      "parent": "B0GDVMMC1Q",
+      "title": "Tineco iFLOOR 3 Breeze Complete Wet Dry Vacuum Cordless Floor Cleaner and Mop One-Step Cleaning for Hard Floors",
+      "trackedSiblings": "B0F3GYMWG5",
+      "status": "历史采集名单缺此ASIN，不复制兄弟商品数值"
+    },
+    {
+      "country": "US",
+      "asin": "B0FKM65DLZ",
+      "category": "vacuum",
+      "parent": "B0HMXRGSDL",
+      "title": "Tineco Pure ONE A90S Cordless Vacuum Cleaner, 270AW Powerful Suction, Up to 105min Runtime, 3DSense Master Brush, 150° Green LED Light, Stick Vacuum Cleaner for Pet Hair, Carpet &amp; Hard Floor",
+      "trackedSiblings": "B0D1CFS2FM",
+      "status": "历史采集名单缺此ASIN，不复制兄弟商品数值"
+    },
+    {
+      "country": "US",
+      "asin": "B0G4LX2948",
+      "category": "vacuum",
+      "parent": "B0HMXRGSDL",
+      "title": "Tineco Pure One A50S Cordless Stick Vacuum Cleaner, 185W Suction,1L Larger Dustbin, 3DSense Power Brush, PureCyclone Tech, Easily Tackles Large Debris",
+      "trackedSiblings": "B0D1CFS2FM",
+      "status": "历史采集名单缺此ASIN，不复制兄弟商品数值"
+    },
+    {
+      "country": "US",
+      "asin": "B0BLGR4ZL7",
+      "category": "wash",
+      "parent": "B0H262VNDX",
+      "title": "Tineco Floor ONE S7 FlashDry Smart Cordless Wet Dry Vacuum Cleaner, Long Runtime, Great for Sticky Messes, Self-Cleaning, 158℉Hot Air FlashDrying, Dual-Sided Edge Cleaning, Extended Battery Lifespan",
+      "trackedSiblings": "B0CRVTSRKH",
+      "status": "历史采集名单缺此ASIN，不复制兄弟商品数值"
+    },
+    {
+      "country": "US",
+      "asin": "B0CW61BSFF",
+      "category": "wash",
+      "parent": "B0HG9KJL3D",
+      "title": "DREAME FloorX 110 Plus Cordless Hard Floor Cleaner, Household Wet &amp; Dry Mop",
+      "trackedSiblings": "B0GXDZGMR6",
+      "status": "历史采集名单缺此ASIN，不复制兄弟商品数值"
+    },
+    {
+      "country": "CA",
+      "asin": "B09JF3BR78",
+      "category": "wash",
+      "parent": "B0HHRPB7XK",
+      "title": "Tineco Wet Dry Vacuum Cleaners, Floor One Switch i5 Stretch Breeze 2-in-1 Cordless Vacuum for Multi-Surface, 20KPa Powerful Floor Cleaner Mop with Long Runtime",
+      "trackedSiblings": "B0FL76DY5R",
+      "status": "历史采集名单缺此ASIN，不复制兄弟商品数值"
+    },
+    {
+      "country": "CA",
+      "asin": "B0C2P8SS2Y",
+      "category": "wash",
+      "parent": "B0DK4V5PPZ",
+      "title": "dreame H12 Dual Smart Wet Dry Vacuum, Floor Cleaner Mop Combo 4-in-1 Cordless Vacuum for Multi-Surface, 30 Minute Hot Air Drying, One-Step Self Cleaning",
+      "trackedSiblings": "B0CZLJKQ7D",
+      "status": "历史采集名单缺此ASIN，不复制兄弟商品数值"
+    }
+  ],
+  "focusCoverage": {
+    "queries": [
+      {
+        "country": "US",
+        "brand": "Roborock",
+        "returned": 251,
+        "status": "接口分页已结束",
+        "truncated": false,
+        "error": null
+      },
+      {
+        "country": "US",
+        "brand": "Tineco",
+        "returned": 71,
+        "status": "接口分页已结束",
+        "truncated": false,
+        "error": null
+      },
+      {
+        "country": "US",
+        "brand": "Dreame",
+        "returned": 223,
+        "status": "接口分页已结束",
+        "truncated": false,
+        "error": null
+      },
+      {
+        "country": "US",
+        "brand": "Narwal",
+        "returned": 49,
+        "status": "接口分页已结束",
+        "truncated": false,
+        "error": null
+      },
+      {
+        "country": "CA",
+        "brand": "Roborock",
+        "returned": 42,
+        "status": "接口分页已结束",
+        "truncated": false,
+        "error": null
+      },
+      {
+        "country": "CA",
+        "brand": "Tineco",
+        "returned": 26,
+        "status": "接口分页已结束",
+        "truncated": false,
+        "error": null
+      },
+      {
+        "country": "CA",
+        "brand": "Dreame",
+        "returned": 67,
+        "status": "接口分页已结束",
+        "truncated": false,
+        "error": null
+      },
+      {
+        "country": "CA",
+        "brand": "Narwal",
+        "returned": 19,
+        "status": "接口分页已结束",
+        "truncated": false,
+        "error": null
+      },
+      {
+        "country": "MX",
+        "brand": "Roborock",
+        "returned": 25,
+        "status": "接口分页已结束",
+        "truncated": false,
+        "error": null
+      },
+      {
+        "country": "MX",
+        "brand": "Tineco",
+        "returned": 2,
+        "status": "接口分页已结束",
+        "truncated": false,
+        "error": null
+      },
+      {
+        "country": "MX",
+        "brand": "Dreame",
+        "returned": 26,
+        "status": "接口分页已结束",
+        "truncated": false,
+        "error": null
+      },
+      {
+        "country": "MX",
+        "brand": "Narwal",
+        "returned": 5,
+        "status": "接口分页已结束",
+        "truncated": false,
+        "error": null
+      },
+      {
+        "country": "BR",
+        "brand": "Roborock",
+        "returned": 1,
+        "status": "接口分页已结束",
+        "truncated": false,
+        "error": null
+      },
+      {
+        "country": "BR",
+        "brand": "Tineco",
+        "returned": 0,
+        "status": "接口分页已结束",
+        "truncated": false,
+        "error": null
+      },
+      {
+        "country": "BR",
+        "brand": "Dreame",
+        "returned": 9,
+        "status": "接口分页已结束",
+        "truncated": false,
+        "error": null
+      },
+      {
+        "country": "BR",
+        "brand": "Narwal",
+        "returned": 0,
+        "status": "接口分页已结束",
+        "truncated": false,
+        "error": null
+      }
+    ],
+    "accepted": 161,
+    "excluded": 655,
+    "sourceBrandConflicts": [],
+    "categories": {
+      "US": {
+        "vacuum": 33,
+        "wash": 51,
+        "fabric": 6,
+        "mattress": 0
+      },
+      "CA": {
+        "vacuum": 12,
+        "wash": 36,
+        "fabric": 2,
+        "mattress": 0
+      },
+      "MX": {
+        "vacuum": 5,
+        "wash": 12,
+        "fabric": 0,
+        "mattress": 0
+      },
+      "BR": {
+        "vacuum": 0,
+        "wash": 4,
+        "fabric": 0,
+        "mattress": 0
+      }
+    }
+  },
+  "quotes": {
+    "total": 30,
+    "countries": {
+      "us": 0,
+      "mx": 17,
+      "ca": 13,
+      "br": 0
+    },
+    "channels": [
+      "tinecomx.com",
+      "mx.dreametech.com",
+      "www.liverpool.com.mx",
+      "www.sharkninja.mx",
+      "www.mercadolibre.com.mx",
+      "ca-store.tineco.com",
+      "ca.dreametech.com",
+      "www.sharkninja.ca",
+      "www.walmart.ca",
+      "www.tsc.ca",
+      "www.bestbuy.ca"
+    ]
+  },
+  "operations": {
+    "sources": [
+      {
+        "name": "Sell Out Uwant 2026 10 04.xlsx",
+        "period": "2026-05-25 至 2026-10-04",
+        "fields": "日期、渠道、SKU、销量",
+        "status": "已接入"
+      },
+      {
+        "name": "Inventory Report - Uwant 2026 10 05.xlsx",
+        "period": "2026-10-05 库存快照",
+        "fields": "可用、分配、总库存、EAN",
+        "status": "已接入"
+      },
+      {
+        "name": "UWANT Prime Big Deal Days 2026 Results EN.xlsx",
+        "period": "2026-10-06 至 2026-10-07",
+        "fields": "销售额、销量、流量、SP 广告",
+        "status": "前两日数据"
+      }
+    ],
+    "eventMetadata": {
+      "country": "mx",
+      "platform": "Amazon",
+      "currency": "MXN",
+      "start": "2026-10-06",
+      "end": "2026-10-07",
+      "source": "UWANT Prime Big Deal Days 2026 Results EN.xlsx",
+      "sourceDate": "2026-10-09",
+      "salesDefinition": "Ordered product sales",
+      "conversionDefinition": "units / Sessions",
+      "status": "Oct 7 may be incomplete; subsequent dates not included",
+      "controls": {
+        "revenue": 8221.05,
+        "units": 4,
+        "sessions": 12684,
+        "spend": 445.14000000000004,
+        "adRevenue": 0
+      }
+    },
+    "sellOut": {
+      "rows": 86,
+      "units": 87,
+      "minDate": "2026-05-25",
+      "maxDate": "2026-10-03",
+      "channels": [
+        "Amazon",
+        "Mercado Libre"
+      ],
+      "bySku": {
+        "D600": 8,
+        "D800": 1,
+        "Y100": 40,
+        "V500": 6,
+        "M600": 32
+      }
+    },
+    "inventory": {
+      "rows": 5,
+      "available": 472,
+      "allocated": 6,
+      "total": 478
+    },
+    "event": {
+      "units": 4,
+      "sessions": 12684,
+      "revenue": 8221.05,
+      "spend": 445.14,
+      "adRevenue": 0
+    },
+    "advertising": {
+      "source": "UWANT Prime Big Deal Days 2026 Results EN.xlsx",
+      "start": "2026-10-06",
+      "end": "2026-10-07",
+      "impressions": 10145,
+      "clicks": 56,
+      "spend": 445.14000000000004,
+      "adOrders": 0,
+      "adRevenue": 0,
+      "previousSpend": 403.51,
+      "previousRevenue": 7124.25,
+      "previousUnits": 1,
+      "previousSessions": 16195,
+      "metaSpend": null,
+      "externalClicks": 27545,
+      "externalViews": 17535,
+      "externalCarts": 34,
+      "externalPurchases": 0,
+      "attributionWindowDays": 14
+    }
+  },
+  "tierReview": {
+    "rows": 34,
+    "knownBrandNames": 8
+  },
+  "matrix": {
+    "sheets": 14,
+    "offers": 190
+  },
+  "publicAdapters": {
+    "rows": 68,
+    "byCountry": {
+      "us": 0,
+      "ca": 13,
+      "mx": 17,
+      "br": 38
+    },
+    "brazilSourcesReverified": false
+  },
+  "archives": {
+    "asOf": "2026-10-28",
+    "markets": {
+      "US": {
+        "products": 100,
+        "period": "202609",
+        "details": 100
+      },
+      "CA": {
+        "products": 100,
+        "period": "202609",
+        "details": 100
+      },
+      "MX": {
+        "products": 65,
+        "period": "202609",
+        "details": 65
+      },
+      "BR": {}
+    },
+    "focus": {
+      "asOf": "2026-10-28",
+      "products": 161,
+      "queries": 16
+    },
+    "curated": 123
+  },
+  "rawCache": {
+    "products": 466,
+    "fieldComparisons": 37280,
+    "mismatches": 0,
+    "missing": []
+  },
+  "inventoryFiles": 93,
+  "issueCounts": {
+    "PARENT-AMBIGUOUS": 1356,
+    "PARENT-MISSING": 405,
+    "BRAND-CONFLICT": 1,
+    "PARENT-VALUE-CONFLICT": 18
+  },
+  "checks": [
+    {
+      "name": "历史主键、类型、国家币种和日期",
+      "status": "PASS",
+      "details": "4660 rows"
+    },
+    {
+      "name": "双份历史JSON逐字段相同",
+      "status": "PASS",
+      "details": "history-data.js vs year-2026/history.json"
+    },
+    {
+      "name": "全部促销日历结构/日期/来源和假日基线",
+      "status": "PASS",
+      "details": []
+    },
+    {
+      "name": "库存明细可用+分配=总库存",
+      "status": "PASS",
+      "details": {
+        "rows": 5,
+        "available": 472,
+        "allocated": 6,
+        "total": 478
+      }
+    },
+    {
+      "name": "活动明细对控制合计",
+      "status": "PASS",
+      "details": {
+        "units": 4,
+        "sessions": 12684,
+        "revenue": 8221.05,
+        "spend": 445.14,
+        "adRevenue": 0
+      }
+    },
+    {
+      "name": "库存EAN13校验位",
+      "status": "PASS",
+      "details": [
+        {
+          "sku": "D600",
+          "ean": "6978934861384"
+        },
+        {
+          "sku": "D800",
+          "ean": "6978934861391"
+        },
+        {
+          "sku": "Y100",
+          "ean": "6978934861407"
+        },
+        {
+          "sku": "V500",
+          "ean": "6978934861438"
+        },
+        {
+          "sku": "M600",
+          "ean": "6978934861445"
+        }
+      ]
+    },
+    {
+      "name": "原表商品国家/SKU与报价类型范围",
+      "status": "PASS",
+      "details": []
+    },
+    {
+      "name": "全部公开报价币种/平台、无伪造销量",
+      "status": "PASS",
+      "details": {
+        "rows": 68,
+        "byCountry": {
+          "us": 0,
+          "ca": 13,
+          "mx": 17,
+          "br": 38
+        },
+        "brazilSourcesReverified": false
+      }
+    },
+    {
+      "name": "原始MCP缓存对历史字段",
+      "status": "PASS",
+      "details": {
+        "products": 466,
+        "fieldComparisons": 37280,
+        "mismatches": 0,
+        "missing": []
+      }
+    },
+    {
+      "name": "采集名单与页面商品/分类/品牌/当前父体一致",
+      "status": "PASS",
+      "details": 466
+    }
+  ]
+}

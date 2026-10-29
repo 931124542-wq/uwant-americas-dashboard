@@ -1,0 +1,43 @@
+{
+  "passed": 9,
+  "failed": 0,
+  "periodChannelCases": 9,
+  "results": [
+    {
+      "name": "内部有效数值汇总区分空和0，部分覆盖保留已知值",
+      "status": "PASS"
+    },
+    {
+      "name": "期间/渠道/SKU明细与汇总和导出一致",
+      "status": "PASS"
+    },
+    {
+      "name": "活动原始真实0与未知有区别，CVR正确",
+      "status": "PASS"
+    },
+    {
+      "name": "总览历史期间不出现活动结论，金额缺失不填零",
+      "status": "PASS"
+    },
+    {
+      "name": "库存KPI随源明细变化，非硬编码",
+      "status": "PASS"
+    },
+    {
+      "name": "利润正负与缺失费用",
+      "status": "PASS"
+    },
+    {
+      "name": "补货向上取整、在途抵扣与零需求",
+      "status": "PASS"
+    },
+    {
+      "name": "旧模板也检查国家与商品链接ID",
+      "status": "PASS"
+    },
+    {
+      "name": "经营统计期/渠道/选中SKU URL刷新往返",
+      "status": "PASS"
+    }
+  ]
+}

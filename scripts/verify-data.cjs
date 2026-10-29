@@ -1,0 +1,6 @@
+/* Offline only. Does not make SellerSprite or other network requests. */
+const fs=require('fs'),path=require('path'),cp=require('child_process');
+const root=path.resolve(__dirname,'..'),out=path.join(root,'docs/data-audit-evidence'),checks=[];fs.mkdirSync(out,{recursive:true});
+const commands=[...['data-audit-contract','operational-data-contract','research-source-contract','market-monthly','price-bands','workspace-contract'].map(t=>[t,process.execPath,['tests/'+t+'.cjs']]),['source-audit',process.execPath,['scripts/data-audit.cjs']],['workbook-audit',process.env.UWANT_AUDIT_PYTHON||'python3',['scripts/audit-workbook.py']]];
+for(const [name,bin,args] of commands){const r=cp.spawnSync(bin,args,{cwd:root,encoding:'utf8',maxBuffer:20*1024*1024,env:process.env});fs.writeFileSync(out+'/'+name+'.log',(r.stdout||'')+(r.stderr||''));checks.push({name,status:r.error?'NOT_EXECUTED':r.status===0?'PASS':'FAIL',exitCode:r.status,error:r.error?.message});}
+const result={asOf:'2026-10-29',networkRequests:0,sellerSpriteCalls:0,checks,passed:checks.every(r=>r.status==='PASS')};fs.writeFileSync(out+'/test-run.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result,null,2));if(!result.passed)process.exitCode=1;
