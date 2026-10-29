@@ -1,0 +1,400 @@
+{
+  "asOf": "2026-10-28",
+  "source": "SellerSprite MCP asin.list",
+  "roster": [
+    {
+      "id": "roborock",
+      "name": "Roborock",
+      "zh": "石头"
+    },
+    {
+      "id": "tineco",
+      "name": "Tineco",
+      "zh": "添可"
+    },
+    {
+      "id": "dreame",
+      "name": "Dreame",
+      "zh": "追觅"
+    },
+    {
+      "id": "narwal",
+      "name": "Narwal",
+      "zh": "云鲸"
+    }
+  ],
+  "queries": [
+    {
+      "country": "US",
+      "brand": "Roborock",
+      "returned": 251,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null
+    },
+    {
+      "country": "US",
+      "brand": "Tineco",
+      "returned": 71,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null
+    },
+    {
+      "country": "US",
+      "brand": "Dreame",
+      "returned": 223,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null
+    },
+    {
+      "country": "US",
+      "brand": "Narwal",
+      "returned": 49,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null
+    },
+    {
+      "country": "CA",
+      "brand": "Roborock",
+      "returned": 42,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null
+    },
+    {
+      "country": "CA",
+      "brand": "Tineco",
+      "returned": 26,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null
+    },
+    {
+      "country": "CA",
+      "brand": "Dreame",
+      "returned": 67,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null
+    },
+    {
+      "country": "CA",
+      "brand": "Narwal",
+      "returned": 19,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null
+    },
+    {
+      "country": "MX",
+      "brand": "Roborock",
+      "returned": 25,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null
+    },
+    {
+      "country": "MX",
+      "brand": "Tineco",
+      "returned": 2,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null
+    },
+    {
+      "country": "MX",
+      "brand": "Dreame",
+      "returned": 26,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null
+    },
+    {
+      "country": "MX",
+      "brand": "Narwal",
+      "returned": 5,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null
+    },
+    {
+      "country": "BR",
+      "brand": "Roborock",
+      "returned": 1,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null
+    },
+    {
+      "country": "BR",
+      "brand": "Tineco",
+      "returned": 0,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null
+    },
+    {
+      "country": "BR",
+      "brand": "Dreame",
+      "returned": 9,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null
+    },
+    {
+      "country": "BR",
+      "brand": "Narwal",
+      "returned": 0,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null
+    }
+  ],
+  "accepted": 161,
+  "excludedCount": 655,
+  "coverage": [
+    {
+      "country": "US",
+      "brand": "Roborock",
+      "returned": 251,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null,
+      "kept": 20,
+      "categories": {
+        "vacuum": 11,
+        "wash": 9,
+        "fabric": 0,
+        "mattress": 0
+      }
+    },
+    {
+      "country": "US",
+      "brand": "Tineco",
+      "returned": 71,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null,
+      "kept": 41,
+      "categories": {
+        "vacuum": 12,
+        "wash": 25,
+        "fabric": 4,
+        "mattress": 0
+      }
+    },
+    {
+      "country": "US",
+      "brand": "Dreame",
+      "returned": 223,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null,
+      "kept": 27,
+      "categories": {
+        "vacuum": 10,
+        "wash": 15,
+        "fabric": 2,
+        "mattress": 0
+      }
+    },
+    {
+      "country": "US",
+      "brand": "Narwal",
+      "returned": 49,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null,
+      "kept": 2,
+      "categories": {
+        "vacuum": 0,
+        "wash": 2,
+        "fabric": 0,
+        "mattress": 0
+      }
+    },
+    {
+      "country": "CA",
+      "brand": "Roborock",
+      "returned": 42,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null,
+      "kept": 4,
+      "categories": {
+        "vacuum": 0,
+        "wash": 4,
+        "fabric": 0,
+        "mattress": 0
+      }
+    },
+    {
+      "country": "CA",
+      "brand": "Tineco",
+      "returned": 26,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null,
+      "kept": 23,
+      "categories": {
+        "vacuum": 6,
+        "wash": 16,
+        "fabric": 1,
+        "mattress": 0
+      }
+    },
+    {
+      "country": "CA",
+      "brand": "Dreame",
+      "returned": 67,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null,
+      "kept": 20,
+      "categories": {
+        "vacuum": 6,
+        "wash": 13,
+        "fabric": 1,
+        "mattress": 0
+      }
+    },
+    {
+      "country": "CA",
+      "brand": "Narwal",
+      "returned": 19,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null,
+      "kept": 3,
+      "categories": {
+        "vacuum": 0,
+        "wash": 3,
+        "fabric": 0,
+        "mattress": 0
+      }
+    },
+    {
+      "country": "MX",
+      "brand": "Roborock",
+      "returned": 25,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null,
+      "kept": 6,
+      "categories": {
+        "vacuum": 0,
+        "wash": 6,
+        "fabric": 0,
+        "mattress": 0
+      }
+    },
+    {
+      "country": "MX",
+      "brand": "Tineco",
+      "returned": 2,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null,
+      "kept": 2,
+      "categories": {
+        "vacuum": 1,
+        "wash": 1,
+        "fabric": 0,
+        "mattress": 0
+      }
+    },
+    {
+      "country": "MX",
+      "brand": "Dreame",
+      "returned": 26,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null,
+      "kept": 8,
+      "categories": {
+        "vacuum": 4,
+        "wash": 4,
+        "fabric": 0,
+        "mattress": 0
+      }
+    },
+    {
+      "country": "MX",
+      "brand": "Narwal",
+      "returned": 5,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null,
+      "kept": 1,
+      "categories": {
+        "vacuum": 0,
+        "wash": 1,
+        "fabric": 0,
+        "mattress": 0
+      }
+    },
+    {
+      "country": "BR",
+      "brand": "Roborock",
+      "returned": 1,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null,
+      "kept": 1,
+      "categories": {
+        "vacuum": 0,
+        "wash": 1,
+        "fabric": 0,
+        "mattress": 0
+      }
+    },
+    {
+      "country": "BR",
+      "brand": "Tineco",
+      "returned": 0,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null,
+      "kept": 0,
+      "categories": {
+        "vacuum": 0,
+        "wash": 0,
+        "fabric": 0,
+        "mattress": 0
+      }
+    },
+    {
+      "country": "BR",
+      "brand": "Dreame",
+      "returned": 9,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null,
+      "kept": 3,
+      "categories": {
+        "vacuum": 0,
+        "wash": 3,
+        "fabric": 0,
+        "mattress": 0
+      }
+    },
+    {
+      "country": "BR",
+      "brand": "Narwal",
+      "returned": 0,
+      "status": "接口分页已结束",
+      "truncated": false,
+      "error": null,
+      "kept": 0,
+      "categories": {
+        "vacuum": 0,
+        "wash": 0,
+        "fabric": 0,
+        "mattress": 0
+      }
+    }
+  ]
+}

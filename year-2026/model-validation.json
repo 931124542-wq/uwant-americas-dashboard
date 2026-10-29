@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "countryCategoryMonthCases": 160,
+  "checks": [
+    "逐月筛选",
+    "父体去重",
+    "KPI/品牌合计一致",
+    "价格带计数",
+    "月度深链接",
+    "导出条数",
+    "未收录不补零",
+    "已知原始值复核",
+    "10月未结月状态"
+  ],
+  "failedQueries": 0
+}

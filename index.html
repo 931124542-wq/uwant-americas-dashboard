@@ -1,64 +1,18 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiMyNDRjMzgiLz48dGV4dCB4PSIzMiIgeT0iNDYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZm9udC1zaXplPSI0NCIgZmlsbD0iI2Y0ZmFlZSI+VTwvdGV4dD48L3N2Zz4="><meta name="viewport" content="width=device-width,initial-scale=1"><title>UWANT 美洲市场与竞品看板</title><meta name="description" content="墨西哥、加拿大与巴西清洁电器市场、价格带、品牌、商品榜单与UWANT竞争定位">
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>UWANT · 美洲经营看板</title><link rel="stylesheet" href="review.css?v=89f58d9db841"></head>
+<body><aside class="sidebar"><a class="logo" href="#page=brands">UWANT<span>AMERICAS</span></a><button class="sidebar-menu" id="sidebar-menu" aria-expanded="false" aria-label="展开导航">菜单</button><small>经营管理</small><nav aria-label="经营管理"><a data-route="overview" href="#page=overview">◫　经营总览</a><a data-route="analysis" href="#page=analysis">▤　经营分析</a><a data-route="products" href="#page=products">▦　SKU 表现</a><a data-route="profit" href="#page=profit">◇　利润与补货</a><a data-route="inventory" href="#page=inventory">▥　库存监控</a></nav><small>市场研究</small><nav aria-label="市场研究"><a data-route="market" href="#page=market">◉　市场总览</a><a data-route="brands" href="#page=brands">▥　品牌分析</a><a data-route="competitors" href="#page=competitors">⇄　竞品对比</a></nav><small>工作台</small><nav aria-label="工作台"><a data-route="calendar" href="#page=calendar">▣　促销日历</a><a data-route="tasks" href="#page=tasks">☑　运营任务</a><a data-route="access" href="#page=access">⚙　访问设置</a></nav><div class="sidebar-note"><span class="status-dot"></span> 在线版 <a href="release-notes.md" target="_blank">更新说明 ↗</a></div></aside>
+<main><header><span>美洲业务 <span class="slash">/</span> <b id="crumb">品牌分析</b></span><span class="header-meta">数据更新 2026-10-28</span><span class="avatar">U</span></header><div id="research-content" class="content"><section class="heading"><div><h1 id="title">品牌分析</h1></div><div class="heading-actions"><a class="button-link" href="year-2026/UWANT_2026_产品月度数据.xlsx" download>2026 年明细</a><button id="export">↓ 导出</button></div></section>
+<section class="filters" aria-label="研究范围"><label>国家<select id="country"><option value="MX">墨西哥</option><option value="CA">加拿大</option><option value="US">美国</option><option value="BR">巴西</option></select></label><label>平台<select id="platform"><option value="amazon">Amazon</option><option value="ml">Mercado Libre</option></select></label><label>品类<select id="category"><option value="vacuum">吸尘器</option><option value="wash">洗地机</option><option value="fabric">布艺清洗机</option><option value="mattress">除螨仪</option></select></label><label>统计期间<select id="dataset"><option value="archive">2026年9月 · 月度榜单</option><option value="focus">近30天 · 品牌样本</option><option value="curated">历史竞品样本</option></select></label></section>
+<div id="scope" class="scope" role="status"></div>
 
 
+<div id="kpis" class="kpis" aria-live="polite"></div>
+<section id="comparison-options" class="comparison-options" hidden><div class="own-product"><label for="own">UWANT 产品</label><select id="own" aria-label="UWANT产品"></select><span id="own-note"></span></div><div class="comparison-controls"><fieldset><legend class="sr-only">对标方式</legend><label><input type="radio" name="mode" value="all">全部商品</label><label><input type="radio" name="mode" value="price">价格相近</label><label><input type="radio" name="mode" value="config">自动集尘</label></fieldset><select id="tier" aria-label="竞品层级"><option value="all">全部层级</option><option value="T1">T1 核心自集尘</option><option value="T2">T2 同价位</option><option value="T3">T3 白牌</option><option value="unknown">未分类</option></select></div><p id="mode-note" class="mode-note"></p></section>
 
-
-
-
-
-
-<link rel="stylesheet" href="style.css?v=5486edbf9421">
-<link rel="stylesheet" href="intelligence.css?v=d88604121750">
-<link rel="stylesheet" href="refined.css?v=3f483d1facb9">
-<link rel="stylesheet" href="analysis.css?v=848b118b74ec">
-<link rel="stylesheet" href="calendar.css?v=529df579ca8a">
-<link rel="stylesheet" href="competitor-plus.css?v=e8ed7dacaf44">
-<link rel="stylesheet" href="research-deep.css?v=86fe1fcef6f8">
-<link rel="stylesheet" href="attached-matrix.css?v=7a8ff12e267d">
-<link rel="stylesheet" href="sales-decisions.css?v=490995d9accc">
-<link rel="stylesheet" href="validation-ledger.css?v=747acb1f256b">
-<link rel="stylesheet" href="research-home.css?v=eb85c73596c3">
-<link rel="stylesheet" href="price-workbench.css?v=aff8ae76d1b3">
-<link rel="stylesheet" href="shared-state.css?v=eaae4724a3e7">
-<link rel="stylesheet" href="market.css?v=392d680b71d1">
-<link rel="stylesheet" href="operations.css?v=889830affec6">
-<link rel="stylesheet" href="market-polish.css?v=bf1168363eb9">
-<link rel="stylesheet" href="clean.css?v=7f7bfcda907f">
-<link rel="stylesheet" href="brazil.css?v=c4e701b188e5">
-<link rel="stylesheet" href="market-radar.css?v=403ce080f4ba">
-<link rel="stylesheet" href="sellersprite-products.css?v=ca4a72af7faa">
-<link rel="stylesheet" href="sellersprite-bi.css?v=389ce9c5cab8">
-<link rel="stylesheet" href="sellersprite-market-override.css?v=86e0f1484e31">
-</head>
-<body><aside class="sidebar"><a class="brand" href="#overview">UWANT<span>AMERICAS</span></a><div class="workspace"><span class="avatar">美</span><div>美洲经营中心<span>Commerce workspace</span></div></div><div class="nav-label">经营管理</div><nav id="navigation"><a href="#overview" data-page="overview"><span>◫</span>经营总览</a><a href="#analysis" data-page="analysis"><span>✧</span>经营分析</a><a href="#products" data-page="products"><span>▦</span>SKU 表现</a><a href="#profit" data-page="profit"><span>◇</span>利润与补货</a><a href="#inventory" data-page="inventory"><span>▤</span>库存监控</a><a href="#calendar" data-page="calendar"><span>▣</span>促销日历</a><a href="#tasks" data-page="tasks"><span>☑</span>运营任务</a></nav><div class="nav-label second">工作台</div><nav><a href="#access" data-page="access"><span>⚙</span>访问设置</a></nav><div class="sidebar-bottom"><div class="access-note"><span class="access-dot"></span>在线版本</div><p>美洲市场与经营数据</p><div class="sidebar-user"><span class="owner-avatar">U</span><div>经营工作台<small>Owner access</small></div></div></div></aside>
-<main><header><div class="breadcrumb">美洲业务 <span>/</span> <b id="crumb">经营总览</b></div><div class="header-right"><span class="preview-pill">运营看板</span><span class="owner-avatar">U</span></div></header><div class="content"><div class="page-heading"><div><div class="eyebrow">UWANT · AMERICAS OPERATIONS</div><h1 id="page-title">经营总览</h1><p id="page-subtitle">查看销售、流量与库存。</p></div><button class="button" id="export">↓ 导出当前数据</button></div>
-<div class="market-heading"><span>选择市场</span><small>独立数据 · 当地币种 · 本地经营节奏</small></div><div class="markets" role="group" aria-label="市场选择"><button class="market active" data-market="mx"><div class="market-top"><span class="market-code">MX</span><span class="market-indicator"></span></div><div class="market-name">墨西哥<small>MEXICO</small></div><div class="market-status"><span>提升与优化</span><b>第一优先</b></div></button><button class="market " data-market="ca"><div class="market-top"><span class="market-code">CA</span><span class="market-indicator"></span></div><div class="market-name">加拿大<small>CANADA</small></div><div class="market-status"><span>运营优化</span></div></button><button class="market " data-market="ar"><div class="market-top"><span class="market-code">AR</span><span class="market-indicator"></span></div><div class="market-name">阿根廷<small>ARGENTINA</small></div><div class="market-status"><span>销售与市场跟踪</span></div></button><button class="market " data-market="br"><div class="market-top"><span class="market-code">BR</span><span class="market-indicator"></span></div><div class="market-name">巴西<small>BRAZIL</small></div><div class="market-status"><span>市场调研</span><b>低优先</b></div></button><button class="market " data-market="us"><div class="market-top"><span class="market-code">US</span><span class="market-indicator"></span></div><div class="market-name">美国<small>UNITED STATES</small></div><div class="market-status"><span>范围待确认</span></div></button></div>
-<div id="filters" class="filters"><div><span class="filter-label">统计期间</span><select id="period" aria-label="销售统计期间"><option value="event">大促前两日 · 10月6—7日</option><option value="all">累计 Sell Out · 截至10月4日</option><option value="sep">9月整月 Sell Out</option><option value="oct">10月1—4日 Sell Out</option></select><select id="channel" aria-label="销售渠道"><option value="all">全部渠道</option><option value="Amazon">Amazon</option><option value="Mercado Libre">Mercado Libre</option></select></div><span id="scope-note"></span></div>
-<div id="view" aria-live="polite"></div><footer>UWANT 美洲经营看板 <span>按报表日期展示 · 缺失数据不计为零</span></footer></div></main>
-<dialog id="detail"><div class="dialog-top"><h2 id="detail-title"></h2><button id="close-detail" aria-label="关闭">×</button></div><div id="detail-body"></div></dialog><div class="toast" id="toast" role="status"></div><script src="intelligence.js?v=cbefea1444b2" defer></script><script src="intelligence-views.js?v=e6925ade9f5d" defer></script><script src="calendar.js?v=a6ecc6462266" defer></script><script src="app.js?v=0184098bb863" defer></script><script src="refined.js?v=1ea9db23300f" defer></script><script src="analysis.js?v=b136480609a7" defer></script><script src="accuracy.js?v=28cf3752080a" defer></script><script src="calendar-hook.js?v=ed3962abb61d" defer></script><script src="market-data.js?v=1682aeecd03f" defer></script><script src="market.js?v=4637e4b4da3e" defer></script><script src="operations.js?v=fc4cf55f72e1" defer></script><script src="competitor-data.js?v=2ea81d4157ca" defer></script>
-<script src="competitor-plus.js?v=cca21d0f964d" defer></script>
-<script src="research-data.js?v=75f2ae5346dd" defer></script>
-<script src="research-deep.js?v=ca0dc8933b65" defer></script>
-<script src="attached-matrix-data.js?v=ec9a6ee5eaaf" defer></script>
-<script src="new-model-data.js?v=7031f391e608" defer></script>
-<script src="monitored-models.js?v=255cbc863c86" defer></script>
-<script src="attached-matrix.js?v=0705f3f7cebc" defer></script>
-<script src="sales-decisions.js?v=163e7b389734" defer></script>
-<script src="validation-ledger.js?v=204621433510" defer></script>
-<script src="research-home.js?v=f268fe6a7480" defer></script>
-<script src="price-workbench.js?v=d9c2dbdb4d29" defer></script>
-<script src="completion-evidence.js?v=bbc408594f1d" defer></script>
-<script src="radar-validation.js?v=a5106bbb0b0e" defer></script>
-<script src="market-radar-data.js?v=53cf00341203" defer></script>
-<script src="shared-state.js?v=4f70dd987c9b" defer></script>
-<script src="clean.js?v=c12372d07b34" defer></script>
-<script src="brazil-data.js?v=7c2544010659" defer></script>
-<script src="brazil-positioning.js?v=c75c1c03b477" defer></script>
-<script src="brazil-market.js?v=14d0b0789c3e" defer></script>
-<script src="market-radar-ui.js?v=b3c72f67a41d" defer></script>
-<script src="sellersprite-products-data.js?v=5183274c59fc" defer></script>
-<script src="sellersprite-products.js?v=f74160e800ed" defer></script>
-<script src="sellersprite-live-data.js?v=a843317ead55" defer></script>
-<script src="sellersprite-bi.js?v=c1f2d4bcc436" defer></script>
-</body></html>
+<section class="panel result-panel"><div class="workspace-tools"><label class="search-label"><span class="sr-only">搜索品牌、商品或ASIN</span><input id="search" type="search" placeholder="搜索品牌、型号或 ASIN" autocomplete="off"></label><label><span class="sr-only">品牌</span><select id="brand" aria-label="品牌"><option value="">全部品牌</option></select></label><label><span class="sr-only">价格带</span><select id="band" aria-label="价格带"><option value="">全部价格带</option></select></label><button id="reset">重置</button></div><div id="chips" class="chips"></div><div class="panel-head"><div><h2 id="result-title">品牌排行</h2><p id="result-note"></p></div><label><span class="sr-only">排序</span><select id="sort" aria-label="排序"><option value="sales">销量从高到低</option><option value="price">商品价格从低到高</option><option value="rank">来源名次</option></select></label></div><div class="table-scroll"><table><thead id="table-head"></thead><tbody id="table-body"></tbody></table></div><div class="pagination"><span id="page-info"></span><div><button id="prev">上一页</button><button id="next">下一页</button></div></div></section>
+<details class="panel price-panel" id="price-panel"><summary><span>价格分布 <small id="price-note"></small></span><span class="expand-label">展开 / 收起</span></summary><div class="chart-actions"><button id="clear-band">全部价格</button></div><div id="price-chart" class="price-chart" aria-label="价格带商品数量"></div></details>
+<details class="data-note"><summary>数据说明 <span id="data-note-count"></span></summary><div id="quality"></div></details>
+<footer>UWANT · 美洲市场研究<span>卖家精灵销量及销售额为估算值</span></footer></div><section id="operations-content" hidden><p id="operations-status" role="status">正在加载…</p><iframe id="operations-frame" title="经营工作台" hidden></iframe><button id="operations-retry" hidden>重新加载</button></section></main>
+<div id="compare-tray" class="compare-tray" hidden><div><strong id="picked-count"></strong><span id="picked-names"></span></div><button id="clear-picks">清空</button><button class="primary" id="open-compare">对比商品</button></div>
+<dialog id="drawer" aria-labelledby="drawer-title"><div class="drawer-head"><div><small id="drawer-kicker">品牌研究</small><h2 id="drawer-title"></h2></div><button id="close-drawer" aria-label="关闭详情">×</button></div><div id="drawer-body"></div></dialog><div id="toast" role="status" class="toast" hidden></div>
+<script src="review-data.js?v=456387840edf"></script><script src="own-data.js?v=a7fbfcb2dc94"></script><script src="focus-brands-data.js?v=c51ab5cbdc93"></script><script src="history-data.js?v=b5e89034dd05"></script><script src="model.js?v=a4d56728246f"></script><script src="review.js?v=73eae7547930"></script></body></html>

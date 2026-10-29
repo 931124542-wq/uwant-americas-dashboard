@@ -1,0 +1,305 @@
+{
+  "asOf": "2026-10-28",
+  "requestedYear": 2026,
+  "products": 466,
+  "queriesCompleted": 466,
+  "queriesFailed": 0,
+  "productsWithMonthlyData": 466,
+  "monthlySlots": 5592,
+  "observedMonthlyRows": 3518,
+  "monthlySalesRows": 3440,
+  "futureSlots": 932,
+  "parentChangeEvents": 548,
+  "ambiguousParentMonthRows": 1356,
+  "brandConflictProducts": 1,
+  "recentDailyRows": 13470,
+  "unexpectedSourcePoints": [],
+  "byCountry": [
+    {
+      "country": "US",
+      "products": 201,
+      "queried": 201,
+      "failed": 0,
+      "months": [
+        {
+          "month": "2026-01",
+          "withAnyMetric": 107,
+          "withParentSales": 107
+        },
+        {
+          "month": "2026-02",
+          "withAnyMetric": 111,
+          "withParentSales": 111
+        },
+        {
+          "month": "2026-03",
+          "withAnyMetric": 118,
+          "withParentSales": 118
+        },
+        {
+          "month": "2026-04",
+          "withAnyMetric": 120,
+          "withParentSales": 120
+        },
+        {
+          "month": "2026-05",
+          "withAnyMetric": 139,
+          "withParentSales": 139
+        },
+        {
+          "month": "2026-06",
+          "withAnyMetric": 150,
+          "withParentSales": 150
+        },
+        {
+          "month": "2026-07",
+          "withAnyMetric": 157,
+          "withParentSales": 157
+        },
+        {
+          "month": "2026-08",
+          "withAnyMetric": 179,
+          "withParentSales": 179
+        },
+        {
+          "month": "2026-09",
+          "withAnyMetric": 195,
+          "withParentSales": 195
+        },
+        {
+          "month": "2026-10",
+          "withAnyMetric": 201,
+          "withParentSales": 201
+        },
+        {
+          "month": "2026-11",
+          "withAnyMetric": 0,
+          "withParentSales": 0
+        },
+        {
+          "month": "2026-12",
+          "withAnyMetric": 0,
+          "withParentSales": 0
+        }
+      ]
+    },
+    {
+      "country": "CA",
+      "products": 142,
+      "queried": 142,
+      "failed": 0,
+      "months": [
+        {
+          "month": "2026-01",
+          "withAnyMetric": 72,
+          "withParentSales": 72
+        },
+        {
+          "month": "2026-02",
+          "withAnyMetric": 75,
+          "withParentSales": 75
+        },
+        {
+          "month": "2026-03",
+          "withAnyMetric": 80,
+          "withParentSales": 80
+        },
+        {
+          "month": "2026-04",
+          "withAnyMetric": 82,
+          "withParentSales": 82
+        },
+        {
+          "month": "2026-05",
+          "withAnyMetric": 91,
+          "withParentSales": 91
+        },
+        {
+          "month": "2026-06",
+          "withAnyMetric": 101,
+          "withParentSales": 101
+        },
+        {
+          "month": "2026-07",
+          "withAnyMetric": 117,
+          "withParentSales": 117
+        },
+        {
+          "month": "2026-08",
+          "withAnyMetric": 134,
+          "withParentSales": 134
+        },
+        {
+          "month": "2026-09",
+          "withAnyMetric": 141,
+          "withParentSales": 141
+        },
+        {
+          "month": "2026-10",
+          "withAnyMetric": 142,
+          "withParentSales": 142
+        },
+        {
+          "month": "2026-11",
+          "withAnyMetric": 0,
+          "withParentSales": 0
+        },
+        {
+          "month": "2026-12",
+          "withAnyMetric": 0,
+          "withParentSales": 0
+        }
+      ]
+    },
+    {
+      "country": "MX",
+      "products": 109,
+      "queried": 109,
+      "failed": 0,
+      "months": [
+        {
+          "month": "2026-01",
+          "withAnyMetric": 78,
+          "withParentSales": 78
+        },
+        {
+          "month": "2026-02",
+          "withAnyMetric": 79,
+          "withParentSales": 79
+        },
+        {
+          "month": "2026-03",
+          "withAnyMetric": 82,
+          "withParentSales": 82
+        },
+        {
+          "month": "2026-04",
+          "withAnyMetric": 85,
+          "withParentSales": 85
+        },
+        {
+          "month": "2026-05",
+          "withAnyMetric": 89,
+          "withParentSales": 89
+        },
+        {
+          "month": "2026-06",
+          "withAnyMetric": 96,
+          "withParentSales": 96
+        },
+        {
+          "month": "2026-07",
+          "withAnyMetric": 98,
+          "withParentSales": 98
+        },
+        {
+          "month": "2026-08",
+          "withAnyMetric": 106,
+          "withParentSales": 106
+        },
+        {
+          "month": "2026-09",
+          "withAnyMetric": 109,
+          "withParentSales": 109
+        },
+        {
+          "month": "2026-10",
+          "withAnyMetric": 106,
+          "withParentSales": 106
+        },
+        {
+          "month": "2026-11",
+          "withAnyMetric": 0,
+          "withParentSales": 0
+        },
+        {
+          "month": "2026-12",
+          "withAnyMetric": 0,
+          "withParentSales": 0
+        }
+      ]
+    },
+    {
+      "country": "BR",
+      "products": 14,
+      "queried": 14,
+      "failed": 0,
+      "months": [
+        {
+          "month": "2026-01",
+          "withAnyMetric": 8,
+          "withParentSales": 0
+        },
+        {
+          "month": "2026-02",
+          "withAnyMetric": 10,
+          "withParentSales": 0
+        },
+        {
+          "month": "2026-03",
+          "withAnyMetric": 9,
+          "withParentSales": 0
+        },
+        {
+          "month": "2026-04",
+          "withAnyMetric": 7,
+          "withParentSales": 0
+        },
+        {
+          "month": "2026-05",
+          "withAnyMetric": 7,
+          "withParentSales": 0
+        },
+        {
+          "month": "2026-06",
+          "withAnyMetric": 9,
+          "withParentSales": 0
+        },
+        {
+          "month": "2026-07",
+          "withAnyMetric": 10,
+          "withParentSales": 0
+        },
+        {
+          "month": "2026-08",
+          "withAnyMetric": 8,
+          "withParentSales": 0
+        },
+        {
+          "month": "2026-09",
+          "withAnyMetric": 10,
+          "withParentSales": 0
+        },
+        {
+          "month": "2026-10",
+          "withAnyMetric": 0,
+          "withParentSales": 0
+        },
+        {
+          "month": "2026-11",
+          "withAnyMetric": 0,
+          "withParentSales": 0
+        },
+        {
+          "month": "2026-12",
+          "withAnyMetric": 0,
+          "withParentSales": 0
+        }
+      ]
+    }
+  ],
+  "checks": [
+    "国家/ASIN/月唯一",
+    "12个月完整状态网格",
+    "未来月份无数值",
+    "空值和零区分",
+    "父体/子体分列",
+    "未混入近30天逐日数据",
+    "原币种保留"
+  ],
+  "browserExportVerified": true,
+  "xlsxDownloadSha256": "3724bb2a2295ee760300c5298e1191d88756802dbedadf9523f7e130353f3961",
+  "xlsxRows": 5592,
+  "xlsxFrozenHeaderRows": 4,
+  "xlsxFrozenIdColumns": 2
+}
