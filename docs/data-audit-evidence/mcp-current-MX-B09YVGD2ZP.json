@@ -1,0 +1,24 @@
+{
+  "checkedAt": "2026-10-29",
+  "scope": "source-response-only; not independent Amazon verification",
+  "data": {
+    "items": [
+      {
+        "asin": "B09YVGD2ZP",
+        "brand": "EUREKA",
+        "categoryPath": [
+          "Hogar y Cocina",
+          "Aspiración, Limpieza y Planchado",
+          "Aspiradoras y Cuidado del Suelo",
+          "Aspiradoras",
+          "Aspiradoras Verticales"
+        ],
+        "currency": "MXN",
+        "marketplace": "MX",
+        "parentAsin": "B0DDX45D2L",
+        "resultStatus": "success",
+        "title": "Aspiradora Midea Multiusos 3 en 1; EST2A2BB; Función Multi-usos 3 En 1"
+      }
+    ]
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "passed": 7,
+  "failed": 9,
+  "results": [
+    {
+      "name": "部分销量覆盖不能打开完整价格带销量图",
+      "status": "FAIL",
+      "error": "Expected values to be strictly equal:\n\ntrue !== false\n"
+    },
+    {
+      "name": "缺失销量不能隐式成为柱状图0",
+      "status": "FAIL",
+      "error": "Expected values to be strictly equal:\n\n2 !== 0\n"
+    },
+    {
+      "name": "TSC Canada 属于当地零售",
+      "status": "FAIL",
+      "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'official'\n- 'retail'\n"
+    },
+    {
+      "name": "未知或伪装域名不是官方渠道",
+      "status": "FAIL",
+      "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'official'\n- 'unknown'\n"
+    },
+    {
+      "name": "筛选不能解除同父体冲突",
+      "status": "FAIL",
+      "error": "Expected values to be strictly equal:\n\n1 !== 0\n"
+    },
+    {
+      "name": "品牌搜索保留同父体冲突状态",
+      "status": "FAIL",
+      "error": "Expected values to be strictly equal:\n\n1635 !== null\n"
+    },
+    {
+      "name": "同父体跨国家跨月份独立去重",
+      "status": "FAIL",
+      "error": "Expected values to be strictly equal:\n\n1 !== 3\n"
+    },
+    {
+      "name": "重复父体取一次，冲突值不计入，0保留",
+      "status": "PASS"
+    },
+    {
+      "name": "父体单位覆盖不把缺失ID当独立Listing",
+      "status": "PASS"
+    },
+    {
+      "name": "月历史不混入其他平台，URL往返不丢状态",
+      "status": "PASS"
+    },
+    {
+      "name": "排名不适用、待采集、不完整、完整可区分",
+      "status": "FAIL",
+      "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- 'not_applicable'\n"
+    },
+    {
+      "name": "两个不同榜单拼不成完整Top10",
+      "status": "PASS"
+    },
+    {
+      "name": "标准导入国家币种日期重复与空值",
+      "status": "PASS"
+    },
+    {
+      "name": "Amazon来源必须指向对应ASIN",
+      "status": "FAIL",
+      "error": "Missing expected exception."
+    },
+    {
+      "name": "真实2月完整记录保留空值，导出与筛选一致",
+      "status": "PASS"
+    },
+    {
+      "name": "销量父子口径不互相填补",
+      "status": "PASS"
+    }
+  ]
+}

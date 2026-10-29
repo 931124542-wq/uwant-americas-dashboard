@@ -1,0 +1,194 @@
+{
+  "checkedAt": "2026-10-29",
+  "scope": "source-response-only; not independent Amazon verification",
+  "data": {
+    "asin": "B0D8J8P1L2",
+    "metrics": [
+      "parentSales",
+      "childSales",
+      "parentSalesAmount",
+      "childSalesAmount",
+      "price"
+    ],
+    "parentChangeHis": [],
+    "recentDailySales": [
+      {
+        "bsr": 330514,
+        "dailySales": 1,
+        "dailySales5MA": 1,
+        "date": "2026-09-30"
+      },
+      {
+        "bsr": 116959,
+        "dailySales": 1,
+        "dailySales5MA": 1,
+        "date": "2026-10-01"
+      },
+      {
+        "bsr": 165811,
+        "dailySales5MA": 0.6666666666666666,
+        "date": "2026-10-02"
+      },
+      {
+        "bsr": 206944,
+        "dailySales5MA": 0.5,
+        "date": "2026-10-03"
+      },
+      {
+        "bsr": 242062,
+        "dailySales5MA": 0.4,
+        "date": "2026-10-04"
+      },
+      {
+        "bsr": 265360,
+        "dailySales": 1,
+        "dailySales5MA": 0.4,
+        "date": "2026-10-05"
+      },
+      {
+        "bsr": 114626,
+        "dailySales": 2,
+        "dailySales5MA": 0.6,
+        "date": "2026-10-06"
+      },
+      {
+        "bsr": 87590,
+        "dailySales": 1,
+        "dailySales5MA": 0.8,
+        "date": "2026-10-07"
+      },
+      {
+        "bsr": 98776,
+        "dailySales": 1,
+        "dailySales5MA": 1,
+        "date": "2026-10-08"
+      },
+      {
+        "bsr": 99011,
+        "dailySales": 1,
+        "dailySales5MA": 1.2,
+        "date": "2026-10-09"
+      },
+      {
+        "bsr": 128950,
+        "dailySales5MA": 1,
+        "date": "2026-10-10"
+      },
+      {
+        "bsr": 164903,
+        "dailySales5MA": 0.6,
+        "date": "2026-10-11"
+      },
+      {
+        "bsr": 199023,
+        "dailySales5MA": 0.4,
+        "date": "2026-10-12"
+      },
+      {
+        "bsr": 217985,
+        "dailySales5MA": 0.2,
+        "date": "2026-10-13"
+      },
+      {
+        "bsr": 245288,
+        "date": "2026-10-14"
+      },
+      {
+        "bsr": 271065,
+        "date": "2026-10-15"
+      },
+      {
+        "bsr": 265889,
+        "date": "2026-10-16"
+      },
+      {
+        "bsr": 283886,
+        "dailySales": 1,
+        "dailySales5MA": 0.2,
+        "date": "2026-10-17"
+      },
+      {
+        "bsr": 289063,
+        "dailySales": 1,
+        "dailySales5MA": 0.4,
+        "date": "2026-10-18"
+      },
+      {
+        "bsr": 115614,
+        "dailySales": 1,
+        "dailySales5MA": 0.6,
+        "date": "2026-10-19"
+      },
+      {
+        "bsr": 148089,
+        "dailySales": 1,
+        "dailySales5MA": 0.8,
+        "date": "2026-10-20"
+      },
+      {
+        "bsr": 204568,
+        "dailySales": 0.43,
+        "dailySales5MA": 0.8859999999999999,
+        "date": "2026-10-21"
+      },
+      {
+        "bsr": 245157,
+        "dailySales5MA": 0.6859999999999999,
+        "date": "2026-10-22"
+      },
+      {
+        "bsr": 262516,
+        "dailySales5MA": 0.48599999999999993,
+        "date": "2026-10-23"
+      },
+      {
+        "bsr": 282511,
+        "dailySales5MA": 0.2859999999999999,
+        "date": "2026-10-24"
+      },
+      {
+        "bsr": 295803,
+        "dailySales5MA": 0.08599999999999994,
+        "date": "2026-10-25"
+      },
+      {
+        "bsr": 303510,
+        "date": "2026-10-26"
+      },
+      {
+        "bsr": 313922,
+        "date": "2026-10-27"
+      },
+      {
+        "bsr": 322391,
+        "date": "2026-10-28"
+      },
+      {
+        "bsr": 303627,
+        "date": "2026-10-29"
+      }
+    ],
+    "series": {
+      "parentSales": [
+        {
+          "date": "2026-02",
+          "value": 5
+        }
+      ],
+      "childSales": [],
+      "parentSalesAmount": [
+        {
+          "date": "2026-02",
+          "value": 4843.35
+        }
+      ],
+      "childSalesAmount": [],
+      "price": [
+        {
+          "date": "2026-02",
+          "value": 999.99
+        }
+      ]
+    }
+  }
+}
