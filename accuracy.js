@@ -31,7 +31,7 @@ analysisView=function(){if(market!=='mx')return analysisBeforeAudit();const audi
  let html=analysisBeforeAudit();const m=data.eventMetadata;if(period==='event'){const selected=eventDiagnostics().filter(r=>analysisSku==='all'||r.sku===analysisSku),units=strictTotal(selected,'units'),sessions=strictTotal(selected,'sessions');html=html.replace(metric('已提供销量',fmt(sum(selected,'units')),'台','当前期间与筛选范围'),metric('已提供销量',fmt(units),'台','任一SKU缺少销量时不输出完整合计'));html=html.replace(metric('单位转化率',pct(ratio(sum(selected,'units'),sum(selected,'sessions'))),'','按销量与Sessions汇总加权'),metric('单位转化率',pct(ratio(units,sessions)),'','明细缺失时不推导；非订单转化率'));
  const missingNotice=audit.missing.length?'<div class="notice">待补信息：'+audit.missing.join('；')+'。相关指标保留为空，策略只作为排查建议。</div>':'';
  const evidenceGuide=panel('分析依据与决策边界','核对的是源报表内部一致性，尚未与平台原始导出复核',`<div class="definitions"><div><b>报表记录</b><span>${m.source}；${m.platform}墨西哥；${m.start}至${m.end}；币种${m.currency}。源报告采集日期${m.sourceDate}，不是实时数据。</span></div><div><b>计算结果</b><span>单位转化率、CPC、CTR、费用比例均显示分子分母口径。缺失值不当作0；零分母不输出比率；广告期间不同则不计算跨报表效率。</span></div><div><b>待验证原因</b><span>低转化只能提供排查线索，不能单凭两个指标确定是价格、Listing或流量问题。跨品类转化率不直接排名。</span></div><div><b>预算决策尚缺依据</b><span>Meta完整费用、退款退货、平台与履约费、利润底线、投放目标及归因回补。未补齐前不输出确定的扩量、停投或降价金额。</span></div><div><b>数据完整性</b><span>10月7日可能仍有更新，10月8—10日不在当前统计内。SP和Amazon Attribution的归因口径分别核对，不能共用14天窗口假设。</span></div><div><b>执行验证</b><span>可比期间仍可能受节日、优惠、配送与流量结构影响。没有可靠对照时，复盘只能说明相关变化，不能直接声称策略造成增长。</span></div></div>`);
- html=missingNotice+html+'<div class="section-gap">'+evidenceGuide+'</div>';
+ html=missingNotice+html+'<details class="analysis-reference"><summary>报表来源与数据核验</summary>'+evidenceGuide+'</details>';
  }
  return html;
 };

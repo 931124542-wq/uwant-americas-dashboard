@@ -9,6 +9,24 @@
 
 
 <style>
+/* UWANT workspace: shared foundations, not a page override sheet. */
+:root{
+  --ui-bg:#f5f7f8;
+  --ui-surface:#fff;
+  --ui-ink:#202e2a;
+  --ui-muted:#64746d;
+  --ui-line:#dfe6e2;
+  --ui-primary:#246044;
+  --ui-soft:#eaf3ed;
+  --ui-warning:#956321;
+  --ui-error:#b42318;
+  --ui-radius:8px;
+  --ui-space:24px;
+  --ui-font:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  --ui-shadow:0 12px 36px #1e39251a}
+
+</style>
+<style>
 :root{--navy:#172c33;--green:#177d62;--mint:#dff0e7;--bg:#f4f6f4;--text:#243a40;--muted:#77858a;--border:#e2e8e4}*{box-sizing:border-box}body{margin:0;font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--text);background:var(--bg);font-size:14px}button,select,input{font:inherit}button,a,select{ -webkit-tap-highlight-color:transparent}button{cursor:pointer}a{color:inherit;text-decoration:none}button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #83c3ad;outline-offset:3px}.sidebar{width:230px;background:var(--navy);position:fixed;inset:0 auto 0 0;padding:33px 20px;color:#c8d4d5;display:flex;flex-direction:column}.brand{font-size:29px;letter-spacing:3px;color:#fff;font-weight:750;padding-left:14px}.brand span{display:block;font-size:8px;letter-spacing:2.4px;color:#92aaa9;margin-top:7px}.workspace{display:flex;gap:12px;align-items:center;border-top:1px solid #34494e;border-bottom:1px solid #34494e;margin:30px 0 25px;padding:21px 12px;color:#fff}.avatar,.owner-avatar{display:grid;place-items:center;background:#2e504d;width:34px;height:34px;border-radius:10px;font-weight:600}.workspace div span{display:block;margin-top:5px;color:#93aaad;font-size:11px}.nav-label{font-size:10px;padding:0 14px;color:#86a1a4;letter-spacing:1px;margin-bottom:10px}.second{margin-top:30px}nav a{display:flex;gap:14px;align-items:center;border-radius:7px;padding:13px 14px;margin-bottom:5px;font-size:13px}nav a span{width:18px;font-size:19px;color:#8da9ad}nav a.active{background:#2c4b49;color:#e6fff4}nav a.active span{color:#96ddbf}nav a:hover{background:#254046}.sidebar-bottom{margin-top:auto;padding:20px 14px 0;font-size:11px;border-top:1px solid #34494e}.sidebar-bottom i{display:inline-block;height:6px;width:6px;border-radius:50%;background:#8fc7ae;margin-right:8px}.sidebar-bottom span{display:block;padding:8px 0 0 14px;color:#8fa8ac}main{margin-left:230px}header{height:72px;display:flex;justify-content:space-between;align-items:center;background:#fff;border-bottom:1px solid var(--border);padding:0 36px}.breadcrumb{color:var(--muted);font-size:12px}.breadcrumb span{margin:0 13px;color:#ccd4cf}.breadcrumb b{font-weight:500;color:var(--text)}.header-right{display:flex;align-items:center;gap:20px}.preview-pill{font-size:11px;background:#f2f5f2;border:1px solid var(--border);padding:6px 10px;border-radius:5px}.owner-avatar{background:#dfeae4;color:var(--green);width:30px;height:30px;border-radius:50%;font-size:11px}.content{padding:31px 36px 18px;max-width:1650px;margin:auto}.page-heading{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:26px}.eyebrow{font-size:9px;letter-spacing:2px;color:var(--green);font-weight:650}h1{font-size:29px;font-weight:650;letter-spacing:-.5px;margin:9px 0 8px}.page-heading p{margin:0;color:var(--muted);font-size:12px}.button{border:1px solid #ccd9d0;background:#fff;border-radius:6px;padding:10px 15px;font-size:12px;color:var(--text)}.button:hover{border-color:var(--green);color:var(--green)}.markets{display:grid;grid-template-columns:1.2fr 1.3fr 1fr .9fr;gap:12px}.market{background:#fff;border:1px solid var(--border);border-radius:9px;padding:16px 14px;display:flex;align-items:center;gap:12px;text-align:left;color:var(--text);min-height:80px}.market.active{background:#edf5ef;border-color:#6ba48e}.market-code{font-family:monospace;font-size:11px;border:1px solid #dce5df;border-radius:6px;background:#f5f8f5;padding:9px 7px;color:#526b65;white-space:nowrap}.market.active .market-code{color:#fff;background:var(--green);border-color:var(--green)}.market div{font-size:13px;font-weight:600}.market small{display:block;font-size:10px;color:var(--muted);font-weight:400;margin-top:6px}.market b{font-size:9px;border-radius:4px;color:var(--green);background:#d6ebdd;margin-left:auto;padding:4px 6px;white-space:nowrap}.filters{margin:22px 0 20px;display:flex;align-items:center;justify-content:space-between;gap:15px}.filters>div{display:flex;align-items:center;gap:10px}.filter-label{font-size:11px;color:var(--muted);margin-right:2px}select{padding:9px 28px 9px 10px;border:1px solid var(--border);background:#fff;border-radius:5px;color:var(--text);font-size:11px}#scope-note{font-size:10px;color:var(--muted)}.notice{display:flex;gap:12px;background:#f9f2e5;border:1px solid #e8dcc4;color:#80692f;border-radius:6px;padding:12px 15px;font-size:11px;line-height:1.7;margin-bottom:18px}.notice.green{background:#e9f3ee;border-color:#d5e6db;color:#356451}.notice b{font-weight:650}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}.metric{background:#fff;border:1px solid var(--border);border-radius:9px;padding:19px 20px;min-height:144px}.metric-label{font-size:11px;color:#71817e;display:flex;justify-content:space-between}.metric-label span{font-size:9px;background:#f3f6f3;padding:3px 5px;border-radius:4px}.metric-value{font-size:31px;font-weight:600;margin:16px 0 11px;letter-spacing:-1px;font-variant-numeric:tabular-nums}.metric-value small{font-size:11px;color:var(--muted);letter-spacing:0;margin-left:6px;font-weight:400}.metric-foot{font-size:10px;color:var(--muted)}.up{color:var(--green)}.grid{display:grid;grid-template-columns:1.65fr 1fr;gap:20px;margin-bottom:22px}.panel{background:#fff;border:1px solid var(--border);border-radius:9px;padding:22px;min-width:0}.panel-heading{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:17px}.panel h2{font-size:14px;margin:0;font-weight:650}.sub{font-size:10px;color:var(--muted);line-height:1.6;margin-top:6px}.link-button{color:var(--green);font-size:11px;background:none;border:0;padding:0;white-space:nowrap}.chart-key{display:flex;gap:14px;font-size:10px;color:var(--muted);margin:8px 0 20px}.chart-key i{display:inline-block;width:7px;height:7px;background:var(--green);border-radius:2px;margin-right:5px}.chart-key i.light{background:#a7cdb9}.bar-chart{height:183px;display:flex;gap:20px;align-items:flex-end;padding:15px 10px 28px;border-bottom:1px solid var(--border);background:repeating-linear-gradient(to top,transparent 0,transparent 45px,#eef2ee 46px,#eef2ee 47px)}.bar-group{flex:1;position:relative;display:flex;justify-content:center;gap:5px;height:100%;align-items:flex-end}.bar{width:23px;background:var(--green);border-radius:3px 3px 0 0;position:relative;min-height:2px}.bar.secondary{background:#a7cdb9}.bar em{position:absolute;top:-17px;width:100%;text-align:center;font-size:10px;font-style:normal}.bar-group label{position:absolute;bottom:-22px;font-size:10px;color:var(--muted);white-space:nowrap}.chart-note{font-size:10px;color:var(--muted);margin-top:16px;line-height:1.6}.progress-row{margin:19px 0}.progress-top{display:flex;justify-content:space-between;margin-bottom:9px;font-size:11px}.track{height:7px;border-radius:10px;background:#edf2ed;overflow:hidden}.fill{height:100%;background:var(--green);border-radius:10px}.fill.light{background:#a7cdb9}.channel-value{font-variant-numeric:tabular-nums}.divider{border-top:1px solid var(--border);margin:23px 0 15px}.callout{display:flex;align-items:flex-start;gap:10px;font-size:11px;line-height:1.7}.dot{width:6px;height:6px;background:#c09342;flex:none;border-radius:50%;margin-top:6px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:11px;white-space:nowrap}th{font-weight:500;color:#7c8987;background:#f7f9f6;text-align:right;padding:12px 13px;border-bottom:1px solid var(--border)}th:first-child,td:first-child{text-align:left}td{padding:15px 13px;border-bottom:1px solid #eef2ed;text-align:right;font-variant-numeric:tabular-nums}tr:last-child td{border-bottom:0}td strong{font-size:12px;font-weight:650}td small{display:block;color:var(--muted);font-size:9px;margin-top:4px}.tag{font-size:9px;display:inline-block;background:#eef4ef;color:#537665;border-radius:4px;padding:4px 7px}.tag.amber{background:#faf1e1;color:#997439}.tag.gray{background:#f0f3f1;color:#788681}.insights{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:20px 0}.insight{background:#fff;border:1px solid var(--border);border-radius:9px;padding:17px 20px}.insight small{font-size:9px;letter-spacing:1px;color:var(--muted)}.insight h3{font-size:12px;margin:9px 0}.insight p{font-size:11px;color:var(--muted);line-height:1.8;margin:0}.task-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.task-count{font-size:11px;color:var(--muted)}.task-list{display:grid;gap:12px}.task{border:1px solid var(--border);border-radius:7px;padding:17px;display:grid;grid-template-columns:1fr 110px;gap:16px}.task h3{font-size:12px;margin:0 0 7px;font-weight:600}.task p{font-size:11px;color:var(--muted);margin:0;line-height:1.8}.task-side{text-align:right}.task-side div{font-size:10px;margin-top:10px;color:var(--muted)}.empty{padding:45px 25px;text-align:center}.empty-mark{background:#edf4ee;width:58px;height:58px;display:grid;place-items:center;border-radius:16px;font-size:24px;color:var(--green);margin:0 auto 17px}.empty h2{font-size:18px;margin:0 0 12px}.empty p{font-size:12px;line-height:1.9;color:var(--muted);max-width:430px;margin:0 auto}.empty .button{display:inline-block;margin-top:24px}.target-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.target{border:1px solid var(--border);background:#fff;border-radius:8px;padding:22px}.target h3{font-size:12px;margin:0}.target .number{font-size:30px;color:var(--green);margin:17px 0}.target p{color:var(--muted);font-size:11px;line-height:1.8;margin:0}.section-gap{margin-top:22px}.data-list{display:grid;gap:12px}.source{border:1px solid var(--border);border-radius:7px;padding:18px;display:flex;align-items:center;justify-content:space-between;gap:20px}.source h3{font-size:12px;margin:0;overflow-wrap:anywhere}.source p{color:var(--muted);font-size:10px;margin:8px 0 0;line-height:1.8}.definitions{display:grid;grid-template-columns:1fr 1fr;gap:17px 25px;font-size:11px;line-height:1.8}.definitions b{display:block;margin-bottom:3px}.definitions span{color:var(--muted)}.access-rows>div{padding:18px 0;display:flex;justify-content:space-between;gap:20px;border-bottom:1px solid var(--border);font-size:12px}.access-rows small{display:block;font-size:11px;color:var(--muted);line-height:1.8;margin-top:6px}.access-rows>div:last-child{border:0}footer{display:flex;justify-content:space-between;gap:15px;color:#96a39e;font-size:9px;margin-top:35px;padding-top:18px;border-top:1px solid var(--border)}dialog{border:1px solid var(--border);border-radius:12px;padding:24px;width:560px;max-width:90vw;color:var(--text);box-shadow:0 24px 100px #172c3330}dialog::backdrop{background:#172c3370}.dialog-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}.dialog-top h2{margin:0;font-size:19px}.dialog-top button{background:none;border:0;font-size:25px;color:var(--muted)}.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.detail-grid div{padding:15px;background:#f6f8f5;border-radius:6px;font-size:11px;color:var(--muted)}.detail-grid strong{display:block;font-size:21px;color:var(--text);margin-top:9px}dialog p{font-size:11px;color:var(--muted);line-height:1.9}.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:var(--navy);color:white;padding:12px 20px;border-radius:7px;display:none;font-size:12px;z-index:10}.toast.show{display:block}#export:disabled{opacity:.4;cursor:default}.muted{color:var(--muted)}
 @media(min-width:1450px){.content{padding-top:38px}.metric{min-height:160px}.bar-chart{height:220px}}@media(max-width:1150px){.sidebar{width:190px;padding:28px 13px}main{margin-left:190px}.content{padding:26px 23px}header{padding:0 23px}.market{gap:8px;padding:14px 10px}.market-code{font-size:9px}.market div{font-size:12px}.market b{display:none}.metric{padding:17px 15px}.metric-value{font-size:27px}.filters{flex-wrap:wrap}.grid{grid-template-columns:1.4fr 1fr}.bar-chart{gap:10px}.bar{width:18px}}@media(max-width:800px){.sidebar{position:relative;width:auto;padding:20px;display:block}.brand{font-size:24px;padding:0}.brand span{display:none}.workspace,.nav-label,.sidebar-bottom{display:none}nav{display:flex;flex-wrap:wrap;gap:4px;margin-top:12px}nav a{padding:9px 10px;font-size:11px;margin:0}nav a span{display:none}.sidebar>nav:last-of-type{display:none}main{margin-left:0}header{height:50px;padding:0 20px}.content{padding:24px 20px}h1{font-size:24px}.page-heading{align-items:flex-start}.page-heading p{font-size:11px;max-width:250px;line-height:1.6}.button{padding:9px;font-size:10px}.markets{grid-template-columns:1fr 1fr;gap:9px}.market{min-height:68px}.metrics{grid-template-columns:1fr 1fr;gap:10px}.metric{min-height:131px}.metric-value{font-size:27px}.grid{grid-template-columns:1fr}.insights{grid-template-columns:1fr}.target-grid{grid-template-columns:1fr 1fr}.panel{padding:18px}.filters>div{flex-wrap:wrap}.filter-label{display:none}.filters select{font-size:10px}#scope-note{font-size:9px}.definitions{grid-template-columns:1fr}.source{align-items:flex-start}.source .tag{flex:none}footer{line-height:1.8}.header-right{gap:10px}.task{grid-template-columns:1fr 90px}}@media(prefers-reduced-motion:no-preference){.market,.button,nav a{transition:background .15s,border-color .15s}#view{animation:appear .2s}@keyframes appear{from{opacity:.4;transform:translateY(3px)}to{opacity:1;transform:none}}}
 
@@ -31,7 +49,174 @@ main,.content,#view{min-width:0}.table-wrap{max-width:100%;overscroll-behavior-x
 
 </style>
 <style>
-.analysis-intro{display:flex;align-items:center;justify-content:space-between;gap:20px;margin:3px 0 22px}.analysis-intro>div>span{font-size:9px;letter-spacing:1.5px;color:#84a171}.analysis-intro h2{font-size:21px;font-weight:500;color:#345b3b;margin:10px 0}.analysis-intro p{font-size:11px;color:#879e7c;line-height:1.8;margin:0}.diagnosis-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.diagnosis-card{padding:24px}.diagnosis-heading{display:flex;align-items:center;justify-content:space-between;gap:15px}.diagnosis-kicker{font-size:9px;letter-spacing:1px;color:#90a67e}.diagnosis-heading h2{font-size:22px;margin:9px 0 0;color:#365b36;font-weight:500}.diagnosis-heading h2 span{font-size:11px;margin-left:7px;color:#92a886;font-weight:400}.diagnosis-evidence{display:flex;flex-direction:column;gap:8px;margin:19px 0;padding:15px 17px;background:#f3f7ee;border-radius:9px}.diagnosis-evidence span{font-size:11px;color:#6c8a5b;line-height:1.7}.diagnosis-block{margin:17px 0}.diagnosis-block label,.diagnosis-validation label{font-size:10px;color:#96ac85;display:block;margin-bottom:7px}.diagnosis-block p,.diagnosis-validation p{font-size:11px;line-height:1.9;color:#6d8561;margin:0}.diagnosis-block ol{padding-left:17px;margin:0;font-size:11px;line-height:1.9;color:#627d55}.diagnosis-block li+li{margin-top:7px}.diagnosis-validation{border-top:1px solid #e8eedf;border-bottom:1px solid #e8eedf;padding:15px 0}.diagnosis-validation p+label{margin-top:14px}.diagnosis-footer{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-top:17px}.diagnosis-footer>span{font-size:9px;color:#a0b28d}.advertising-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;padding:8px 0 17px;border-bottom:1px solid #e6ecdd}.advertising-stats>div{padding-right:8px}.advertising-stats label{display:block;font-size:11px;color:#91a780}.advertising-stats strong{display:block;font-size:21px;color:#557d43;letter-spacing:-.5px;font-weight:500;margin:13px 0 8px}.advertising-stats small{display:block;font-size:10px;color:#a1b58e;line-height:1.7}.advertising-stats strong small{display:inline;font-size:10px}.analysis-intro .tag{white-space:nowrap}.analysis-summary-link{display:flex;align-items:center;gap:10px;padding:13px 16px;border-radius:8px;background:#f0f5e8;margin-top:19px;color:#627c4f;font-size:11px}.analysis-summary-link span{margin-left:auto}@media(max-width:1100px){.diagnosis-grid{grid-template-columns:1fr}.advertising-stats{grid-template-columns:1fr 1fr}}@media(max-width:800px){.analysis-intro{align-items:flex-start;flex-wrap:wrap}.analysis-intro h2{font-size:19px}.diagnosis-card{padding:20px}.diagnosis-heading h2{font-size:20px}.diagnosis-heading{flex-wrap:wrap}.diagnosis-footer{flex-wrap:wrap}.advertising-stats{gap:20px}.advertising-stats strong{font-size:20px}}
+/* Operational research uses the same workspace tokens, with a queue-first layout. */
+.analysis-workspace{
+  font:14px/1.6 var(--ui-font);
+  color:var(--ui-ink)}
+.analysis-summary{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:20px 32px;
+  padding:6px 0 22px;
+  border-bottom:1px solid var(--ui-line);
+  margin-bottom:22px}
+.analysis-summary>div{
+  min-width:130px}
+.analysis-summary span{
+  display:block;
+  font-size:12px;
+  color:var(--ui-muted)}
+.analysis-summary strong{
+  font-size:28px;
+  line-height:1.4;
+  font-weight:600}
+.analysis-summary strong small{
+  font-size:13px;
+  font-weight:400;
+  color:var(--ui-muted)}
+.analysis-summary>p{
+  flex:1;
+  min-width:180px;
+  text-align:right;
+  font-size:12px;
+  color:var(--ui-muted);
+  margin:0}
+.analysis-queue .panel-head{
+  padding:18px 20px}
+.analysis-queue .panel-head h2{
+  font-size:17px;
+  margin:0}
+.analysis-queue .panel-head p{
+  color:var(--ui-muted);
+  font-size:12px;
+  margin:4px 0 0}
+.analysis-workspace table{
+  font-size:13px}
+.analysis-workspace th{
+  font-size:12px;
+  font-weight:500;
+  background:#f5f8f6}
+.analysis-workspace td,.analysis-workspace th{
+  padding:12px 15px}
+.analysis-sku-link{
+  border:0;
+  background:none;
+  color:var(--ui-primary);
+  padding:5px 0;
+  font:inherit;
+  font-weight:500;
+  cursor:pointer}
+.analysis-sku-link[aria-pressed=true]{
+  text-decoration:underline;
+  text-underline-offset:5px}
+.diagnosis-card{
+  padding:20px;
+  margin:0;
+  background:white;
+  border:1px solid var(--ui-line);
+  border-radius:8px}
+.diagnosis-heading{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px}
+.diagnosis-heading h2{
+  font-size:20px;
+  margin:5px 0 10px}
+.diagnosis-heading h2 span{
+  font-size:13px;
+  color:var(--ui-muted);
+  font-weight:400}
+.diagnosis-kicker{
+  font-size:11px;
+  color:var(--ui-muted);
+  letter-spacing:.7px}
+.diagnosis-evidence{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 18px;
+  padding:12px 0;
+  border-top:1px solid var(--ui-line);
+  border-bottom:1px solid var(--ui-line);
+  font-size:12px;
+  color:var(--ui-muted)}
+.diagnosis-block{
+  padding:14px 0}
+.diagnosis-block label,.diagnosis-validation label{
+  display:block;
+  font-size:13px;
+  font-weight:500;
+  color:var(--ui-ink)}
+.diagnosis-block p,.diagnosis-validation p{
+  font-size:13px;
+  color:var(--ui-muted);
+  line-height:1.75;
+  margin:6px 0}
+.diagnosis-block ol{
+  margin:8px 0;
+  padding-left:20px;
+  font-size:13px;
+  line-height:1.8}
+.diagnosis-validation{
+  background:#f5f8f6;
+  padding:15px 18px;
+  border-radius:5px}
+.diagnosis-footer{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  margin-top:14px;
+  font-size:12px;
+  color:var(--ui-muted)}
+.analysis-reference{
+  margin:16px 0;
+  border-top:1px solid var(--ui-line);
+  padding-top:14px;
+  font-size:13px;
+  color:var(--ui-muted)}
+.analysis-reference>summary{
+  color:var(--ui-primary);
+  cursor:pointer}
+.analysis-reference>p{
+  line-height:1.8}
+.analysis-reference>.panel{
+  margin-top:14px}
+.advertising-stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px}
+.advertising-stats label,.advertising-stats small{
+  font-size:12px;
+  color:var(--ui-muted)}
+.advertising-stats strong{
+  display:block;
+  font-size:20px;
+  margin:8px 0}
+.analysis-summary-link{
+  display:flex;
+  justify-content:space-between;
+  border-top:1px solid var(--ui-line);
+  padding:15px 0;
+  color:var(--ui-primary);
+  font-size:13px}
+@media(max-width:800px){
+  .analysis-summary{
+  gap:16px}
+.analysis-summary>p{
+  text-align:left;
+  flex-basis:100%}
+.analysis-summary>div{
+  min-width:90px}
+.analysis-summary strong{
+  font-size:25px}
+.advertising-stats{
+  grid-template-columns:1fr 1fr}
+.diagnosis-heading,.diagnosis-footer{
+  flex-wrap:wrap}
+.diagnosis-card{
+  padding:16px}
+}
 
 </style>
 <style>
@@ -286,27 +471,834 @@ footer{color:#69766e;font-size:10px;border-color:#e7eddb}
 
 </style>
 <style>
-/* UWANT market radar: quiet green, clear hierarchy, consistent data context. */
-body.bi-mode .markets{display:none!important}body.bi-mode .content{max-width:1740px}body.bi-mode .page-heading{margin-bottom:24px}.bi-workspace{color:#26372e;font-variant-numeric:tabular-nums}.bi-intro{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:25px}.bi-intro span{font-size:10px;letter-spacing:.16em;color:#6c7d72}.bi-intro h2{font-size:27px;letter-spacing:-.5px;margin:9px 0 8px;font-weight:600}.bi-intro p{margin:0;color:#718076;font-size:12px;line-height:1.8}.bi-link{background:none;border:0;padding:0;color:#356a4d;font:inherit;font-size:12px;cursor:pointer;white-space:nowrap}.bi-toolbar{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;padding:20px;background:#fff;border:1px solid #e0e7e1;border-radius:8px;margin-bottom:20px}.bi-toolbar label,.bi-top{display:flex;flex-direction:column;gap:8px;font-size:11px;color:#748176}.bi-toolbar select,.bi-inline select,.bi-table-controls select,.bi-table-controls input{height:38px;min-width:120px;max-width:100%;border:1px solid #d9e2da;border-radius:5px;background:white;padding:8px 10px;font-size:12px;color:#334d3c}.bi-toolbar .bi-dataset{flex:1;min-width:210px;max-width:480px}.bi-toolbar .bi-dataset select{width:100%;text-overflow:ellipsis}.bi-top>div{display:flex;border:1px solid #d9e2da;border-radius:5px;overflow:hidden}.bi-top button{height:36px;border:0;background:white;padding:7px 11px;color:#6c796f;cursor:pointer;font-size:11px}.bi-top button+button{border-left:1px solid #e4eae5}.bi-top button[aria-pressed=true]{background:#2e6047;color:#fff}.bi-top button:disabled{color:#aab3ac;cursor:default;background:#fafbf9}.bi-tabs{display:flex;gap:26px;overflow-x:auto;border-bottom:1px solid #dce5de;margin-bottom:22px}.bi-tabs button{white-space:nowrap;border:0;border-bottom:2px solid transparent;background:none;padding:12px 0;font-size:13px;color:#768277;cursor:pointer}.bi-tabs button[aria-pressed=true]{color:#2d6045;font-weight:600;border-bottom-color:#2d6045}.bi-tabs #bi-research-link{margin-left:auto;color:#3f6d50}.bi-scope{display:flex;align-items:center;gap:30px;flex-wrap:wrap;background:#234d3b;color:white;border-radius:7px;padding:18px 22px;margin-bottom:18px}.bi-scope>div:first-child{margin-right:auto}.bi-scope strong{font-size:15px;font-weight:600}.bi-scope span{display:block;color:#c3d3c7;font-size:10px;line-height:1.8;margin-top:4px}.bi-scope b{font-size:12px;font-weight:500;line-height:1.8}.bi-scope .bi-link{color:#d6e5d5;font-size:11px}.bi-kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-bottom:20px}.bi-kpis article{min-width:0;background:#fff;border:1px solid #e0e7e1;border-radius:7px;padding:18px 17px}.bi-kpis span{display:block;font-size:11px;color:#708073}.bi-kpis strong{display:block;font-size:23px;font-weight:600;letter-spacing:-.6px;margin:15px 0 12px;overflow-wrap:anywhere}.bi-kpis small{font-size:10px;line-height:1.8;color:#899389;display:block;min-height:35px}.bi-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}.bi-panel{min-width:0;padding:23px;background:#fff;border:1px solid #e0e7e1;border-radius:8px;margin-bottom:20px}.bi-panel h3{font-size:15px;margin:0 0 8px;font-weight:600}.bi-panel-title{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:20px}.bi-panel-title p{font-size:11px;color:#829083;line-height:1.8;margin:0}.bi-inline{font-size:10px;color:#7c897d;display:flex;align-items:center;gap:9px}.bi-inline select{min-width:85px;height:33px;font-size:11px}.bi-bars{margin:10px 0 22px;display:grid;gap:19px}.bi-bar{display:grid;grid-template-columns:90px minmax(0,1fr) 62px 42px;align-items:center;gap:12px;font-size:11px}.bi-bar>span{overflow-wrap:anywhere;color:#687c6d}.bi-bar>div{height:14px;background:#f1f5ef;border-radius:2px;overflow:hidden}.bi-bar i{display:block;background:#6e9676;height:100%;border-radius:2px}.bi-bar b{font-weight:500;text-align:right;color:#3c5643;font-size:11px;overflow-wrap:anywhere}.bi-bar small{text-align:right;color:#8a978c;font-size:10px}.bi-foot,.bi-disclaimer{font-size:10px;line-height:1.9;color:#8b978d;margin:14px 0 0}.bi-disclaimer{padding:4px 0 20px;text-align:center}.bi-empty{min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:25px;text-align:center;background:linear-gradient(#fbfcfa,#f5f8f3);border-radius:6px;border:1px dashed #dfe7dc}.bi-empty>span{color:#a8b9a9;font-size:30px;font-weight:300;margin-bottom:8px}.bi-empty strong{font-size:13px;font-weight:500;color:#607b64}.bi-empty p{font-size:11px;color:#8c9b8e;line-height:1.9;max-width:340px;margin:12px 0 0}.bi-scatter{display:block;width:100%;height:auto;min-height:240px;margin-top:5px;overflow:visible}.bi-scatter text{font-size:10px;fill:#819183;font-family:inherit}.bi-scatter circle:hover{stroke-width:3;fill-opacity:1}.bi-own-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.bi-own-cards article{padding:15px;border:1px solid #e4ebe0;border-radius:5px;background:#fafcf8}.bi-own-cards strong{font-size:13px;color:#43654b}.bi-own-cards p{font-size:11px;line-height:1.8;color:#82917e;min-height:36px;margin:9px 0 12px}.bi-own-cards .bi-link{font-size:11px}.bi-table-controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:18px}.bi-table-controls input{flex:1;max-width:350px;min-width:180px}.bi-table-controls span{font-size:10px;color:#89958a}.bi-table-wrap{overflow-x:auto;max-width:100%}.bi-workspace .bi-table-wrap table{width:100%;min-width:920px;border-collapse:collapse;font-size:12px;line-height:1.8}.bi-workspace .bi-table-wrap th{padding:13px 12px;background:#f3f7f1;color:#6c806d;font-size:10px;white-space:normal;text-align:left;border-bottom:1px solid #dce7d9;font-weight:600}.bi-workspace .bi-table-wrap td{vertical-align:top;white-space:normal;text-align:left;padding:16px 12px;border-bottom:1px solid #e8eee5;min-width:105px;max-width:250px;overflow-wrap:anywhere}.bi-workspace .bi-table-wrap td:first-child{min-width:45px;color:#7a9279}.bi-workspace .bi-table-wrap td:nth-child(2){min-width:200px}.bi-workspace .bi-table-wrap strong{font-weight:500;font-size:12px;color:#3d5742}.bi-workspace .bi-table-wrap small{display:block;font-size:10px;color:#8b9888;margin-top:5px;line-height:1.8}.bi-workspace .bi-table-wrap a{font-size:11px;color:#47724f;text-decoration:underline;text-underline-offset:3px}.bi-workspace .bi-table-wrap details{margin-top:8px;color:#8a9787;font-size:10px}.bi-workspace .bi-table-wrap details summary{cursor:pointer;color:#5c7f60}.bi-pagination{display:flex;align-items:center;justify-content:flex-end;gap:12px;padding-top:16px}.bi-pagination span{margin-right:auto;font-size:10px;color:#8a9889}.bi-pagination button:disabled{opacity:.5}.bi-import-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.bi-file{position:relative;overflow:hidden;cursor:pointer}.bi-file input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%}.bi-import-status{font-size:12px;padding:14px;background:#f3f7ef;color:#60815c;line-height:1.9;border-radius:5px;margin:18px 0}.bi-details{font-size:12px;color:#7b8d78;line-height:1.9;border-top:1px solid #e7ede2;padding-top:15px}.bi-details summary{cursor:pointer;color:#527a50}.bi-quality{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-top:20px}.bi-quality>div{padding:13px;background:#f6f9f3;border-radius:5px}.bi-quality span{display:block;font-size:10px;color:#8a9a83;margin-bottom:8px}.bi-quality strong{font-size:17px;color:#597952;font-weight:500}.bi-workspace button:focus-visible,.bi-workspace select:focus-visible,.bi-workspace input:focus-visible,.bi-workspace summary:focus-visible,.bi-workspace .bi-table-wrap:focus-visible{outline:2px solid #528453;outline-offset:3px}.bi-workspace .mi-button{font-size:11px;white-space:nowrap}
-@media(max-width:1300px){.bi-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.bi-kpis strong{font-size:24px}.bi-bar{grid-template-columns:75px minmax(0,1fr) 55px 35px;gap:8px}.bi-toolbar .bi-dataset{max-width:none}.bi-quality{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(max-width:900px){.bi-grid{grid-template-columns:1fr}.bi-toolbar label{flex:1}.bi-toolbar .bi-dataset{min-width:100%}.bi-tabs{gap:20px}.bi-tabs #bi-research-link{margin-left:0}.bi-intro h2{font-size:23px}.bi-intro>.bi-link{display:none}.bi-scope{gap:20px}.bi-scope>div:first-child{width:100%}.bi-panel{padding:20px}.bi-kpis strong{font-size:22px}.bi-own-cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(max-width:600px){.bi-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.bi-kpis article{padding:15px}.bi-kpis strong{font-size:22px}.bi-toolbar{padding:16px;gap:12px}.bi-toolbar select{width:100%;min-width:0}.bi-toolbar label{min-width:100px}.bi-top{width:100%}.bi-top>div{align-self:flex-start}.bi-panel-title{gap:10px}.bi-panel-title h3{font-size:14px}.bi-own-cards{grid-template-columns:1fr}.bi-panel{padding:17px}.bi-bar{grid-template-columns:80px minmax(0,1fr) 55px 36px}.bi-quality{grid-template-columns:repeat(2,minmax(0,1fr))}.bi-scope{padding:16px}.bi-scope .bi-link{white-space:normal;text-align:left}.bi-tabs{gap:18px}.bi-tabs button{font-size:12px}.bi-intro h2{font-size:22px}.bi-import-actions .mi-button{font-size:11px}}
-.bi-macro-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.bi-macro-cards article{padding:20px;background:#f6f9f3;border-radius:6px}.bi-macro-cards span{font-size:11px;color:#6c806a}.bi-macro-cards strong{display:block;font-size:26px;color:#3b623e;margin:15px 0;font-weight:500}.bi-macro-cards small{font-size:12px}.bi-macro-cards p,.bi-macro-cards a{font-size:11px;line-height:1.8;color:#7f9279}.bi-macro-note{font-size:13px;line-height:1.9;color:#73886d}@media(max-width:900px){.bi-macro-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:500px){.bi-macro-cards{grid-template-columns:1fr}}
-body.bi-mode .page-heading{display:none}.bi-intro h1{font-size:27px;letter-spacing:-.5px;margin:9px 0 8px;font-weight:600;color:#2d4536}.bi-intro-actions{display:flex;align-items:center;gap:20px}.bi-kpis strong{white-space:nowrap;font-size:clamp(17px,1.7vw,24px)}@media(max-width:900px){.bi-intro h1{font-size:23px}.bi-intro-actions>.bi-link{display:none}.bi-kpis strong{font-size:23px}}@media(max-width:600px){.bi-intro{align-items:flex-start;flex-wrap:wrap;gap:14px}.bi-intro h1{font-size:22px}.bi-intro-actions{margin-left:auto}.bi-kpis strong{font-size:22px}}
-/* Evidence first, followed by analysis and actions. */
-.bi-assessment{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:20px}.bi-assessment article{padding:20px 22px;border:1px solid #dce6dd;border-radius:8px;background:#f4f8f2}.bi-assessment span{font-size:11px;color:#70816e}.bi-assessment strong{display:block;font-size:19px;font-weight:600;color:#31573c;margin:11px 0}.bi-assessment p{font-size:12px;color:#73816f;line-height:1.9;margin:0 0 12px}.bi-badge{display:inline-block;padding:3px 9px;border-radius:20px;background:#f5f0e5;color:#8a6b32;font-size:11px}.bi-badge.ready{background:#e7f1e6;color:#426941}.bi-action-copy{font-size:14px;line-height:2;color:#5b705b;max-width:960px}.bi-next-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;border-top:1px solid #e4ebe1;margin-top:22px;padding-top:22px}.bi-next-steps b{font-size:13px;color:#3b6244}.bi-next-steps p{font-size:12px;line-height:1.9;color:#7c8c76}.bi-opportunity-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.bi-opportunity-card{padding:20px;border:1px solid #e2e9de;border-radius:6px;min-width:0}.bi-opportunity-card>div{display:flex;justify-content:space-between;align-items:center;gap:15px}.bi-opportunity-card p{font-size:12px;line-height:1.9;color:#7d8b76}.bi-opportunity-card .bi-own-price{font-size:17px;color:#3a5a40}.bi-opportunity-card small{font-size:10px;color:#899580}.bi-opportunity-card ul{list-style:none;padding:0;margin:10px 0}.bi-opportunity-card li{display:grid;grid-template-columns:1fr auto;gap:6px 12px;padding:12px 0;border-top:1px solid #edf1e8}.bi-opportunity-card li small{grid-column:1/-1}.bi-opportunity-card a{font-size:12px;color:#4f7650;line-height:1.8;overflow-wrap:anywhere}.bi-opportunity-card li b{font-size:12px;color:#476343;white-space:nowrap}.bi-empty{min-height:180px}@media(max-width:1050px){.bi-assessment{grid-template-columns:1fr}.bi-assessment article{padding:18px}.bi-next-steps{gap:16px}}@media(max-width:650px){.bi-opportunity-grid,.bi-next-steps{grid-template-columns:1fr}.bi-assessment strong{font-size:18px}.bi-next-steps{gap:10px}}
+/* Market workspace components. Replaces the former layered market styles. */
+body.bi-mode .markets,body.bi-mode .page-heading{
+  display:none!important}
 
-/* Product polish: compact hierarchy, predictable states and navigation. */
-.bi-workspace{--bi-focus:#397454;--bi-soft:#f4f7f3;--bi-border:#dfe7e1}.bi-workspace section,.bi-workspace article,.bi-workspace button,.bi-workspace a,.bi-workspace select,.bi-workspace input{transition:border-color .16s ease,background-color .16s ease,color .16s ease,box-shadow .16s ease,transform .16s ease}.bi-intro{margin-bottom:18px}.bi-intro p{line-height:1.55}.bi-toolbar{position:sticky;top:0;z-index:6;padding:16px 18px;margin-bottom:14px;box-shadow:0 5px 18px rgba(32,65,46,.04)}.bi-tabs{margin-bottom:18px;scrollbar-width:thin}.bi-tabs button:hover,.bi-link:hover{color:#214f37}.bi-tabs button[aria-pressed=true]{color:#244f38}.bi-panel:hover{border-color:#d3dfd6}.bi-workspace button:not(:disabled):active{transform:translateY(1px)}.bi-panel,.bi-kpis article,.bi-assessment article{box-shadow:0 1px 2px rgba(24,51,35,.025)}.bi-panel-title{margin-bottom:16px}.bi-panel-title p{max-width:68ch;line-height:1.55}.bi-assessment p,.bi-action-copy,.bi-opportunity-card p{line-height:1.65}.bi-table-wrap thead{position:sticky;top:0;z-index:2}.bi-workspace .bi-table-wrap tbody tr:hover{background:#fafcf9}.bi-row-action{display:block;border:0;background:none;padding:5px 0 0;color:#356a4d;font:inherit;font-size:11px;cursor:pointer;text-align:left}.bi-row-action:hover{text-decoration:underline;text-underline-offset:3px}.bi-table-empty{display:flex;flex-direction:column;align-items:center;gap:6px;padding:34px;color:#7c8d80}.bi-table-empty strong{font-size:13px}.bi-table-empty span{font-size:11px}.bi-context-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 16px;margin-bottom:16px;background:#f3f7f2;border:1px solid #dce6de;border-radius:7px}.bi-context-bar span{font-size:11px;color:#76857a}.bi-disclaimer{display:block;padding:0;margin:4px auto 12px;max-width:760px;text-align:left;border:0;color:#7d8b81}.bi-disclaimer summary{width:max-content;margin:auto;cursor:pointer;font-size:11px;color:#587160}.bi-disclaimer p{padding:10px 16px;margin:8px 0 0;border:1px solid var(--bi-border);border-radius:6px;background:#fff;text-align:center;line-height:1.7}.bi-import-status{border-left:3px solid #6f9675}.bi-empty{min-height:150px}.bi-empty>span{font-size:22px}.bi-empty p{line-height:1.65}.bi-details p{max-width:90ch}.bi-workspace [aria-busy=true]{cursor:progress}.bi-workspace :is(section,article,nav){scroll-margin-top:88px}
-@media(max-width:900px){.bi-toolbar{position:static}.bi-context-bar{align-items:flex-start;flex-direction:column;gap:5px}.bi-workspace .bi-table-wrap thead{position:static}}
-@media(prefers-reduced-motion:reduce){.bi-workspace *{scroll-behavior:auto!important;transition:none!important}}
+.bi-workspace{
+  font:14px/1.55 var(--ui-font);
+  color:var(--ui-ink);
+  font-variant-numeric:tabular-nums;
+  max-width:1600px;
+  margin:auto}
 
-/* Data-aware overview: available charts first; unavailable metrics stay compact. */
-.bi-kpis-adaptive{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}.bi-kpis-adaptive small{min-height:0}.bi-gap{padding:12px 0 18px;color:#66776b;font-size:12px;line-height:1.8}.bi-state{padding:14px 18px;margin-bottom:12px}.bi-state p{font-size:12px;color:#66776b;margin:6px 0}.bi-chart-grid:has(>.bi-panel:only-child){grid-template-columns:1fr}.bi-chart-grid:empty{display:none}.bi-own-details{margin:12px 0 20px}.bi-own-details summary{cursor:pointer;color:#356a4d;font-size:13px}.bi-own-details[open] summary{margin-bottom:12px}.bi-empty{min-height:0;padding:15px}.bi-empty>span{display:none}
+.bi-workspace *{
+  box-sizing:border-box}
+.bi-workspace [hidden]{
+  display:none!important}
 
-.bi-workspace [hidden]{display:none!important}
+.bi-workspace button,.bi-workspace input,.bi-workspace select{
+  font:inherit;
+  touch-action:manipulation}
 
-.bi-chart-grid{align-items:start}
+.bi-workspace button{
+  cursor:pointer}
+.bi-workspace button:disabled{
+  cursor:default;
+  opacity:.45}
+
+.bi-workspace :is(button,input,select,a,summary):focus-visible{
+  outline:2px solid var(--ui-primary);
+  outline-offset:3px}
+
+.bi-intro{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  margin-bottom:14px}
+.bi-intro h1{
+  font-size:26px;
+  font-weight:600;
+  letter-spacing:-.7px;
+  margin:0}
+.bi-eyebrow{
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:1.5px;
+  color:var(--ui-muted)}
+
+.bi-intro-actions,.bi-chart-actions{
+  display:flex;
+  align-items:center;
+  gap:8px}
+.bi-workspace .mi-button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  min-height:36px;
+  padding:7px 13px;
+  border:1px solid var(--ui-line);
+  border-radius:6px;
+  background:var(--ui-surface);
+  color:var(--ui-ink);
+  font:inherit;
+  cursor:pointer;
+  text-decoration:none}
+.bi-workspace .bi-primary{
+  background:var(--ui-primary);
+  color:white;
+  border-color:var(--ui-primary)}
+
+.bi-link{
+  border:0;
+  background:none;
+  padding:0;
+  color:var(--ui-primary);
+  font:inherit;
+  font-size:13px;
+  cursor:pointer;
+  text-decoration:none}
+.bi-link:hover{
+  text-decoration:underline}
+
+#bi-toggle-filters{
+  display:none}
+.bi-toolbar{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:flex-end;
+  padding:14px 16px;
+  background:var(--ui-surface);
+  border:1px solid var(--ui-line);
+  border-radius:var(--ui-radius)}
+
+.bi-toolbar label{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  flex:1;
+  min-width:110px;
+  font-size:12px;
+  color:var(--ui-muted)}
+.bi-toolbar .bi-source{
+  flex:2;
+  min-width:210px}
+
+.bi-workspace select,.bi-workspace input:not([type=checkbox]):not([type=radio]):not([type=file]){
+  min-height:36px;
+  border:1px solid var(--ui-line);
+  border-radius:5px;
+  padding:6px 9px;
+  background:var(--ui-surface);
+  color:var(--ui-ink);
+  font-size:13px;
+  min-width:0;
+  max-width:100%}
+
+.bi-top{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  font-size:12px;
+  color:var(--ui-muted)}
+.bi-top>div{
+  display:flex;
+  gap:2px;
+  border:1px solid var(--ui-line);
+  border-radius:5px;
+  overflow:hidden}
+.bi-top button{
+  font-size:12px;
+  border:0;
+  background:white;
+  color:var(--ui-muted);
+  padding:8px}
+.bi-top button[aria-pressed=true]{
+  background:var(--ui-soft);
+  color:var(--ui-primary)}
+.bi-toolbar select{
+  width:100%}
+.bi-scope{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  padding:10px 0;
+  color:var(--ui-muted);
+  font-size:12px}
+.bi-dot{
+  padding:0 5px;
+  color:#a3b2aa}
+
+.bi-tabs{
+  display:flex;
+  align-items:center;
+  gap:24px;
+  border-bottom:1px solid var(--ui-line);
+  margin:0 0 18px;
+  min-height:42px;
+  overflow-x:auto}
+.bi-tabs>button{
+  border:0;
+  border-bottom:2px solid transparent;
+  background:none;
+  padding:9px 0;
+  color:var(--ui-muted);
+  font-size:13px;
+  white-space:nowrap}
+.bi-tabs>button[aria-pressed=true]{
+  color:var(--ui-primary);
+  border-bottom-color:var(--ui-primary);
+  font-weight:600}
+.bi-more{
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  white-space:nowrap;
+  color:var(--ui-muted);
+  font-size:12px}
+.bi-more select{
+  max-width:160px}
+
+.bi-kpis{
+  display:flex;
+  flex-wrap:wrap;
+  gap:0;
+  margin:0 0 22px;
+  padding:0 0 18px;
+  border-bottom:1px solid var(--ui-line)}
+.bi-kpis article{
+  flex:1;
+  min-width:170px;
+  padding:0 22px;
+  border-left:1px solid var(--ui-line)}
+.bi-kpis article:first-child{
+  padding-left:0;
+  border-left:0}
+.bi-kpis span{
+  display:block;
+  color:var(--ui-muted);
+  font-size:12px}
+.bi-kpis strong{
+  display:block;
+  font-size:27px;
+  line-height:1.25;
+  font-weight:600;
+  letter-spacing:-.6px;
+  margin:4px 0}
+.bi-kpis small{
+  display:block;
+  font-size:12px;
+  color:var(--ui-muted)}
+
+.bi-panel{
+  min-width:0;
+  background:var(--ui-surface);
+  border:1px solid var(--ui-line);
+  border-radius:var(--ui-radius);
+  padding:20px;
+  margin:0 0 20px;
+  box-shadow:none}
+.bi-panel h3,.bi-research-brief h3{
+  font-size:17px;
+  font-weight:600;
+  margin:0 0 6px}
+.bi-panel-title{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:14px;
+  margin-bottom:16px}
+.bi-panel-title p{
+  font-size:12px;
+  color:var(--ui-muted);
+  margin:3px 0;
+  line-height:1.5}
+.bi-panel-title h3{
+  margin-top:3px}
+.bi-badge{
+  background:var(--ui-soft);
+  color:var(--ui-primary);
+  border-radius:4px;
+  padding:4px 7px;
+  font-size:12px;
+  white-space:nowrap}
+.bi-inline{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  font-size:12px}
+
+.bi-hist-scroll{
+  overflow-x:auto}
+.bi-hist{
+  display:grid;
+  grid-template-columns:repeat(var(--bins),minmax(66px,1fr));
+  align-items:end;
+  gap:5px;
+  padding:5px 0 0;
+  min-width:100%}
+.bi-hist-bin{
+  display:grid;
+  grid-template-rows:22px 130px 48px;
+  gap:5px;
+  align-items:end;
+  text-align:center;
+  padding:0 4px;
+  border:0;
+  background:none;
+  color:var(--ui-muted);
+  min-width:0}
+.bi-hist-value{
+  font-size:12px;
+  color:var(--ui-ink)}
+.bi-hist-track{
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  height:130px;
+  border-bottom:1px solid var(--ui-line)}
+.bi-hist-track i{
+  display:block;
+  width:70%;
+  max-width:64px;
+  background:#86a795;
+  border-radius:3px 3px 0 0;
+  min-height:0}
+.bi-hist-bin:hover .bi-hist-track i,.bi-hist-bin[aria-pressed=true] .bi-hist-track i{
+  background:var(--ui-primary)}
+.bi-hist-bin[aria-pressed=true]{
+  color:var(--ui-primary);
+  font-weight:600}
+.bi-hist-label{
+  font-size:12px;
+  white-space:nowrap;
+  transform:rotate(-34deg);
+  transform-origin:50% 0;
+  align-self:start;
+  margin-top:7px}
+.bi-chart-caption{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  color:var(--ui-muted);
+  font-size:12px;
+  margin-top:8px}
+.bi-secondary-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.5fr) minmax(280px,1fr);
+  gap:24px;
+  align-items:start;
+  margin-bottom:20px}
+.bi-secondary-grid>.bi-panel{
+  margin:0}
+.bi-research-brief{
+  padding:18px 0 18px 22px;
+  border-left:2px solid #b8cfc1}
+.bi-research-brief h3{
+  margin-top:7px}
+.bi-research-brief p{
+  font-size:13px;
+  line-height:1.7;
+  color:var(--ui-muted);
+  margin:8px 0 16px}
+.bi-research-brief dl{
+  margin:0 0 14px}
+.bi-research-brief dl>div{
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  padding:7px 0;
+  border-bottom:1px solid var(--ui-line);
+  font-size:12px}
+.bi-research-brief dt{
+  color:var(--ui-muted)}
+.bi-research-brief dd{
+  margin:0;
+  text-align:right}
+
+.bi-bars{
+  display:grid;
+  gap:12px;
+  margin:10px 0}
+.bi-bar{
+  display:grid;
+  grid-template-columns:minmax(80px,130px) minmax(40px,1fr) auto 45px;
+  gap:12px;
+  align-items:center;
+  font-size:13px}
+.bi-bar>span{
+  overflow-wrap:anywhere}
+.bi-bar>div{
+  height:6px;
+  background:#edf2ef;
+  border-radius:3px;
+  overflow:hidden}
+.bi-bar i{
+  height:100%;
+  display:block;
+  background:#79a18c;
+  border-radius:3px}
+.bi-bar b{
+  font-weight:500;
+  text-align:right}
+.bi-bar small{
+  color:var(--ui-muted);
+  font-size:12px;
+  text-align:right}
+.bi-foot{
+  margin:12px 0 0;
+  color:var(--ui-muted);
+  font-size:12px;
+  line-height:1.65}
+.bi-state{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  padding:14px 18px;
+  background:#f0f4f2}
+.bi-state strong{
+  font-size:14px;
+  white-space:nowrap}
+.bi-state p{
+  flex:1;
+  color:var(--ui-muted);
+  font-size:13px;
+  margin:0}
+.bi-gap{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 20px;
+  font-size:12px;
+  color:var(--ui-muted);
+  line-height:1.7;
+  padding:10px 0}
+.bi-empty{
+  display:grid;
+  gap:7px;
+  padding:15px 0;
+  color:var(--ui-muted);
+  font-size:13px}
+.bi-empty>span{
+  display:none}
+.bi-empty strong{
+  font-size:14px;
+  color:var(--ui-ink)}
+.bi-empty p{
+  margin:0}
+
+.bi-table-wrap{
+  overflow-x:auto}
+.bi-workspace table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+  text-align:left}
+.bi-workspace th{
+  background:#f5f8f6;
+  color:var(--ui-muted);
+  font-size:12px;
+  font-weight:500;
+  padding:11px 12px;
+  white-space:nowrap;
+  border-bottom:1px solid var(--ui-line)}
+.bi-workspace td{
+  padding:12px;
+  border-bottom:1px solid #edf1ee;
+  vertical-align:top}
+.bi-workspace td:nth-child(2){
+  min-width:240px;
+  max-width:400px}
+.bi-workspace td:nth-child(3){
+  white-space:nowrap}
+.bi-workspace td>small{
+  display:block;
+  color:var(--ui-muted);
+  font-size:12px;
+  margin-top:4px;
+  max-width:230px}
+.bi-workspace td>strong{
+  font-weight:500}
+.bi-workspace td a{
+  color:var(--ui-primary)}
+.bi-workspace td details{
+  font-size:12px;
+  margin-top:7px;
+  max-width:300px}
+.bi-workspace td details p{
+  white-space:normal;
+  overflow-wrap:anywhere}
+.bi-row-action{
+  display:block;
+  border:0;
+  background:none;
+  color:var(--ui-primary);
+  padding:5px 0;
+  font:inherit;
+  font-size:12px;
+  text-align:left}
+.bi-product-identity{
+  display:flex;
+  align-items:center;
+  gap:12px}
+.bi-product-identity img,.bi-no-image{
+  width:46px;
+  height:52px;
+  object-fit:contain;
+  flex:none}
+.bi-no-image{
+  display:grid;
+  place-items:center;
+  background:#f5f7f6;
+  color:#85928b;
+  font-size:10px}
+.bi-product-identity strong{
+  font-weight:500;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden}
+.bi-table-controls,.bi-pagination,.bi-import-actions{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+  margin:12px 0}
+.bi-table-controls input{
+  flex:1;
+  min-width:180px}
+.bi-table-controls>span,.bi-pagination{
+  font-size:12px;
+  color:var(--ui-muted)}
+.bi-pagination>span{
+  margin-right:auto}
+.bi-table-empty{
+  display:grid;
+  text-align:center;
+  gap:8px;
+  padding:20px;
+  color:var(--ui-muted)}
+
+.bi-next-actions{
+  display:grid;
+  grid-template-columns:140px repeat(3,minmax(0,1fr));
+  gap:18px;
+  padding:10px 0 24px}
+.bi-next-actions h3{
+  font-size:17px;
+  margin:5px 0}
+.bi-next-actions button{
+  text-align:left;
+  border:0;
+  border-left:1px solid var(--ui-line);
+  background:none;
+  padding:7px 18px;
+  color:var(--ui-primary)}
+.bi-next-actions strong{
+  display:block;
+  font-size:14px;
+  font-weight:500}
+.bi-next-actions span:not(.bi-eyebrow){
+  display:block;
+  color:var(--ui-muted);
+  font-size:12px;
+  margin-top:8px}
+.bi-disclaimer{
+  border-top:1px solid var(--ui-line);
+  padding:16px 0;
+  color:var(--ui-muted);
+  font-size:12px}
+.bi-disclaimer summary{
+  cursor:pointer;
+  color:var(--ui-primary);
+  width:max-content}
+.bi-disclaimer p{
+  max-width:900px}
+.bi-details{
+  font-size:13px;
+  line-height:1.8;
+  color:var(--ui-muted);
+  margin-top:16px}
+.bi-details summary{
+  cursor:pointer;
+  color:var(--ui-primary)}
+.bi-quality{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px}
+.bi-quality>div{
+  padding:12px 0;
+  border-bottom:1px solid var(--ui-line)}
+.bi-quality span{
+  display:block;
+  font-size:12px;
+  color:var(--ui-muted)}
+.bi-quality strong{
+  display:block;
+  font-size:19px;
+  margin-top:5px;
+  font-weight:500}
+.bi-file input{
+  max-width:200px}
+.bi-import-status{
+  font-size:13px;
+  background:var(--ui-soft);
+  padding:10px 14px;
+  border-radius:5px}
+.bi-scatter{
+  display:block;
+  width:100%;
+  max-height:360px}
+.bi-scatter text{
+  font:12px var(--ui-font);
+  fill:var(--ui-muted)}
+
+.bi-own-cards,.bi-macro-cards,.bi-opportunity-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:18px}
+.bi-own-cards article,.bi-opportunity-card{
+  padding:16px;
+  border:1px solid var(--ui-line);
+  border-radius:6px}
+.bi-own-cards p,.bi-opportunity-card p,.bi-macro-note{
+  font-size:13px;
+  color:var(--ui-muted);
+  line-height:1.7}
+.bi-macro-cards article{
+  border-left:2px solid #abc6b6;
+  padding:10px 18px}
+.bi-macro-cards span{
+  display:block;
+  color:var(--ui-muted);
+  font-size:12px}
+.bi-macro-cards strong{
+  display:block;
+  font-size:24px;
+  margin:8px 0}
+.bi-macro-cards p{
+  font-size:12px;
+  color:var(--ui-muted)}
+.bi-opportunity-card>div{
+  display:flex;
+  justify-content:space-between;
+  gap:12px}
+.bi-opportunity-card ul{
+  padding:0;
+  list-style:none}
+.bi-opportunity-card li{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px 14px;
+  padding:12px 0;
+  border-top:1px solid var(--ui-line)}
+.bi-opportunity-card li a{
+  flex:1;
+  min-width:140px}
+.bi-opportunity-card li small{
+  flex-basis:100%;
+  color:var(--ui-muted);
+  font-size:12px}
+.bi-next-steps{
+  display:flex;
+  gap:24px}
+.bi-next-steps>div{
+  flex:1}
+.bi-next-steps p{
+  font-size:13px;
+  color:var(--ui-muted)}
+.bi-context-bar{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:12px;
+  background:var(--ui-soft);
+  font-size:12px;
+  margin-bottom:16px}
+
+.bi-benchmark-gap{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  font-size:13px;
+  color:var(--ui-muted)}
+.bi-benchmark-gap>.mi-button{
+  flex:none}
+.bi-benchmark-body{
+  display:grid;
+  grid-template-columns:220px minmax(0,1fr) auto;
+  gap:24px;
+  align-items:center}
+.bi-own-price span,.bi-own-price small{
+  display:block;
+  color:var(--ui-muted);
+  font-size:12px}
+.bi-own-price strong{
+  display:block;
+  font-size:24px;
+  font-weight:600;
+  margin:5px 0}
+.bi-near-products a{
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  padding:9px 0;
+  color:var(--ui-ink);
+  border-bottom:1px solid var(--ui-line);
+  font-size:13px}
+.bi-near-products a small{
+  color:var(--ui-muted);
+  font-size:12px}
+.bi-near-products a strong{
+  font-weight:500;
+  white-space:nowrap}
+.bi-near-products p{
+  color:var(--ui-muted);
+  font-size:13px}
+.bi-file{
+  position:relative}
+.bi-file input{
+  position:absolute;
+  width:1px;
+  height:1px;
+  opacity:0}
+.bi-file:focus-within{
+  outline:2px solid var(--ui-primary);
+  outline-offset:3px}
+@media(max-width:850px){
+  .bi-benchmark-gap{
+  flex-direction:column;
+  align-items:flex-start}
+.bi-benchmark-body{
+  grid-template-columns:1fr}
+.bi-benchmark-body>.mi-button{
+  justify-self:start}
+.bi-near-products a small{
+  display:block}
+}
+
+.bi-action-list>div{padding:14px 0;border-top:1px solid var(--ui-line)}.bi-action-list strong{font-size:14px;font-weight:500}.bi-action-list p{font-size:13px;color:var(--ui-muted);margin:6px 0}
+@media(max-width:1050px){
+  .bi-toolbar{
+  gap:10px}
+.bi-secondary-grid{
+  grid-template-columns:1fr}
+.bi-research-brief{
+  padding:12px 18px}
+.bi-next-actions{
+  grid-template-columns:1fr 1fr}
+.bi-kpis article{
+  min-width:150px;
+  padding:0 14px}
+.bi-kpis strong{
+  font-size:25px}
+}
+
+@media(max-width:650px){
+  #bi-toggle-filters{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  width:100%;
+  padding:12px;
+  background:var(--ui-surface);
+  border:1px solid var(--ui-line);
+  border-radius:6px;
+  color:var(--ui-ink);
+  font-size:13px}
+#bi-toggle-filters b{
+  font-size:12px;
+  color:var(--ui-primary);
+  font-weight:500}
+.bi-range-shell:not(.is-open) .bi-toolbar{
+  display:none}
+.bi-range-shell.is-open .bi-toolbar{
+  margin-top:8px}
+.bi-intro{
+  align-items:flex-start}
+.bi-intro h1{
+  font-size:23px}
+.bi-intro-actions{
+  flex-wrap:wrap;
+  justify-content:flex-end}
+.bi-intro-actions .mi-button{
+  font-size:12px;
+  padding:6px 9px}
+.bi-toolbar{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  padding:12px}
+.bi-toolbar label{
+  min-width:0}
+.bi-toolbar .bi-source{
+  grid-column:1/-1;
+  min-width:0}
+.bi-toolbar select{
+  min-height:42px}
+.bi-tabs{
+  gap:18px}
+.bi-more{
+  margin-left:0}
+.bi-more>select{
+  max-width:130px}
+.bi-scope{
+  font-size:11px;
+  align-items:flex-start}
+.bi-scope>span{
+  flex:1}
+.bi-scope .bi-link{
+  font-size:12px}
+.bi-kpis{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px}
+.bi-kpis article{
+  min-width:0;
+  padding:0;
+  border:0}
+.bi-panel{
+  padding:15px}
+.bi-hist{
+  grid-template-columns:repeat(var(--bins),66px)}
+.bi-hist-bin{
+  grid-template-rows:22px 130px 48px}
+.bi-hist-track{
+  height:130px}
+.bi-panel-title{
+  gap:10px}
+.bi-panel-title h3{
+  font-size:16px}
+.bi-panel-title p{
+  font-size:12px}
+.bi-chart-caption{
+  flex-direction:column;
+  font-size:11px}
+.bi-state{
+  display:block}
+.bi-state p{
+  margin:7px 0}
+.bi-next-actions{
+  grid-template-columns:1fr;
+  gap:10px}
+.bi-next-actions button{
+  padding:9px 14px}
+.bi-quality{
+  grid-template-columns:1fr 1fr}
+.bi-bar{
+  grid-template-columns:85px minmax(30px,1fr) auto 38px;
+  gap:8px;
+  font-size:12px}
+.bi-next-steps{
+  flex-direction:column;
+  gap:10px}
+.bi-workspace .mi-button{
+  min-height:40px}
+.bi-table-controls>select{
+  width:100%}
+}
+
+@media(prefers-reduced-motion:no-preference){
+  .bi-hist-track i{
+  transition:height .18s,background .15s}
+.bi-workspace button{
+  transition:color .12s,background .12s}
+}
 
 </style>
 <style>
@@ -323,7 +1315,7 @@ body.bi-mode .page-heading{display:none}.bi-intro h1{font-size:27px;letter-spaci
 
 </style>
 <script>window.UWANT_OFFLINE=true;</script><style>
-body>.sidebar,body>main>header{display:none!important}body>main{margin-left:0!important}.content{max-width:none;padding:24px 30px 70px!important}.market-heading,.market-status,.market-code,.market-indicator,.market-name small,.market-top{display:none!important}.markets{display:flex!important;gap:6px!important;margin:0 0 18px!important;padding:0!important;background:none!important;overflow:auto}.market{width:auto!important;flex:0 0 auto!important;padding:6px 14px!important;min-height:0!important;border-radius:6px!important}.market-name{margin:0!important;font-size:12px!important}.market-heading small{display:none!important}.page-heading .eyebrow,.page-heading #page-subtitle{display:none!important}.page-heading{margin-bottom:18px!important}#page-title{font-size:24px!important;margin:0!important}.notice{font-size:11px!important}.panel-subtitle,.panel-head p{font-size:11px!important}footer{font-size:10px!important}@media(max-width:780px){.content{padding:18px 14px 65px!important}.market{padding:6px 10px!important}}
+body>.sidebar,body>main>header{display:none!important}body>main{margin-left:0!important}.content{max-width:none;padding:24px 28px 64px!important}.market-heading,.market-status,.market-code,.market-indicator,.market-name small,.market-top{display:none!important}.markets{display:flex!important;gap:6px!important;margin:0 0 18px!important;padding:0!important;background:none!important;overflow:auto}.market{width:auto!important;flex:0 0 auto!important;padding:6px 14px!important;min-height:0!important;border-radius:6px!important}.market-name{margin:0!important;font-size:13px!important}.page-heading .eyebrow,.page-heading #page-subtitle{display:none!important}.page-heading{margin-bottom:18px!important}body.bi-mode{background:var(--ui-bg)}.page-heading #export:disabled{display:none}body.bi-mode .content{padding-top:22px!important}@media(max-width:780px){.content{padding:18px 14px 64px!important}.market{padding:6px 10px!important}}
 </style></head>
 <body><aside class="sidebar"><a class="brand" href="#overview">UWANT<span>AMERICAS</span></a><div class="workspace"><span class="avatar">美</span><div>美洲经营中心<span>Commerce workspace</span></div></div><div class="nav-label">经营管理</div><nav id="navigation"><a href="#overview" data-page="overview"><span>◫</span>经营总览</a><a href="#analysis" data-page="analysis"><span>✧</span>经营分析</a><a href="#products" data-page="products"><span>▦</span>SKU 表现</a><a href="#profit" data-page="profit"><span>◇</span>利润与补货</a><a href="#inventory" data-page="inventory"><span>▤</span>库存监控</a><a href="#calendar" data-page="calendar"><span>▣</span>促销日历</a><a href="#tasks" data-page="tasks"><span>☑</span>运营任务</a></nav><div class="nav-label second">工作台</div><nav><a href="#access" data-page="access"><span>⚙</span>访问设置</a></nav><div class="sidebar-bottom"><div class="access-note"><span class="access-dot"></span>在线版本</div><p>美洲市场与经营数据</p><div class="sidebar-user"><span class="owner-avatar">U</span><div>经营工作台<small>Owner access</small></div></div></div></aside>
 <main><header><div class="breadcrumb">美洲业务 <span>/</span> <b id="crumb">经营总览</b></div><div class="header-right"><span class="preview-pill">运营看板</span><span class="owner-avatar">U</span></div></header><div class="content"><div class="page-heading"><div><div class="eyebrow">UWANT · AMERICAS OPERATIONS</div><h1 id="page-title">经营总览</h1><p id="page-subtitle">查看销售、流量与库存。</p></div><button class="button" id="export">↓ 导出当前数据</button></div>
@@ -1387,9 +2379,14 @@ function eventDiagnostics(){return data.event.map(r=>{const s=stock(r.sku),cvr=r
  }).sort((a,b)=>a.priority-b.priority||b.sessions-a.sessions);}
 function historyDiagnostics(){return rows().map(r=>{const s=stock(r.sku),septUnits=sum(data.sales.filter(x=>x.sku===r.sku&&x.date.startsWith('2026-09')&&(channel==='all'||x.channel===channel)),'units'),allSeptUnits=sum(data.sales.filter(x=>x.sku===r.sku&&x.date.startsWith('2026-09')),'units'),coverage=allSeptUnits>0?s.available/(allSeptUnits/30):null;return {...r,available:s.available,septUnits,coverage,issue:r.units===0?'当前期间无销量':'有销量，待接入转化数据',priority:r.units===0?1:2,evidence:[`当前期间 Sell Out ${r.units}台`,`10月5日仓库可用 ${s.available}台`,`9月全渠道销量 ${allSeptUnits}台`],actions:r.units===0?['核对平台是否在售、有货、促销有效及购买路径。','补充曝光、访问、广告与价格，区分没流量和有流量未成交。']:['补充同期间销售额、访问、广告和成本后分析转化效率。','结合库存、备货周期与连续销售节奏复核运营方向。'],measure:'取得同期间、同平台的流量、费用与销量，再比较调整前后表现。'};}).sort((a,b)=>a.priority-b.priority||b.available-a.available);}
 function analysisMetricTable(list){const event=period==='event';return `<div class="table-wrap"><table><thead><tr><th>SKU</th><th>销量 / 台</th><th>Sessions</th><th>单位转化率</th><th>SP花费 / MXN</th><th>SP花费 / 销售额</th><th>广告ROAS</th><th>诊断</th></tr></thead><tbody>${list.map(r=>`<tr><td><strong>${r.sku}</strong><small>${categories[r.sku]}</small></td><td>${fmt(r.units)}</td><td>${fmt(r.sessions)}</td><td>${event?pct(r.cvr):'—'}</td><td>${fmt(r.spend,2)}</td><td>${event&&r.revenue===0?'无销售额':event?pct(r.costRate):'—'}</td><td>${event?fmt(r.roas,2):'—'}</td><td><span class="tag ${r.priority===1?'amber':'gray'}">${r.issue}</span></td></tr>`).join('')}</tbody></table></div>`;}
-function diagnosticCard(r){let event=period==='event';return `<article class="panel diagnosis-card"><div class="diagnosis-heading"><div><span class="diagnosis-kicker">${r.priority===1?'PRIORITY · 优先排查':'VALIDATE · 持续验证'}</span><h2>${r.sku} <span>${categories[r.sku]}</span></h2></div><span class="tag ${r.priority===1?'amber':'gray'}">${r.issue}</span></div><div class="diagnosis-evidence">${r.evidence.map(x=>`<span>${x}</span>`).join('')}</div>${event?`<div class="diagnosis-block"><label>待验证原因</label><p>${r.hypotheses.join(' ')}</p></div>`:''}<div class="diagnosis-block"><label>建议动作</label><ol>${r.actions.map(a=>`<li>${a}</li>`).join('')}</ol></div><div class="diagnosis-validation"><label>如何验证</label><p>${r.measure}</p>${event?`<label>下一步判断</label><p>${r.decision}</p>`:''}</div><div class="diagnosis-footer"><span>${event?'两日快照 · '+(r.smallSample?'成交样本小':'按现有数据诊断'):'缺少访问与费用 · 先补数据'}</span><a class="link-button" href="#${r.sku==='D800'?'inventory':'products'}">查看${r.sku==='D800'?'库存':'产品数据'} ↗</a></div></article>`;}
+function diagnosticCard(r){let event=period==='event';return `<article class="panel diagnosis-card"><div class="diagnosis-heading"><div><span class="diagnosis-kicker">${r.priority===1?'优先核查':'持续验证'}</span><h2>${r.sku} <span>${categories[r.sku]}</span></h2></div><span class="tag ${r.priority===1?'amber':'gray'}">${r.issue}</span></div><div class="diagnosis-evidence">${r.evidence.map(x=>`<span>${x}</span>`).join('')}</div>${event?`<div class="diagnosis-block"><label>待验证原因</label><p>${r.hypotheses.join(' ')}</p></div>`:''}<div class="diagnosis-block"><label>建议动作</label><ol>${r.actions.map(a=>`<li>${a}</li>`).join('')}</ol></div><div class="diagnosis-validation"><label>如何验证</label><p>${r.measure}</p>${event?`<label>下一步判断</label><p>${r.decision}</p>`:''}</div><div class="diagnosis-footer"><span>${event?'两日快照 · '+(r.smallSample?'成交样本小':'按现有数据诊断'):'缺少访问与费用 · 先补数据'}</span><a class="link-button" href="#${r.sku==='D800'?'inventory':'products'}">查看${r.sku==='D800'?'库存':'产品数据'} ↗</a></div></article>`;}
 function advertisingReadout(){const a=data.advertising,totalRevenue=sum(data.event,'revenue'),spCpc=ratio(a.spend,a.clicks),spCtr=ratio(a.clicks,a.impressions);return panel('广告投入诊断','Amazon SP · 2026年10月6—7日 · 仅基于已提供数据',`<div class="advertising-stats"><div><label>曝光 / 点击</label><strong>${fmt(a.impressions)} / ${fmt(a.clicks)}</strong><small>SP CTR ${pct(spCtr)}</small></div><div><label>广告花费</label><strong>${fmt(a.spend,2)} <small>MXN</small></strong><small>CPC ${fmt(spCpc,2)} MXN</small></div><div><label>广告归因销售</label><strong>${fmt(a.adRevenue,2)} <small>MXN</small></strong><small>ACOS不可计算；ROAS ${fmt(ratio(a.adRevenue,a.spend),2)}</small></div><div><label>SP花费 / 总销售额</label><strong>${pct(ratio(a.spend,totalRevenue))}</strong><small>非完整广告成本率；Meta费用缺失</small></div></div><div class="diagnosis-block"><label>观察与策略</label><p>站内广告已有花费但本期未记录归因销售。先检查关键词、投放状态、落地商品与归因回补，不能直接把所有广告判定为无效，也不能直接把未归因成交认定为自然成交。</p></div><div class="diagnosis-block"><label>站外流量需要补充验证</label><p>Amazon Attribution记录 ${fmt(a.externalClicks)}点击、${fmt(a.externalViews)}详情页浏览、${fmt(a.externalCarts)}加购与${a.externalPurchases}归因购买。建议核对素材、落地页和购买意图，并补齐Meta费用。该数据为品牌口径，归因窗口14天，不能与SP或Seller Central数字简单相加。</p></div><div class="notice green section-gap">下一步先补齐站外费用和归因结果，再比较完整广告成本、有效成交与贡献利润。两日广告表现不足以推导长期投放回报。</div>`);}
-function analysisView(){if(market!=='mx'){const p=marketProfiles[market];return empty(p.name+'分析待接入经营数据','需要该市场相同期间的销售、访问、广告费用与库存，才能生成针对性策略。各国采用自己的数据和口径，墨西哥结论不自动套用。','<a class="button" href="#data">查看数据需求 ↗</a>');}const event=period==='event',all=event?eventDiagnostics():historyDiagnostics(),list=all.filter(r=>analysisSku==='all'||r.sku===analysisSku),priority=list.filter(r=>r.priority===1).length;return `<div class="analysis-intro"><div><span>DIAGNOSE · ACT · VERIFY</span><h2>把经营数据转成下一步动作</h2><p>每条策略都关联证据、待验证原因和结果复盘。建议随当前期间、渠道和SKU筛选重新生成。</p></div><span class="tag gray">可解释规则 · 建议待执行</span></div><div class="notice ${event?'':'green'}">${event?'当前为大促前两日诊断，单位转化率＝销量台数÷Sessions。样本小、品类不同，不以跨SKU转化率高低直接决定预算。':'当前Sell Out不含访问、销售额与广告费用，无法判断转化率或广告效率。这里先分析销售与库存线索，缺失指标保留为空。'}</div><div class="sku-pills" role="group" aria-label="分析产品">${['all','D600','D800','V500','Y100','M600'].map(s=>`<button class="button ${analysisSku===s?'selected':''}" data-analysis-sku="${s}" aria-pressed="${analysisSku===s}">${s==='all'?'全部SKU':s}</button>`).join('')}</div><div class="metrics">${metric('优先排查',fmt(priority),'个 SKU',event?'有访问但本期销量为0':'当前选择期间无销量')}${metric('已提供销量',fmt(sum(list,'units')),'台','当前期间与筛选范围')}${metric(event?'单位转化率':'转化率',event?pct(ratio(sum(list,'units'),sum(list,'sessions'))):'—',event?'':'待接入',event?'按销量与Sessions汇总加权':'缺少Sessions，不能推导')}${metric('策略执行效果','—','待复盘','当前展示建议，尚无优化后结果')}</div>${panel('转化与广告对照','不同品类、流量来源和样本量会影响转化；只显示观察，不设统一行业标准。',analysisMetricTable(list))}<div class="diagnosis-grid section-gap">${list.map(diagnosticCard).join('')}</div>${event?'<div class="section-gap">'+advertisingReadout()+'</div>':'<div class="notice green section-gap">库存快照为10月5日，销量按所选期间。库存压力需结合库龄、在途和采购运输周期评估，不能仅依据累计销量安排补货。</div>'}<div class="section-gap">${panel('判断规则与边界','让建议可核查，而非把推测当原因',`<div class="definitions"><div><b>无成交筛选</b><span>本期Sessions ≥${analysisRules.zeroSaleSessions}且销量为0，优先检查转化。100是诊断筛选阈值，不是行业转化基准。</span></div><div><b>样本量提示</b><span>Sessions少于${analysisRules.smallSampleSessions}或销量少于${analysisRules.smallSampleUnits}台，显示样本提示。此规则不等同于统计显著性检验。</span></div><div><b>广告费用</b><span>仅计算已提供的SP费用。销售额为0时费用占比不可计算；归因销售为0时ACOS不可计算。</span></div><div><b>建议与结果</b><span>策略是待验证动作。利润基准、测试预算、执行日期与结果需你确认和录入；不保证采取动作后必然改善。</span></div></div>`)}</div>`;}
+function analysisView(){
+ if(market!=='mx')return empty(marketProfiles[market].name+' · 经营报表尚未接入','需要本国同期间的销量、访问与广告数据。不会套用墨西哥结果。','<a class="button" href="#market">查看已有市场研究 →</a>');
+ const event=period==='event',all=event?eventDiagnostics():historyDiagnostics(),chosen=all.find(r=>r.sku===analysisSku)||all[0],units=typeof strictTotal==='function'?strictTotal(all,'units'):sum(all,'units'),sessions=typeof strictTotal==='function'?strictTotal(all,'sessions'):null;
+ return `<div class="analysis-workspace"><div class="analysis-summary"><div><span>优先核查</span><strong>${all.filter(r=>r.priority===1).length}<small> 个 SKU</small></strong></div><div><span>已记录销量</span><strong>${fmt(units)}<small> 台</small></strong></div>${event?`<div><span>单位转化率</span><strong>${pct(ratio(units,sessions))}</strong></div>`:''}<p>${event?'Amazon MX · 10月6—7日；SP与站外归因分别核验':'当前 Sell Out 只有销量；转化与广告效率尚不可计算'}</p></div><section class="panel analysis-queue"><div class="panel-head"><div><h2>需要关注的商品</h2><p>选择型号，查看证据和下一步核查</p></div></div>${analysisMetricTable(all).replace(/<strong>([A-Z][0-9A-Z]+)<\/strong>/g,(_,sku)=>`<button class="analysis-sku-link" data-analysis-sku="${sku}" aria-pressed="${chosen?.sku===sku}">${sku} →</button>`)}</section><div class="analysis-selected">${chosen?diagnosticCard(chosen):''}</div>${event?`<details class="analysis-reference"><summary>广告数据与归因说明</summary>${advertisingReadout()}</details>`:''}<details class="analysis-reference"><summary>判断规则与统计限制</summary><p>Sessions ≥ ${analysisRules.zeroSaleSessions}且销量为0仅是优先排查条件，不是行业标准。单位转化率为销量台数 ÷ Sessions；缺失不补零，零分母不输出比例。库存是独立快照，建议不是已证实原因。</p></details></div>`;
+}
+
 function wireAnalysis(){document.querySelectorAll('[data-analysis-sku]').forEach(b=>b.addEventListener('click',()=>{analysisSku=b.dataset.analysisSku;render();}));}
 const renderWithStrategy=render;
 render=function(){renderWithStrategy();if(!data)return;if(page==='analysis'){$('#page-title').textContent=marketProfiles[market].name+' · 经营分析';$('#view').innerHTML=analysisView();wireAnalysis();}};
@@ -1431,7 +2428,7 @@ analysisView=function(){if(market!=='mx')return analysisBeforeAudit();const audi
  let html=analysisBeforeAudit();const m=data.eventMetadata;if(period==='event'){const selected=eventDiagnostics().filter(r=>analysisSku==='all'||r.sku===analysisSku),units=strictTotal(selected,'units'),sessions=strictTotal(selected,'sessions');html=html.replace(metric('已提供销量',fmt(sum(selected,'units')),'台','当前期间与筛选范围'),metric('已提供销量',fmt(units),'台','任一SKU缺少销量时不输出完整合计'));html=html.replace(metric('单位转化率',pct(ratio(sum(selected,'units'),sum(selected,'sessions'))),'','按销量与Sessions汇总加权'),metric('单位转化率',pct(ratio(units,sessions)),'','明细缺失时不推导；非订单转化率'));
  const missingNotice=audit.missing.length?'<div class="notice">待补信息：'+audit.missing.join('；')+'。相关指标保留为空，策略只作为排查建议。</div>':'';
  const evidenceGuide=panel('分析依据与决策边界','核对的是源报表内部一致性，尚未与平台原始导出复核',`<div class="definitions"><div><b>报表记录</b><span>${m.source}；${m.platform}墨西哥；${m.start}至${m.end}；币种${m.currency}。源报告采集日期${m.sourceDate}，不是实时数据。</span></div><div><b>计算结果</b><span>单位转化率、CPC、CTR、费用比例均显示分子分母口径。缺失值不当作0；零分母不输出比率；广告期间不同则不计算跨报表效率。</span></div><div><b>待验证原因</b><span>低转化只能提供排查线索，不能单凭两个指标确定是价格、Listing或流量问题。跨品类转化率不直接排名。</span></div><div><b>预算决策尚缺依据</b><span>Meta完整费用、退款退货、平台与履约费、利润底线、投放目标及归因回补。未补齐前不输出确定的扩量、停投或降价金额。</span></div><div><b>数据完整性</b><span>10月7日可能仍有更新，10月8—10日不在当前统计内。SP和Amazon Attribution的归因口径分别核对，不能共用14天窗口假设。</span></div><div><b>执行验证</b><span>可比期间仍可能受节日、优惠、配送与流量结构影响。没有可靠对照时，复盘只能说明相关变化，不能直接声称策略造成增长。</span></div></div>`);
- html=missingNotice+html+'<div class="section-gap">'+evidenceGuide+'</div>';
+ html=missingNotice+html+'<details class="analysis-reference"><summary>报表来源与数据核验</summary>'+evidenceGuide+'</details>';
  }
  return html;
 };
@@ -2891,11 +3888,24 @@ const ceExportBefore=rhExportRows;rhExportRows=function(){const rows=ceExportBef
 })(globalThis);
 
 </script>
-<script data-source="market-radar-data.js">
+<script data-source="history-metrics.js">
+(function(root){
+function metricRows(rows,key){
+ const monthly=rows.some(r=>r.origin==='monthly'||r.month&&r.recordStatus),field=key==='units'?'parentSales':'parentSalesAmount';
+ const eligible=monthly?rows.filter(r=>r.parentBasis==='历史父体变更记录'&&(r.parent_id||r.parentAsin)&&Number.isFinite(r[field])):rows.filter(r=>(r.sales_scope==='listing'||r.sales_scope==='family'&&(r.parent_id||r.parentAsin))&&Number.isFinite(r[key]));
+ const familyIds=new Set(eligible.filter(r=>r.sales_scope==='family'||monthly).map(r=>(r.parent_id||r.parentAsin)));
+ const groups=new Map();for(const r of eligible.filter(r=>r.sales_scope!=='listing'||!familyIds.has((r.parent_id||r.parentAsin)))){const id=monthly||r.sales_scope==='family'?'family|'+((r.parent_id||r.parentAsin)||r.product_id):'listing|'+r.product_id;if(!groups.has(id))groups.set(id,[]);groups.get(id).push(r);}
+ return [...groups.values()].filter(g=>new Set(g.map(r=>monthly?r[field]:r[key])).size===1).map(g=>({...g[0],brand:new Set(g.map(r=>r.brand)).size===1?g[0].brand:'品牌待核',[key]:monthly?g[0][field]:g[0][key],sales_scope:monthly?'family':g[0].sales_scope}));
+}
+const api={metricRows};if(typeof module!=='undefined')module.exports=api;else root.HistoryMetrics=api;
+})(globalThis);
+
+</script><script data-source="market-radar-data.js">
 /* BI data adapters preserve source dates and distinguish samples from markets. */
 const biCategories={wash:'洗地机',vacuum:'吸尘器',fabric:'布艺清洗机',mattress:'除螨仪'};
 const biCountries={us:'美国',mx:'墨西哥',ca:'加拿大',br:'巴西'},biCurrencies={us:'USD',mx:'MXN',ca:'CAD',br:'BRL'};
 const biPlatforms={amazon:'Amazon',ml:'Mercado Libre',bestbuy:'Best Buy',official:'品牌 / 分销站',retail:'其他当地零售'};
+let biBand='';
 let biSnapshots=[],biTab='overview',biCategory='wash',biPlatform='all',biDataset='',biTop=0,biMetric='count',biSearch='',biSort='rank',biPage=0,biNotice='';
 const biToday=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
 const biCat=sku=>({D:'wash',V:'vacuum',Y:'fabric',M:'mattress'})[sku?.[0]];
@@ -2919,7 +3929,8 @@ function biContext(){
  const groups=biDatasets(),chosen=groups.find(g=>g.key===biDataset)||(biIsMonth(biDataset)?null:groups[0])||null;
  biDataset=chosen?.key||(biIsMonth(biDataset)?biDataset:'');const all=chosen?.rows||[],ranked=all.filter(r=>Number.isInteger(r.rank)&&r.rank_scope),hasRanks=ranked.length>0;
  if(!hasRanks)biTop=0;
- const rows=biTop?ranked.filter(r=>r.rank<=biTop):all;
+ const scoped=biTop?ranked.filter(r=>r.rank<=biTop):all;
+ const rows=biBand===''?scoped:scoped.filter(r=>Number.isFinite(r.price)&&Math.floor(r.price/biPriceSteps[market])===Number(biBand));
  const monthly=biIsMonth(biDataset),knownScope=rows.length>0&&rows.every(r=>['listing','family'].includes(r.sales_scope)),listing=!monthly&&rows.length>0&&rows.every(r=>r.sales_scope==='listing');
  const unitRows=biMetricRows(rows,'units'),revenueRows=biMetricRows(rows,'revenue');
  const units=unitRows.length?unitRows.reduce((n,r)=>n+r.units,0):null,revenue=revenueRows.length?revenueRows.reduce((n,r)=>n+r.revenue,0):null;
@@ -2969,13 +3980,7 @@ function biCoverageGroups(country,category,platform){
 let biHistorySlice=[];
 const biIsMonth=value=>/^2026-(0[1-9]|1[0-2])$/.test(value);
 function biHistoryRows(){return biHistorySlice.filter(r=>r.country.toLowerCase()===market&&r.category===biCategory&&r.month===biDataset&&(biPlatform==='all'||biPlatform==='amazon')).map(r=>({...r,origin:'monthly',country:r.country.toLowerCase(),platform:'amazon',snapshot:r.retrievedAt,dataset:'SellerSprite 商品月度历史',method:'estimate',product_id:r.asin,model:r.title,brand:r.brand||'品牌待核',currency:r.currency,price:r.price,units:null,revenue:null,parent_id:r.parentAsin||'',sales_scope:'unknown',period_start:r.month+'-01',period_end:r.month+'-'+new Date(Number(r.month.slice(0,4)),Number(r.month.slice(5,7)),0).getDate(),rank:null,rank_scope:'',source:'https://www.'+({us:'amazon.com',ca:'amazon.ca',mx:'amazon.com.mx',br:'amazon.com.br'})[market]+'/dp/'+r.asin,uid:r.country+'|'+r.asin+'|'+r.month,priceNote:'期末最后有效价格，非月均价',conditions:r.parentBasis+'；父体月销量 '+biNum(r.parentSales)+'，子体购买量快照 '+biNum(r.childSales)+'（不相加）'}));}
-function biMetricRows(rows,key){
- const monthly=rows.some(r=>r.origin==='monthly'),field=key==='units'?'parentSales':'parentSalesAmount';
- const eligible=monthly?rows.filter(r=>r.parentBasis==='历史父体变更记录'&&r.parent_id&&Number.isFinite(r[field])):rows.filter(r=>(r.sales_scope==='listing'||r.sales_scope==='family'&&r.parent_id)&&Number.isFinite(r[key]));
- const familyIds=new Set(eligible.filter(r=>r.sales_scope==='family'||monthly).map(r=>r.parent_id));
- const groups=new Map();for(const r of eligible.filter(r=>r.sales_scope!=='listing'||!familyIds.has(r.parent_id))){const id=monthly||r.sales_scope==='family'?'family|'+(r.parent_id||r.product_id):'listing|'+r.product_id;if(!groups.has(id))groups.set(id,[]);groups.get(id).push(r);}
- return [...groups.values()].filter(g=>new Set(g.map(r=>monthly?r[field]:r[key])).size===1).map(g=>({...g[0],brand:new Set(g.map(r=>r.brand)).size===1?g[0].brand:'品牌待核',[key]:monthly?g[0][field]:g[0][key],sales_scope:monthly?'family':g[0].sales_scope}));
-}
+function biMetricRows(rows,key){return HistoryMetrics.metricRows(rows,key);}
 
 </script>
 <script data-source="shared-state.js">
@@ -4113,8 +5118,8 @@ if(new URLSearchParams(location.search).get('market')==='br')market='br';
 </script>
 <script data-source="market-radar-ui.js">
 /* Market-facing BI: global context first; research details remain one click away. */
-const biTabs=[['overview','市场概览'],['macro','市场环境'],['products','商品排行'],['brands','品牌表现'],['competitors','竞品对比'],['opportunities','经营建议'],['coverage','数据完整度'],['changes','变化记录'],['data','数据管理']];
-let biReturnContext=null;
+const biTabs=[['overview','市场概览'],['macro','市场环境'],['products','商品研究'],['brands','品牌表现'],['competitors','竞品对比'],['opportunities','UWANT 同价位'],['coverage','数据完整度'],['changes','变化记录'],['data','数据管理']];
+let biReturnContext=null,biFiltersOpen=false;
 const biKpiNum=n=>n==null?'—':n>=1e8?biNum(n/1e8,2)+'亿':n>=1e4?biNum(n/1e4,2)+'万':biNum(n,2);
 const biMethod=r=>r?.method==='estimate'?'第三方估算':r?.method==='actual'?'后台实际':'公开观察';
 function biEmpty(title,text){return `<div class="bi-empty"><span aria-hidden="true">—</span><strong>${rdE(title)}</strong><p>${rdE(text)}</p></div>`;}
@@ -4122,43 +5127,66 @@ function biOptions(items,value){return items.map(([k,v])=>`<option value="${rdE(
 function biAllowedPlatforms(country){return country==='ca'?['all','amazon','bestbuy','official','retail']:['all','amazon',...(country==='mx'||country==='br'?['ml']:[]),'official','retail'];}
 function biSetTab(next){if(next==='competitors'&&biTab!=='competitors')biReturnContext={tab:biTab,scrollY:globalThis.scrollY||0};else if(next!=='competitors')biReturnContext=null;if(next==='competitors'&&typeof ssBrand!=='undefined'&&ssBrand!=='all'&&!(window.ssProducts||[]).some(r=>r.market===market.toUpperCase()&&r.brand.toLowerCase()===ssBrand))ssBrand='all';biTab=next;if(next==='competitors')rdTab='compare';biPage=0;render();globalThis.requestAnimationFrame?.(()=>document.querySelector(`[data-bi-tab="${next}"]`)?.focus({preventScroll:true}));}
 function biFilterView(c){
- return `<section class="bi-toolbar" aria-label="市场全局筛选"><label>国家<select id="bi-country">${biOptions(Object.entries(biCountries),market)}</select></label><label>平台<select id="bi-platform">${biOptions([['all','全部已采集渠道'],...Object.entries(biPlatforms).filter(([k])=>k!=='bestbuy'||market==='ca')],biPlatform)}</select></label><label>品类<select id="bi-category">${biOptions(Object.entries(biCategories),biCategory)}</select></label><label class="bi-dataset">数据集 / 月份<select id="bi-dataset">${Array.from({length:12},(_,i)=>{const m='2026-'+String(i+1).padStart(2,'0');return `<option value="${m}" ${biDataset===m?'selected':''}>${m} · SellerSprite 商品月度历史${i===9?'（未结月）':i>9?'（尚未发生）':''}</option>`;}).join('')}${c.groups.length?biOptions(c.groups.filter(g=>g.first.origin!=='monthly').map(g=>[g.key,`${g.first.snapshot} · ${g.first.dataset} · ${biMethod(g.first)}${g.first.origin==='public'?'':` · ${biPlatforms[g.first.platform]||g.first.platform} · ${g.first.period_start||'无销量期间'}${g.first.period_end?'～'+g.first.period_end:''}`}`]),biDataset):'<option value="">当前筛选暂无数据</option>'}</select></label><div class="bi-top" ${c.hasRanks?'':'hidden'}><span>榜单范围</span><div>${[0,10,20,50].map(n=>`<button type="button" data-bi-top="${n}" aria-pressed="${biTop===n}" ${n&&!c.hasRanks?'disabled title="尚无带榜单范围与名次的数据"':''}>${n?'Top'+n:'已采集'}</button>`).join('')}</div></div><button type="button" class="mi-button" id="bi-reset">重置</button></section>`;
+ const monthly=biIsMonth(biDataset),snapshots=c.groups.filter(g=>g.first.origin!=='monthly');
+ return `<section class="bi-toolbar" aria-label="市场全局筛选"><label>国家<select id="bi-country">${biOptions(Object.entries(biCountries),market)}</select></label><label>平台<select id="bi-platform">${biOptions([['all','全部已采集渠道'],...Object.entries(biPlatforms).filter(([k])=>k!=='bestbuy'||market==='ca'||biPlatform==='bestbuy')],biPlatform)}</select></label><label>品类<select id="bi-category">${biOptions(Object.entries(biCategories),biCategory)}</select></label><label class="bi-source">数据集<select id="bi-source">${biOptions([['history','SellerSprite · 商品月度历史'],...snapshots.map(g=>[g.key,g.first.dataset+' · '+biMethod(g.first)+' · '+g.first.snapshot])],monthly?'history':biDataset)}</select></label>${monthly?`<label>统计月份<select id="bi-month">${biOptions(Array.from({length:12},(_,i)=>{const m='2026-'+String(i+1).padStart(2,'0');return [m,m+(i===9?' · 未结月':i>9?' · 尚未发生':'')];}),biDataset)}</select></label>`:''}${c.hasRanks?`<div class="bi-top"><span>榜单范围</span><div>${[0,10,20,50].map(n=>`<button data-bi-top="${n}" aria-pressed="${biTop===n}">${n?'Top'+n:'全部记录'}</button>`).join('')}</div></div>`:''}<button class="mi-button" id="bi-reset">重置</button></section>`;
 }
-function biScopeView(c){const r=c.chosen?.first,platforms=[...new Set(c.rows.map(r=>r.platform))],platformLabel=biPlatform==='all'?(platforms.length===1?biPlatforms[platforms[0]]||platforms[0]:platforms.length?'跨渠道观察':'全部已采集渠道'):biPlatforms[biPlatform];return `<div class="bi-scope"><div><strong>${biCountries[market]} · ${biCategories[biCategory]}</strong><span>${rdE(platformLabel)} · ${biTop?'Top'+biTop:'采集样本'} · ${biMethod(r)}${r?.origin==='import'?' · 用户导入':''}</span></div><div><span>${c.monthly?'统计月份':'快照日期'}</span><b>${c.monthly?biDataset:r?.snapshot||'—'}</b></div><div><span>记录数量</span><b>${c.rows.length} 条</b></div><div><span>币种</span><b>${biCurrencies[market]} 原币</b></div><button type="button" class="bi-link" data-bi-tab="data">${c.hasRanks?(biTop?`${new Set(c.rows.filter(r=>r.rank!=null).map(r=>r.rank)).size}/${biTop}名已采集${c.complete?' · 完整':' · 未完整'}`:'查看排名说明'):'查看覆盖与统计说明'}</button></div>`;}
+
+function biScopeView(c){const row=c.chosen?.first;return `<div class="bi-scope"><span>${rdE(row?.dataset||(c.monthly?'SellerSprite · 商品月度历史':'当前范围无数据'))} <span class="bi-dot">·</span> ${c.monthly?biDataset+(row?.snapshot?' · 采集 '+row.snapshot:''):row?.snapshot||'日期未提供'} <span class="bi-dot">·</span> ${biCurrencies[market]} <span class="bi-dot">·</span> ${c.monthly?'第三方估算':biMethod(row)} / 非全市场</span><button class="bi-link" data-bi-tab="data">来源与覆盖 ↗</button></div>`;}
+
+
 function biBars(values,unit){const max=Math.max(0,...values.map(r=>r.value)),total=values.reduce((n,r)=>n+r.value,0);return `<div class="bi-bars" role="list">${values.map(r=>`<div role="listitem" class="bi-bar"><span>${rdE(r.label)}</span><div><i style="width:${max?r.value/max*100:0}%"></i></div><b>${biNum(r.value,unit==='金额'?2:0)}${unit==='条'?' 条':unit==='台'?' 台':''}</b><small>${total?(r.value/total*100).toFixed(1)+'%':'—'}</small></div>`).join('')}</div>`;}
-function biPriceChart(c){if(!biCanMetric(c,biMetric))biMetric='count';return `<section class="bi-panel"><div class="bi-panel-title"><div><h3>价格带分布</h3><p>${biCurrencies[market]} · 每档 ${biPriceSteps[market]} · 仅统计有价格的记录</p></div><label class="bi-inline">指标<select id="bi-metric">${biOptions([['count','记录数'],...(biCanMetric(c,'units')?[['units','销量']]:[]),...(biCanMetric(c,'revenue')?[['revenue','销售额']]:[])],biMetric)}</select></label></div>${c.prices.length?biBars(biBins(c),{count:'条',units:'台',revenue:'金额'}[biMetric]):biEmpty('价格带待补齐','当前筛选没有可用价格；不以其他国家价格填充。')}<p class="bi-foot">${biMetric==='count'?`按当地币种分档，区间标签省略小数；${biPriceSteps[market]-0.01} 仍归第一档。柱长为商品记录数，不代表销量。`:'只表示所选样本的统计期构成，不是全国或平台份额。'}</p></section>`;}
+function biPriceChart(c){
+ if(!biCanMetric(c,biMetric))biMetric='count';
+ const chart={...c,prices:c.prices},bins=biBins(chart),max=Math.max(1,...bins.map(b=>b.value));
+ return `<section class="bi-panel bi-price-primary"><div class="bi-panel-title"><div><h3>竞品价格分布</h3><p>${biCurrencies[market]} · 每档 ${biPriceSteps[market]} · ${chart.prices.length} 条有效价格${c.monthly?' · 期末价，非月均价':''}</p></div><div class="bi-chart-actions">${biBand!==''?'<button class="mi-button" data-bi-band="">清除价格筛选</button>':''}${biCanMetric(c,'units')?`<label class="bi-inline">指标<select id="bi-metric">${biOptions([['count','商品记录数'],['units','销量'],...(biCanMetric(c,'revenue')?[['revenue','销售额']]:[])],biMetric)}</select></label>`:'<span class="bi-badge">商品记录数</span>'}</div></div><div class="bi-hist-scroll"><div class="bi-hist" style="--bins:${bins.length}" role="group" aria-label="${biCurrencies[market]}价格分布，点击价格段筛选商品">${bins.map((b,i)=>`<button class="bi-hist-bin" data-bi-band="${i}" aria-pressed="${biBand===String(i)}" aria-label="${b.label} ${biCurrencies[market]}，${biNum(b.value)}${biMetric==='count'?'条记录':'来源值'}"><span class="bi-hist-value">${biNum(b.value)}</span><span class="bi-hist-track"><i style="height:${b.value/max*100}%"></i></span><span class="bi-hist-label">${b.label}</span></button>`).join('')}</div></div><div class="bi-chart-caption"><span>价格 / ${biCurrencies[market]} · ${biPriceSteps[market]-.01} 仍归第一档</span><span>${biMetric==='count'?'记录数不代表销量':'仅当前样本来源值'}</span></div></section>`;
+}
+
 function biScatter(c){const rows=c.monthly?[]:c.rows.filter(r=>r.price>0&&r.units!=null&&r.sales_scope==='listing');if(!rows.length)return `<section class="bi-panel"><div class="bi-panel-title"><div><h3>价格 × 销量产品分布</h3><p>每个点代表单商品 · 大小按已有销售额</p></div></div>${biEmpty('销量分布待接入','需要同统计期的单商品价格与销量。评价数、BSR和周购买徽章不换算成月销量。')}<p class="bi-foot">接入数据后可悬停查看品牌、型号、价格及统计期。</p></section>`;
  const maxX=Math.max(...rows.map(r=>r.price))*1.15,maxY=Math.max(1,...rows.map(r=>r.units))*1.18,maxRev=Math.max(1,...rows.map(r=>r.revenue||0)),colors=['#376c54','#b78143','#647c93','#9b6e75','#7e8054'];
  return `<section class="bi-panel"><div class="bi-panel-title"><div><h3>价格 × 销量产品分布</h3><p>${rows.length}个单商品 · ${biMethod(c.chosen.first)} · 面积随来源销售额变化，缺失时用空心点</p></div></div><svg class="bi-scatter" viewBox="0 0 620 310" role="img" aria-label="当前样本价格与销量散点图"><path d="M60 20V260H600" fill="none" stroke="#ccd8d0"/>${[0,.25,.5,.75,1].map(t=>`<path d="M60 ${260-t*230}H600" stroke="#e8ede9" stroke-dasharray="3 5"/><text x="50" y="${264-t*230}" text-anchor="end">${biNum(maxY*t)}</text><text x="${60+t*530}" y="280" text-anchor="middle">${biNum(maxX*t)}</text>`).join('')}${rows.map(r=>`<circle cx="${60+r.price/maxX*530}" cy="${260-r.units/maxY*230}" r="${r.revenue!=null?Math.max(5,Math.sqrt(r.revenue/maxRev)*19):5}" fill="${r.revenue!=null?colors[c.brands.indexOf(r.brand)%colors.length]:'#fff'}" fill-opacity=".8" stroke="${colors[c.brands.indexOf(r.brand)%colors.length]}"><title>${rdE(`${r.brand} ${r.model} · ${biMoney(r.price)} · ${biNum(r.units)}台 · 销售额${biMoney(r.revenue)} · ${r.period_start}～${r.period_end}`)}</title></circle>`).join('')}<text x="330" y="307" text-anchor="middle">价格 / ${biCurrencies[market]}</text><text x="12" y="16">销量 / 台</text></svg><p class="bi-foot">只展示有价格、销量且明确归属单商品的记录；不把家族销量分配给某个变体。</p></section>`;
 }
-function biBrandChart(c,full=false){const metric=c.revenue!==null?'revenue':c.units!==null?'units':'count',values=biBrandValues(c,metric),shown=full?values:values.slice(0,5),tail=full?[]:values.slice(5);if(tail.length)shown.push({label:'其他样本品牌',value:tail.reduce((n,r)=>n+r.value,0)});return `<section class="bi-panel"><div class="bi-panel-title"><div><h3>品牌${{count:'采集记录',units:'样本销量',revenue:'样本销售额'}[metric]}${full?'':' Top5'}</h3><p>${metric==='count'?'当前档案商品数，包含本月无记录商品':`${metric==='units'?c.unitRows.length:c.revenueRows.length} 个可确认归属的去重单位；其余未计入` } · 比例只按当前样本计算</p></div>${full?'':'<button type="button" class="bi-link" data-bi-tab="brands">全部品牌 →</button>'}</div>${shown.length?biBars(shown,{count:'条',units:'台',revenue:'金额'}[metric]):biEmpty('暂无品牌数据','当前国家、平台和品类没有记录。')}</section>`;}
+function biBrandChart(c,full=false){const metric=c.revenue!==null?'revenue':c.units!==null?'units':'count',values=biBrandValues(c,metric),shown=full?values:values.slice(0,5),tail=full?[]:values.slice(5);if(tail.length)shown.push({label:'其他样本品牌',value:tail.reduce((n,r)=>n+r.value,0)});return `<section class="bi-panel"><div class="bi-panel-title"><div><h3>品牌${{count:'商品结构',units:'已知样本销量',revenue:'已知样本销售额'}[metric]}${!full&&values.length>5?' · 前5及其他':''}</h3><p>${metric==='count'?'当前档案商品数，包含本月无记录商品':`${metric==='units'?c.unitRows.length:c.revenueRows.length} 个可确认归属的去重单位；其余未计入` } · 比例只按当前样本计算</p></div>${full?'':'<button type="button" class="bi-link" data-bi-tab="brands">全部品牌 →</button>'}</div>${shown.length?biBars(shown,{count:'条',units:'台',revenue:'金额'}[metric]):biEmpty('暂无品牌数据','当前国家、平台和品类没有记录。')}</section>`;}
 function biOwnView(){const skus=market==='br'?Object.keys(brSkuCategories):Object.keys(amSourceData[market]||{}),matching=skus.filter(s=>biCat(s)===biCategory);return `<section class="bi-panel"><div class="bi-panel-title"><div><h3>UWANT 产品</h3><p>选择型号，查看价格或配置对比</p></div></div><div class="bi-own-cards">${matching.map(s=>{const p=amSourceData[market]?.[s]?.products.find(p=>p.isOwn),offers=p?.offers.filter(q=>(biPlatform==='all'||q.kind===biPlatform)&&q.price>0&&!q.isRange)||[];return `<article><strong>UWANT ${s}</strong><p>${offers.length?offers.map(q=>`${biPlatforms[q.kind]||q.kind} · ${biMoney(q.price)} · ${q.isTarget?'目标MSRP':'历史价格记录'}`).map(rdE).join('<br>'):'当地价格和完整供货版本待核'}</p><button type="button" class="bi-link" data-bi-sku="${s}">查看竞品对比 →</button></article>`;}).join('')}</div><p class="bi-foot">UWANT历史价格和目标价不并入竞品销量统计；不同日期的报价不能直接判断当前价格优势。</p></section>`;}
-function biTableRows(c,term=biSearch){const search=term.trim().toLowerCase();return c.rows.filter(r=>!search||[r.brand,r.model,r.product_id].join(' ').toLowerCase().includes(search)).slice().sort((a,b)=>{const key=biSort,an=a[key],bn=b[key];if(an==null&&bn==null)return a.model.localeCompare(b.model);if(an==null)return 1;if(bn==null)return -1;return ['units','revenue'].includes(key)?bn-an:an-bn;});}
-function biProductTable(c,compact=false){const all=biTableRows(c,compact?'':biSearch),size=compact?5:10;if(!compact)biPage=Math.min(biPage,Math.max(0,Math.ceil(all.length/size)-1));const rows=compact?all.slice(0,5):all.slice(biPage*size,biPage*size+size);return `<section class="bi-panel"><div class="bi-panel-title"><div><h3>${c.hasRanks?'商品排行':'商品明细'}</h3><p>${c.hasRanks?'名次以导入的同一榜单范围为准':'当前没有已核名次，以下不是畅销顺序'} · ${all.length}条${compact?' · 显示前5条':''}</p></div>${compact?'<button type="button" class="bi-link" data-bi-tab="products">查看全部 →</button>':'<button type="button" class="mi-button" id="bi-table-export">导出当前明细</button>'}</div>${compact?'':`<div class="bi-table-controls"><input id="bi-search" aria-label="搜索商品明细" placeholder="搜索品牌 / 型号 / 商品ID" value="${rdE(biSearch)}" maxlength="100"><button type="button" class="mi-button" id="bi-search-go">搜索</button><select id="bi-sort" aria-label="明细排序">${biOptions([['rank','按榜单名次'],['price','价格从低到高'],['units','销量从高到低'],['revenue','销售额从高到低']],biSort)}</select><span>搜索和排序同时用于当前导出</span></div>`}<div class="bi-table-wrap" tabindex="0" aria-label="横向滚动查看商品明细"><table><thead><tr><th>名次</th><th>品牌 / 型号</th><th>${c.monthly?'期末价格':'价格'} / ${biCurrencies[market]}</th><th>统计期销量</th><th>统计期销售额</th><th>评分 / 评价数</th><th>来源与操作</th></tr></thead><tbody>${rows.length?rows.map(r=>`<tr><td>${r.rank??'—'}</td><td><strong>${rdE(r.brand+' '+r.model)}</strong><small>${rdE(r.product_id||'商品ID待补')}</small></td><td>${biMoney(r.price)}<small>${rdE(r.priceNote||'历史价格记录')}</small></td><td>${biNum(r.units)}<small>${r.origin==='monthly'?'父体 '+biNum(r.parentSales)+' · '+(r.parentBasis==='历史父体变更记录'?'已确认关系，按父体去重合计':'归属待核，不计合计'):r.units!=null?biMethod(r):'未取得'}</small></td><td>${biMoney(r.revenue)}<small>${r.origin==='monthly'?'父体来源值 '+biMoney(r.parentSalesAmount):r.revenue!=null?biMethod(r):'未取得，不反算'}</small></td><td>${r.rating??'—'} / ${biNum(r.reviews)}<small>不据评价数推导销量</small></td><td><a href="${rdE(r.source)}" target="_blank" rel="noopener noreferrer">查看来源 ↗</a><button type="button" class="bi-row-action" data-bi-brand="${rdE(r.brand.toLowerCase())}">查看同品牌竞品</button><small>${r.snapshot} · ${biPlatforms[r.platform]||rdE(r.platform)}</small><details><summary>数据说明</summary><p>数据性质：${biMethod(r)}。统计期：${r.period_start||'未提供'}${r.period_end?'～'+r.period_end:''}。</p><p>销量归属：${{listing:'单商品',family:'家族合计',unknown:'待核'}[r.sales_scope]}；父级ID：${rdE(r.parent_id||'未提供')}。</p><p>榜单范围：${rdE(r.rank_scope||'未提供')}。上架日：${r.release_date||'未提供'}。</p>${r.features?`<p>品牌 / 卖家标称：${rdE(r.features)}</p>`:''}<p>${rdE(r.conditions||'购买条件待核')}</p></details></td></tr>`).join(''):'<tr><td colspan="7"><div class="bi-table-empty"><strong>没有符合条件的商品</strong><span>可调整国家、平台、品类或搜索词。</span></div></td></tr>'}</tbody></table></div>${compact?'':`<div class="bi-pagination"><span>${all.length?biPage*size+1:0}–${Math.min((biPage+1)*size,all.length)} / ${all.length} 条</span><button class="mi-button" id="bi-prev" ${biPage===0?'disabled':''}>上一页</button><button class="mi-button" id="bi-next" ${(biPage+1)*size>=all.length?'disabled':''}>下一页</button></div>`}</section>`;}
+function biTableRows(c,term=biSearch){const search=term.trim().toLowerCase();return c.rows.filter(r=>!search||[r.brand,r.model,r.product_id].join(' ').toLowerCase().includes(search)).slice().sort((a,b)=>{const key=biSort,an=a[key],bn=b[key];if(an==null&&bn==null)return Number(b.recordStatus==='AVAILABLE')-Number(a.recordStatus==='AVAILABLE')||a.model.localeCompare(b.model);if(an==null)return 1;if(bn==null)return -1;return ['units','revenue'].includes(key)?bn-an:an-bn;});}
+function biProductTable(c,compact=false){const all=biTableRows(c,compact?'':biSearch),size=compact?5:10;if(!compact)biPage=Math.min(biPage,Math.max(0,Math.ceil(all.length/size)-1));const rows=compact?all.slice(0,5):all.slice(biPage*size,biPage*size+size);return `<section class="bi-panel"><div class="bi-panel-title"><div><h3>${c.hasRanks?'商品排行':'商品明细'}</h3><p>${c.hasRanks?'名次以导入的同一榜单范围为准':'当前没有已核名次，以下不是畅销顺序'} · ${all.length}条${compact?' · 显示前5条':''}</p></div>${compact?'<button type="button" class="bi-link" data-bi-tab="products">查看全部 →</button>':'<button type="button" class="mi-button" id="bi-table-export">导出当前明细</button>'}</div>${compact?'':`<div class="bi-table-controls"><input id="bi-search" aria-label="搜索商品明细" placeholder="搜索品牌 / 型号 / 商品ID" value="${rdE(biSearch)}" maxlength="100"><button type="button" class="mi-button" id="bi-search-go">搜索</button><select id="bi-sort" aria-label="明细排序">${biOptions([['rank',c.hasRanks?'来源名次':'档案顺序'],['price','价格从低到高'],['units','销量从高到低'],['revenue','销售额从高到低']],biSort)}</select><span>搜索和排序同时用于当前导出</span></div>`}<div class="bi-table-wrap" tabindex="0" aria-label="横向滚动查看商品明细"><table><thead><tr><th>名次</th><th>品牌 / 型号</th><th>${c.monthly?'期末价格':'价格'} / ${biCurrencies[market]}</th><th>统计期销量</th><th>统计期销售额</th><th>评分 / 评价数</th><th>来源与操作</th></tr></thead><tbody>${rows.length?rows.map(r=>`<tr><td>${r.rank??'—'}</td><td><div class="bi-product-identity">${r.imageUrl||r.image?`<img src="${rdE(r.imageUrl||r.image)}" alt="" loading="lazy" referrerpolicy="no-referrer">`:'<span class="bi-no-image">暂无图片</span>'}<strong>${rdE(r.brand+' '+r.model)}</strong></div><small>${rdE(r.product_id||'商品ID待补')}</small></td><td>${biMoney(r.price)}<small>${rdE(r.priceNote||'历史价格记录')}</small></td><td>${biNum(r.units)}<small>${r.origin==='monthly'?'父体 '+biNum(r.parentSales)+' · '+(r.parentBasis==='历史父体变更记录'?'已确认关系，按父体去重合计':'归属待核，不计合计'):r.units!=null?(r.sales_scope==='family'?'家族来源值，非子体销量':biMethod(r)):'未取得'}</small></td><td>${biMoney(r.revenue)}<small>${r.origin==='monthly'?'父体来源值 '+biMoney(r.parentSalesAmount):r.revenue!=null?biMethod(r):'未取得，不反算'}</small></td><td>${r.rating??'—'} / ${biNum(r.reviews)}<small>不据评价数推导销量</small></td><td><a href="${rdE(r.source)}" target="_blank" rel="noopener noreferrer">查看来源 ↗</a><button type="button" class="bi-row-action" data-bi-brand="${rdE(r.brand.toLowerCase())}">查看同品牌竞品</button><small>${r.snapshot} · ${biPlatforms[r.platform]||rdE(r.platform)}</small><details><summary>数据说明</summary><p>数据性质：${biMethod(r)}。统计期：${r.period_start||'未提供'}${r.period_end?'～'+r.period_end:''}。</p><p>销量归属：${{listing:'单商品',family:'家族合计',unknown:'待核'}[r.sales_scope]}；父级ID：${rdE(r.parent_id||'未提供')}。</p><p>榜单范围：${rdE(r.rank_scope||'未提供')}。上架日：${r.release_date||'未提供'}。</p>${r.features?`<p>品牌 / 卖家标称：${rdE(r.features)}</p>`:''}<p>${rdE(r.conditions||'购买条件待核')}</p></details></td></tr>`).join(''):'<tr><td colspan="7"><div class="bi-table-empty"><strong>没有符合条件的商品</strong><span>可调整国家、平台、品类或搜索词。</span></div></td></tr>'}</tbody></table></div>${compact?'':`<div class="bi-pagination"><span>${all.length?biPage*size+1:0}–${Math.min((biPage+1)*size,all.length)} / ${all.length} 条</span><button class="mi-button" id="bi-prev" ${biPage===0?'disabled':''}>上一页</button><button class="mi-button" id="bi-next" ${(biPage+1)*size>=all.length?'disabled':''}>下一页</button></div>`}</section>`;}
 function biChangesView(c){const previous=biPrevious(c),changes=biChanges(c);if(!previous)return `<section class="bi-panel"><h3>价格与排名变化</h3>${biEmpty('还需要同口径的两次快照','导入相同国家、平台、品类、榜单范围和数据性质的两次快照后，显示同一商品的价格与名次变化。')}</section>`;return `<section class="bi-panel"><div class="bi-panel-title"><div><h3>${previous.first.snapshot} → ${c.chosen.first.snapshot}</h3><p>仅匹配相同商品ID；缺少上期记录不直接称为新品或新进榜。</p></div></div><div class="bi-table-wrap"><table><thead><tr><th>商品</th><th>上期 / 本期名次</th><th>名次变化</th><th>价格变化</th></tr></thead><tbody>${changes.map(({r,p,rankChange,priceChange})=>`<tr><td>${rdE(r.brand+' '+r.model)}<small>${rdE(r.product_id)}</small></td><td>${p?.rank??'—'} / ${r.rank??'—'}</td><td>${rankChange==null?'无可比名次':rankChange>0?'↑ '+rankChange:rankChange<0?'↓ '+Math.abs(rankChange):'持平'}</td><td>${priceChange==null?'无可比报价':(priceChange>=0?'+':'')+(priceChange*100).toFixed(1)+'%'}</td></tr>`).join('')}</tbody></table></div><p class="bi-foot">排名下降不自动代表销量下降；两次滚动期估算不同，也不直接标为自然月环比。</p></section>`;}
-function biDataView(c){return csStatus()+`<section class="bi-panel"><div class="bi-panel-title"><div><h3>导入榜单与销量快照</h3><p>支持美国、墨西哥、加拿大和巴西；实际、估算和公开观察数据分别标记。</p></div></div><div class="bi-import-actions"><button type="button" class="mi-button" id="bi-template">下载CSV模板</button><label class="mi-button bi-file">导入CSV<input type="file" id="bi-import" accept=".csv,text/csv" aria-label="导入BI标准CSV"></label><button type="button" class="mi-button" id="bi-backup-imports">导出已导入快照</button><button type="button" class="mi-button" id="bi-work-backup">备份全部工作记录</button></div><p class="bi-import-status" role="status">${rdE(biNotice||`当前有${biSnapshots.length}条导入快照。导入会追加记录，不会覆盖原始文件。`)}</p><details class="bi-details"><summary>查看字段和统计规则</summary><p>模板每行一个商品。必须填写国家、平台、品类、快照日、数据集名称、商品ID、品牌、型号、币种、数据性质、销量归属与来源链接。暂缺的价格、销量、销售额、名次等留空。</p><p>名次必须填写同一平台的榜单范围。搜索位置和广告位置不作为畅销名次。销量与销售额必须标明起止日期；销售额采用来源值，不把当前价格乘以历史销量。</p><p>国家：us / mx / ca / br；平台：amazon / ml / bestbuy（仅加拿大）/ official / retail；品类：wash / vacuum / fabric / mattress；数据性质：actual / estimate / observation；销量归属：listing / family / unknown。</p><p>相同数据组的商品ID或名次重复、父子体销量重叠、未来日期、币种错误会被拒绝，原数据保留。导入为追加；同名数据集的新日期可用于前后对照。</p><p>只计算当前样本，不称为全国市场规模；导入数据尚未独立核验。其他地区的参考数据不会混入本看板。</p></details></section><section class="bi-panel"><h3>当前范围的数据完整度</h3><div class="bi-quality">${[['商品记录',c.rows.length+'/'+c.rows.length],['有价格',c.prices.length+'/'+c.rows.length],['有销量',c.rows.filter(r=>r.units!=null).length+'/'+c.rows.length],['有销售额',c.rows.filter(r=>r.revenue!=null).length+'/'+c.rows.length],['有名次',c.ranked.length+'/'+c.all.length],['归属明确',c.rows.filter(r=>r.sales_scope!=='unknown').length+'/'+c.rows.length]].map(([label,value])=>`<div><span>${label}</span><strong>${value}</strong></div>`).join('')}</div><p class="bi-foot">完整度只针对当前数据组。0/0表示尚无样本，不代表市场销量为零。</p></section>${typeof brMacroView==='function'&&market==='br'?brMacroView():''}`;}
+function biDataView(c){return csStatus()+`<section class="bi-panel"><div class="bi-panel-title"><div><h3>导入榜单与销量快照</h3><p>支持美国、墨西哥、加拿大和巴西；实际、估算和公开观察数据分别标记。</p></div></div><div class="bi-import-actions"><button type="button" class="mi-button" id="bi-template">下载CSV模板</button><label class="mi-button bi-file">导入CSV<input type="file" id="bi-import" accept=".csv,text/csv" aria-label="导入BI标准CSV"></label><button type="button" class="mi-button" id="bi-backup-imports">导出已导入快照</button><button type="button" class="mi-button" id="bi-work-backup">备份全部工作记录</button></div><p class="bi-import-status" role="status">${rdE(biNotice||`当前有${biSnapshots.length}条导入快照。导入会追加记录，不会覆盖原始文件。`)}</p><details class="bi-details"><summary>查看字段和统计规则</summary><p>模板每行一个商品。必须填写国家、平台、品类、快照日、数据集名称、商品ID、品牌、型号、币种、数据性质、销量归属与来源链接。暂缺的价格、销量、销售额、名次等留空。</p><p>名次必须填写同一平台的榜单范围。搜索位置和广告位置不作为畅销名次。销量与销售额必须标明起止日期；销售额采用来源值，不把当前价格乘以历史销量。</p><p>国家：us / mx / ca / br；平台：amazon / ml / bestbuy（仅加拿大）/ official / retail；品类：wash / vacuum / fabric / mattress；数据性质：actual / estimate / observation；销量归属：listing / family / unknown。</p><p>相同数据组的商品ID或名次重复、父子体销量重叠、未来日期、币种错误会被拒绝，原数据保留。导入为追加；同名数据集的新日期可用于前后对照。</p><p>只计算当前样本，不称为全国市场规模；导入数据尚未独立核验。其他地区的参考数据不会混入本看板。</p></details></section><section class="bi-panel"><h3>当前范围的数据完整度</h3><div class="bi-quality">${[['商品档案',c.rows.length+' 条'],['有价格',c.prices.length+'/'+c.rows.length],['有销量字段',biCoverageLabel(c.rawSales,c.rows.length)],['有销售额字段',biCoverageLabel(c.rawRevenue,c.rows.length)],['榜单名次',c.hasRanks?c.ranked.length+' 条':'不适用'],['确认销量单位',c.unitRows.length+' 个（去重）']].map(([label,value])=>`<div><span>${label}</span><strong>${value}</strong></div>`).join('')}</div><p class="bi-foot">完整度只针对当前数据组。0/0表示尚无样本，不代表市场销量为零。</p></section>`;}
 function biMacroView(){
  if(market==='br')return brMacroView();
  const m=marketMacro[market];if(!m)return `<section class="bi-panel"><h3>${biCountries[market]} · 市场环境</h3>${biEmpty('宏观资料待补齐','当前可查看竞品商品、品牌销量和产品对比；不会用其他国家资料替代。')}</section>`;return `<section class="bi-panel"><div class="bi-panel-title"><div><h3>${biCountries[market]} · 零售与电商环境</h3><p>核查日期 ${marketEvidenceDate} · 各指标统计期单独展示</p></div></div><div class="bi-macro-cards">${m.cards.map(c=>`<article><span>${rdE(c.label)}</span><strong>${rdE(c.value)} <small>${rdE(c.unit)}</small></strong><p>${rdE(c.foot)}</p>${c.source?`<a href="${rdE(marketSources[c.source].url)}" target="_blank" rel="noopener noreferrer">来源与口径 ↗</a>`:''}</article>`).join('')}</div><p class="bi-foot">${rdE(m.note)}</p></section><section class="bi-panel"><h3>对销售的影响</h3><p class="bi-macro-note">${rdE(m.insight)}</p><details class="bi-details"><summary>数据边界</summary><p>全国零售、电商与平台细分样本分别统计。当前没有四国同口径的四品类全国规模，因此不计算跨国机会总分。</p></details><a class="bi-link" href="#calendar">查看当地节日与平台促销节点 →</a></section>`;
 }
 function biCompetitorView(c){const back=biReturnContext?`<div class="bi-context-bar"><button type="button" class="bi-link" id="bi-back-context">← 返回${rdE(biTabs.find(([id])=>id===biReturnContext.tab)?.[1]||'上一步')}</button><span>国家、平台、品类和数据快照已保留</span></div>`:'',selector=typeof ssBenchmarkHeader==='function'?ssBenchmarkHeader():'',products=typeof ssPanel==='function'?ssPanel():biEmpty('竞品商品正在加载','请稍后刷新页面。'),positioning=['mx','ca'].includes(market)&&typeof cpPanel==='function'?cpPanel():`<section class="bi-panel"><div class="bi-panel-title"><div><h3>${biCountries[market]} · 竞争定位</h3><p>商品图片、Amazon链接、价格与销量估算集中展示。</p></div></div>${biProductTable(c,true)}<p class="bi-foot">当地定位与购买条件会在取得同口径价格、版本及售后证据后继续补充；不会用其他国家数据代替。</p></section>`;return `<div class="bi-competitor-view">${back}${selector}${positioning}${products}</div>`;}
-function biView(){const c=biContext();return `<div class="mi bi-workspace"><div class="bi-intro"><div><span>UWANT · AMERICAS</span><h1>美洲市场分析</h1><p>查看已收录商品的价格、品牌与销量。</p></div><div class="bi-intro-actions"><button type="button" class="bi-link" data-bi-tab="data">管理数据</button><button type="button" class="mi-button" id="bi-global-export">导出当前样本</button></div></div>${biFilterView(c)}<nav class="bi-tabs" aria-label="市场分析模块">${biTabs.map(([id,label])=>`<button type="button" data-bi-tab="${id}" aria-pressed="${biTab===id}">${label}</button>`).join('')}<button type="button" id="bi-research-link">查看UWANT产品</button></nav>${biScopeView(c)}${biTab==='overview'?biKpis(c)+biAssessment(c)+biOverviewCharts(c)+biProductTable(c,true):biTab==='macro'?biMacroView():biTab==='products'?biProductTable(c):biTab==='brands'?biBrandChart(c,true)+biOwnView():biTab==='competitors'?biCompetitorView(c):biTab==='opportunities'?biOpportunities(c):biTab==='coverage'?biCoverageView():biTab==='changes'?biChangesView(c):biDataView(c)}<details class="bi-disclaimer"><summary>数据说明</summary><p>数据按来源日期展示。当前样本不等于整个市场；缺失值保留为空；产品参数来自品牌或卖家标称。</p></details></div>`;}
+function biView(){const c=biContext();
+ const titles={overview:'市场总览',macro:'市场环境',products:'商品研究',brands:'品牌结构',competitors:'竞品研究资料',opportunities:'UWANT 同价位观察',coverage:'数据覆盖',changes:'变化记录',data:'数据管理'};
+ const nav=[['overview','市场概况'],['macro','市场环境']];
+ const content=biTab==='overview'?biKpis(c)+biOverviewCharts(c)+biBenchmark(c)+biProductTable(c,true)+biNextActions(c):biTab==='macro'?biMacroView()+(typeof ssBiAvailable==='function'&&ssBiAvailable()?'<details class="bi-details"><summary>SellerSprite 来源类目统计（期间独立）</summary>'+ssBiOverview()+'</details>':''):biTab==='products'?biProductTable(c):biTab==='brands'?biBrandChart(c,true)+(typeof ssBiSelected==='function'&&ssBiSelected(c)?'<details class="bi-details"><summary>来源类目品牌聚合（独立于当前商品筛选）</summary>'+ssBiBrandAnalysis()+'</details>':''):biTab==='competitors'?biCompetitorView(c):biTab==='opportunities'?biOpportunities(c):biTab==='coverage'?biCoverageView():biTab==='changes'?biChangesView(c):biDataView(c);
+ return `<div class="mi bi-workspace"><div class="bi-intro"><div><h1>${titles[biTab]||'市场研究'}</h1></div><div class="bi-intro-actions"><button class="mi-button" data-bi-tab="${biTab==='data'?'overview':'data'}">${biTab==='data'?'返回市场总览':'数据管理'}</button><button class="mi-button bi-primary" id="bi-global-export">导出当前样本</button></div></div>${`<div class="bi-range-shell ${biFiltersOpen?'is-open':''}"><button id="bi-toggle-filters" aria-expanded="${biFiltersOpen}"><span>${biCountries[market]} · ${biPlatforms[biPlatform]||'已采集渠道'} · ${biCategories[biCategory]}</span><b>${biFiltersOpen?'收起':'筛选'}</b></button>${biFilterView(c)}</div>`}${biScopeView(c)}<nav class="bi-tabs" aria-label="市场分析模块">${nav.map(([id,label])=>`<button data-bi-tab="${id}" aria-pressed="${biTab===id}">${label}</button>`).join('')}<button data-bi-open="brands">品牌分析 ↗</button><button data-bi-open="competitors">竞品对比 ↗</button><label class="bi-more">研究工具<select id="bi-workspace-view" aria-label="研究工具"><option value="">选择工具</option>${biOptions(biTabs.filter(([id])=>!['overview','macro'].includes(id)),biTab)}</select></label></nav>${content}<details class="bi-disclaimer"><summary>统计范围与数据说明</summary>${biAssessment(c)}<p>月度历史只覆盖当前收录的 Amazon 商品。价格为月末最后有效点；父体销量按确认关系去重，待核值保留原始明细；销售额使用来源值，不用现价反算。</p></details></div>`;
+}
+
 function biGoSku(sku){if(biTab!=='competitors')biReturnContext={tab:biTab,scrollY:globalThis.scrollY||0};page='market';biTab='competitors';rhMode='sku';amSku=sku;miSku=sku;rdTab='compare';if(market==='br'){brTab='position';brCompareSku=sku;brCompareRelation='all';}location.hash='market';render();}
 function biExport(){if(biTab==='competitors')return ['mx','ca'].includes(market)&&typeof cpExport==='function'?cpExport():ssExport();const c=biContext(),rows=biTab==='products'?biTableRows(c):c.rows;rdDownload(`UWANT_${market}_${biCategory}_${c.monthly?biDataset:c.chosen?.first.snapshot||biToday()}_BI.csv`,biExportRows(rows,c));}
 function biWire(){
+ document.querySelector('#bi-toggle-filters')?.addEventListener('click',()=>{biFiltersOpen=!biFiltersOpen;render();document.querySelector('#bi-toggle-filters')?.focus({preventScroll:true});});
+ document.querySelector('#bi-own-sku')?.addEventListener('change',e=>{biOwnSku=e.target.value;render();});
+ document.querySelector('#bi-month')?.addEventListener('change',e=>{biDataset=e.target.value;biBand='';biPage=0;render();});
+ document.querySelector('#bi-source')?.addEventListener('change',e=>{biDataset=e.target.value==='history'?'2026-09':e.target.value;biBand='';biPage=0;render();});
+ document.querySelector('#bi-workspace-view')?.addEventListener('change',e=>{if(e.target.value)biSetTab(e.target.value);});
+ document.querySelectorAll('[data-bi-band]').forEach(b=>b.addEventListener('click',()=>{const band=b.dataset.biBand;biBand=band;biPage=0;render();(document.querySelector('[data-bi-band="'+band+'"]')||document.querySelector('[data-bi-band]'))?.focus({preventScroll:true});}));
+ document.querySelectorAll('[data-bi-open]').forEach(b=>b.addEventListener('click',()=>{if(!biIsMonth(biDataset)){if(b.dataset.biOwn)biGoSku(b.dataset.biOwn);else biSetTab(b.dataset.biOpen==='brands'?'brands':'competitors');return;}parent.postMessage({type:'uwant:research',page:b.dataset.biOpen,...(b.dataset.biOwn?{own:b.dataset.biOwn,mode:b.dataset.biMode||'price'}:{})},location.origin==='null'?'*':location.origin);}));
+
  document.querySelectorAll('[data-bi-coverage]').forEach(b=>b.addEventListener('click',()=>{const [category,platform]=b.dataset.biCoverage.split(':');biCategory=category;biPlatform=platform;if(!biIsMonth(biDataset))biDataset='';biTop=0;biPage=0;biSearch='';biTab='products';render();}));
  document.querySelector('#bi-global-export')?.addEventListener('click',biExport);
- for(const [id,fn] of [['bi-country',v=>{market=v;if(!biAllowedPlatforms(v).includes(biPlatform))biPlatform='all';if(typeof ssBrand!=='undefined'){ssBrand='all';ssSearch='';ssLimit=12;}}],['bi-platform',v=>biPlatform=v],['bi-category',v=>biCategory=v],['bi-dataset',v=>biDataset=v]])document.querySelector('#'+id)?.addEventListener('change',e=>{fn(e.target.value);if(id!=='bi-dataset'&&!biIsMonth(biDataset))biDataset='';biPage=0;biSearch='';biTop=0;render();});
+ for(const [id,fn] of [['bi-country',v=>{market=v;if(typeof ssBrand!=='undefined'){ssBrand='all';ssSearch='';ssLimit=12;}}],['bi-platform',v=>biPlatform=v],['bi-category',v=>biCategory=v],['bi-dataset',v=>biDataset=v]])document.querySelector('#'+id)?.addEventListener('change',e=>{fn(e.target.value);if(id!=='bi-dataset'&&!biIsMonth(biDataset))biDataset='';biBand='';biPage=0;biSearch='';biTop=0;render();});
  document.querySelectorAll('[data-bi-tab]').forEach(b=>b.addEventListener('click',()=>biSetTab(b.dataset.biTab)));
  document.querySelectorAll('[data-bi-top]').forEach(b=>b.addEventListener('click',()=>{biTop=Number(b.dataset.biTop);biPage=0;render();}));
  document.querySelectorAll('[data-bi-sku]').forEach(b=>b.addEventListener('click',()=>biGoSku(b.dataset.biSku)));
  document.querySelectorAll('[data-bi-brand]').forEach(b=>{const available=(window.ssProducts||[]).some(r=>r.market===market.toUpperCase()&&r.brand.toLowerCase()===b.dataset.biBrand);if(!available)b.textContent='查看竞品对比';b.addEventListener('click',()=>{biReturnContext={tab:biTab,scrollY:globalThis.scrollY||0};ssBrand=available?b.dataset.biBrand:'all';ssTier='all';ssLimit=12;biTab='competitors';rdTab='compare';render();});});
  document.querySelector('#bi-back-context')?.addEventListener('click',()=>{const context=biReturnContext;biReturnContext=null;biTab=context?.tab||'products';render();globalThis.requestAnimationFrame?.(()=>globalThis.scrollTo?.({top:context?.scrollY||0,behavior:'auto'}));});
  document.querySelector('#bi-research-link')?.addEventListener('click',()=>{const skus=market==='br'?Object.keys(brSkuCategories):Object.keys(amSourceData[market]||{});const sku=skus.find(s=>biCat(s)===biCategory);if(sku)biGoSku(sku);});
- document.querySelector('#bi-reset')?.addEventListener('click',()=>{biCategory='wash';biPlatform='all';biDataset='';biTop=0;biSearch='';biSort='rank';biPage=0;render();});
+ document.querySelector('#bi-reset')?.addEventListener('click',()=>{biCategory='wash';biPlatform='amazon';biDataset='2026-09';biBand='';biTop=0;biSearch='';biSort='rank';biPage=0;render();});
  document.querySelector('#bi-metric')?.addEventListener('change',e=>{biMetric=e.target.value;render();});
  document.querySelector('#bi-sort')?.addEventListener('change',e=>{biSort=e.target.value;biPage=0;render();});
- const search=()=>{biSearch=document.querySelector('#bi-search')?.value.trim()||'';biPage=0;render();};
+ const search=()=>{biSearch=document.querySelector('#bi-search')?.value.trim()||'';biPage=0;render();const input=document.querySelector('#bi-search');input?.focus({preventScroll:true});input?.setSelectionRange(input.value.length,input.value.length);};
  document.querySelector('#bi-search-go')?.addEventListener('click',search);document.querySelector('#bi-search')?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();search();}});
  document.querySelector('#bi-prev')?.addEventListener('click',()=>{biPage--;render();});document.querySelector('#bi-next')?.addEventListener('click',()=>{biPage++;render();});
  document.querySelector('#bi-table-export')?.addEventListener('click',biExport);
@@ -4175,15 +5203,9 @@ const biRenderBefore=render;render=function(...args){document.body.classList.tog
 const biExportBefore=miExport;miExport=function(...args){return page==='market'&&Object.hasOwn(biCountries,market)?biExport():biExportBefore(...args);};
 const biDataExportBefore=exportData;exportData=function(...args){return page==='market'&&Object.hasOwn(biCountries,market)?biExport():biDataExportBefore(...args);};
 
-function biCoverageView(){
- const platforms=market==='ca'?['amazon','bestbuy']:['amazon','ml'];
- const rows=Object.entries(biCategories).flatMap(([category,label])=>platforms.map(platform=>{
-  const group=biCoverageGroups(market,category,platform)[0],a=biAudit(group?.rows||[]),r=group?.first;
-  return `<tr><td>${label}<small>${biPlatforms[platform]}</small></td><td>${r?.snapshot||'—'}<small>${rdE(r?.dataset||'未采集快照')}</small></td><td>${a.total} 条<small>${a.priced} 条有价格 · ${a.sales} 条销量归属明确</small></td><td><span class="bi-badge ${a.top10?'ready':''}">${a.top10?'Top10已齐':`${10-a.missing.length}/10名`}</span><small>${a.top10?'同一统计组覆盖第1–10名':'缺少：'+a.missing.join('、')}</small></td><td>${r?biMethod(r):'—'}<small>${r?.period_start||'统计期未取得'}${r?.period_end?'～'+r.period_end:''}</small></td><td><button class="bi-link" data-bi-coverage="${category}:${platform}">查看这一品类 →</button></td></tr>`;
- })).join('');
- return `<section class="bi-panel"><div class="bi-panel-title"><div><h3>${biCountries[market]} · 四品类数据覆盖</h3><p>逐渠道显示最新快照，每行独立核对；不拼接不同日期或类目的名次。</p></div><button class="mi-button" data-bi-tab="data">接入数据</button></div><div class="bi-table-wrap"><table><thead><tr><th>品类 / 平台</th><th>最近快照</th><th>可用记录</th><th>Top10 完整度</th><th>销量口径 / 统计期</th><th>操作</th></tr></thead><tbody>${rows}</tbody></table></div><p class="bi-foot">缺少类目ID与明确榜单范围的商品不计入Top10。这里显示的是最新一组快照，其他历史组可在全局快照筛选中查看。Top10齐全也不表示已取得类目总销量。</p></section>`;
-}
-function biOpportunities(c){
+function biCoverageView(){const c=biContext();return `<section class="bi-panel"><div class="bi-panel-title"><div><h3>当前范围的数据覆盖</h3><p>${biCountries[market]} · ${biCategories[biCategory]} · ${biDataset} · ${biPlatforms[biPlatform]||'已采集渠道'}</p></div><button class="mi-button" data-bi-tab="data">导入与来源 →</button></div>${biAssessment(c)}<div class="bi-quality">${[['档案记录',c.rows.length+' 条'],['有有效价格',biCoverageLabel(c.prices.length,c.rows.length)],['确认销量单位',c.unitRows.length+' 个（去重）']].map(([k,v])=>`<div><span>${k}</span><strong>${v}</strong></div>`).join('')}</div><p class="bi-foot">有字段值不代表可直接累加；未确认的父体关系和冲突值不计合计，原始值仍在明细和年度导出保留。</p></section>`;}
+
+function biReferencePlaybook(c){
  const playbooks={wash:['把使用成本和维护体验讲清楚','核实贴边、平躺、缠毛处理、自清洁和烘干条件，用相同污渍与地面拍演示。把清洁液、滚刷和售后成本放进购买比较。'],vacuum:['围绕家庭清洁场景选主推版本','分别核实地毯、宠物毛、硬地和家具清洁表现；自动集尘、续航和重量需按当地版本对比，并说明耗材价格。'],fabric:['用可复现的去污效果证明价值','将沙发、汽车座椅和宠物污渍分开演示，核实清水/污水容量、工具、清洁液与干燥时间。蒸汽与常温清洗分别比较。'],mattress:['先证明清洁体验，再谈附加功能','核实重量、线长、拍打、集尘过滤和噪声。涉及除螨、UV或杀菌效果的宣传，先核对对应测试条件与当地版本。']};
  const [title,action]=playbooks[biCategory],skus=(market==='br'?Object.keys(brSkuCategories):Object.keys(amSourceData[market]||{})).filter(s=>biCat(s)===biCategory);
  const priced=c.prices,median=priced.length?(()=>{const p=priced.map(r=>r.price).sort((a,b)=>a-b);return(p[Math.floor((p.length-1)/2)]+p[Math.floor(p.length/2)])/2;})():null;
@@ -4208,29 +5230,30 @@ function biKpis(c){
  if(c.weighted!==null)list.push(['销量加权均价 / '+biCurrencies[market],biKpiNum(c.weighted),'仅完整单商品销量与销售额']);
  return `<div class="bi-kpis bi-kpis-adaptive">${list.map(([k,v,n])=>`<article><span>${k}</span><strong>${v}</strong><small>${n}</small></article>`).join('')}</div>`;
 }
-function biAssessment(c){
- const notes=[`有月销量 ${biCoverageLabel(c.rawSales,c.rows.length)}`,`有销售额 ${biCoverageLabel(c.rawRevenue,c.rows.length)}`];
- if(c.monthly)notes.push(`父体关系已确认 ${c.rows.filter(r=>r.parentBasis==='历史父体变更记录').length} 条；其余待核，不计入合计`, '期末价格非月均价；父体与子体指标分列');
- if(!c.hasRanks)notes.push('榜单名次：不适用');
- if(c.units===null)notes.push('暂无可确认归属的销量合计');
- if(c.revenue===null)notes.push('暂无可确认归属的销售额合计');
- return `<div class="bi-gap" role="status">${notes.map(rdE).join('　·　')} <button class="bi-link" data-bi-tab="data">数据说明 →</button></div>`;
-}
+function biAssessment(c){return `<div class="bi-gap"><span>月销量字段 ${biCoverageLabel(c.rawSales,c.rows.length)}</span><span>销售额字段 ${biCoverageLabel(c.rawRevenue,c.rows.length)}</span><span>可确认销量单位 ${c.unitRows.length} 个（去重）</span><span>${c.hasRanks?'有来源名次':'榜单名次不适用'}</span><span>父体关系不明确的原始记录保留待核，不计合计。</span></div>`;}
+
+
 function biOverviewCharts(c){
- const valid=[c.prices.length?biPriceChart(c):'',c.rows.length?biBrandChart(c):''].filter(Boolean);
- const scatter=!c.monthly&&c.rows.filter(r=>r.price>0&&Number.isFinite(r.units)&&r.sales_scope==='listing').length>=2;
- if(scatter)valid.push(biScatter(c));
- const gaps=[];
- if(!c.rows.length)gaps.push(biStatus('当前范围没有月度记录',c.monthly&&biPlatform!=='amazon'&&biPlatform!=='all'?'该月度数据仅覆盖 Amazon；请切换到 Amazon 或选择公开观察、导入快照。':'请调整国家、品类、月份或导入对应记录；缺失不代表零销量。'));
- else if(!c.prices.length)gaps.push(biStatus('暂无有效价格',`当前 ${c.rows.length} 条记录，0 条有价格；可查看商品明细或导入同月价格。`));
- if(!scatter&&c.rows.length)gaps.push(biStatus('价格与销量关系图暂不展示',c.monthly?'期末报价与整月父体销量不属于单商品同期口径；可查看价格分布和父体来源明细。':'需要至少 2 条同期间单商品价格与销量，当前 '+c.rows.filter(r=>r.price>0&&Number.isFinite(r.units)&&r.sales_scope==='listing').length+' 条。'));
- return `<div class="bi-grid bi-chart-grid">${valid.join('')}</div>${gaps.join('')}<details class="bi-own-details"><summary>UWANT 产品与历史报价</summary>${biOwnView()}</details>`;
+ if(!c.rows.length)return biStatus('当前范围没有可用记录',c.monthly&&biPlatform!=='amazon'&&biPlatform!=='all'?'商品月度历史仅覆盖 Amazon。请切换平台或选择其他数据集。':'该国家、品类和期间没有匹配记录；缺失不代表零销量。');
+ const complete=c.unitRows.length>0;
+ const rows=c.all.length?c.all:c.rows,visible=rows.filter(r=>r.recordStatus==='AVAILABLE'||r.origin!=='monthly').length;
+ return `${c.prices.length?biPriceChart(c):biStatus('价格尚未返回',`${visible} 条记录返回其他指标，0 条有有效价格。可继续查看品牌商品结构和原始明细。`)}<div class="bi-secondary-grid">${biBrandChart(c)}<section class="bi-research-brief"><h3>${complete?'已知销量可供参考':'先看价格与商品结构'}</h3><p>${complete?`${c.unitRows.length} 个去重单位已确认销量，其余关系待核，不能解释为完整市场。`:`${c.rawSales} / ${c.rows.length} 条有月销量字段；${c.unitRows.length} 个父体可确认归属，暂不输出完整销量总量。`}</p><dl><div><dt>价格覆盖</dt><dd>${biCoverageLabel(c.prices.length,c.rows.length)}</dd></div><div><dt>商品品牌</dt><dd>${c.brands.length} 个</dd></div></dl><button class="bi-link" data-bi-tab="data">查看缺口与导入方式 →</button></section></div>${!c.monthly&&c.rows.filter(r=>r.price>0&&Number.isFinite(r.units)&&r.sales_scope==='listing').length>=2?biScatter(c):''}`;
 }
-const biDataViewOriginal=biDataView;
-biDataView=function(c){return biDataViewOriginal(c).replace(`${c.rows.length}/${c.rows.length}`,`${c.rows.length} 条`).replace('商品记录</span>','商品记录</span>').replace(/有销量<\/span><strong>[^<]*/,`有月销量</span><strong>${biCoverageLabel(c.rawSales,c.rows.length)}`).replace(/有销售额<\/span><strong>[^<]*/,`有销售额</span><strong>${biCoverageLabel(c.rawRevenue,c.rows.length)}`).replace(/有名次<\/span><strong>[^<]*/,`榜单名次</span><strong>${c.hasRanks?biCoverageLabel(c.ranked.length,c.all.length):'不适用'}`).replace(/归属明确<\/span><strong>[^<]*/,`可确认销量单位</span><strong>${c.unitRows.length} 个（去重）`);};
-const biCoverageOriginal=biCoverageView;
-biCoverageView=function(){const c=biContext();return c.monthly?`<section class="bi-panel"><h3>${biCountries[market]} · ${biCategories[biCategory]} · ${biDataset}</h3>${biAssessment(c)}<p>当前档案 ${c.rows.length} 条；有指标 ${c.rows.filter(r=>r.recordStatus==='AVAILABLE').length} 条；有价格 ${c.prices.length} 条。无记录、无价格、无销量与无销售额分别保留。</p><p>月度历史仅覆盖已收录 Amazon 商品，不是完整市场。更换品类可查看对应覆盖。</p></section>`:biCoverageOriginal().replace(/Top10 完整度/g,'榜单名次').replace(/0\/10名/g,'不适用').replace(/缺少：1、2、3、4、5、6、7、8、9、10/g,'该组未提供榜单名次');};
+
 function biExportRows(rows,c){if(!c.monthly)return biCsvRows(rows);const keys=['country','platform','category','month','product_id','brand','currency','price','parent_id','parentBasis','parentSales','parentSalesAmount','childSales','childSalesAmount','recordStatus'];return [keys,...rows.map(r=>keys.map(k=>r[k]??''))];}
+
+function biNextActions(c){const n=c.prices.length;return `<section class="bi-next-actions"><div><h3>继续研究</h3></div><button data-bi-tab="products"><strong>查看商品明细 →</strong><span>${c.rows.length} 条档案 · ${n} 条有效价格</span></button><button data-bi-tab="opportunities"><strong>UWANT 同价位观察 →</strong><span>历史报价与当前样本分别标明日期</span></button><button data-bi-tab="coverage"><strong>核对数据覆盖 →</strong><span>${c.rawSales} 条有销量字段 · ${c.unitRows.length} 个可确认单位</span></button></section>`;}
+
+let biOwnSku='';
+function biBenchmark(c){
+ const ownData=parent.REVIEW_OWN?.[market.toUpperCase()]||{},prefix={vacuum:'V',wash:'D',fabric:'Y',mattress:'M'}[biCategory],skus=Object.keys(ownData).filter(s=>s.startsWith(prefix));
+ if(!skus.length)return `<details class="bi-details"><summary>UWANT 当地型号资料</summary>${biOwnView()}</details>`;
+ if(!skus.includes(biOwnSku))biOwnSku=skus[0];const own=ownData[biOwnSku],near=c.prices.filter(r=>r.platform==='amazon'&&own.price>0&&Math.abs(r.price/own.price-1)<=.2).sort((a,b)=>Math.abs(a.price-own.price)-Math.abs(b.price-own.price));
+ if(!(own.price>0))return `<section class="bi-panel bi-benchmark"><div class="bi-panel-title"><div><h3>UWANT 与同价位商品</h3><p>当地报价尚未提供，暂不能计算同价位范围</p></div><label class="bi-inline">UWANT 型号<select id="bi-own-sku">${biOptions(skus.map(s=>[s,s]),biOwnSku)}</select></label></div><div class="bi-benchmark-gap"><span>UWANT ${biOwnSku} · ${rdE(own.date)} 资料缺少有效报价。可先核对版本与配置，补价后再按 ±20% 匹配。</span><button class="mi-button" data-bi-open="competitors" data-bi-own="${biOwnSku}" data-bi-mode="all">查看版本与配置 ↗</button></div></section>`;
+ return `<section class="bi-panel bi-benchmark"><div class="bi-panel-title"><div><h3>UWANT 与同价位商品</h3><p>历史报价 ±20% 初筛；价格日期不同，不据此判断当前优势</p></div><label class="bi-inline">UWANT 型号<select id="bi-own-sku">${biOptions(skus.map(s=>[s,s]),biOwnSku)}</select></label></div><div class="bi-benchmark-body"><div class="bi-own-price"><span>UWANT ${biOwnSku}</span><strong>${biMoney(own.price)}</strong><small>${rdE(own.priceType)} · ${rdE(own.date)}</small></div><div class="bi-near-products">${near.length?near.slice(0,3).map(r=>`<a href="${rdE(r.source)}" target="_blank" rel="noopener noreferrer"><span>${rdE(r.brand)} <small>${rdE(r.product_id)}</small></span><strong>${biMoney(r.price)}</strong></a>`).join(''):'<p>当前平台、价格段和月份没有匹配商品；样本未覆盖不代表没有竞品。</p>'}</div><button class="mi-button" data-bi-open="competitors" data-bi-own="${biOwnSku}">比较商品与配置 ↗</button></div><p class="bi-foot">候选：${near.length} 条 · 竞品价格 ${c.monthly?biDataset:c.chosen?.first.snapshot||'日期待补'} · ${biPlatform==='amazon'||biPlatform==='all'?'Amazon':'本数据集不支持按 Amazon 报价匹配其他平台'}</p></section>`;
+}
+
+function biOpportunities(c){return `${biBenchmark(c)}<section class="bi-panel"><div class="bi-panel-title"><div><h3>当前可推进的核查</h3><p>按本次范围的真实数据列出，不把待验证原因当作结论</p></div></div><div class="bi-action-list"><div><strong>核对同价位商品</strong><p>${c.prices.length} 条有效报价。先查看版本、套装和日期，再判断是否可直接比较。</p><button class="bi-link" data-bi-tab="products">查看当前商品 →</button></div><div><strong>确认历史销量归属</strong><p>${c.rawSales} 条有月销量字段，${c.unitRows.length} 个单位可确认合计；其余保留原值待核。</p><button class="bi-link" data-bi-tab="coverage">查看数据覆盖 →</button></div><div><strong>补齐经营判断依据</strong><p>实际广告、转化、费用和库存需本国同期经营报表；不从竞品估算推导 UWANT 利润。</p><a class="bi-link" href="#analysis">查看经营分析 →</a></div></div></section><details class="bi-details"><summary>品类核查参考与原表观察</summary>${biReferencePlaybook(c)}</details>`;}
 
 </script>
 <script data-source="sellersprite-products-data.js">
@@ -4315,11 +5338,13 @@ function ssBiBrandAnalysis(){
 }
 
 const ssBiAssessmentBefore=biAssessment;
-biAssessment=function(c){if(c.monthly||!ssBiSelected(c))return ssBiAssessmentBefore(c);const notice=biTab==='overview'&&biCategory!=='vacuum'?'<div class="ss-bi-notice">卖家精灵吸尘器数据已更新：市场概览、商品榜单、品牌销量。<button type="button" class="bi-link" id="ss-bi-open">查看吸尘器 →</button></div>':'';const status=ssBiSelected(c)?`<div class="ss-bi-notice">下方商品样本：${ssBiMarket().products.dataMonth}，${c.rows.length} 件 · 月销量估算 ${biNum(c.units)} 台。品牌集中度请查看同月品牌分析；商品未提供品牌字段时不参与品牌归类。</div>`:ssBiAssessmentBefore(c);return notice+(ssBiAvailable()?ssBiOverview():'')+status;};
+biAssessment=function(c){return ssBiAssessmentBefore(c);};
+
 const ssBiProductTableBefore=biProductTable;
-biProductTable=function(c,compact=false){const view=!compact&&ssBiSelected(c)?ssBiProductRanking(c):null;return (view||'')+ssBiProductTableBefore(c,compact);};
+biProductTable=function(c,compact=false){const view=!compact&&ssBiSelected(c)?ssBiProductRanking(c):null;return ssBiProductTableBefore(c,compact)+(view?'<details class="bi-details"><summary>查看来源榜单商品卡片</summary>'+view+'</details>':'');};
 const ssBiBrandChartBefore=biBrandChart;
-biBrandChart=function(c,full=false){const view=ssBiSelected(c)?ssBiBrandAnalysis():null;return view||ssBiBrandChartBefore(c,full);};
+biBrandChart=function(c,full=false){return ssBiBrandChartBefore(c,full);};
+
 const ssBiKpisBefore=biKpis;
 biKpis=function(c){if(!ssBiSelected(c))return ssBiKpisBefore(c);const brands=[...new Set(c.rows.map(row=>row.brand).filter(brand=>brand!=='品牌未提供'))];return ssBiKpisBefore({...c,brands}).replace('样本品牌','已识别品牌').replace('当前筛选内品牌数量','仅统计有品牌字段的商品；其余待补');};
 const ssBiWireBefore=biWire;
@@ -4338,23 +5363,34 @@ const embeddedCountry=new URLSearchParams(location.search).get('country')||embed
 if(['mx','ca','ar','br','us'].includes(String(embeddedCountry).toLowerCase()))market=String(embeddedCountry).toLowerCase();
 const embeddedPage=embeddedInitial.get('page');
 let embeddedDesired=embeddedPages.has(location.hash.slice(1))?location.hash.slice(1):embeddedPages.has(embeddedPage)?embeddedPage:'overview';
+function embeddedScopeKey(){return JSON.stringify([biPlatform,biCategory,biDataset,biTab,biBand,biOwnSku,biSearch,biSort,biPage,biTop]);}
+function embeddedHistoryKey(){return [biHistorySlice.length,biHistorySlice[0]?.country,biHistorySlice[0]?.category,biHistorySlice[0]?.month,biHistorySlice.at(-1)?.asin].join('|');}
 function embeddedApplyScope(route){
+ if(typeof route.marketQuery==='string')biSearch=route.marketQuery.slice(0,100);
+ if(['rank','price','units','revenue'].includes(route.marketSort))biSort=route.marketSort;
+ if(/^[0-9]+$/.test(route.marketOffset))biPage=Math.min(500,Number(route.marketOffset));
+ if(['0','10','20','50'].includes(route.marketTop))biTop=Number(route.marketTop);
+ if(typeof route.own==='string')biOwnSku=route.own;
+ if(['overview','macro','products','brands','competitors','opportunities','coverage','changes','data'].includes(route.view))biTab=route.view;
+ if(typeof route.priceBand==='string'&&/^(?:|[0-9]+)$/.test(route.priceBand))biBand=route.priceBand;
  if(route.platform&&['amazon','ml','all','bestbuy','official','retail'].includes(route.platform))biPlatform=route.platform;
  if(Object.hasOwn(biCategories,route.category))biCategory=route.category;
  if(typeof route.dataset==='string')biDataset=route.dataset;
  biHistorySlice=Array.isArray(route.historyRows)?route.historyRows:(parent.REVIEW_HISTORY?.rows||[]).filter(r=>r.country.toLowerCase()===market&&r.category===biCategory&&r.month===biDataset);
 }
-embeddedApplyScope(Object.fromEntries(embeddedInitial));
+embeddedApplyScope(parent.ResearchModel?.parse(parent.location.hash)||Object.fromEntries(embeddedInitial));
 const embeddedScroll=new Map();let embeddedLast='',embeddedStarted=false,embeddedControlled=false;
 const embeddedBefore=render;render=function(){
  embeddedBefore();if(!data)return;
- if(embeddedLast!==page){if(embeddedLast)embeddedScroll.set(embeddedLast,window.scrollY);embeddedLast=page;window.scrollTo(0,embeddedScroll.get(page)||0);}
- if(embeddedStarted&&!embeddedControlled)embeddedSend('uwant:route',{page,country:market,...(page==='market'?{platform:biPlatform,category:biCategory,dataset:biDataset}:{})});
+ const positionKey=page==='market'?page+':'+biTab:page;
+ if(embeddedLast!==positionKey){if(embeddedLast)embeddedScroll.set(embeddedLast,window.scrollY);embeddedLast=positionKey;window.scrollTo(0,embeddedScroll.get(positionKey)||0);}
+ if(embeddedStarted&&!embeddedControlled)embeddedSend('uwant:route',{page,country:market,...(page==='market'?{platform:biPlatform,category:biCategory,dataset:biDataset,view:biTab,priceBand:biBand,marketQuery:biSearch,marketSort:biSort,marketOffset:String(biPage),marketTop:String(biTop),...(biOwnSku?{own:biOwnSku}:{})}:{})});
 };
 window.addEventListener('message',event=>{
  if(event.source!==parent||event.origin!==location.origin||event.data?.type!=='uwant:navigate'||!embeddedPages.has(event.data.page))return;
  embeddedDesired=event.data.page;const nextCountry=event.data.country,countryChanged=['mx','ca','ar','br','us'].includes(nextCountry)&&market!==nextCountry;
- if(countryChanged)market=nextCountry;embeddedApplyScope(event.data);
+ const scopeBefore=embeddedScopeKey(),historyBefore=embeddedHistoryKey();if(countryChanged)market=nextCountry;embeddedApplyScope(event.data);
+ if(page===embeddedDesired&&!countryChanged&&scopeBefore===embeddedScopeKey()&&historyBefore===embeddedHistoryKey())return;
  page=embeddedDesired;if(!location.href.startsWith('about:srcdoc'))history.replaceState(null,'','#'+page);embeddedControlled=true;try{render();}finally{embeddedControlled=false;}
 });
 document.addEventListener('click',event=>{const link=event.target.closest('a[href^="#"]');if(!link)return;const target=link.getAttribute('href').slice(1);if(embeddedPages.has(target)){event.preventDefault();embeddedDesired=target;page=target;if(!location.href.startsWith('about:srcdoc'))history.replaceState(null,'','#'+page);render();}});

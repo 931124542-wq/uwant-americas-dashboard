@@ -1,0 +1,15 @@
+/* UWANT workspace: shared foundations, not a page override sheet. */
+:root{
+  --ui-bg:#f5f7f8;
+  --ui-surface:#fff;
+  --ui-ink:#202e2a;
+  --ui-muted:#64746d;
+  --ui-line:#dfe6e2;
+  --ui-primary:#246044;
+  --ui-soft:#eaf3ed;
+  --ui-warning:#956321;
+  --ui-error:#b42318;
+  --ui-radius:8px;
+  --ui-space:24px;
+  --ui-font:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  --ui-shadow:0 12px 36px #1e39251a}

@@ -8,6 +8,7 @@
 
 
 
+<link rel="stylesheet" href="design-tokens.css">
 <link rel="stylesheet" href="style.css?v=5486edbf9421">
 <link rel="stylesheet" href="intelligence.css?v=d88604121750">
 <link rel="stylesheet" href="refined.css?v=3f483d1facb9">
@@ -50,7 +51,7 @@
 <script src="price-workbench.js?v=d9c2dbdb4d29" defer></script>
 <script src="completion-evidence.js?v=bbc408594f1d" defer></script>
 <script src="radar-validation.js?v=a5106bbb0b0e" defer></script>
-<script src="market-radar-data.js?v=53cf00341203" defer></script>
+<script src="history-metrics.js" defer></script><script src="market-radar-data.js?v=53cf00341203" defer></script>
 <script src="shared-state.js?v=4f70dd987c9b" defer></script>
 <script src="clean.js?v=c12372d07b34" defer></script>
 <script src="brazil-data.js?v=7c2544010659" defer></script>

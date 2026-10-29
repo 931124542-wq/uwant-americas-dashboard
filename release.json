@@ -1,12 +1,16 @@
 {
-  "version": "2026-10-29",
+  "version": "2026-10-29-workspace",
   "dataAsOf": "2026-10-28",
-  "baseCommit": "64d991a71deaee4874eb3a0b51511a4feb33dd70",
+  "baseCommit": "cd4fb24ec9d29a1e0bf7b2e557d95c81f132a579",
   "products": 466,
   "observedMonthlyRows": 3518,
   "features": [
-    "brand-research",
-    "product-comparison",
-    "2026-monthly-history"
+    "market-workspace",
+    "currency-price-distribution",
+    "shared-confirmed-parent-metrics",
+    "research-view-deep-links",
+    "responsive-workspace",
+    "operations-diagnostic-queue",
+    "wide-product-comparison"
   ]
 }
