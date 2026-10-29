@@ -15,30 +15,32 @@ function biPublicRows(){
  return rows.map(r=>({...r,origin:'public',uid:r.country+'|'+r.id}));
 }
 function biLegacyRows(){return rdSamples.map((r,i)=>({...r,platform:/amazon/i.test(r.platform)?'amazon':/mercado|\bml\b/i.test(r.platform)?'ml':/best.?buy/i.test(r.platform)?'bestbuy':r.platform,snapshot:r.exported_at,dataset:'已有销量样本',rank_scope:'',rank:null,revenue:null,rating:null,reviews:null,release_date:'',origin:'legacy',uid:'legacy-'+i,priceNote:'导入样本价格；不据此反算历史销售额',conditions:'来源与销量归属以原导入记录为准'}));}
-function biAllRows(){return [...biPublicRows(),...biLegacyRows(),...biSnapshots.map((r,i)=>({...r,origin:'import',uid:'import-'+i,priceNote:'用户导入的价格快照；未独立复核',conditions:'电压、优惠、库存和套装需核当地商品页'}))];}
-function biGroupKey(r){return r.origin==='public'?['public',r.country,r.category,r.snapshot].join('|'):[r.origin,UwantRadarCore.group(r)].join('|');}
+function biAllRows(){return [...biHistoryRows(),...biPublicRows(),...biLegacyRows(),...biSnapshots.map((r,i)=>({...r,origin:'import',uid:'import-'+i,priceNote:'用户导入的价格快照；未独立复核',conditions:'电压、优惠、库存和套装需核当地商品页'}))];}
+function biGroupKey(r){if(r.origin==='monthly')return r.month;return r.origin==='public'?['public',r.country,r.category,r.snapshot].join('|'):[r.origin,UwantRadarCore.group(r)].join('|');}
 function biDatasets(){
  const groups=new Map();for(const r of biAllRows().filter(r=>r.country===market&&r.category===biCategory&&(biPlatform==='all'||r.platform===biPlatform))){const key=biGroupKey(r);if(!groups.has(key))groups.set(key,{key,first:r,rows:[]});groups.get(key).rows.push(r);}
  return [...groups.values()].sort((a,b)=>b.first.snapshot.localeCompare(a.first.snapshot)||Number(b.first.origin==='import')-Number(a.first.origin==='import'));
 }
 function biContext(){
- const groups=biDatasets(),chosen=groups.find(g=>g.key===biDataset)||groups[0]||null;
- biDataset=chosen?.key||'';const all=chosen?.rows||[],ranked=all.filter(r=>Number.isInteger(r.rank)&&r.rank_scope),hasRanks=ranked.length>0;
+ const groups=biDatasets(),chosen=groups.find(g=>g.key===biDataset)||(biIsMonth(biDataset)?null:groups[0])||null;
+ biDataset=chosen?.key||(biIsMonth(biDataset)?biDataset:'');const all=chosen?.rows||[],ranked=all.filter(r=>Number.isInteger(r.rank)&&r.rank_scope),hasRanks=ranked.length>0;
  if(!hasRanks)biTop=0;
  const rows=biTop?ranked.filter(r=>r.rank<=biTop):all;
- const knownScope=rows.length>0&&rows.every(r=>['listing','family'].includes(r.sales_scope)),listing=rows.length>0&&rows.every(r=>r.sales_scope==='listing');
- const units=knownScope&&rows.every(r=>Number.isFinite(r.units))?rows.reduce((n,r)=>n+r.units,0):null;
- const revenue=knownScope&&rows.every(r=>Number.isFinite(r.revenue))?rows.reduce((n,r)=>n+r.revenue,0):null;
- const prices=rows.filter(r=>Number.isFinite(r.price)&&r.price>0),brands=[...new Set(rows.map(r=>r.brand))];
+ const monthly=biIsMonth(biDataset),knownScope=rows.length>0&&rows.every(r=>['listing','family'].includes(r.sales_scope)),listing=!monthly&&rows.length>0&&rows.every(r=>r.sales_scope==='listing');
+ const unitRows=biMetricRows(rows,'units'),revenueRows=biMetricRows(rows,'revenue');
+ const units=unitRows.length?unitRows.reduce((n,r)=>n+r.units,0):null,revenue=revenueRows.length?revenueRows.reduce((n,r)=>n+r.revenue,0):null;
+ const prices=rows.filter(r=>Number.isFinite(r.price)&&r.price>=0),brands=[...new Set(rows.map(r=>r.brand))];
+ const rawSales=rows.filter(r=>Number.isFinite(monthly?r.parentSales:r.units)).length,rawRevenue=rows.filter(r=>Number.isFinite(monthly?r.parentSalesAmount:r.revenue)).length;
  const complete=!!biTop&&Array.from({length:biTop},(_,i)=>i+1).every(n=>ranked.some(r=>r.rank===n));
- return {groups,chosen,all,rows,ranked,hasRanks,knownScope,listing,units,revenue,prices,brands,complete,weighted:listing&&units>0&&revenue!=null?revenue/units:null};
+ return {groups,chosen,all,rows,ranked,hasRanks,knownScope,listing,monthly,units,revenue,unitRows,revenueRows,rawSales,rawRevenue,prices,brands,complete,weighted:listing&&unitRows.length===rows.length&&revenueRows.length===rows.length&&units>0&&revenue!=null?revenue/units:null};
 }
+
 function biCanMetric(c,key){return key==='count'||c.listing&&c.prices.length===c.rows.length&&(key==='units'?c.units!==null:c.revenue!==null);}
 function biBins(c,metric=biMetric){
- const ranges=market==='mx'?(biCategory==='mattress'?[0,1000,2000,3000,4000,6000,Infinity]:[0,2000,4000,6000,8000,12000,Infinity]):market==='br'?[0,500,1000,1500,2000,3000,Infinity]:[0,100,200,400,600,800,Infinity];
+ const step=market==='us'?100:1000,max=Math.max(0,...c.prices.map(r=>r.price)),ranges=Array.from({length:Math.floor(max/step)+2},(_,i)=>i*step);
  return ranges.slice(0,-1).map((lo,i)=>({label:Number.isFinite(ranges[i+1])?`${biNum(lo)}–<${biNum(ranges[i+1])}`:`≥${biNum(lo)}`,value:c.prices.filter(r=>r.price>=lo&&r.price<ranges[i+1]).reduce((n,r)=>n+(metric==='count'?1:r[metric]||0),0)}));
 }
-function biBrandValues(c,metric='count'){return [...c.rows.reduce((m,r)=>m.set(r.brand,(m.get(r.brand)||0)+(metric==='count'?1:r[metric]||0)),new Map())].map(([label,value])=>({label,value})).sort((a,b)=>b.value-a.value);}
+function biBrandValues(c,metric='count'){const input=metric==='units'?c.unitRows:metric==='revenue'?c.revenueRows:c.rows;return [...input.reduce((m,r)=>m.set(r.brand,(m.get(r.brand)||0)+(metric==='count'?1:r[metric]||0)),new Map())].map(([label,value])=>({label,value})).sort((a,b)=>b.value-a.value);}
 function biPrevious(c){if(!c.chosen||c.chosen.first.origin!=='import')return null;const now=c.chosen.first;return biDatasets().filter(g=>g.first.origin==='import'&&g.first.snapshot<now.snapshot&&['country','platform','category','dataset','rank_scope','method'].every(k=>g.first[k]===now[k])).sort((a,b)=>b.first.snapshot.localeCompare(a.first.snapshot))[0]||null;}
 function biChanges(c){const previous=biPrevious(c);if(!previous)return [];const prev=previous.rows;return c.rows.map(r=>{const p=prev.find(x=>x.product_id===r.product_id);return {r,p,rankChange:p&&r.rank!=null&&p.rank!=null?p.rank-r.rank:null,priceChange:p&&r.price!=null&&p.price>0?r.price/p.price-1:null};});}
 function biParseCsv(text){
@@ -58,7 +60,7 @@ function biAudit(rows){
  const missing=Array.from({length:10},(_,i)=>i+1).filter(n=>!ranks.has(n));
  return {total:rows.length,priced:rows.filter(r=>r.price>0).length,
   sales:rows.filter(r=>Number.isFinite(r.units)&&['listing','family'].includes(r.sales_scope)).length,
-  missing,top10:missing.length===0};
+  missing,hasRanks:ranks.size>0,top10:ranks.size>0&&missing.length===0};
 }
 function biCoverageGroups(country,category,platform){
  const map=new Map();
@@ -66,4 +68,16 @@ function biCoverageGroups(country,category,platform){
   const key=biGroupKey(r);if(!map.has(key))map.set(key,{key,first:r,rows:[]});map.get(key).rows.push(r);
  }
  return [...map.values()].sort((a,b)=>b.first.snapshot.localeCompare(a.first.snapshot)||Number(b.first.origin==='import')-Number(a.first.origin==='import'));
+}
+
+/* Shared history is supplied once by the outer shell; this frame holds only the selected slice. */
+let biHistorySlice=[];
+const biIsMonth=value=>/^2026-(0[1-9]|1[0-2])$/.test(value);
+function biHistoryRows(){return biHistorySlice.filter(r=>r.country.toLowerCase()===market&&r.category===biCategory&&r.month===biDataset&&(biPlatform==='all'||biPlatform==='amazon')).map(r=>({...r,origin:'monthly',country:r.country.toLowerCase(),platform:'amazon',snapshot:r.retrievedAt,dataset:'SellerSprite 商品月度历史',method:'estimate',product_id:r.asin,model:r.title,brand:r.brand||'品牌待核',currency:r.currency,price:r.price,units:null,revenue:null,parent_id:r.parentAsin||'',sales_scope:'unknown',period_start:r.month+'-01',period_end:r.month+'-'+new Date(Number(r.month.slice(0,4)),Number(r.month.slice(5,7)),0).getDate(),rank:null,rank_scope:'',source:'https://www.'+({us:'amazon.com',ca:'amazon.ca',mx:'amazon.com.mx',br:'amazon.com.br'})[market]+'/dp/'+r.asin,uid:r.country+'|'+r.asin+'|'+r.month,priceNote:'期末最后有效价格，非月均价',conditions:r.parentBasis+'；父体月销量 '+biNum(r.parentSales)+'，子体购买量快照 '+biNum(r.childSales)+'（不相加）'}));}
+function biMetricRows(rows,key){
+ const monthly=rows.some(r=>r.origin==='monthly'),field=key==='units'?'parentSales':'parentSalesAmount';
+ const eligible=monthly?rows.filter(r=>r.parentBasis==='历史父体变更记录'&&r.parent_id&&Number.isFinite(r[field])):rows.filter(r=>(r.sales_scope==='listing'||r.sales_scope==='family'&&r.parent_id)&&Number.isFinite(r[key]));
+ const familyIds=new Set(eligible.filter(r=>r.sales_scope==='family'||monthly).map(r=>r.parent_id));
+ const groups=new Map();for(const r of eligible.filter(r=>r.sales_scope!=='listing'||!familyIds.has(r.parent_id))){const id=monthly||r.sales_scope==='family'?'family|'+(r.parent_id||r.product_id):'listing|'+r.product_id;if(!groups.has(id))groups.set(id,[]);groups.get(id).push(r);}
+ return [...groups.values()].filter(g=>new Set(g.map(r=>monthly?r[field]:r[key])).size===1).map(g=>({...g[0],brand:new Set(g.map(r=>r.brand)).size===1?g[0].brand:'品牌待核',[key]:monthly?g[0][field]:g[0][key],sales_scope:monthly?'family':g[0].sales_scope}));
 }

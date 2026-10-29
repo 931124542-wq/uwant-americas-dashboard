@@ -1,0 +1,183 @@
+{
+  "passed": true,
+  "filterCases": 160,
+  "sourceValidationMatched": true,
+  "february": [
+    {
+      "country": "US",
+      "category": "vacuum",
+      "catalog": 147,
+      "withMetrics": 68,
+      "withPrice": 67,
+      "withParentSales": 68,
+      "withParentRevenue": 67,
+      "confirmedSalesUnits": 7,
+      "confirmedUnits": 22740
+    },
+    {
+      "country": "US",
+      "category": "wash",
+      "catalog": 48,
+      "withMetrics": 40,
+      "withPrice": 39,
+      "withParentSales": 40,
+      "withParentRevenue": 39,
+      "confirmedSalesUnits": 4,
+      "confirmedUnits": 1141
+    },
+    {
+      "country": "US",
+      "category": "fabric",
+      "catalog": 6,
+      "withMetrics": 3,
+      "withPrice": 3,
+      "withParentSales": 3,
+      "withParentRevenue": 3,
+      "confirmedSalesUnits": 0,
+      "confirmedUnits": null
+    },
+    {
+      "country": "US",
+      "category": "mattress",
+      "catalog": 0,
+      "withMetrics": 0,
+      "withPrice": 0,
+      "withParentSales": 0,
+      "withParentRevenue": 0,
+      "confirmedSalesUnits": 0,
+      "confirmedUnits": null
+    },
+    {
+      "country": "CA",
+      "category": "vacuum",
+      "catalog": 106,
+      "withMetrics": 49,
+      "withPrice": 49,
+      "withParentSales": 49,
+      "withParentRevenue": 49,
+      "confirmedSalesUnits": 4,
+      "confirmedUnits": 3069
+    },
+    {
+      "country": "CA",
+      "category": "wash",
+      "catalog": 34,
+      "withMetrics": 25,
+      "withPrice": 25,
+      "withParentSales": 25,
+      "withParentRevenue": 25,
+      "confirmedSalesUnits": 2,
+      "confirmedUnits": 274
+    },
+    {
+      "country": "CA",
+      "category": "fabric",
+      "catalog": 2,
+      "withMetrics": 1,
+      "withPrice": 1,
+      "withParentSales": 1,
+      "withParentRevenue": 1,
+      "confirmedSalesUnits": 0,
+      "confirmedUnits": null
+    },
+    {
+      "country": "CA",
+      "category": "mattress",
+      "catalog": 0,
+      "withMetrics": 0,
+      "withPrice": 0,
+      "withParentSales": 0,
+      "withParentRevenue": 0,
+      "confirmedSalesUnits": 0,
+      "confirmedUnits": null
+    },
+    {
+      "country": "MX",
+      "category": "vacuum",
+      "catalog": 97,
+      "withMetrics": 68,
+      "withPrice": 68,
+      "withParentSales": 68,
+      "withParentRevenue": 68,
+      "confirmedSalesUnits": 0,
+      "confirmedUnits": null
+    },
+    {
+      "country": "MX",
+      "category": "wash",
+      "catalog": 12,
+      "withMetrics": 11,
+      "withPrice": 11,
+      "withParentSales": 11,
+      "withParentRevenue": 11,
+      "confirmedSalesUnits": 1,
+      "confirmedUnits": 64
+    },
+    {
+      "country": "MX",
+      "category": "fabric",
+      "catalog": 0,
+      "withMetrics": 0,
+      "withPrice": 0,
+      "withParentSales": 0,
+      "withParentRevenue": 0,
+      "confirmedSalesUnits": 0,
+      "confirmedUnits": null
+    },
+    {
+      "country": "MX",
+      "category": "mattress",
+      "catalog": 0,
+      "withMetrics": 0,
+      "withPrice": 0,
+      "withParentSales": 0,
+      "withParentRevenue": 0,
+      "confirmedSalesUnits": 0,
+      "confirmedUnits": null
+    },
+    {
+      "country": "BR",
+      "category": "vacuum",
+      "catalog": 10,
+      "withMetrics": 9,
+      "withPrice": 0,
+      "withParentSales": 0,
+      "withParentRevenue": 0,
+      "confirmedSalesUnits": 0,
+      "confirmedUnits": null
+    },
+    {
+      "country": "BR",
+      "category": "wash",
+      "catalog": 4,
+      "withMetrics": 1,
+      "withPrice": 0,
+      "withParentSales": 0,
+      "withParentRevenue": 0,
+      "confirmedSalesUnits": 0,
+      "confirmedUnits": null
+    },
+    {
+      "country": "BR",
+      "category": "fabric",
+      "catalog": 0,
+      "withMetrics": 0,
+      "withPrice": 0,
+      "withParentSales": 0,
+      "withParentRevenue": 0,
+      "confirmedSalesUnits": 0,
+      "confirmedUnits": null
+    },
+    {
+      "country": "BR",
+      "category": "mattress",
+      "catalog": 0,
+      "withMetrics": 0,
+      "withPrice": 0,
+      "withParentSales": 0,
+      "withParentRevenue": 0,
+      "confirmedSalesUnits": 0,
+      "confirmedUnits": null
+    }
+  ]
+}

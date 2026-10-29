@@ -10,6 +10,7 @@ const brandLabel=brand=>{const b=D.focus.roster.find(b=>b.name.toLowerCase()===S
 const featureLabel=r=>state.category==='vacuum'?(r.autoEmpty?'自动集尘（标题标称）':'—'):(r.classificationReason||'—');
 const pageNames={brands:'品牌分析',competitors:'竞品对比',market:'市场总览',overview:'经营总览',analysis:'经营分析',products:'SKU 表现',profit:'利润与补货',inventory:'库存监控',calendar:'促销日历',tasks:'运营任务',access:'访问设置'};
 let operationsReady=false,operationsTimer,frameRoute='';
+function operationPayload(){return {type:'uwant:navigate',page:state.page,country:state.country.toLowerCase(),platform:state.platform,category:state.category,dataset:state.dataset,historyRows:M.isHistory(state.dataset)?D.history.rows.filter(r=>r.country===state.country&&r.category===state.category&&r.month===state.dataset):[],historyAsOf:D.history.asOf};}
 function operationPage(){
  const research=['brands','competitors'].includes(state.page);
  document.querySelectorAll('[data-route]').forEach(a=>a.setAttribute('aria-current',a.dataset.route===state.page?'page':'false'));
@@ -20,19 +21,20 @@ function operationPage(){
  const frame=$('operations-frame');
  if(!frame.dataset.started){
   frame.dataset.started='true';
-  if(typeof window.REVIEW_OPERATIONS_HTML==='string')frame.srcdoc=window.REVIEW_OPERATIONS_HTML;else frame.src='operations/index.html?country='+state.country.toLowerCase()+'#'+state.page;frameRoute=state.page;
+  if(typeof window.REVIEW_OPERATIONS_HTML==='string')frame.srcdoc=window.REVIEW_OPERATIONS_HTML;else frame.src='operations/index.html?v=20261029-monthly&country='+state.country.toLowerCase()+'#'+state.page;frameRoute=state.page;
   operationsTimer=setTimeout(()=>{if(!operationsReady){$('operations-status').textContent='加载尚未完成，请重试。';$('operations-retry').hidden=false;}},15000);
- }else if(operationsReady){frame.contentWindow.postMessage({type:'uwant:navigate',page:state.page,country:state.country.toLowerCase()},location.origin==='null'?'*':location.origin);frameRoute=state.page;}
+ }else if(operationsReady){frame.contentWindow.postMessage(operationPayload(),location.origin==='null'?'*':location.origin);frameRoute=state.page;}
  return true;
 }
 window.addEventListener('message',e=>{
  if(e.source!==$('operations-frame').contentWindow||e.origin!==location.origin)return;
  if(e.data?.type==='uwant:ready'){
   operationsReady=true;clearTimeout(operationsTimer);$('operations-status').hidden=true;$('operations-retry').hidden=true;$('operations-frame').hidden=false;
-  if(!['brands','competitors'].includes(state.page))$('operations-frame').contentWindow.postMessage({type:'uwant:navigate',page:state.page,country:state.country.toLowerCase()},location.origin==='null'?'*':location.origin);
+  if(!['brands','competitors'].includes(state.page))$('operations-frame').contentWindow.postMessage(operationPayload(),location.origin==='null'?'*':location.origin);
  }else if(operationsReady&&e.data?.type==='uwant:route'&&pageNames[e.data.page]&&!['brands','competitors'].includes(state.page)){
   const nextCountry=String(e.data.country||'').toUpperCase(),countryChanged=M.countries[nextCountry]&&state.country!==nextCountry;
-  if(state.page!==e.data.page||countryChanged){frameRoute=e.data.page;change({page:e.data.page,detail:'',...(countryChanged?{country:nextCountry}:{})});}
+  const scope=e.data.page==='market'?Object.fromEntries(['platform','category','dataset'].filter(k=>typeof e.data[k]==='string').map(k=>[k,e.data[k]])):{};
+  if(state.page!==e.data.page||countryChanged||Object.entries(scope).some(([k,v])=>state[k]!==v)){frameRoute=e.data.page;change({page:e.data.page,detail:'',...scope,...(countryChanged?{country:nextCountry}:{})});}
  }
 });
 function shortTitle(r){

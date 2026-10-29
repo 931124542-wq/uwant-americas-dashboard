@@ -40,7 +40,7 @@ function ssBiBrandAnalysis(){
 }
 
 const ssBiAssessmentBefore=biAssessment;
-biAssessment=function(c){const notice=biTab==='overview'&&biCategory!=='vacuum'?'<div class="ss-bi-notice">卖家精灵吸尘器数据已更新：市场概览、商品榜单、品牌销量。<button type="button" class="bi-link" id="ss-bi-open">查看吸尘器 →</button></div>':'';const status=ssBiSelected(c)?`<div class="ss-bi-notice">下方商品样本：${ssBiMarket().products.dataMonth}，${c.rows.length} 件 · 月销量估算 ${biNum(c.units)} 台。品牌集中度请查看同月品牌分析；商品未提供品牌字段时不参与品牌归类。</div>`:ssBiAssessmentBefore(c);return notice+(ssBiAvailable()?ssBiOverview():'')+status;};
+biAssessment=function(c){if(c.monthly||!ssBiSelected(c))return ssBiAssessmentBefore(c);const notice=biTab==='overview'&&biCategory!=='vacuum'?'<div class="ss-bi-notice">卖家精灵吸尘器数据已更新：市场概览、商品榜单、品牌销量。<button type="button" class="bi-link" id="ss-bi-open">查看吸尘器 →</button></div>':'';const status=ssBiSelected(c)?`<div class="ss-bi-notice">下方商品样本：${ssBiMarket().products.dataMonth}，${c.rows.length} 件 · 月销量估算 ${biNum(c.units)} 台。品牌集中度请查看同月品牌分析；商品未提供品牌字段时不参与品牌归类。</div>`:ssBiAssessmentBefore(c);return notice+(ssBiAvailable()?ssBiOverview():'')+status;};
 const ssBiProductTableBefore=biProductTable;
 biProductTable=function(c,compact=false){const view=!compact&&ssBiSelected(c)?ssBiProductRanking(c):null;return (view||'')+ssBiProductTableBefore(c,compact);};
 const ssBiBrandChartBefore=biBrandChart;

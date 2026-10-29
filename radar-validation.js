@@ -1,6 +1,6 @@
 /* Shared by the browser and Worker: one validation contract for BI snapshots. */
 (function(root){
- const currencies={mx:'MXN',ca:'CAD',br:'BRL'};
+ const currencies={us:'USD',mx:'MXN',ca:'CAD',br:'BRL'};
  const columns=['country','platform','category','snapshot','dataset','rank_scope','product_id','parent_id','sales_scope','brand','model','currency','price','units','revenue','period_start','period_end','method','rank','rating','reviews','release_date','source'];
  const date=s=>typeof s==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(s)&&!Number.isNaN(Date.parse(s))&&new Date(s+'T00:00:00Z').toISOString().slice(0,10)===s;
  const group=r=>[r.country,r.platform,r.category,r.snapshot,r.dataset,r.rank_scope,r.method,r.period_start,r.period_end].join('|');
@@ -18,7 +18,7 @@
    for(const k of ['dataset','product_id','brand','model','source'])if(!r[k].trim())fail('缺少'+k);
    if(!/^https?:\/\/[^\s]+$/i.test(r.source))fail('来源须为有效http/https链接');
    if(r.platform==='amazon'){
-    const host=new URL(r.source).hostname.toLowerCase(),suffix={mx:'amazon.com.mx',ca:'amazon.ca',br:'amazon.com.br'}[r.country];
+    const host=new URL(r.source).hostname.toLowerCase(),suffix={us:'amazon.com',mx:'amazon.com.mx',ca:'amazon.ca',br:'amazon.com.br'}[r.country];
     if(host!==suffix&&!host.endsWith('.'+suffix)||!/^[A-Z0-9]{10}$/.test(r.product_id))fail('Amazon商品须使用对应国家来源和10位ASIN');
    }
    if(r.platform==='ml'){
