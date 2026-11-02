@@ -1,0 +1,253 @@
+{
+  "previousPublicCommit": "80ba63c",
+  "developmentSource": "8eec8bf",
+  "newSellerSpriteCalls": 0,
+  "privateCaptureIncluded": false,
+  "unitValidation": {
+    "unitTests": [
+      {
+        "test": "public-release-contract",
+        "status": "PASS"
+      },
+      {
+        "test": "product-library-range",
+        "status": "PASS"
+      },
+      {
+        "test": "sparse-data-states",
+        "status": "PASS"
+      },
+      {
+        "test": "sparse-product-table",
+        "status": "PASS"
+      },
+      {
+        "test": "decision-context",
+        "status": "PASS"
+      },
+      {
+        "test": "market-monthly",
+        "status": "PASS"
+      },
+      {
+        "test": "price-bands",
+        "status": "PASS"
+      },
+      {
+        "test": "operational-data-contract",
+        "status": "PASS"
+      }
+    ],
+    "productionIntegrity": [
+      {
+        "file": "history-data.js",
+        "sha256": "b5e89034dd0526ddd42d8250cfa2016eb6e97907902d54db75465b7baf8182e7",
+        "unchanged": true
+      },
+      {
+        "file": "history-metrics.js",
+        "sha256": "eed1ff84bc741adbd19a3491c1a981d2d74e4a377dda1a22ed14b7e4bd9dec2e",
+        "unchanged": true
+      },
+      {
+        "file": "review-data.js",
+        "sha256": "456387840edff93a17143538172493297f36b71f95c114c297760f3e6e85b1ca",
+        "unchanged": true
+      },
+      {
+        "file": "own-data.js",
+        "sha256": "a7fbfcb2dc94eb34335ffd16c564c666cdfae5153bf25525a1bee54602487555",
+        "unchanged": true
+      },
+      {
+        "file": "focus-brands-data.js",
+        "sha256": "c51ab5cbdc9391811b659847869e6ec05453c5e5b3022d1c58df366ea3716cde",
+        "unchanged": true
+      },
+      {
+        "file": "data.json",
+        "sha256": "2cacf5b7313f71caff198e22096258fed71b018d9464062a0b2f5a1ad14ad549",
+        "unchanged": true
+      },
+      {
+        "file": "competitor-data.js",
+        "sha256": "2ea81d4157cada6e4049ff20d925ff320752bf171e7b0c6dda4eeb27afa94c68",
+        "unchanged": true
+      },
+      {
+        "file": "brazil-data.js",
+        "sha256": "7c25440106594db0d920d8550fc12531772b06ae67cfb9a3ad2eedceb2ee54a1",
+        "unchanged": true
+      },
+      {
+        "file": "amazon-research-data.js",
+        "sha256": "7f147bb2ee7b94ef21a0b863a29f73c7d5483f16d9a5092180f1e7e9b4ec0772",
+        "unchanged": true
+      },
+      {
+        "file": "research-evidence-data.js",
+        "sha256": "b1341f94fa6e368a35fd3f2ddde86176a409d13ff406b51cf901990d789f08fd",
+        "unchanged": true
+      },
+      {
+        "file": "year-2026/history.json",
+        "sha256": "18d5e6e272abbb0433b073788d0e9ca2b86279d2f2f10036aca0d49877af8dea",
+        "unchanged": true
+      },
+      {
+        "file": "year-2026/validation.json",
+        "sha256": "8b48c8862ab9689d24f8d47c4487554f52111ed707a9978f17ab68b23653e020",
+        "unchanged": true
+      },
+      {
+        "file": "year-2026/UWANT_2026_产品月度数据.xlsx",
+        "sha256": "3724bb2a2295ee760300c5298e1191d88756802dbedadf9523f7e130353f3961",
+        "unchanged": true
+      }
+    ],
+    "paidMcpCalls": 0,
+    "privateCaptureIncluded": false
+  },
+  "browser": {
+    "base": "public-package local preview",
+    "passed": 12,
+    "failed": 0,
+    "checks": [
+      {
+        "name": "public product library renders correct country/SKU and does not load a private capture",
+        "status": "PASS"
+      },
+      {
+        "name": "product details keep source/image evidence and restore the search context",
+        "status": "PASS"
+      },
+      {
+        "name": "four countries and four categories retain independent product/source scopes",
+        "status": "PASS"
+      },
+      {
+        "name": "Jan–Sep uses only existing public monthly records with exact qualified totals",
+        "status": "PASS"
+      },
+      {
+        "name": "monthly CSV matches country/platform/bounds and never exports isolated values as counted sales",
+        "status": "PASS"
+      },
+      {
+        "name": "range refresh/back and category/platform changes preserve month bounds",
+        "status": "PASS"
+      },
+      {
+        "name": "all eight UWANT SKU choices use their category dimensions and preserve comparison controls",
+        "status": "PASS"
+      },
+      {
+        "name": "unverified pilot data remains isolated and sources remain accessible in research",
+        "status": "PASS"
+      },
+      {
+        "name": "product export retains identity, source, date, selected price and metric eligibility",
+        "status": "PASS"
+      },
+      {
+        "name": "Brazil no-metric history and no-data channels use compact states instead of empty tables",
+        "status": "PASS"
+      },
+      {
+        "name": "operating/data-management modules and mobile layout remain usable",
+        "status": "PASS"
+      },
+      {
+        "name": "no JavaScript runtime errors or private script requests",
+        "status": "PASS"
+      }
+    ]
+  },
+  "renderInventory": {
+    "renderedStates": 131,
+    "runtimeErrors": [],
+    "emptyNumericColumns": []
+  },
+  "publicCoverage": [
+    {
+      "country": "CA",
+      "category": "fabric",
+      "products": 13
+    },
+    {
+      "country": "CA",
+      "category": "wash",
+      "products": 41
+    },
+    {
+      "country": "CA",
+      "category": "vacuum",
+      "products": 113
+    },
+    {
+      "country": "CA",
+      "category": "mattress",
+      "products": 2
+    },
+    {
+      "country": "MX",
+      "category": "fabric",
+      "products": 8
+    },
+    {
+      "country": "MX",
+      "category": "wash",
+      "products": 19
+    },
+    {
+      "country": "MX",
+      "category": "vacuum",
+      "products": 102
+    },
+    {
+      "country": "MX",
+      "category": "mattress",
+      "products": 6
+    },
+    {
+      "country": "US",
+      "category": "fabric",
+      "products": 6
+    },
+    {
+      "country": "US",
+      "category": "wash",
+      "products": 51
+    },
+    {
+      "country": "US",
+      "category": "vacuum",
+      "products": 150
+    },
+    {
+      "country": "US",
+      "category": "mattress",
+      "products": 0
+    },
+    {
+      "country": "BR",
+      "category": "fabric",
+      "products": 2
+    },
+    {
+      "country": "BR",
+      "category": "wash",
+      "products": 7
+    },
+    {
+      "country": "BR",
+      "category": "vacuum",
+      "products": 12
+    },
+    {
+      "country": "BR",
+      "category": "mattress",
+      "products": 2
+    }
+  ]
+}

@@ -38,7 +38,7 @@
  function priceFilter(rows,s){if(!s.evidenceMin&&!s.evidenceMax)return rows;return rows.filter(r=>{const p=quote(r,s.evidencePriceBasis);return p&&(!s.evidenceMin||p.value>=Number(s.evidenceMin))&&(!s.evidenceMax||p.value<=Number(s.evidenceMax));});}
  function exportRows(rows,Q){const basic=Q.exportRows(rows),extra=['modelKey','versionId','versionStatus','modelStatus','sellerType','soldBy','imageUrl','imageEvidence','claims','historicalObservation','relatedListings','captureAccess','sourceUpdatedAt','currencyBasis','capturedHistory','capturedTrends','capturedTrendsSource','stage4History','historicalParentEvents','skuMappingStatus'];return [[...basic[0],...extra],...rows.map((r,i)=>[...basic[i+1],...extra.map(k=>typeof r[k]==='object'?JSON.stringify(r[k]):r[k]??'')])];}
  function analysisPrice(r,s){
-  const h=r.historicalObservation;
+  const h=r.historicalObservations?.find(x=>x.period===(s.endMonth||s.dataset))||r.historicalObservation;
   if(/^2026-\d\d$/.test(s.dataset)){if(h?.period===s.dataset&&h.kind==='month_end'&&finite(h.price))return {value:h.price,currency:h.currency,date:h.period,kind:'month_end',platform:r.platform,productType:r.productType};if(r.origin==='history_profile'&&r.period===s.dataset&&r.priceKind==='month_end'&&finite(r.price))return {value:r.price,currency:r.currency,date:r.period,kind:'month_end',platform:r.platform,productType:r.productType};return null;}
   return r.priceKind==='observation'&&r.sourceDate&&finite(r.price)?{value:r.price,currency:r.currency,date:r.sourceDate,kind:'observation',platform:r.platform,productType:r.productType}:null;
  }

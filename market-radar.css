@@ -427,10 +427,10 @@ body.bi-mode .markets,body.bi-mode .page-heading{
   padding:12px;
   border-bottom:1px solid #edf1ee;
   vertical-align:top}
-.bi-workspace td:nth-child(2){
+.bi-workspace table:not(.bi-record-table) td:nth-child(2){
   min-width:240px;
   max-width:400px}
-.bi-workspace td:nth-child(3){
+.bi-workspace table:not(.bi-record-table) td:nth-child(3){
   white-space:nowrap}
 .bi-workspace td>small{
   display:block;
@@ -828,3 +828,8 @@ body.bi-mode .markets,body.bi-mode .page-heading{
 .bi-workspace button{
   transition:color .12s,background .12s}
 }
+
+/* Sparse source tables keep products visible without repeated empty metric columns. */
+.bi-record-table{min-width:650px}.bi-record-table td{padding:10px 12px;vertical-align:middle}.bi-record-table .bi-record-product{min-width:280px;max-width:520px;white-space:normal}.bi-record-table .bi-product-identity>div{min-width:0;flex:1}.bi-record-table .bi-product-identity strong{font-weight:500;line-height:1.45}.bi-record-table .bi-product-identity small{display:block;font-size:11px;color:var(--ui-muted);margin-top:4px}.bi-record-table .bi-product-identity img{width:42px;height:48px}.bi-record-table .bi-record-actions{min-width:205px;max-width:330px}.bi-record-actions>div{display:flex;gap:14px;align-items:center;flex-wrap:wrap}.bi-record-actions .bi-row-action{display:inline;padding:0}.bi-record-table .bi-record-details{margin:5px 0 0;font-size:11px}.bi-record-details>div{font-size:12px;line-height:1.65;white-space:normal;overflow-wrap:anywhere}.bi-record-details p{margin:7px 0}.bi-record-gap{font-size:12px;line-height:1.65;color:var(--ui-muted);padding:8px 0 12px}.bi-record-notes{margin:10px 0 0;font-size:12px;color:var(--ui-muted)}.bi-record-notes p{line-height:1.7;max-width:900px}.bi-catalog-only .bi-record-product{width:52%}.bi-catalog-only .bi-record-actions{width:24%}
+
+.bi-record-image{position:relative;display:grid;place-items:center;flex:0 0 42px;width:42px;height:48px;background:#f7f9f7}.bi-record-image>span{font-size:10px;text-align:center;color:var(--ui-muted)}.bi-record-image img{position:absolute;inset:0;opacity:0}.bi-record-image img[data-ready]{opacity:1}.bi-record-image img[hidden]{display:none}

@@ -1,5 +1,5 @@
 {
-  "version": "2026-10-29-data-audit",
+  "version": "2026-11-02-product-workbench",
   "dataAsOf": "2026-10-28",
   "baseCommit": "4a4cb86bd6ffd3adf77b9592a25bdf2c3cff6386",
   "products": 466,
@@ -8,10 +8,20 @@
     "brand-research",
     "product-comparison",
     "2026-monthly-history",
-    "audited-metric-contracts"
+    "audited-metric-contracts",
+    "product-first-research",
+    "category-specific-comparison",
+    "source-backed-product-library",
+    "custom-month-range",
+    "compact-missing-data-states"
   ],
   "auditBaseline": "4a4cb86",
   "auditReport": "docs/data-audit-2026-10-29.md",
   "auditCheckpoint": "ffafdce8be300ed104c5db299f249c25c2053929",
-  "operationsRevision": "9b96af9bd335"
+  "operationsRevision": "9b96af9bd335",
+  "uiUpdatedAt": "2026-11-02",
+  "previousPublicCommit": "80ba63c9215794542e8497378e1fbeafb72dc65d",
+  "verifiedDevelopmentCommit": "8eec8bf",
+  "publicPackage": true,
+  "privateCaptureIncluded": false
 }
