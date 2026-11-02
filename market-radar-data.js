@@ -10,6 +10,7 @@ const biCat=sku=>({D:'wash',V:'vacuum',Y:'fabric',M:'mattress'})[sku?.[0]];
 const biNum=(n,d=0)=>n==null?'—':new Intl.NumberFormat('zh-CN',{maximumFractionDigits:d}).format(n);
 const biMoney=n=>n==null?'—':new Intl.NumberFormat('zh-CN',{style:'currency',currency:biCurrencies[market],maximumFractionDigits:2}).format(n);
 function biPlatformOf(r){
+ if(typeof ResearchQuality!=='undefined')return ResearchQuality.platformOf(r);
  let host;try{host=new URL(r.source).hostname.toLowerCase().replace(/^www\./,'');}catch{return 'unknown';}
  const matches=domain=>host===domain||host.endsWith('.'+domain);
  if(['amazon.com','amazon.ca','amazon.com.mx','amazon.com.br'].some(matches))return 'amazon';
@@ -36,7 +37,7 @@ function biContext(){
  const groups=biDatasets(),chosen=groups.find(g=>g.key===biDataset)||(biIsMonth(biDataset)?null:groups[0])||null;
  biDataset=chosen?.key||(biIsMonth(biDataset)?biDataset:'');const all=chosen?.rows||[],ranked=all.filter(r=>Number.isInteger(r.rank)&&r.rank_scope),hasRanks=ranked.length>0;
  if(!hasRanks)biTop=0;
- const scoped=biTop?ranked.filter(r=>r.rank<=biTop):all;
+ const rankedScope=biTop?ranked.filter(r=>r.rank<=biTop):all;const scoped=typeof ResearchQuality!=='undefined'?rankedScope.filter(r=>ResearchQuality.matchesType(r,typeof biResearchState==='undefined'?'all':biResearchState.productType)):rankedScope;
  const rows=biBand===''?scoped:scoped.filter(r=>Number.isFinite(r.price)&&Math.floor(r.price/biPriceSteps[market])===Number(biBand));
  const monthly=biIsMonth(biDataset),knownScope=rows.length>0&&rows.every(r=>['listing','family'].includes(r.sales_scope)),listing=!monthly&&rows.length>0&&rows.every(r=>r.sales_scope==='listing');
  const priceAligned=!monthly&&rows.length>0&&rows.every(r=>r.period_end&&r.snapshot===r.period_end);
@@ -91,4 +92,4 @@ function biCoverageGroups(country,category,platform){
 let biHistorySlice=[];
 const biIsMonth=value=>/^2026-(0[1-9]|1[0-2])$/.test(value);
 function biHistoryRows(){return biHistorySlice.filter(r=>r.country.toLowerCase()===market&&r.category===biCategory&&r.month===biDataset&&(biPlatform==='all'||biPlatform==='amazon')).map(r=>({...r,origin:'monthly',country:r.country.toLowerCase(),platform:'amazon',snapshot:r.retrievedAt,dataset:'SellerSprite 商品月度历史',method:'estimate',product_id:r.asin,model:r.title,sourceBrandName:r.brand,brand:HistoryMetrics.brandName(r.brand)||'品牌待核',currency:r.currency,price:r.price,units:null,revenue:null,parent_id:r.parentAsin||'',sales_scope:'unknown',period_start:r.month+'-01',period_end:r.month+'-'+new Date(Number(r.month.slice(0,4)),Number(r.month.slice(5,7)),0).getDate(),rank:null,rank_scope:'',source:'https://www.'+({us:'amazon.com',ca:'amazon.ca',mx:'amazon.com.mx',br:'amazon.com.br'})[market]+'/dp/'+r.asin,uid:r.country+'|'+r.asin+'|'+r.month,priceNote:'期末最后有效价格，非月均价',conditions:r.parentBasis+'；父体月销量 '+biNum(r.parentSales)+'，子体购买量快照 '+biNum(r.childSales)+'（不相加）'}));}
-function biMetricRows(rows,key,universe=rows){return HistoryMetrics.metricRows(rows,key,{universe});}
+function biMetricRows(rows,key,universe=rows){return (typeof ResearchQuality!=='undefined'?ResearchQuality:HistoryMetrics).metricRows(rows,key,{universe});}

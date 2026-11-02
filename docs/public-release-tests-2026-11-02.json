@@ -1,0 +1,43 @@
+{
+  "base": "public-package local preview",
+  "passed": 9,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "eight public brand scopes render without private capture",
+      "status": "PASS"
+    },
+    {
+      "name": "search focus, brand drilldown and browser back retain context",
+      "status": "PASS"
+    },
+    {
+      "name": "private pilot quantities are absent from public candidate data and UI",
+      "status": "PASS"
+    },
+    {
+      "name": "CSV retains source and eligibility",
+      "status": "PASS"
+    },
+    {
+      "name": "country/platform/month survive refresh and ML never uses Amazon sales",
+      "status": "PASS"
+    },
+    {
+      "name": "public market, operations and data management render",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile public brand layout has no page overflow",
+      "status": "PASS"
+    },
+    {
+      "name": "non-Amazon channels and US/BR preserve brand scope",
+      "status": "PASS"
+    },
+    {
+      "name": "no runtime errors",
+      "status": "PASS"
+    }
+  ]
+}

@@ -28,6 +28,7 @@
 <link rel="stylesheet" href="clean.css?v=7f7bfcda907f">
 <link rel="stylesheet" href="brazil.css?v=c4e701b188e5">
 <link rel="stylesheet" href="market-radar.css?v=403ce080f4ba">
+<link rel="stylesheet" href="research-catalog.css">
 <link rel="stylesheet" href="sellersprite-products.css?v=ca4a72af7faa">
 <link rel="stylesheet" href="sellersprite-bi.css?v=389ce9c5cab8">
 <link rel="stylesheet" href="sellersprite-market-override.css?v=86e0f1484e31">
@@ -51,7 +52,7 @@
 <script src="price-workbench.js?v=d9c2dbdb4d29" defer></script>
 <script src="completion-evidence.js?v=bbc408594f1d" defer></script>
 <script src="radar-validation.js?v=a5106bbb0b0e" defer></script>
-<script src="history-metrics.js" defer></script><script src="market-radar-data.js?v=53cf00341203" defer></script>
+<script src="history-metrics.js" defer></script><script src="research-quality.js" defer></script><script src="research-evidence-data.js" defer></script><script>if(parent!==window&&parent.AmazonResearch){window.AMAZON_RESEARCH=parent.AMAZON_RESEARCH;window.AmazonResearch=parent.AmazonResearch;}else{document.write('<script src="../amazon-research-data.js"></scr'+'ipt><script src="../amazon-research-model.js"></scr'+'ipt>');}</script><script src="research-catalog-ui.js" defer></script><script src="market-radar-data.js?v=53cf00341203" defer></script>
 <script src="shared-state.js?v=4f70dd987c9b" defer></script>
 <script src="clean.js?v=c12372d07b34" defer></script>
 <script src="brazil-data.js?v=7c2544010659" defer></script>
