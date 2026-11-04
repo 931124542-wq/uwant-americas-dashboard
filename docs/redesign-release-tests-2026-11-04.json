@@ -1,0 +1,124 @@
+{
+  "publicBrowser": {
+    "base": "http://127.0.0.1:8805/",
+    "passed": 12,
+    "failed": 0,
+    "checks": [
+      {
+        "name": "public product library renders correct country/SKU and does not load a private capture",
+        "status": "PASS"
+      },
+      {
+        "name": "product details keep source/image evidence and restore the search context",
+        "status": "PASS"
+      },
+      {
+        "name": "four countries and four categories retain independent product/source scopes",
+        "status": "PASS"
+      },
+      {
+        "name": "Jan–Sep uses only existing public monthly records with exact qualified totals",
+        "status": "PASS"
+      },
+      {
+        "name": "monthly CSV matches country/platform/bounds and never exports isolated values as counted sales",
+        "status": "PASS"
+      },
+      {
+        "name": "range refresh/back and category/platform changes preserve month bounds",
+        "status": "PASS"
+      },
+      {
+        "name": "all eight UWANT SKU choices use their category dimensions and preserve comparison controls",
+        "status": "PASS"
+      },
+      {
+        "name": "unverified pilot data remains isolated and sources remain accessible in research",
+        "status": "PASS"
+      },
+      {
+        "name": "product export retains identity, source, date, selected price and metric eligibility",
+        "status": "PASS"
+      },
+      {
+        "name": "Brazil no-metric history and no-data channels use compact states instead of empty tables",
+        "status": "PASS"
+      },
+      {
+        "name": "operating/data-management modules and mobile layout remain usable",
+        "status": "PASS"
+      },
+      {
+        "name": "no JavaScript runtime errors or private script requests",
+        "status": "PASS"
+      }
+    ]
+  },
+  "redesignBrowser": {
+    "passed": 14,
+    "failed": 0,
+    "checks": [
+      {
+        "name": "Default market opens with one compact scope, four KPIs, genuine charts and the product table in the first screen",
+        "status": "PASS"
+      },
+      {
+        "name": "No-data state stays compact and never invents charts or Amazon sales for Mercado Libre",
+        "status": "PASS"
+      },
+      {
+        "name": "Product search keeps focus; correct detail price/source is reused and closing retains context",
+        "status": "PASS"
+      },
+      {
+        "name": "Category/SKU filters stay global; all four categories show matching SKU choices, not a vacuum-only template",
+        "status": "PASS"
+      },
+      {
+        "name": "The persistent SKU control commits one history step after repeated redraws; Back restores the previous model",
+        "status": "PASS"
+      },
+      {
+        "name": "Comparison leads with real product headers and preserves source expansion and selection without releasing isolated units",
+        "status": "PASS"
+      },
+      {
+        "name": "Brand analysis uses Listing counts, not market share, and drill-through keeps country/category/month",
+        "status": "PASS"
+      },
+      {
+        "name": "January–September scope survives page navigation/refresh/back; actual CSV uses the same bounds and qualified monthly totals",
+        "status": "PASS"
+      },
+      {
+        "name": "Price-band click, selected group and browser back still identify exactly the same product range",
+        "status": "PASS"
+      },
+      {
+        "name": "Operations retain real data, inventory, profit, calendar and tasks with the compact shared toolbar",
+        "status": "PASS"
+      },
+      {
+        "name": "Calendar month board uses dated source events only; month navigation, pending-only filter and export stay consistent",
+        "status": "PASS"
+      },
+      {
+        "name": "Import/backup and access settings remain reachable at the bottom of navigation",
+        "status": "PASS"
+      },
+      {
+        "name": "390px mobile and 1024px tablet preserve navigation, filters and table scrolling without page overflow",
+        "status": "PASS"
+      },
+      {
+        "name": "No JavaScript errors; public-only preview excludes private capture",
+        "status": "PASS"
+      }
+    ]
+  },
+  "productLibraryChecks": 15,
+  "priceEvidenceChecks": 14,
+  "protectedFilesUnchanged": 13,
+  "mcpCalls": 0,
+  "privateCaptureIncluded": false
+}

@@ -6,14 +6,14 @@
   --line:var(--ui-line);
   --bg:var(--ui-bg);
   --soft:var(--ui-soft);
-  --sidebar:208px}
+  --sidebar:184px}
 *{
   box-sizing:border-box}
 body{
   margin:0;
   background:var(--bg);
   color:var(--ink);
-  font:14px/1.55 var(--ui-font)}
+  font:var(--ui-body)/1.5 var(--ui-font)}
 button,input,select{
   font:inherit}
 button,a,input,select{
@@ -56,9 +56,9 @@ a:hover{
   position:fixed;
   inset:0 auto 0 0;
   width:var(--sidebar);
-  background:#203b30;
+  background:#073e2e;
   color:#dce9e1;
-  padding:24px 15px 18px;
+  padding:20px 12px 14px;
   display:flex;
   flex-direction:column;
   overflow-y:auto}
@@ -66,8 +66,8 @@ a:hover{
   color:white;
   letter-spacing:2px;
   font-weight:700;
-  font-size:25px;
-  padding-left:12px}
+  font-size:24px;
+  padding-left:10px}
 .logo span{
   display:block;
   font-size:10px;
@@ -76,7 +76,7 @@ a:hover{
   color:#a3bcad;
   margin-top:4px}
 .sidebar>small{
-  margin:24px 12px 8px;
+  margin:19px 10px 7px;
   font-size:11px;
   color:#9ab4a6}
 .sidebar nav{
@@ -84,16 +84,20 @@ a:hover{
   gap:3px}
 .sidebar nav a{
   color:#c8dbd0;
-  padding:9px 12px;
+  padding:8px 10px;
   border-radius:5px;
   font-size:13px}
 .sidebar nav a[aria-current=page]{
-  background:#355b47;
+  background:#176449;
   color:white;
   font-weight:500}
-.sidebar-note{
+.sidebar-system{
   margin-top:auto;
-  padding:24px 10px 0;
+  padding-top:18px;
+  border-top:1px solid #3a5748}
+.sidebar-note{
+  margin-top:0;
+  padding:14px 10px 0;
   font-size:11px;
   color:#9eb7a8;
   display:flex;
@@ -113,11 +117,11 @@ a:hover{
 main{
   margin-left:var(--sidebar)}
 header{
-  height:52px;
+  height:38px;
   display:flex;
   align-items:center;
   gap:18px;
-  padding:0 28px;
+  padding:0 20px;
   border-bottom:1px solid var(--line);
   background:white;
   font-size:12px;
@@ -134,7 +138,7 @@ header b{
 .avatar{
   display:none}
 .content{
-  padding:24px 28px 90px;
+  padding:14px 20px 48px;
   max-width:1660px;
   margin:auto}
 .heading{
@@ -142,9 +146,9 @@ header b{
   align-items:center;
   justify-content:space-between;
   gap:16px;
-  margin-bottom:18px}
+  margin-bottom:2px}
 .heading h1{
-  font-size:26px;
+  font-size:var(--ui-heading);
   margin:0;
   font-weight:600;
   letter-spacing:-.6px}
@@ -161,36 +165,45 @@ header b{
 .heading-actions button{
   font-size:13px}
 
+.filters-mobile-toggle{display:none}
 .filters{
-  display:flex;
-  gap:16px;
-  align-items:flex-end;
-  background:white;
+  display:grid;
+  grid-template-columns:1fr 1.1fr 1fr 1.15fr 140px auto;
+  gap:12px;
+  align-items:center;
+  padding:9px 12px;
+  margin-bottom:15px;
+  background:var(--ui-surface);
   border:1px solid var(--line);
-  border-radius:8px;
-  padding:14px 16px}
+  border-radius:var(--ui-radius)}
 .filters label{
   display:flex;
-  flex:1;
-  flex-direction:column;
-  gap:6px;
+  align-items:center;
+  gap:8px;
   min-width:0;
-  font-size:12px;
+  white-space:nowrap;
+  font-size:11px;
   color:var(--muted)}
-.filters label:last-child{
-  flex:1.7}
 .filters select{
-  font-size:13px;
-  width:100%}
+  font-size:12px;
+  width:100%;
+  min-width:0;
+  height:var(--ui-control);
+  padding:4px 7px}
 .scope{
   display:flex;
+  align-items:start;
   justify-content:space-between;
   gap:14px;
-  padding:10px 0 18px;
-  font-size:12px;
+  padding:4px 0 12px;
+  font-size:11px;
   color:var(--muted)}
-.scope a{
-  color:var(--muted)}
+.scope a{color:var(--muted);white-space:nowrap}
+.scope-period{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.scope-details{position:relative}
+.scope-details summary{cursor:pointer;color:var(--muted)}
+.scope-details[open]{max-width:620px}
+.scope-details p{margin:6px 0 0;line-height:1.6}
 .kpis{
   display:flex;
   flex-wrap:wrap;
@@ -781,6 +794,12 @@ td,th{
 .sidebar.nav-expanded>small{
   display:block;
   margin:12px 8px 0}
+.sidebar-system{
+  display:none;
+  margin-top:10px;
+  padding-top:8px}
+.sidebar.nav-expanded .sidebar-system{
+  display:block}
 main{
   margin:0}
 header{
@@ -799,15 +818,12 @@ header{
   font-size:12px;
   padding:6px 9px}
 .filters{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  padding:12px}
-.filters label{
-  font-size:12px}
-.filters select{
-  font-size:13px;
-  min-height:40px}
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  padding:10px;
+  gap:10px}
+.filters label{display:grid;gap:4px;white-space:normal;font-size:11px}
+.filters select{font-size:12px;height:34px}
+.filters .month-range-controls{grid-column:1/-1}
 .scope{
   font-size:11px;
   gap:12px}
