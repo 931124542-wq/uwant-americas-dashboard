@@ -1,0 +1,253 @@
+{
+  "public-browser": {
+    "base": "http://127.0.0.1:8806/",
+    "passed": 12,
+    "failed": 0,
+    "checks": [
+      {
+        "name": "public product library renders correct country/SKU and does not load a private capture",
+        "status": "PASS"
+      },
+      {
+        "name": "product details keep source/image evidence and restore the search context",
+        "status": "PASS"
+      },
+      {
+        "name": "four countries and four categories retain independent product/source scopes",
+        "status": "PASS"
+      },
+      {
+        "name": "Jan–Sep uses only existing public monthly records with exact qualified totals",
+        "status": "PASS"
+      },
+      {
+        "name": "monthly CSV matches country/platform/bounds and never exports isolated values as counted sales",
+        "status": "PASS"
+      },
+      {
+        "name": "range refresh/back and category/platform changes preserve month bounds",
+        "status": "PASS"
+      },
+      {
+        "name": "all eight UWANT SKU choices use their category dimensions and preserve comparison controls",
+        "status": "PASS"
+      },
+      {
+        "name": "unverified pilot data remains isolated and sources remain accessible in research",
+        "status": "PASS"
+      },
+      {
+        "name": "product export retains identity, source, date, selected price and metric eligibility",
+        "status": "PASS"
+      },
+      {
+        "name": "Brazil no-metric history and no-data channels use compact states instead of empty tables",
+        "status": "PASS"
+      },
+      {
+        "name": "operating/data-management modules and mobile layout remain usable",
+        "status": "PASS"
+      },
+      {
+        "name": "no JavaScript runtime errors or private script requests",
+        "status": "PASS"
+      }
+    ]
+  },
+  "market-browser": {
+    "passed": 10,
+    "failed": 1,
+    "checks": [
+      {
+        "name": "Market overview stays four sections for observed/history/candidate deep links and leads with actual class scope",
+        "status": "PASS"
+      },
+      {
+        "name": "One click opens January–September trend; amount switch, actual export, month drill and Back retain context",
+        "status": "PASS"
+      },
+      {
+        "name": "Price line uses the selected ASIN, has visible month gaps and never converts missing values to zero",
+        "status": "PASS"
+      },
+      {
+        "name": "Product list filters and sorts source signals; search keeps focus and detail/CSV match the same month",
+        "status": "PASS"
+      },
+      {
+        "name": "Held product brand does not silently constrain the market snapshot; brand drill still narrows products",
+        "status": "PASS"
+      },
+      {
+        "name": "Brand tables use qualified family-month sales and independent Listing coverage, with no market-share numbers",
+        "status": "PASS"
+      },
+      {
+        "name": "New F25 RT manufacturer link is visible in detail, matches the correct picture and leaves units isolated",
+        "status": "FAIL",
+        "error": "The expression evaluated to a falsy value:\n\n  assert(dims.width>=32&&dims.height>=32)\n"
+      },
+      {
+        "name": "Four countries, all categories and platform switching preserve scope and never borrow Amazon samples for Mercado Libre",
+        "status": "PASS"
+      },
+      {
+        "name": "Original brand aggregates stay separately labelled and missing BSR category IDs cannot create a false ranking",
+        "status": "PASS"
+      },
+      {
+        "name": "390px mobile preserves filters, horizontal table scrolling and all four sections without page overflow",
+        "status": "PASS"
+      },
+      {
+        "name": "Operating, inventory, calendar, data management and comparison continue to render; public preview excludes private input",
+        "status": "PASS"
+      }
+    ]
+  },
+  "canada-browser": {
+    "passed": 8,
+    "failed": 0,
+    "checks": [
+      {
+        "name": "Five manufacturer-store products render in existing product library with a single core filter group",
+        "status": "PASS"
+      },
+      {
+        "name": "2513E keeps search focus and the exact price record across list, detail and actual CSV",
+        "status": "PASS"
+      },
+      {
+        "name": "Exact-model image URLs load with real dimensions; unavailable 3618C image stays absent",
+        "status": "PASS"
+      },
+      {
+        "name": "Four-model functional comparison works while missing prices, suffixes and own local version remain explicit",
+        "status": "PASS"
+      },
+      {
+        "name": "Cached and failed pages never become current quotes; power and suction remain separate fields",
+        "status": "PASS"
+      },
+      {
+        "name": "January–September range survives compare navigation, refresh and Back without releasing any new units",
+        "status": "PASS"
+      },
+      {
+        "name": "Country/platform scope cannot borrow Canadian manufacturer-store products or Amazon history",
+        "status": "PASS"
+      },
+      {
+        "name": "Mobile product/detail layout and public-only mode work without private capture or JavaScript errors",
+        "status": "PASS"
+      }
+    ]
+  },
+  "imageTargetedRecheck": [
+    {
+      "url": "https://cdn.shopify.com/s/files/1/0751/1778/9405/files/Roborock_F25_RT_ID.png?v=1758792729",
+      "status": "loaded",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "url": "https://cdn.shopify.com/s/files/1/0751/1778/9405/files/Roborock_F25_RT_ID.png?v=1758792729&width=600",
+      "status": "loaded",
+      "width": 600,
+      "height": 600
+    }
+  ],
+  "privateCaptureIncluded": false,
+  "publicCoverage": {
+    "CA": {
+      "fabric": {
+        "listings": 17,
+        "modelGroups": 10,
+        "prices": 5
+      },
+      "wash": {
+        "listings": 41,
+        "modelGroups": 8,
+        "prices": 2
+      },
+      "vacuum": {
+        "listings": 114,
+        "modelGroups": 7,
+        "prices": 5
+      },
+      "mattress": {
+        "listings": 2,
+        "modelGroups": 2,
+        "prices": 0
+      }
+    },
+    "MX": {
+      "fabric": {
+        "listings": 8,
+        "modelGroups": 8,
+        "prices": 1
+      },
+      "wash": {
+        "listings": 22,
+        "modelGroups": 9,
+        "prices": 5
+      },
+      "vacuum": {
+        "listings": 104,
+        "modelGroups": 8,
+        "prices": 5
+      },
+      "mattress": {
+        "listings": 6,
+        "modelGroups": 4,
+        "prices": 2
+      }
+    },
+    "US": {
+      "fabric": {
+        "listings": 6,
+        "modelGroups": 0,
+        "prices": 0
+      },
+      "wash": {
+        "listings": 51,
+        "modelGroups": 0,
+        "prices": 0
+      },
+      "vacuum": {
+        "listings": 150,
+        "modelGroups": 0,
+        "prices": 0
+      },
+      "mattress": {
+        "listings": 0,
+        "modelGroups": 0,
+        "prices": 0
+      }
+    },
+    "BR": {
+      "fabric": {
+        "listings": 2,
+        "modelGroups": 2,
+        "prices": 0
+      },
+      "wash": {
+        "listings": 7,
+        "modelGroups": 3,
+        "prices": 0
+      },
+      "vacuum": {
+        "listings": 12,
+        "modelGroups": 2,
+        "prices": 0
+      },
+      "mattress": {
+        "listings": 2,
+        "modelGroups": 2,
+        "prices": 0
+      }
+    }
+  },
+  "publishedScope": "Public code, manufacturer/retail evidence and existing publicly released data only",
+  "unpublishedPrivateData": "New MCP reports, catalogue details, quotes, history overlays, keywords, raw and billing remain local"
+}

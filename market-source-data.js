@@ -1,0 +1,29 @@
+/* Provider category aggregates are independent statistical units, never child-ASIN sales. */
+(function(root){
+ const finite=x=>typeof x==='number'&&Number.isFinite(x)&&x>=0;
+ const expected={CA:'CAD',MX:'MXN',US:'USD',BR:'BRL'};
+ const capture=()=>root.UWANT_PRIVATE_CAPTURE?.access==='personal_local_only'?root.UWANT_PRIVATE_CAPTURE:null;
+ const inScope=(r,s)=>['amazon','all'].includes(s.platform)&&r.country===s.country&&r.platform==='amazon'&&r.category===s.category;
+ const selectedMonth=s=>root.MonthlyRange.bounds(s).end;
+ function reports(s){return (capture()?.marketReports||[]).filter(r=>inScope(r,s)&&r.currency===expected[s.country]);}
+ function report(s){const all=reports(s),source=all.find(r=>r.preferred)||all[0];if(!source)return null;
+  const selected=root.MonthlyRange.months(s),months=selected.map(month=>{const raw=source.months.find(m=>m.month===month),valid=raw?.hasDetail===true;return {month,units:valid&&finite(raw.totalSales)?raw.totalSales:null,revenue:valid&&finite(raw.totalRevenue)?raw.totalRevenue:null,products:valid&&finite(raw.products)?raw.products:null,brands:valid&&finite(raw.brands)?raw.brands:null,sourceAveragePrice:valid&&finite(raw.avgPrice)?raw.avgPrice:null,weightedAveragePrice:valid&&finite(raw.weightedAvgPrice)?raw.weightedAvgPrice:null,hasDetail:valid};});
+  const sum=key=>months.some(m=>m[key]!==null)?months.reduce((n,m)=>n+(m[key]??0),0):null,last=months.at(-1);
+  return {source,months,units:sum('units'),revenue:sum('revenue'),coveredMonths:months.filter(m=>m.units!==null).length,revenueMonths:months.filter(m=>m.revenue!==null).length,last,availableMonths:source.months.filter(m=>m.hasDetail).length,range:root.MonthlyRange.bounds(s)};
+ }
+ function rankings(s){return (capture()?.sourceRankSnapshots||[]).filter(r=>inScope(r,s));}
+ function ranking(s){return rankings(s).find(r=>r.month===selectedMonth(s))||null;}
+ function brandRanking(s){const r=(capture()?.sourceBrandSnapshots||[]).find(r=>inScope(r,s)&&r.month===selectedMonth(s));return r?{...r,reconciliation:(capture()?.sourceConsistencyChecks||[]).find(x=>x.country===r.country&&x.categoryId===r.categoryId&&x.month===r.month)||null}:null;}
+ function rankChange(s,asin){const end=ranking(s);if(!end)return null;const prevDate=new Date(end.month+'-01T00:00:00Z');prevDate.setUTCMonth(prevDate.getUTCMonth()-1);const previousMonth=prevDate.toISOString().slice(0,7),prior=rankings(s).find(r=>r.month===previousMonth&&r.categoryId===end.categoryId&&r.requestedTopN===end.requestedTopN);if(!prior)return null;
+  const current=end.items.find(x=>x.asin===asin),previous=prior.items.find(x=>x.asin===asin);if(!current)return previous?{state:'left_window',from:prior.month,to:end.month,previousRank:previous.ranking,currentRank:null,change:null}:null;
+  return {state:previous?'comparable':'entered_window',from:prior.month,to:end.month,previousRank:previous?.ranking??null,currentRank:current.ranking,change:previous&&finite(previous.ranking)&&finite(current.ranking)?previous.ranking-current.ranking:null,previousReferencePrice:previous?.avgPrice??null,currentReferencePrice:current.avgPrice??null,priceMeaning:'source_avgPrice_archive_reference',source:end.source,categoryId:end.categoryId};
+ }
+ function rankRow(s,asin){const x=ranking(s),row=x?.items.find(r=>r.asin===asin);return row?{...row,snapshot:x}:null;}
+ function exportRows(s){const header=['section','country','platform','category','periodStart','periodEnd','metric','entity','value','unit','dataNature','coverage','source','limitations','selectedPlatform','metricQualification'],rows=[],push=(section,from,to,metric,entity,value,unit,nature,coverage,source,limit,qualification)=>rows.push([section,s.country,'amazon',s.category,from,to,metric,entity,value??'',unit,nature,coverage,source,limit,s.platform,value==null?'missing':qualification]);
+  const x=report(s);if(x)for(const m of x.months)for(const [k,label,unit]of [['units','providerMonthlySales','台'],['revenue','providerMonthlyRevenue',x.source.currency],['products','sampleProducts','件'],['brands','sampleBrands','个'],['sourceAveragePrice','providerAveragePrice',x.source.currency],['weightedAveragePrice','providerWeightedAveragePrice',x.source.currency]])push('provider_category_month',m.month,m.month,label,x.source.categoryId,m[k],unit,'provider_category_sample_estimate',`${m.products??'缺失'}/${x.source.requestedSampleCount}来源样本上限`,x.source.source+' / '+x.source.rawEvidence,x.source.limitations+'；各月样本可能变化；不与跟踪商品合计相加；采集 '+x.source.retrievedAt,'provider_category_aggregate');
+  const brands=brandRanking(s);if(brands)for(const b of brands.items)for(const [k,unit]of [['ranking','源名次'],['products','件'],['sales','台'],['revenue',expected[s.country]]])push('provider_brand_month',brands.periodStart,brands.periodEnd,k,b.brand||b.name||'原来源未命名',b[k],unit,'provider_brand_aggregate',brands.items.length+'个来源分组',brands.source+' / '+brands.rawEvidence,'来源名称原样；类目报告、榜单与品牌聚合样本未对齐；只代表该月，不是跨月累计；不并入合格父体统计','provider_brand_aggregate');
+  const ranked=ranking(s);if(ranked)for(const r of ranked.items){push('provider_product_rank',ranked.periodStart,ranked.periodEnd,'ranking',r.asin,r.ranking,'源名次','source_rank_reference',ranked.items.length+'条榜单窗口',ranked.source+' / '+ranked.rawEvidence,'来源混有相邻品类；不是销量资格证明','source_rank_reference_only');push('provider_product_price_reference',ranked.periodStart,ranked.periodEnd,'avgPrice',r.asin,r.avgPrice,expected[s.country],'provider_archived_price_reference','来源avgPrice字段',ranked.source+' / '+ranked.rawEvidence,'归档参考价，非当前报价、非期末价；来源未提供具体均价计算方法','source_price_reference_only');const d=rankChange(s,r.asin);if(d)push('provider_rank_change',d.from,d.to,d.state,r.asin,d.change,'名','comparable_rank_snapshots',d.previousRank==null?'前期窗口未见':d.previousRank+'→'+d.currentRank,ranked.source,'正值表示上升；窗口新出现不等于新品上市','source_rank_reference_only');}
+  return [header,...rows];
+ }
+ root.MarketSourceData={reports,report,ranking,rankRow,rankChange,brandRanking,exportRows};
+})(window);

@@ -1,6 +1,6 @@
 /* Additive, source-backed product evidence. No sales or private responses. */
 window.PRODUCT_EVIDENCE_ADDITIONS={
-  "asOf": "2026-11-02",
+  "asOf": "2026-11-04",
   "records": [
     {
       "country": "ca",
@@ -91,8 +91,8 @@ window.PRODUCT_EVIDENCE_ADDITIONS={
       "sourceUrl": "https://www.sharkninja.ca/shark-stainstriker-portable-carpet-upholstery-cleaner/PX200C.html",
       "imageUrl": "https://assets.sharkninja.com/image/upload/f_auto/q_auto/SharkNinja-NA/PX200C_01.jpg",
       "productId": "PX200C",
-      "source": "当地公开商品资料",
-      "sourceDate": "2026-11-02",
+      "source": "Shark加拿大官网正文及Product结构化记录（直接HTTP200）",
+      "sourceDate": "2026-11-04",
       "price": 129.99,
       "currency": "CAD",
       "priceKind": "observation",
@@ -121,20 +121,70 @@ window.PRODUCT_EVIDENCE_ADDITIONS={
           "basis": "品牌加拿大商品规格",
           "sourceDate": "2026-11-02",
           "locator": "Warranty"
+        },
+        {
+          "key": "power",
+          "value": "450 W（输入功率，非吸力）",
+          "sourceDate": "2026-11-04",
+          "basis": "品牌加拿大PX200C商品规格",
+          "locator": "Wattage"
+        },
+        {
+          "key": "voltage",
+          "value": "120 V（该官网型号标称，不套用其他渠道版本）",
+          "sourceDate": "2026-11-04",
+          "basis": "品牌加拿大PX200C商品规格",
+          "locator": "Voltage"
+        },
+        {
+          "key": "cord",
+          "value": "3.66 m（品牌标称）",
+          "sourceDate": "2026-11-04",
+          "basis": "品牌加拿大PX200C商品规格",
+          "locator": "Cord Length"
+        },
+        {
+          "key": "weight",
+          "value": "正文称低于9 lbs，规格为5.58 kg；来源内部冲突，暂不作重量排名",
+          "sourceDate": "2026-11-04",
+          "basis": "品牌加拿大PX200C商品正文与规格，冲突未消解",
+          "locator": "Product Details / Weight"
+        },
+        {
+          "key": "mode",
+          "value": "两种清洁液在手持工具内混合活化；不是已核蒸汽功能",
+          "sourceDate": "2026-11-04",
+          "basis": "品牌加拿大PX200C商品说明",
+          "locator": "StainStriker Technology"
+        },
+        {
+          "key": "accessories",
+          "value": "3.5英寸可翻转刷毛手工具、缝隙工具；6oz与12oz清洁液属于耗材，不是水箱容量",
+          "sourceDate": "2026-11-04",
+          "basis": "品牌加拿大PX200C所选套装清单",
+          "locator": "In the Box"
         }
       ],
       "evidenceReferences": [
         {
           "label": "当地商品与图片来源 · 2026-11-02",
           "url": "https://www.sharkninja.ca/shark-stainstriker-portable-carpet-upholstery-cleaner/PX200C.html"
+        },
+        {
+          "label": "加拿大准确型号、规格及当日页面促销观察；结构化缺货",
+          "sourceDate": "2026-11-04",
+          "url": "https://www.sharkninja.ca/shark-stainstriker-portable-carpet-upholstery-cleaner/PX200C.html",
+          "fields": ["model", "price", "currency", "availability", "power", "voltage", "cord", "weight", "accessories"]
         }
       ],
       "unresolvedIssues": [
-        "公开商品资料不赋予任何历史销量统计资格；供货、套装和保修以渠道为准"
+        "公开商品资料不赋予任何历史销量统计资格；供货、套装和保修以渠道为准",
+        "正文低于9 lbs与规格5.58 kg互不相符，保留原值，不用于重量优劣判断。"
       ],
       "modelKey": "ca:shark:px200c",
       "availability": "页面结构化报价标记缺货；不是可保证购买的在售报价",
-      "promotion": "页面促销价129.99 CAD；原价179.99。HALLOWEEN额外10%码未计入，适用条件和有效期未核。"
+      "promotion": "2026-11-04页面促销价129.99 CAD，原标示179.99；不沿用旧HALLOWEEN优惠码，不保证实时库存或结账到手价。",
+      "quoteObservations": [{"price":129.99,"currency":"CAD","date":"2026-11-02","kind":"observation","source":"https://www.sharkninja.ca/shark-stainstriker-portable-carpet-upholstery-cleaner/PX200C.html"}]
     },
     {
       "country": "mx",

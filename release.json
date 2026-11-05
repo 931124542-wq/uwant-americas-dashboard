@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-04-decision-workbench",
+  "version": "2026-11-05-market-data-workflows-public",
   "dataAsOf": "2026-10-28",
   "baseCommit": "4a4cb86bd6ffd3adf77b9592a25bdf2c3cff6386",
   "products": 466,
@@ -19,17 +19,38 @@
     "market-context-and-price-bands",
     "image-feature-comparison-matrix",
     "source-dated-public-product-evidence",
-    "month-first-promotion-calendar"
+    "month-first-promotion-calendar",
+    "four-section-market-intelligence",
+    "qualified-fixed-cohort-trends",
+    "dated-brand-aggregation-reference",
+    "source-aware-product-performance",
+    "field-level-parameter-parsing",
+    "optional-provider-report-adapter"
   ],
   "auditBaseline": "4a4cb86",
   "auditReport": "docs/data-audit-2026-10-29.md",
   "auditCheckpoint": "ffafdce8be300ed104c5db299f249c25c2053929",
   "operationsRevision": "d86f8e19420e",
-  "uiUpdatedAt": "2026-11-04",
-  "previousPublicCommit": "2e1c6aabd6b4e91a7fcc6fb02f391a8590698d84",
-  "verifiedDevelopmentCommit": "b2d7b9a",
+  "uiUpdatedAt": "2026-11-05",
+  "previousPublicCommit": "a32da948584bcc685143a6e92796b20a8319964c",
+  "verifiedDevelopmentCommit": "c84d03ccebc85fbf3b2e5dadb49ceb282ab03352",
   "publicPackage": true,
   "privateCaptureIncluded": false,
-  "publicProductEvidenceAsOf": "2026-11-03",
-  "productionDataUnchanged": true
+  "publicProductEvidenceAsOf": "2026-11-04",
+  "productionDataUnchanged": true,
+  "verifiedDevelopmentCommits": [
+    "48fdf41",
+    "364b3a9",
+    "0559179",
+    "c84d03c"
+  ],
+  "publicationScope": "Public code, independently sourced manufacturer evidence and previously published datasets",
+  "excludedPrivateData": [
+    "new_provider_category_reports",
+    "private_product_profiles_and_quotes",
+    "private_history_and_sales_eligibility",
+    "private_keyword_snapshots",
+    "raw_responses_and_billing"
+  ],
+  "publicationBoundaryReason": "SellerSprite MCP public redistribution permission is not confirmed; public GitHub Pages is not internal-only hosting"
 }
