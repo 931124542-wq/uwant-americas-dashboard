@@ -74,7 +74,7 @@
   return {claims,issues};
  }
  function modelIdentity(r){
-  const model=decode(r.model||'').trim(),uncertain=!model||/待核|型号未|unknown|unconfirmed|conflict|冲突/i.test(model)||r.identityStatus==='partial'||r.identityStatus==='conflict'||/^\w{10}$/.test(model)||/\b\d+(?:\.\d+)?\s*(?:oz|liters?|litres?|ml|L)\b/i.test(model);
+  const model=decode(r.model||'').trim(),uncertain=!model||r.modelEvidence?.verified===false||r.modelStatus==='source_title_unconfirmed'||/待核|型号未|unknown|unconfirmed|conflict|冲突/i.test(model)||r.identityStatus==='partial'||r.identityStatus==='conflict'||/^\w{10}$/.test(model)||/\b\d+(?:\.\d+)?\s*(?:oz|liters?|litres?|ml|L)\b/i.test(model);
   const status=!uncertain&&(r.modelKey||r.modelStatus?.startsWith('confirmed')||['observed_model','current_listing_confirmed','manufacturer_model'].includes(r.identityStatus))?'confirmed':'unconfirmed';
   // A Listing fallback is never a confirmed model group, nor a reason to merge variants.
   return {status,model:model||null,groupKey:status==='confirmed'?(r.modelKey||[r.country,r.platform,r.productId||r.id,'explicit-model'].join(':')):null,basis:status==='confirmed'?(r.modelStatus||'已有当地型号资料'):'型号证据未完整；ASIN仅区分Listing',sourceUrl:r.sourceUrl||null};

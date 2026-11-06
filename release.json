@@ -1,7 +1,7 @@
 {
-  "version": "2026-11-06-mercado-business-copy",
+  "version": "2026-11-06-private-research-ingestion",
   "dataAsOf": "2026-10-28",
-  "baseCommit": "4a4cb86bd6ffd3adf77b9592a25bdf2c3cff6386",
+  "baseCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "products": 466,
   "observedMonthlyRows": 3518,
   "features": [
@@ -34,14 +34,18 @@
     "model-reference-specifications-without-offer-merging",
     "mercado-five-site-same-type-library",
     "mercado-source-snapshot-shares",
-    "mercado-isolated-product-monthly-history"
+    "mercado-isolated-product-monthly-history",
+    "optional-loopback-research-overlay",
+    "same-batch-snapshot-aggregation",
+    "repeatable-private-intake-qc",
+    "source-model-verification-levels"
   ],
   "auditBaseline": "4a4cb86",
   "auditReport": "docs/data-audit-2026-10-29.md",
   "auditCheckpoint": "ffafdce8be300ed104c5db299f249c25c2053929",
   "operationsRevision": "d86f8e19420e",
   "uiUpdatedAt": "2026-11-06",
-  "previousPublicCommit": "28c948ef046046575ca300b154293b3d35438764",
+  "previousPublicCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "verifiedDevelopmentCommit": "e0931bd7d7f9c0086348f3a3bf67683388c822ec",
   "publicPackage": true,
   "privateCaptureIncluded": false,
@@ -65,7 +69,10 @@
     "raw_responses_and_billing",
     "private_discovery_catalog_and_images",
     "new_30_month_end_prices",
-    "seller_and_receiving_context"
+    "seller_and_receiving_context",
+    "deep-expansion-discovery-and-history",
+    "private-research-overlay-payload",
+    "raw-provider-usage-and-credit-receipts"
   ],
   "publicationBoundaryReason": "SellerSprite MCP public redistribution permission is not confirmed; public GitHub Pages is not internal-only hosting",
   "publicEvidenceDateNote": "2026-11-05 applies to the PX251C public quote recheck; other records retain their individual source dates.",
@@ -94,5 +101,8 @@
     "monthlyPriceAvailable": false,
     "rawResponsesIncluded": false,
     "newPaidCalls": 0
-  }
+  },
+  "publicDataUnchanged": true,
+  "privateResearchPublication": "New personal MCP records, histories, raw responses and receipts remain local only",
+  "dataDatePolicy": "Per-record dates retained; a code release does not refresh quotes or sales"
 }

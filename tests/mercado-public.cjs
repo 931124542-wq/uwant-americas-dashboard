@@ -1,5 +1,5 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
-const c=require('./library-fixture.cjs')();vm.runInContext(fs.readFileSync('mercado-data.js','utf8'),c);vm.runInContext(fs.readFileSync('mercado.js','utf8'),c);
+const c=require('./library-fixture.cjs')();vm.runInContext(fs.readFileSync('mercado-data.js','utf8'),c);for(const f of ['market-insights.js','research-snapshot.js','mercado.js'])vm.runInContext(fs.readFileSync(f,'utf8'),c);
 const D=c.MERCADO_DATA,M=c.ResearchModel,checks=[],test=(name,fn)=>{try{fn();checks.push({name,status:'PASS'});}catch(e){checks.push({name,status:'FAIL',error:e.message});}};
 const counts={MX:[8,28,88,38],BR:[41,76,27,245],AR:[20,135,18,38],CL:[20,19,6,109],CO:[22,76,9,59]},categories=['vacuum','wash','fabric','mattress'],currency={MX:'MXN',BR:'BRL',AR:'ARS',CL:'CLP',CO:'COP'};
 test('Latest same-type review has 1082 unique country/product IDs and 1081 counting representatives',()=>{
