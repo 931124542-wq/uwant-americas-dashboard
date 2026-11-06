@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-06-qualified-shares-and-fabric-public",
+  "version": "2026-11-06-mercado-same-type-public",
   "dataAsOf": "2026-10-28",
   "baseCommit": "4a4cb86bd6ffd3adf77b9592a25bdf2c3cff6386",
   "products": 466,
@@ -31,14 +31,17 @@
     "share-drill-and-filtered-export",
     "exact-local-model-research-groups",
     "evidence-specific-fabric-comparison",
-    "model-reference-specifications-without-offer-merging"
+    "model-reference-specifications-without-offer-merging",
+    "mercado-five-site-same-type-library",
+    "mercado-source-snapshot-shares",
+    "mercado-isolated-product-monthly-history"
   ],
   "auditBaseline": "4a4cb86",
   "auditReport": "docs/data-audit-2026-10-29.md",
   "auditCheckpoint": "ffafdce8be300ed104c5db299f249c25c2053929",
   "operationsRevision": "d86f8e19420e",
   "uiUpdatedAt": "2026-11-06",
-  "previousPublicCommit": "07499777a7a9ed8ff4a1d6df378840ac5a1529a4",
+  "previousPublicCommit": "45d80a6e4997b5245105e1b65d010a3f72e08d41",
   "verifiedDevelopmentCommit": "e0931bd7d7f9c0086348f3a3bf67683388c822ec",
   "publicPackage": true,
   "privateCaptureIncluded": false,
@@ -53,7 +56,7 @@
     "85c78b0",
     "e0931bd"
   ],
-  "publicationScope": "Public research UI, qualified shares from previously published historical datasets, and independently sourced manufacturer facts",
+  "publicationScope": "Public research UI, qualified shares from previously published historical datasets, and independently sourced manufacturer facts; user-authorized sanitized Mercado same-type product observations and retained product monthly order series",
   "excludedPrivateData": [
     "new_provider_category_reports",
     "private_product_profiles_and_quotes",
@@ -65,5 +68,31 @@
     "seller_and_receiving_context"
   ],
   "publicationBoundaryReason": "SellerSprite MCP public redistribution permission is not confirmed; public GitHub Pages is not internal-only hosting",
-  "publicEvidenceDateNote": "2026-11-05 applies to the PX251C public quote recheck; other records retain their individual source dates."
+  "publicEvidenceDateNote": "2026-11-05 applies to the PX251C public quote recheck; other records retain their individual source dates.",
+  "mercado": {
+    "source": "大麦数据 MCP，复用用户已保存的规范化结果",
+    "sourceDate": "2026-11-05",
+    "records": 1082,
+    "countingRepresentatives": 1081,
+    "productsWithMonthlyOrders": 32,
+    "countries": [
+      "MX",
+      "BR",
+      "AR",
+      "CL",
+      "CO"
+    ],
+    "categories": [
+      "vacuum",
+      "wash",
+      "fabric",
+      "mattress"
+    ],
+    "scopePolicy": "same_type_household_only_v1",
+    "snapshotPeriod": "NEAR_30_DAYS_UNKNOWN_BOUNDS",
+    "monthlyRevenueAvailable": false,
+    "monthlyPriceAvailable": false,
+    "rawResponsesIncluded": false,
+    "newPaidCalls": 0
+  }
 }

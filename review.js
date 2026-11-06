@@ -3,6 +3,7 @@ const M=ResearchModel,D=REVIEW_DATA;D.own=REVIEW_OWN;D.focus=FOCUS_BRANDS;D.hist
 const $=id=>document.getElementById(id),esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=x=>x==null?'—':new Intl.NumberFormat('zh-CN',{maximumFractionDigits:0}).format(x);
 let state=M.parse(location.hash),drawerKey='',lastFocus=null,lastFocusToken='',toastTimer;
+const requestedCountry=new URLSearchParams(location.hash.slice(1)).get('country');if(state.platform==='ml'&&['CA','US'].includes(requestedCountry)&&requestedCountry!==state.country){history.replaceState(history.state,'',M.encode(state));setTimeout(()=>notify('美客多尚无该站点数据，已切换墨西哥。'),0);}
 const country=()=>M.countries[state.country],money=n=>n==null?'—':`${new Intl.NumberFormat('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2}).format(n)} ${country().currency}`;
 const url=r=>`https://www.${country().domain}/dp/${r.asin}`;
 const tier=r=>({T1:'T1 核心自集尘',T2:'T2 同价位',T3:'T3 白牌（分组待核）'})[r.tier]||'未核层级';
@@ -11,7 +12,7 @@ const featureLabel=r=>state.category==='vacuum'?(r.autoEmpty?'自动集尘（标
 const pageNames={brands:'品牌分析',competitors:'竞品对比',market:'市场总览',overview:'经营总览',analysis:'经营分析',products:'SKU 表现',profit:'利润与补货',inventory:'库存监控',calendar:'促销日历',tasks:'运营任务',access:'访问设置'};
 let operationsReady=false,operationsTimer,frameRoute='';
 function operationPayload(){return {type:'uwant:navigate',page:state.page,country:state.country.toLowerCase(),platform:state.platform,category:state.category,dataset:state.dataset,view:state.view,own:state.own,marketQuery:state.marketQuery,marketSort:state.marketSort,marketOffset:state.marketOffset,marketTop:state.marketTop,priceBand:state.priceBand,opsPeriod:state.opsPeriod,opsChannel:state.opsChannel,opsSku:state.opsSku,...ResearchCatalog.stateFrom(state),historyRows:M.isHistory(state.dataset)?D.history.rows.filter(r=>r.country===state.country&&r.category===state.category&&r.month===state.dataset):[],historyAsOf:D.history.asOf};}
-function isDecisionRoute(s){return ['brands','competitors'].includes(s.page)||s.page==='market'&&['overview','products','brands','competitors','opportunities','coverage','research','keywords','macro','pricing'].includes(s.view);}
+function isDecisionRoute(s){return ['brands','competitors'].includes(s.page)||s.page==='market'&&['overview','products','brands','competitors','opportunities','coverage','research','keywords','macro','pricing'].includes(s.view)||s.page==='market'&&s.platform==='ml'&&s.view==='monthly';}
 function isOuterResearch(s){return ['brands','competitors'].includes(s.page)||isDecisionRoute(s);}
 function updateNavigation(){
  let page=state.page,view=state.view;
@@ -65,7 +66,7 @@ function shortTitle(r){
 function notify(text){$('toast').textContent=text;$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,4000);}
 function change(patch,{replace=false,scroll=false}={}){
  history.replaceState({...history.state,scrollY:window.scrollY},'',location.href);
- const previous=state;state={...state,...patch};if('dataset' in patch&&!('startMonth' in patch)){state.startMonth='';state.endMonth='';}if(state.startMonth&&state.endMonth)state.dataset=state.endMonth;if(state.country==='AR'&&['brands','competitors','market'].includes(state.page)){state.country='MX';notify('阿根廷尚未接入市场研究，已切换墨西哥。');}
+ const previous=state;state={...state,...patch};if('dataset' in patch&&!('startMonth' in patch)){state.startMonth='';state.endMonth='';}if(state.startMonth&&state.endMonth)state.dataset=state.endMonth;if(['AR','CL','CO'].includes(state.country)&&state.platform!=='ml'&&['brands','competitors','market'].includes(state.page)){state.country='MX';notify('此国家尚无当前渠道研究数据，已切换墨西哥。');}if(state.platform==='ml'&&['CA','US'].includes(state.country)&&['market','brands','competitors'].includes(state.page)){state.country='MX';notify('美客多当前采集五个拉美站点，已切换墨西哥。');}if(!['market','brands','competitors'].includes(state.page)&&['CL','CO'].includes(state.country)){state.country='MX';notify('该国家尚无经营管理数据，已切换墨西哥。');}if(state.platform!=='ml'&&state.startMonth&&(!M.isHistory(state.startMonth)||!M.isHistory(state.endMonth))){state.startMonth='';state.endMonth='';state.dataset='2026-09';notify('Amazon历史仅支持2026年，已返回可用月份。');}
  if(patch.page==='brands'){state.mode='all';state.tier='all';}
  if(['country','platform','category','dataset'].some(k=>k in patch&&patch[k]!==previous[k])){
   state={...state,brand:'',band:'',q:'',picked:[],detail:'',offset:'0',tier:'all',mode:'all'};
@@ -89,7 +90,10 @@ function priceHistogram(v){
  return `<svg class="price-histogram" viewBox="0 0 ${w} ${h}" role="group" aria-label="价格分布柱状图，点击柱子筛选价格段"><text x="${left}" y="13" class="axis-caption">商品数</text>${Array.from({length:5},(_,i)=>{const count=ceiling*i/4,y=bottom-count/ceiling*(bottom-top);return `<line x1="${left}" y1="${y}" x2="${w-right}" y2="${y}" class="chart-grid"/><text x="${left-12}" y="${y+4}" text-anchor="end" class="axis-label">${count}</text>`;}).join('')}${bins.map(b=>{const x=left+b.index*slot+slot*.16,bw=slot*.68,bh=b.count/ceiling*(bottom-top),cx=x+bw/2;return `<g role="button" tabindex="0" data-band="${b.index}" aria-label="${b.label}，${b.count}件商品" aria-pressed="${state.band===String(b.index)}"><title>${b.label} ${country().currency}：${b.count} 件商品</title><rect x="${left+b.index*slot}" y="${top}" width="${slot}" height="${bottom-top}" fill="transparent"/><rect x="${x}" y="${bottom-bh}" width="${bw}" height="${b.count?Math.max(1,bh):0}" rx="3" class="histogram-bar ${state.band===String(b.index)?'selected':''}"/><text x="${cx}" y="${bottom-bh-7}" text-anchor="middle" class="chart-count">${b.count||''}</text><text transform="translate(${cx},${bottom+15}) rotate(-36)" text-anchor="end" class="axis-label">${b.label}</text></g>`;}).join('')}<text x="${w-right}" y="${h-2}" text-anchor="end" class="axis-caption">价格 / ${country().currency} · 每档 ${num(M.priceStep(state.country))}</text></svg>`;
 }
 function render(){
+ if(window.Mercado)Mercado.restore();
+ for(const option of $('country').options)option.disabled=isOuterResearch(state)?state.platform==='ml'?!['MX','BR','AR','CL','CO'].includes(option.value):['AR','CL','CO'].includes(option.value):['CL','CO'].includes(option.value);
  if(operationPage())return;
+ if(state.platform==='ml'&&isDecisionRoute(state)){Mercado.render(state,change,evidenceDownload);return;}
  if(isDecisionRoute(state)){renderDecisionWorkspace();return;}
  const historical=M.isHistory(state.dataset);$('month-range-controls').innerHTML='';$('dataset').closest('label').hidden=false;
  if(!$('dataset').querySelector('optgroup')){const group=document.createElement('optgroup');group.label='2026 年 · 当前商品历史';for(const month of D.history.months){const option=document.createElement('option');option.value=month;option.textContent=month.replace('-','年')+'月'+(month===new Date().toISOString().slice(0,7)?' · 当前月':'');group.append(option);}$('dataset').prepend(group);}
