@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* Build an external, private payload from preserved source responses. No credentials/network. */
 const fs=require('fs'),path=require('path'),vm=require('vm'),crypto=require('crypto');
-const args=process.argv.slice(2),arg=k=>args[args.indexOf(k)+1],repo=path.resolve(__dirname,'..'),work=path.resolve(arg('--workspace')||'.');
+const args=process.argv.slice(2),arg=k=>args[args.indexOf(k)+1],repo=path.resolve(__dirname,'..'),work=fs.realpathSync(path.resolve(arg('--workspace')||'.'));
 if(!args.includes('--workspace')||work===repo||work.startsWith(repo+path.sep))throw Error('Research workspace must be explicitly selected outside the public repository');
 const read=p=>JSON.parse(fs.readFileSync(p)),write=(f,x)=>fs.writeFileSync(path.join(work,f),JSON.stringify(x,null,2));
 const input=read(path.join(work,'research.json')),context={};context.window=context;vm.createContext(context);
