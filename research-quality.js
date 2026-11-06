@@ -2,8 +2,8 @@
 (function(root){
  const HM=typeof module!=='undefined'?require('./history-metrics.js'):root.HistoryMetrics;
  const currencies={us:'USD',ca:'CAD',mx:'MXN',br:'BRL'};
- const typeLabels={portable:'Portable Spot Cleaner',steam:'Steam Spot Cleaner',upright:'Upright Carpet Cleaner',wash:'Wet Dry Floor Washer',dry:'干式吸尘器',mattress:'床褥除螨吸尘器',spray:'喷剂抽吸 · 相邻替代',bucket:'桶式干湿吸尘器 · 非同型',unknown:'产品类型待核'};
- const typeFilters={all:'全部产品类型',portable:'便携抽洗（含蒸汽）',steam:'蒸汽便携抽洗',upright:'推行式地毯机',wash:'硬地面洗地机',dry:'干式吸尘器',mattress:'除螨仪',spray:'喷剂抽吸（相邻）',bucket:'桶式干湿吸尘器（非同型）',unknown:'类型待核'};
+ const typeLabels={portable:'Portable Spot Cleaner',steam:'Steam Spot Cleaner',upright:'Upright Carpet Cleaner',wash:'Wet Dry Floor Washer',steam_mop:'蒸汽吸尘拖地机（相邻）',dry:'干式吸尘器',mattress:'床褥除螨吸尘器',spray:'喷剂抽吸 · 相邻替代',bucket:'桶式干湿吸尘器 · 非同型',unknown:'产品类型待核'};
+ const typeFilters={all:'全部产品类型',portable:'便携抽洗（含蒸汽）',steam:'蒸汽便携抽洗',upright:'推行式地毯机',wash:'硬地面洗地机',steam_mop:'蒸汽吸尘拖地机（相邻）',dry:'干式吸尘器',mattress:'除螨仪',spray:'喷剂抽吸（相邻）',bucket:'桶式干湿吸尘器（非同型）',unknown:'类型待核'};
  const platforms={amazon:'Amazon',ml:'Mercado Libre',bestbuy:'Best Buy',official:'品牌官网 / 分销站',retail:'当地零售',unknown:'渠道待核'};
  const finite=v=>typeof v==='number'&&Number.isFinite(v)&&v>=0;
  const validImageDimensions=(width,height)=>Number.isFinite(width)&&Number.isFinite(height)&&width>=32&&height>=32;
@@ -22,6 +22,7 @@
  function productType(r){
   const t=String(r.title||r.model||'').toLowerCase(),hint=r.productTypeHint||r.productType;
   if(/\bgtw\b|\bwd[1-6]\b|shop.?vac|\b(?:[3-9]|[12]\d)\s*(?:gal|gallon)|industrial|commercial|\b(?:15|16|18|20|30|40|50|60)\s*(?:l\b|lit)/.test(t)||hint==='commercial_bucket')return 'bucket';
+  if(['source_title_classification','manufacturer_model_reference'].includes(r.productTypeEvidence?.basis)&&Object.hasOwn(typeLabels,hint))return hint;
   if(/hx101|stainforce/.test(t))return 'spray';
   if(/carpet\s*one\s*spot/.test(t))return /steam|dualheat/.test(t)?'steam':'portable';
   if(/carpet\s*one|carpetxpert|carpetforce|powerdash(?!\s*go)|powerscrub|smartwash|allout|proheat\s*2x|revolution|big green|turbobrush/.test(t)||hint==='upright_carpet')return 'upright';

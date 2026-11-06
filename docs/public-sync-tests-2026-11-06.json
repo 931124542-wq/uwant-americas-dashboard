@@ -1,0 +1,130 @@
+{
+  "publicPackageOnly": true,
+  "sellerSpriteCalls": 0,
+  "logic": {
+    "shares": {
+      "passed": 22,
+      "failed": 0,
+      "skippedPrivateIntegration": 9
+    },
+    "other": [
+      {
+        "name": "public-range.log",
+        "passed": 15,
+        "failed": 0
+      },
+      {
+        "name": "public-price.log",
+        "passed": 14,
+        "failed": 0
+      }
+    ]
+  },
+  "browser": {
+    "generalPassed": 12,
+    "featurePassed": 12,
+    "unresolvedFailures": 0,
+    "firstFeatureRun": {
+      "passed": 10,
+      "failed": 2,
+      "reason": "Two test locators used an outdated input name or matched duplicate navigation buttons; corrected and both flows re-executed."
+    },
+    "featureChecks": [
+      {
+        "name": "Published-history shares use one 47-parent-month denominator in both charts",
+        "status": "PASS"
+      },
+      {
+        "name": "Brand drill and price-band drill expose the actual component months",
+        "status": "PASS"
+      },
+      {
+        "name": "Downloaded share CSV and global CSV agree with visible qualified revenue",
+        "status": "PASS"
+      },
+      {
+        "name": "Custom native price bands, metric switch, months and channel isolation work",
+        "status": "PASS"
+      },
+      {
+        "name": "No qualified CA fabric revenue produces a compact explanation, not fabricated share charts",
+        "status": "PASS"
+      },
+      {
+        "name": "Product price distribution remains reachable from market overview",
+        "status": "PASS"
+      },
+      {
+        "name": "Y200S default comparison uses exact local steam models; a selected ordinary extractor stays labeled alternative",
+        "status": "PASS"
+      },
+      {
+        "name": "PX251C public quote retains Nov5 date, CAD and out-of-stock status across detail and CSV",
+        "status": "PASS"
+      },
+      {
+        "name": "Period/navigation/Back/refresh preserve the selected interval and alternative research scope",
+        "status": "PASS"
+      },
+      {
+        "name": "A one-parent sample warns against interpreting 100 percent as market leadership",
+        "status": "PASS"
+      },
+      {
+        "name": "Mobile shares and product comparison fit 390px and keep source access",
+        "status": "PASS"
+      },
+      {
+        "name": "Public scope notice and previous publication documents remain accessible",
+        "status": "PASS"
+      }
+    ]
+  },
+  "dataIntegrity": [
+    {
+      "path": "review-data.js",
+      "unchanged": true
+    },
+    {
+      "path": "own-data.js",
+      "unchanged": true
+    },
+    {
+      "path": "focus-brands-data.js",
+      "unchanged": true
+    },
+    {
+      "path": "history-data.js",
+      "unchanged": true
+    },
+    {
+      "path": "history-metrics.js",
+      "unchanged": true
+    },
+    {
+      "path": "competitor-data.js",
+      "unchanged": true
+    },
+    {
+      "path": "brazil-data.js",
+      "unchanged": true
+    },
+    {
+      "path": "amazon-research-data.js",
+      "unchanged": true
+    },
+    {
+      "path": "research-data.js",
+      "unchanged": true
+    },
+    {
+      "path": "market-data.js",
+      "unchanged": true
+    },
+    {
+      "path": "year-2026/UWANT_2026_产品月度数据.xlsx",
+      "unchanged": true
+    }
+  ],
+  "publicationScope": "docs/public-sync-2026-11-06.md"
+}
