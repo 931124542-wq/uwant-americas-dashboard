@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-06-mercado-same-type-public",
+  "version": "2026-11-06-mercado-business-copy",
   "dataAsOf": "2026-10-28",
   "baseCommit": "4a4cb86bd6ffd3adf77b9592a25bdf2c3cff6386",
   "products": 466,
@@ -41,7 +41,7 @@
   "auditCheckpoint": "ffafdce8be300ed104c5db299f249c25c2053929",
   "operationsRevision": "d86f8e19420e",
   "uiUpdatedAt": "2026-11-06",
-  "previousPublicCommit": "45d80a6e4997b5245105e1b65d010a3f72e08d41",
+  "previousPublicCommit": "28c948ef046046575ca300b154293b3d35438764",
   "verifiedDevelopmentCommit": "e0931bd7d7f9c0086348f3a3bf67683388c822ec",
   "publicPackage": true,
   "privateCaptureIncluded": false,
