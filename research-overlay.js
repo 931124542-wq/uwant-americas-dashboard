@@ -3,6 +3,7 @@
  const currencies={MX:'MXN',CA:'CAD',US:'USD',BR:'BRL',AR:'ARS',CL:'CLP',CO:'COP'},markets={MLM:'MX',MLB:'BR',MLA:'AR',MLC:'CL',MCO:'CO'},cats=['wash','vacuum','fabric','mattress'];
  const finite=v=>typeof v==='number'&&Number.isFinite(v)&&v>=0;
  const key=r=>[r.country.toUpperCase(),r.platform,r.productId].join('|');
+ function resolveImage(r,repairs){const original=r.picture_link,p=repairs?.[original];if(!p?.ok||p.width<32||p.height<32)return r;try{const expected=String(original).replaceAll('{sanitizedTitle}','').replace(/^http:/,'https:');if(p.originalUrl!==original||p.url!==expected||new URL(expected).hostname!=='http2.mlstatic.com')return r;}catch{return r;}return {...r,picture_link:p.url,originalPictureUrl:original,imageLinkValid:true,imageEvidence:{sourceUrl:original,resolvedUrl:p.url,method:p.method,observedAt:p.observedAt,width:p.width,height:p.height,modelVerified:false}};}
  function validate(r){
   if(!currencies[r.country]||!cats.includes(r.category)||!['ml','amazon','retail','official'].includes(r.platform))return 'unsupported_scope';
   if(r.platform==='amazon'&&(!['MX','CA','US','BR'].includes(r.country)||!/^B[A-Z0-9]{9}$/.test(r.productId)))return 'amazon_identity';
@@ -20,9 +21,9 @@
   const map=new Map(valid.map(r=>[key(r),r])),histories={},historyRejected=[];
   for(const [id,t]of Object.entries(payload.histories||{})){const prior=target.MERCADO_DATA?.records.find(x=>x.product_code===id),r=valid.find(x=>x.platform==='ml'&&x.productId===id)||(prior?{...prior,productId:id,sourceDate:payload.asOf}:null);if(historyValid(t,r))histories[id]=t;else historyRejected.push(id);}
   if(target.MERCADO_DATA){const d=target.MERCADO_DATA,byId=new Map(d.records.map(r=>[r.product_code,{...r,sourceDate:r.sourceDate||d.asOf}]));
-   for(const r of [...(payload.priorMlRecords||[]).filter(r=>!validate(r)),...valid.filter(r=>r.platform==='ml')]){const old=byId.get(r.productId);byId.set(r.productId,{...r,priorObservations:old?[...(old.priorObservations||[]),old]:[]});}
+   for(const r of [...(payload.priorMlRecords||[]).filter(r=>!validate(r)),...valid.filter(r=>r.platform==='ml')]){const old=byId.get(r.productId);let next=resolveImage({...r,priorObservations:old?[...(old.priorObservations||[]),old]:[]},payload.imageUrlRepairs);const cached=old&&resolveImage(old,payload.imageUrlRepairs),usable=u=>typeof u==='string'&&/^https:\/\//.test(u)&&!/[{}]/.test(u);if(!usable(next.picture_link)&&cached&&usable(cached.picture_link)&&cached.country===r.country&&cached.category===r.category&&(cached.product_name||cached.title)===(r.product_name||r.title)){next={...next,picture_link:cached.picture_link,originalPictureUrl:r.picture_link||null,imageLinkValid:true,imageEvidence:{sourceDate:cached.sourceDate||d.asOf,sourceUrl:cached.detail_link,cached:true,method:'exact_country_listing_and_title_cache',modelVerified:false}};}byId.set(r.productId,next);}
    for(const p of payload.baselineScopeIsolation||[]){const r=byId.get(p.productId);if(r&&r.category==='vacuum')byId.set(p.productId,{...r,counted:false,sourceScopeTier:'adjacent',statIsolationReason:p.reason});}
-   target.MERCADO_DATA={...d,records:[...byId.values()],asOf:payload.asOf,researchMode:true,researchSnapshot:payload.asOf,trends:{...d.trends,...histories},coverage:[...d.coverage,...(payload.mlCoverage||[])]};
+   target.MERCADO_DATA={...d,records:[...byId.values()].map(r=>resolveImage(r,payload.imageUrlRepairs)),asOf:payload.asOf,researchMode:true,researchSnapshot:payload.asOf,trends:{...d.trends,...histories},coverage:[...d.coverage,...(payload.mlCoverage||[])]};
   }
   // Existing independently reviewed identities and all historical eligibility remain intact.
   const capture=payload.legacyCapture||{access:'personal_local_only',listings:[]},old=new Map((capture.listings||[]).map(r=>[r.country.toUpperCase()+'|amazon|'+r.productId,r]));
@@ -32,5 +33,5 @@
   target.PRIVATE_RESEARCH={...payload,records:valid,histories,rejected,historyRejected};
   return {applied:true,records:valid.length,rejected,historyRejected};
  }
- const api={validate,historyValid,apply,key};if(typeof module!=='undefined')module.exports=api;else{root.ResearchOverlay=api;if(root.UWANT_RESEARCH_PAYLOAD)api.apply(root,root.UWANT_RESEARCH_PAYLOAD);}
+ const api={validate,historyValid,apply,key,resolveImage};if(typeof module!=='undefined')module.exports=api;else{root.ResearchOverlay=api;if(root.UWANT_RESEARCH_PAYLOAD)api.apply(root,root.UWANT_RESEARCH_PAYLOAD);}
 })(typeof window==='undefined'?globalThis:window);
