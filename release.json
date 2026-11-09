@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-06-private-research-ingestion",
+  "version": "2026-11-09-published-market-research",
   "dataAsOf": "2026-10-28",
   "baseCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "products": 466,
@@ -44,13 +44,13 @@
   "auditReport": "docs/data-audit-2026-10-29.md",
   "auditCheckpoint": "ffafdce8be300ed104c5db299f249c25c2053929",
   "operationsRevision": "d86f8e19420e",
-  "uiUpdatedAt": "2026-11-06",
+  "uiUpdatedAt": "2026-11-09",
   "previousPublicCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "verifiedDevelopmentCommit": "e0931bd7d7f9c0086348f3a3bf67683388c822ec",
   "publicPackage": true,
   "privateCaptureIncluded": false,
   "publicProductEvidenceAsOf": "2026-11-05",
-  "productionDataUnchanged": true,
+  "productionDataUnchanged": false,
   "verifiedDevelopmentCommits": [
     "48fdf41",
     "364b3a9",
@@ -63,25 +63,20 @@
   "publicationScope": "Public research UI, qualified shares from previously published historical datasets, and independently sourced manufacturer facts; user-authorized sanitized Mercado same-type product observations and retained product monthly order series",
   "excludedPrivateData": [
     "new_provider_category_reports",
-    "private_product_profiles_and_quotes",
-    "private_history_and_sales_eligibility",
     "private_keyword_snapshots",
     "raw_responses_and_billing",
-    "private_discovery_catalog_and_images",
     "new_30_month_end_prices",
     "seller_and_receiving_context",
-    "deep-expansion-discovery-and-history",
-    "private-research-overlay-payload",
     "raw-provider-usage-and-credit-receipts"
   ],
-  "publicationBoundaryReason": "SellerSprite MCP public redistribution permission is not confirmed; public GitHub Pages is not internal-only hosting",
+  "publicationBoundaryReason": "User authorized normalized research publication on 2026-11-09; raw responses, billing, internal business data and credentials remain excluded",
   "publicEvidenceDateNote": "2026-11-05 applies to the PX251C public quote recheck; other records retain their individual source dates.",
   "mercado": {
     "source": "大麦数据 MCP，复用用户已保存的规范化结果",
-    "sourceDate": "2026-11-05",
-    "records": 1082,
+    "sourceDate": "2026-11-06",
+    "records": 6207,
     "countingRepresentatives": 1081,
-    "productsWithMonthlyOrders": 32,
+    "productsWithMonthlyOrders": 613,
     "countries": [
       "MX",
       "BR",
@@ -102,7 +97,15 @@
     "rawResponsesIncluded": false,
     "newPaidCalls": 0
   },
-  "publicDataUnchanged": true,
-  "privateResearchPublication": "New personal MCP records, histories, raw responses and receipts remain local only",
-  "dataDatePolicy": "Per-record dates retained; a code release does not refresh quotes or sales"
+  "publicDataUnchanged": false,
+  "privateResearchPublication": "User authorized normalized product research publication on 2026-11-09; raw responses, billing and internal operations remain excluded",
+  "dataDatePolicy": "Per-record dates retained; a code release does not refresh quotes or sales",
+  "researchPublication": {
+    "sourceAsOf": "2026-11-06",
+    "mlListings": 6207,
+    "mlHistoricalProducts": 613,
+    "newSourceRecords": 5939,
+    "priorAmazonListings": 237,
+    "retainedAmazonMonths": 278
+  }
 }

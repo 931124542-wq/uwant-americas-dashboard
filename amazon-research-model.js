@@ -2,7 +2,7 @@
 (function(root){
  const finite=v=>typeof v==='number'&&Number.isFinite(v)&&v>=0;
  function mergeHistory(original,capture=root.UWANT_PRIVATE_CAPTURE){
-  if(capture?.access!=='personal_local_only'||!capture.formalMonthlyRows)return original;
+  if(!['personal_local_only','public_sanitized'].includes(capture?.access)||!capture.formalMonthlyRows)return original;
   const key=r=>[r.country,r.asin,r.month].join('|'),seen=new Set(original.rows.map(key)),duplicates=[],rows=[...original.rows];
   for(const r of [...capture.formalMonthlyRows,...(capture.priceMonthlyRows||[])]){if((capture.priceMonthlyRows||[]).includes(r)&&(r.parentSales!==null||r.parentSalesAmount!==null||r.parentAsin!==null||r.fieldEvidence?.units!==false||r.fieldEvidence?.revenue!==false))throw new Error('独立价格历史不得携带可合计销量或父体归属');if(!['CA','MX'].includes(r.country)||r.platform!=='amazon'||r.currency!==({CA:'CAD',MX:'MXN'})[r.country]||r.asin==='B0DGRZFHQ6'||!/^2026-(0[1-9]|10)$/.test(r.month))throw new Error('本地月度数据的国家、渠道、币种或保护规则不匹配');if(seen.has(key(r))){duplicates.push(key(r));continue;}seen.add(key(r));rows.push({...r});}
   return {...original,rows,asOf:rows.reduce((date,r)=>String(r.retrievedAt||'').slice(0,10)>date?String(r.retrievedAt).slice(0,10):date,original.asOf),overlayReview:{added:rows.length-original.rows.length,duplicates}};
@@ -10,8 +10,8 @@
  function integrate(base,{scope,data,Q}){
   // Explicit personal-preview injection only. No private response is bundled into public assets.
   const capture=root.UWANT_PRIVATE_CAPTURE;
-  if(capture?.access==='personal_local_only'&&data){const byId=new Map(data.listings.map(r=>[r.country+':'+r.productId,r]));for(const r of capture.listings||[])if(r.productId!=='B0DGRZFHQ6')byId.set(r.country+':'+r.productId,r);data={...data,listings:[...byId.values()]};}
-  if(!data||!(data.scope.countries.includes(scope.country.toLowerCase())||capture?.access==='personal_local_only'&&(capture.listings||[]).some(r=>r.country===scope.country.toLowerCase()))||!['amazon','all'].includes(scope.platform))return {...base,scope:{...scope}};
+  if(['personal_local_only','public_sanitized'].includes(capture?.access)&&data){const byId=new Map(data.listings.map(r=>[r.country+':'+r.productId,r]));for(const r of capture.listings||[])if(r.productId!=='B0DGRZFHQ6')byId.set(r.country+':'+r.productId,r);data={...data,listings:[...byId.values()]};}
+  if(!data||!(data.scope.countries.includes(scope.country.toLowerCase())||['personal_local_only','public_sanitized'].includes(capture?.access)&&(capture.listings||[]).some(r=>r.country===scope.country.toLowerCase()))||!['amazon','all'].includes(scope.platform))return {...base,scope:{...scope}};
   const country=scope.country.toLowerCase(),source=data.listings.filter(r=>r.country===country&&r.category===scope.category&&(!scope.productType||scope.productType==='all'||(scope.productType==='portable'?['portable','steam'].includes(r.productType):r.productType===scope.productType)));
   const observed=[...base.observed],candidates=[...base.candidates];
   for(const item of source){
