@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-09-published-market-research",
+  "version": "2026-11-10-market-continuity",
   "dataAsOf": "2026-10-28",
   "baseCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "products": 466,
@@ -44,7 +44,7 @@
   "auditReport": "docs/data-audit-2026-10-29.md",
   "auditCheckpoint": "ffafdce8be300ed104c5db299f249c25c2053929",
   "operationsRevision": "d86f8e19420e",
-  "uiUpdatedAt": "2026-11-09",
+  "uiUpdatedAt": "2026-11-10",
   "previousPublicCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "verifiedDevelopmentCommit": "e0931bd7d7f9c0086348f3a3bf67683388c822ec",
   "publicPackage": true,
@@ -107,5 +107,6 @@
     "newSourceRecords": 5939,
     "priorAmazonListings": 237,
     "retainedAmazonMonths": 278
-  }
+  },
+  "marketContinuity": "Original category-market components and source scopes retained; normalized dated product snapshots restored; incomplete refresh cannot erase same-listing evidence"
 }

@@ -1,6 +1,18 @@
 /* Additive catalog adapter. Never writes to history or changes HistoryMetrics. */
 (function(root){
  const finite=v=>typeof v==='number'&&Number.isFinite(v)&&v>=0;
+ function mergeProfile(prior,item){
+  if(!prior||prior.country!==item.country||prior.productId!==item.productId||prior.category!==item.category)return item;
+  const merged={...prior,...item};
+  for(const k of ['imageUrl','sourceListSnapshot','discoveryObservation'])if(item[k]==null&&prior[k]!=null)merged[k]=prior[k];
+  if(!item.imageUrl&&prior.imageUrl)merged.imageEvidence=prior.imageEvidence;
+  // Keep independently established identity only for the same model; a different title stays a separate unresolved claim.
+  if(prior.modelStatus?.startsWith('confirmed')&&item.modelEvidence?.verified===false&&(!item.model||String(item.model).trim().toLowerCase()===String(prior.model).trim().toLowerCase())){
+   for(const k of ['model','modelStatus','modelKey','modelEvidence','versionId'])if(prior[k]!=null)merged[k]=prior[k];
+   if(prior.modelEvidence==null)delete merged.modelEvidence;
+  }
+  return merged;
+ }
  function mergeHistory(original,capture=root.UWANT_PRIVATE_CAPTURE){
   if(!['personal_local_only','public_sanitized'].includes(capture?.access)||!capture.formalMonthlyRows)return original;
   const key=r=>[r.country,r.asin,r.month].join('|'),seen=new Set(original.rows.map(key)),duplicates=[],rows=[...original.rows];
@@ -10,7 +22,7 @@
  function integrate(base,{scope,data,Q}){
   // Explicit personal-preview injection only. No private response is bundled into public assets.
   const capture=root.UWANT_PRIVATE_CAPTURE;
-  if(['personal_local_only','public_sanitized'].includes(capture?.access)&&data){const byId=new Map(data.listings.map(r=>[r.country+':'+r.productId,r]));for(const r of capture.listings||[])if(r.productId!=='B0DGRZFHQ6')byId.set(r.country+':'+r.productId,r);data={...data,listings:[...byId.values()]};}
+  if(['personal_local_only','public_sanitized'].includes(capture?.access)&&data){const byId=new Map(data.listings.map(r=>[r.country+':'+r.productId,r]));for(const r of capture.listings||[])if(r.productId!=='B0DGRZFHQ6')byId.set(r.country+':'+r.productId,mergeProfile(byId.get(r.country+':'+r.productId),r));data={...data,listings:[...byId.values()]};}
   if(!data||!(data.scope.countries.includes(scope.country.toLowerCase())||['personal_local_only','public_sanitized'].includes(capture?.access)&&(capture.listings||[]).some(r=>r.country===scope.country.toLowerCase()))||!['amazon','all'].includes(scope.platform))return {...base,scope:{...scope}};
   const country=scope.country.toLowerCase(),source=data.listings.filter(r=>r.country===country&&r.category===scope.category&&(!scope.productType||scope.productType==='all'||(scope.productType==='portable'?['portable','steam'].includes(r.productType):r.productType===scope.productType)));
   const observed=[...base.observed],candidates=[...base.candidates];
@@ -60,5 +72,5 @@
   return {brands:[...groups.values()].sort((a,b)=>b.rows.length-a.rows.length||a.brand.localeCompare(b.brand)),rows:unique,own,sku,universe};
  }
  function brandExportRows(c,s,rows,Q){const b=brandSummary(c,s,rows,Q);return [['country','platform','dataset','brand','brandRole','researchProducts','monthlyListings','directTypeOrConfiguration','adjacent','configurationPending','familyUnitsEstimate','eligibleFamilyUnits','metricPlatform','familyRevenueEstimate','eligibleRevenueUnits','purchaseBadgeListingsNotSales','priceGroups','dataNature'],...b.brands.map(x=>[c.scope.country,c.scope.platform,s.dataset,x.brand,x.ownBrand?'own_brand_sku_mapping_pending':'competitor_source_group',x.rows.length,x.monthlyListings,x.direct,x.adjacent,x.pending,x.units??'',x.unitsCount,x.monthlyListings?'amazon':'',x.revenue??'',x.revenueCount,x.badgeListings,JSON.stringify(x.priceGroups.map(g=>({date:g.date,platform:g.platform,kind:g.kind,currency:g.currency,type:g.productType,min:g.min,max:g.max,count:g.rows.length}))), 'brand_research_separate_metric_scopes'])];}
- const api={integrate,mergeHistory,filter,priceFilter,quote,exportRows,analysisPrice,canBenchmarkPrice,relation,brandSummary,brandExportRows};if(typeof module!=='undefined')module.exports=api;else root.AmazonResearch=api;
+ const api={integrate,mergeProfile,mergeHistory,filter,priceFilter,quote,exportRows,analysisPrice,canBenchmarkPrice,relation,brandSummary,brandExportRows};if(typeof module!=='undefined')module.exports=api;else root.AmazonResearch=api;
 })(typeof window==='undefined'?globalThis:window);

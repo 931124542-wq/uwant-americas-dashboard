@@ -28,6 +28,14 @@ for r in out['amazonListings']:r['researchSnapshots']=[] # normalized source met
 out['retailListings']=[pick(r,list(set(record+listing))) for r in s['retailListings']]
 out['histories']={k:pick(v,'market_code product_code range_start_date range_end_date requested_day_count data_available data_coverage aggregation_period notices covered_day_count monthly_order_series sourceDate historyUsable'.split()) for k,v in s['histories'].items()}
 legacy=s['legacyCapture'];out['legacyCapture']={'access':'public_sanitized','listings':[pick(r,listing) for r in legacy['listings']], 'formalMonthlyRows':[pick(r,month) for r in legacy['formalMonthlyRows']], 'priceMonthlyRows':[pick(r,month) for r in legacy['priceMonthlyRows']], 'evidencePatches':[pick(r,'country platform productId category brand identityStatus identityEvidence model modelEvidence modelStatus versionStatus imageUrl imageEvidence sourceDate sourceUrl claims'.split()) for r in legacy['evidencePatches']]}
+
+# Restore only the normalized, dated display fields used by the original product/market components.
+# Raw responses, file names, account details and representative sales remain excluded here.
+for target,original in zip(out['legacyCapture']['listings'],legacy['listings']):
+ snapshot=original.get('sourceListSnapshot')
+ if snapshot:
+  target['sourceListSnapshot']=pick(snapshot,'sourceUrl sourceDate dataMode bsr rating ratingCount availableDate availableDateMeaning seller coupon currentParent'.split())
+
 out['cachedCalendar']=[pick(r,month) for r in s['cachedCalendar']]
 body=json.dumps(out,ensure_ascii=False,separators=(',',':'));(repo/'published-research-data.js').write_text('window.UWANT_PUBLISHED_RESEARCH='+body+';\n')
 print(json.dumps({'bytes':len(body.encode()),'records':len(out['records']),'histories':len(out['histories']),'priorAmazon':len(legacy['listings']),'priorMonths':len(legacy['formalMonthlyRows'])+len(legacy['priceMonthlyRows'])}))
