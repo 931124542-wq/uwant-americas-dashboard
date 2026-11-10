@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-10-proactive-site-audit",
+  "version": "2026-11-10-market-presentation",
   "dataAsOf": "2026-10-28",
   "baseCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "products": 466,
@@ -38,7 +38,10 @@
     "optional-loopback-research-overlay",
     "same-batch-snapshot-aggregation",
     "repeatable-private-intake-qc",
-    "source-model-verification-levels"
+    "source-model-verification-levels",
+    "market-first-presentation",
+    "source-exact-snapshot-export",
+    "searchable-paginated-brand-analysis"
   ],
   "auditBaseline": "4a4cb86",
   "auditReport": "docs/data-audit-2026-10-29.md",
@@ -118,5 +121,6 @@
     "all-channel Latin American scope keeps country and native currency",
     "Mercado search terms entry reports unavailable data explicitly",
     "failed expansion asset shows a baseline-data warning"
-  ]
+  ],
+  "marketPresentation": "Market-first hierarchy; separate snapshot and calendar-history views; bounded source-exact charts and complete drill/export; focused product/brand routes; collapsed operations navigation"
 }

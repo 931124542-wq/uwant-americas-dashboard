@@ -16,6 +16,7 @@ function isDecisionRoute(s){return ['brands','competitors'].includes(s.page)||s.
 function isOuterResearch(s){return ['brands','competitors'].includes(s.page)||isDecisionRoute(s);}
 function updateNavigation(){
  let page=state.page,view=state.view;
+ if(view==='monthly'&&['market','brands'].includes(page)){page='market';view='overview';}
  if(page==='market'){
   if(['macro','pricing','opportunities'].includes(view))view='overview';
   else if(['coverage','research','changes'].includes(view))view='data';
@@ -75,7 +76,7 @@ function change(patch,{replace=false,scroll=false}={}){
   if(patch.brand!==undefined)state.brand=patch.brand;
   if(previous.picked.length)notify('研究范围已变化，对比清单已清空');
  }
- if(['country','platform','category'].some(k=>k in patch&&patch[k]!==previous[k])){state.evidenceQuery='';state.evidenceBrand='';state.evidenceDetail='';state.evidencePicks='';state.evidenceGroup='';state.evidencePage='0';state.ownListing='';state.priceBand='';state.keywordAsin='';state.keywordQuery='';Object.assign(state,ResearchCatalog.scopeReset(Object.fromEntries(['country','platform','category'].map(k=>[k,k in patch&&patch[k]!==previous[k]]))));}
+ if(['country','platform','category'].some(k=>k in patch&&patch[k]!==previous[k])){state.brandQuery='';state.brandOffset='0';state.evidenceQuery='';state.evidenceBrand='';state.evidenceDetail='';state.evidencePicks='';state.evidenceGroup='';state.evidencePage='0';state.ownListing='';state.priceBand='';state.keywordAsin='';state.keywordQuery='';Object.assign(state,ResearchCatalog.scopeReset(Object.fromEntries(['country','platform','category'].map(k=>[k,k in patch&&patch[k]!==previous[k]]))));}
  if(state.category!=='fabric'&&state.competitionGroup==='alternative')state.competitionGroup='direct';
  if(!('offset' in patch))state.offset='0';
  history[replace?'replaceState':'pushState']({scrollY:scroll?0:window.scrollY,drawer:!!state.detail,rqDetail:!!state.evidenceDetail},'',M.encode(state));
@@ -91,7 +92,8 @@ function priceHistogram(v){
  const bins=v.bins,w=1120,h=260,left=48,right=20,top=25,bottom=190,plot=w-left-right,slot=plot/bins.length,max=Math.max(1,...bins.map(b=>b.count)),ceiling=Math.max(4,Math.ceil(max/4)*4);
  return `<svg class="price-histogram" viewBox="0 0 ${w} ${h}" role="group" aria-label="价格分布柱状图，点击柱子筛选价格段"><text x="${left}" y="13" class="axis-caption">商品数</text>${Array.from({length:5},(_,i)=>{const count=ceiling*i/4,y=bottom-count/ceiling*(bottom-top);return `<line x1="${left}" y1="${y}" x2="${w-right}" y2="${y}" class="chart-grid"/><text x="${left-12}" y="${y+4}" text-anchor="end" class="axis-label">${count}</text>`;}).join('')}${bins.map(b=>{const x=left+b.index*slot+slot*.16,bw=slot*.68,bh=b.count/ceiling*(bottom-top),cx=x+bw/2;return `<g role="button" tabindex="0" data-band="${b.index}" aria-label="${b.label}，${b.count}件商品" aria-pressed="${state.band===String(b.index)}"><title>${b.label} ${country().currency}：${b.count} 件商品</title><rect x="${left+b.index*slot}" y="${top}" width="${slot}" height="${bottom-top}" fill="transparent"/><rect x="${x}" y="${bottom-bh}" width="${bw}" height="${b.count?Math.max(1,bh):0}" rx="3" class="histogram-bar ${state.band===String(b.index)?'selected':''}"/><text x="${cx}" y="${bottom-bh-7}" text-anchor="middle" class="chart-count">${b.count||''}</text><text transform="translate(${cx},${bottom+15}) rotate(-36)" text-anchor="end" class="axis-label">${b.label}</text></g>`;}).join('')}<text x="${w-right}" y="${h-2}" text-anchor="end" class="axis-caption">价格 / ${country().currency} · 每档 ${num(M.priceStep(state.country))}</text></svg>`;
 }
-function render(){
+function render(){renderWorkspace();window.MarketPresentation?.sync(state,change,evidenceDownload);}
+function renderWorkspace(){
  if(window.Mercado)Mercado.restore();
  for(const option of $('country').options)option.disabled=isOuterResearch(state)?state.platform==='ml'?!['MX','BR','AR','CL','CO'].includes(option.value):state.platform==='all'?false:['AR','CL','CO'].includes(option.value):['CL','CO'].includes(option.value);
  if(operationPage())return;
@@ -240,7 +242,7 @@ function renderDecisionWorkspace(){
  const options=MarketWorkbench.choices[state.category]||[];if(!options.includes(state.own))state.own=options[0];
  const ownSelect=document.querySelector('.filters [data-wb-own]');ownSelect.closest('label').hidden=false;document.querySelector('.heading-actions a[download]').hidden=true;ownSelect.innerHTML=options.map(k=>`<option ${k===state.own?'selected':''}>${esc(k)}</option>`).join('');
  state.researchLayer=state.page==='market'&&state.view==='research'?'candidates':'observed';
- const title=state.page==='brands'?'品牌分析':state.page==='competitors'?'UWANT竞品对比':({products:'商品研究',research:'数据与待核',keywords:'竞品搜索词',macro:'市场大盘',pricing:'价格带'})[state.view]||'市场总览';
+ const title=state.view==='monthly'?'商品月度历史':state.page==='brands'?'品牌分析':state.page==='competitors'?'UWANT竞品对比':({products:'商品研究',research:'数据与待核',keywords:'竞品搜索词',macro:'市场大盘',pricing:'价格带'})[state.view]||'市场总览';
  if(['127.0.0.1','localhost'].includes(location.hostname))document.querySelector('.sidebar-note').childNodes[1].textContent=' 本地预览 ';$('title').textContent=title;$('crumb').textContent=title;document.title=title+' · UWANT';
  if(!$('dataset').querySelector('optgroup')){const group=document.createElement('optgroup');group.label='商品月度历史';for(const month of D.history.months){const option=document.createElement('option');option.value=month;option.textContent=month+(month===new Date().toISOString().slice(0,7)?' · 当前月':'');group.append(option);}$('dataset').prepend(group);}
  for(const key of ['country','platform','category','dataset'])$(key).value=state[key];
