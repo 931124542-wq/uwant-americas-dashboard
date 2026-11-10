@@ -1,6 +1,7 @@
 (function(root){
  const finite=v=>typeof v==='number'&&Number.isFinite(v)&&v>=0,e=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  function render(s,catalog){
+  if(!root.ResearchDataAdmin?.isRoute(s))return '';
   const extra=root.ResearchArchive?.render(s)||'';
   let a=(root.COVERAGE_AUDIT||[]).find(x=>x.country===s.country&&x.platform===s.platform&&x.category===s.category);
   if(!a)return extra;

@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-10-restored-market-layout",
+  "version": "2026-11-10-separated-data-management",
   "dataAsOf": "2026-10-28",
   "baseCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "products": 466,
@@ -109,5 +109,6 @@
     "retainedAmazonMonths": 278
   },
   "marketContinuity": "Original category-market components and source scopes retained; normalized dated product snapshots restored; incomplete refresh cannot erase same-listing evidence",
-  "layoutContinuity": "Original four market blocks and primary navigation retained for both platforms; product, brand and comparison routes separated; shared scope summary updates on mobile"
+  "layoutContinuity": "Original four market blocks and primary navigation retained for both platforms; product, brand and comparison routes separated; shared scope summary updates on mobile",
+  "displaySeparation": "Market/product/brand/comparison views show analysis only; collection evidence, pagination, coverage and raw-workbook links are centralized in the dedicated data-management view"
 }

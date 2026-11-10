@@ -18,25 +18,20 @@
   workspace.replaceChildren();
   if(overview){
    const first=block('01','市场大盘',route('macro','类目与来源'));if(summary){summary.textContent='美客多已采集样本，非完整市场；近30天快照与自然月历史分列。';first.append(summary);}if(kpis)first.append(kpis);
-   if(history){
-    const entries=[...history.querySelectorAll(':scope > details')].filter(x=>x.querySelector('[data-ml-single-export]'));
-    const selected=entries.find(x=>x.querySelector('[data-ml-single-export]').dataset.mlSingleExport===s.historyProduct)||entries[0];
-    if(entries.length){const select=document.createElement('select');select.setAttribute('data-ml-history-product','');select.setAttribute('aria-label','查看商品月度历史');select.innerHTML=entries.map(x=>{const id=x.querySelector('[data-ml-single-export]').dataset.mlSingleExport;return '<option value="'+id+'" '+(x===selected?'selected':'')+'>'+esc(x.querySelector('summary').textContent)+'</option>';}).join('');select.onchange=e=>change({historyProduct:e.target.value});history.querySelector('h2').after(select);for(const entry of entries){entry.hidden=entry!==selected;if(entry===selected)entry.open=true;}}
-    history.insertAdjacentHTML('beforeend',route('monthly','全部商品历史 →'));first.append(history);
-   }
+   first.insertAdjacentHTML('beforeend','<div class="market-inline-links">'+route('monthly','查看商品月度历史 →')+'</div>');
    const second=block('02','品牌与价格带','<button class="rq-button" data-ml-page="brands">品牌分析 →</button>');if(shares)second.append(shares);second.insertAdjacentHTML('beforeend','<div class="market-inline-links">'+route('pricing','产品价格分布 →')+route('products','品牌与产品覆盖 →')+'</div>');if(detail)second.append(detail);
    const third=block('03','UWANT对标','<button class="rq-button" data-ml-page="competitors">查看对标 →</button>');const ownRows=all.filter(r=>/uwant/i.test(r.brand_label||'')&&String(r.product_name).toLowerCase().includes(String(s.own).toLowerCase()));third.innerHTML+='<div class="wb-own"><div class="wb-own-main"><div><div class="wb-target">UWANT 对标<strong>'+esc(s.own)+'</strong></div><p>'+(ownRows.length?'有'+ownRows.length+'条当地来源线索，型号、电压及套装仍需核验。':'尚无已核实的本国美客多同型号报价，暂不计算价格优势。')+'</p></div></div></div>';
-   const fourth=block('04','经营判断');fourth.classList.add('market-decisions');fourth.innerHTML+='<dl><div><dt>价格研究</dt><dd>按本币档案价查看同类型商品，核对功能后再判断价格位置。 '+route('pricing','价格带 →')+'</dd></div><div><dt>销售证据</dt><dd>'+report.all.length+'个当前批次去重统计单位；近30天估算与自然月记录分开，不推算全市场规模。 '+route('monthly','历史与覆盖 →')+'</dd></div><div><dt>UWANT行动</dt><dd>核对当地版本、配置和套装，保留未知项。 <button data-ml-page="competitors">查看对标 →</button></dd></div></dl>';
+   const fourth=block('04','经营判断');fourth.classList.add('market-decisions');fourth.innerHTML+='<dl><div><dt>价格研究</dt><dd>按本币档案价查看同类型商品，核对功能后再判断价格位置。 '+route('pricing','价格带 →')+'</dd></div><div><dt>销售证据</dt><dd>'+report.all.length+'件商品有当前快照估算；月度历史另行查看。 '+route('monthly','历史与覆盖 →')+'</dd></div><div><dt>UWANT行动</dt><dd>核对当地版本、配置和套装，保留未知项。 <button data-ml-page="competitors">查看对标 →</button></dd></div></dl>';
    workspace.append(first,second,third,fourth);
   }else if(product||compare){
    if(compare&&comparison)workspace.append(comparison);if(catalog)workspace.append(catalog);if(product&&comparison)workspace.append(comparison);
   }else if(brand){
    const section=block('','品牌销售样本与覆盖');if(shares)section.append(shares);
-   section.insertAdjacentHTML('beforeend','<div class="table-scroll"><table class="market-brand-performance"><thead><tr><th>品牌</th><th>商品覆盖</th><th>当前批次统计单位</th><th>近30天样本估算 / '+(s.shareMetric==='units'?'台':esc(currency))+'</th><th></th></tr></thead><tbody>'+report.brands.map(([name,value])=>'<tr><th>'+esc(name)+'</th><td>'+all.filter(r=>(r.brandGroup||r.brand_label||'未识别品牌')===name).length+'条Listing</td><td>'+report.all.filter(r=>(r.brandGroup||r.brand_label||'未识别品牌')===name).length+'</td><td>'+fmt(value)+'</td><td><button data-ml-brand="'+esc(name)+'">产品 →</button></td></tr>').join('')+'</tbody></table></div>');workspace.append(section);
+   section.insertAdjacentHTML('beforeend','<div class="table-scroll"><table class="market-brand-performance"><thead><tr><th>品牌</th><th>商品覆盖</th><th>参与统计商品</th><th>近30天样本估算 / '+(s.shareMetric==='units'?'台':esc(currency))+'</th><th></th></tr></thead><tbody>'+report.brands.map(([name,value])=>'<tr><th>'+esc(name)+'</th><td>'+all.filter(r=>(r.brandGroup||r.brand_label||'未识别品牌')===name).length+'条Listing</td><td>'+report.all.filter(r=>(r.brandGroup||r.brand_label||'未识别品牌')===name).length+'</td><td>'+fmt(value)+'</td><td><button data-ml-brand="'+esc(name)+'">产品 →</button></td></tr>').join('')+'</tbody></table></div>');workspace.append(section);
   }else if(monthly){if(history)workspace.append(history);if(detail)workspace.append(detail);workspace.insertAdjacentHTML('afterbegin','<div class="market-inline-links">'+route('overview','返回市场总览 →')+route('products','商品研究 →')+'</div>');
   }else if(s.view==='pricing'){const section=block('','品牌与价格带',route('overview','返回市场总览'));if(shares)section.append(shares);if(detail)section.append(detail);workspace.append(section);
-  }else{const section=block('','类目与来源',route('overview','返回市场总览'));if(summary)section.append(summary);if(notes)section.append(notes);workspace.append(section);}
-  if(notes&&!notes.isConnected)workspace.append(notes);if(coverage)workspace.append(coverage);if(sourceEvidence)workspace.append(sourceEvidence);
+  }else{const section=block('','类目与来源',route('overview','返回市场总览'));if(summary)section.append(summary);section.insertAdjacentHTML('beforeend','<p>销量及销售额为第三方估算；近30天快照与自然月记录分别展示。当前样本不代表完整市场。</p>');workspace.append(section);}
+  // Collection reports and audits are rendered only at the data-management route.
   if(!host.querySelector('[data-ml-detail]')){const d=document.createElement('div');d.setAttribute('data-ml-detail','');workspace.append(d);}
   host.querySelectorAll('[data-ml-route]').forEach(b=>b.onclick=()=>change({page:'market',view:b.dataset.mlRoute}));host.querySelectorAll('[data-ml-page]').forEach(b=>b.onclick=()=>change({page:b.dataset.mlPage,view:'overview'}));
   host.querySelectorAll('[data-ml-brand]').forEach(b=>b.onclick=()=>change({page:'market',view:'products',evidenceBrand:b.dataset.mlBrand,evidencePage:'0'}));
