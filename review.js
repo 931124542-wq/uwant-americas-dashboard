@@ -3,7 +3,7 @@ const M=ResearchModel,D=REVIEW_DATA;D.own=REVIEW_OWN;D.focus=FOCUS_BRANDS;D.hist
 const $=id=>document.getElementById(id),esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=x=>x==null?'—':new Intl.NumberFormat('zh-CN',{maximumFractionDigits:0}).format(x);
 let state=M.parse(location.hash),drawerKey='',lastFocus=null,lastFocusToken='',toastTimer;
-const requestedCountry=new URLSearchParams(location.hash.slice(1)).get('country');if(state.platform==='ml'&&['CA','US'].includes(requestedCountry)&&requestedCountry!==state.country){history.replaceState(history.state,'',M.encode(state));setTimeout(()=>notify('美客多尚无该站点数据，已切换墨西哥。'),0);}
+const initialScopeHash=location.hash;setTimeout(()=>showScopeFallback(initialScopeHash),0);
 const country=()=>M.countries[state.country],money=n=>n==null?'—':`${new Intl.NumberFormat('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2}).format(n)} ${country().currency}`;
 const url=r=>`https://www.${country().domain}/dp/${r.asin}`;
 const tier=r=>({T1:'T1 核心自集尘',T2:'T2 同价位',T3:'T3 白牌（分组待核）'})[r.tier]||'未核层级';
@@ -63,11 +63,12 @@ function shortTitle(r){
  if(match){const name=match[0].replace(/[,\s.]+$/,'').replace(/\s+(?:Cordless|Wet|Dry|Vacuum|with|for)\b.*$/i,'');return name.toLowerCase().startsWith(String(r.brand||'').toLowerCase())?name:((r.brand||'')+' '+name).trim();}
  return title.split(/\s[|–—]\s|[,，]/)[0].slice(0,72)||r.asin;
 }
+function showScopeFallback(hash){const requested=new URLSearchParams(hash.replace(/^#/,'' )).get('country');if(M.countries[requested]&&requested!==state.country){history.replaceState(history.state,'',M.encode(state));notify('当前渠道或模块暂无'+M.countries[requested].name+'的已保存数据，已切换'+M.countries[state.country].name+'。');}}
 function notify(text){$('toast').textContent=text;$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,4000);}
 function change(patch,{replace=false,scroll=false}={}){
  if(window.Mercado?.rendering)return;
  history.replaceState({...history.state,scrollY:window.scrollY},'',location.href);
- const previous=state;state={...state,...patch};if('dataset' in patch&&!('startMonth' in patch)){state.startMonth='';state.endMonth='';}if(state.startMonth&&state.endMonth)state.dataset=state.endMonth;if(['AR','CL','CO'].includes(state.country)&&state.platform!=='ml'&&['brands','competitors','market'].includes(state.page)){state.country='MX';notify('此国家尚无当前渠道研究数据，已切换墨西哥。');}if(state.platform==='ml'&&['CA','US'].includes(state.country)&&['market','brands','competitors'].includes(state.page)){state.country='MX';notify('美客多当前采集五个拉美站点，已切换墨西哥。');}if(!['market','brands','competitors'].includes(state.page)&&['CL','CO'].includes(state.country)){state.country='MX';notify('该国家尚无经营管理数据，已切换墨西哥。');}if(state.platform!=='ml'&&state.startMonth&&(!M.isHistory(state.startMonth)||!M.isHistory(state.endMonth))){state.startMonth='';state.endMonth='';state.dataset='2026-09';notify('Amazon历史仅支持2026年，已返回可用月份。');}
+ const previous=state;state={...state,...patch};if('dataset' in patch&&!('startMonth' in patch)){state.startMonth='';state.endMonth='';}if(state.startMonth&&state.endMonth)state.dataset=state.endMonth;if(['AR','CL','CO'].includes(state.country)&&!['ml','all'].includes(state.platform)&&['brands','competitors','market'].includes(state.page)){state.country='MX';notify('此国家尚无当前渠道研究数据，已切换墨西哥。');}if(state.platform==='ml'&&['CA','US'].includes(state.country)&&['market','brands','competitors'].includes(state.page)){state.country='MX';notify('美客多当前采集五个拉美站点，已切换墨西哥。');}if(!['market','brands','competitors'].includes(state.page)&&['CL','CO'].includes(state.country)){state.country='MX';notify('该国家尚无经营管理数据，已切换墨西哥。');}if(state.platform!=='ml'&&state.startMonth&&(!M.isHistory(state.startMonth)||!M.isHistory(state.endMonth))){state.startMonth='';state.endMonth='';state.dataset='2026-09';notify('Amazon历史仅支持2026年，已返回可用月份。');}
  if(patch.page==='brands'){state.mode='all';state.tier='all';}
  if(['country','platform','category','dataset'].some(k=>k in patch&&patch[k]!==previous[k])){
   state={...state,brand:'',band:'',q:'',picked:[],detail:'',offset:'0',tier:'all',mode:'all'};
@@ -92,8 +93,10 @@ function priceHistogram(v){
 }
 function render(){
  if(window.Mercado)Mercado.restore();
- for(const option of $('country').options)option.disabled=isOuterResearch(state)?state.platform==='ml'?!['MX','BR','AR','CL','CO'].includes(option.value):['AR','CL','CO'].includes(option.value):['CL','CO'].includes(option.value);
+ for(const option of $('country').options)option.disabled=isOuterResearch(state)?state.platform==='ml'?!['MX','BR','AR','CL','CO'].includes(option.value):state.platform==='all'?false:['AR','CL','CO'].includes(option.value):['CL','CO'].includes(option.value);
  if(operationPage())return;
+ const importWarning=$('research-load-warning');
+ if(!window.UWANT_PUBLISHED_RESEARCH&&isOuterResearch(state)){if(!importWarning){const box=document.createElement('p');box.id='research-load-warning';box.className='research-load-warning';box.setAttribute('role','alert');box.textContent='扩充资料未加载，当前仅显示已保存的基础样本。请刷新重试。';$('research-content').prepend(box);}}else importWarning?.remove();
  $('export').onclick=()=>exportResults();
  if(window.ResearchDataAdmin?.isRoute(state)){renderDataWorkspace();return;}
  if(state.platform==='ml'&&isDecisionRoute(state)){Mercado.render(state,change,evidenceDownload);return;}
@@ -205,8 +208,8 @@ document.addEventListener('change',e=>{if(e.target.dataset.pick)pick(e.target.da
 $('operations-retry').onclick=()=>{operationsReady=false;$('operations-frame').removeAttribute('src');$('operations-frame').removeAttribute('srcdoc');delete $('operations-frame').dataset.started;$('operations-status').hidden=false;$('operations-status').textContent='正在加载…';$('operations-retry').hidden=true;render();};
 document.addEventListener('click',e=>{if(e.target.closest('[data-open-notes]')){e.preventDefault();document.querySelector('.data-note').open=true;document.querySelector('.data-note').scrollIntoView({block:'start',behavior:'smooth'});}});
 document.addEventListener('keydown',e=>{const target=e.target.closest('g[data-band]');if(target&&['Enter',' '].includes(e.key)){e.preventDefault();change({band:target.dataset.band});}});
-window.addEventListener('popstate',()=>{state=M.parse(location.hash);drawerKey='';render();requestAnimationFrame(()=>window.scrollTo({top:history.state?.scrollY||0,behavior:'auto'}));});
-window.addEventListener('hashchange',()=>{if(M.encode(state)!==location.hash){state=M.parse(location.hash);drawerKey='';render();}});
+window.addEventListener('popstate',()=>{const requestedHash=location.hash;state=M.parse(requestedHash);drawerKey='';render();showScopeFallback(requestedHash);requestAnimationFrame(()=>window.scrollTo({top:history.state?.scrollY||0,behavior:'auto'}));});
+window.addEventListener('hashchange',()=>{if(M.encode(state)!==location.hash){const requestedHash=location.hash;state=M.parse(requestedHash);drawerKey='';render();showScopeFallback(requestedHash);}});
 $('scope-toggle').onclick=()=>{const open=document.querySelector('.filters').classList.toggle('is-expanded');$('scope-toggle').setAttribute('aria-expanded',String(open));};
 $('sidebar-menu').onclick=()=>{const open=document.querySelector('.sidebar').classList.toggle('nav-expanded');$('sidebar-menu').setAttribute('aria-expanded',String(open));};
 document.addEventListener('click',e=>{if(e.target.closest('[data-route]')){document.querySelector('.sidebar').classList.remove('nav-expanded');$('sidebar-menu').setAttribute('aria-expanded','false');}});
@@ -226,8 +229,8 @@ function renderDataWorkspace(){
  $('research-layers').innerHTML='';$('title').textContent='数据管理';$('crumb').textContent='数据管理';document.title='数据管理 · UWANT';
  $('dataset').closest('label').hidden=true;document.querySelector('.filters [data-wb-own]').closest('label').hidden=true;document.querySelector('.heading-actions a[download]').hidden=true;$('month-range-controls').innerHTML='';
  for(const key of ['country','platform','category'])$(key).value=state[key];
- $('scope').textContent=country().name+' / '+(ResearchQuality.platforms[state.platform]||state.platform)+' · 数据覆盖、核验与来源记录';
- $('scope-toggle').innerHTML='<span>'+esc(country().name)+' / '+esc(ResearchQuality.platforms[state.platform]||state.platform)+'<small>数据管理</small></span><b>筛选⌄</b>';
+ $('scope').textContent=country().name+' / '+(state.platform==='all'?'全部已采集渠道':ResearchQuality.platforms[state.platform]||state.platform)+' · 数据覆盖、核验与来源记录';
+ $('scope-toggle').innerHTML='<span>'+esc(country().name)+' / '+esc(state.platform==='all'?'全部已采集渠道':ResearchQuality.platforms[state.platform]||state.platform)+'<small>数据管理</small></span><b>筛选⌄</b>';
  $('research-evidence').innerHTML=ResearchDataAdmin.render(state,c)+(c?ResearchCatalog.extras(c,state,null,{dialogOnly:true}):'');
  ResearchDataAdmin.wire($('research-evidence'),state,change);
  if(c)ResearchCatalog.wire($('research-content'),{catalog:c,state:{...state,researchLayer:'candidates'},own:null,onState:change,download:evidenceDownload,notify});

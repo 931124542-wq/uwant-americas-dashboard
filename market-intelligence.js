@@ -1,7 +1,7 @@
 /* Read-only analysis of source snapshots, qualified family months and product evidence. */
 (function(root){
  const R=root.MonthlyRange,Q=root.ResearchQuality,C=root.ResearchContext,E=root.ProductEvidence;
- const finite=x=>typeof x==='number'&&Number.isFinite(x),currency=s=>({MX:'MXN',CA:'CAD',US:'USD',BR:'BRL'})[s.country];
+ const finite=x=>typeof x==='number'&&Number.isFinite(x),currency=s=>({MX:'MXN',CA:'CAD',US:'USD',BR:'BRL',AR:'ARS',CL:'CLP',CO:'COP'})[s.country];
  const cleanScope=s=>({...s,evidenceQuery:'',evidenceBrand:'',productType:'all',priceBand:'',competitionGroup:'all'});
  const brand=r=>root.HistoryMetrics.brandName(r.brand)||'品牌待核';
  function monthly(c,s){return R.summary(c.metricSourceRows||[],s,{universe:c.metricSourceRows||[]});}

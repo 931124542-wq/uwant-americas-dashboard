@@ -2,7 +2,7 @@
 (function(root){
  const Q=root.ResearchQuality,R=root.MonthlyRange,H=root.HistoryMetrics;
  const finite=v=>typeof v==='number'&&Number.isFinite(v)&&v>=0;
- const currencies={CA:'CAD',MX:'MXN',US:'USD',BR:'BRL'};
+ const currencies={CA:'CAD',MX:'MXN',US:'USD',BR:'BRL',AR:'ARS',CL:'CLP',CO:'COP'};
  const UNKNOWN_BRAND='未识别品牌',UNKNOWN_PRICE='价位待归类';
  const asin=r=>r.asin||r.product_id||r.productId||'',parent=r=>r.parentAsin||r.parent_id||'';
  const platform=r=>{const raw=String(r.platform||r.marketplace||'').toLowerCase();return ['amazon','amazon.ca','amazon.com','amazon.com.mx','amazon.com.br','ca','mx','us','br'].includes(raw)?'amazon':raw||'unknown';};
@@ -10,7 +10,7 @@
  const eligibleFlag=(r,metric)=>r.fieldEvidence?.[metric]!==false&&r.metricEligibility?.[metric]!==false&&r.metricEligibility?.[metric]?.eligible!==false;
  const admissible=r=>!['candidate','quarantined_estimate','model_reference'].includes(r.dataNature)&&r.origin!=='candidate'&&!r.quarantinedHistory&&asin(r)!=='B0DGRZFHQ6';
  function boundaries(s){
-  const currency=currencies[s.country],step={MX:1000,CA:100,US:100,BR:500}[s.country]||100;
+  const currency=currencies[s.country],step={MX:1000,CA:100,US:100,BR:500,AR:50000,CL:30000,CO:100000}[s.country]||100;
   const defaults=Array.from({length:11},(_,i)=>i*step),[code,raw]=String(s.shareBands||'').split(':');
   if(code!==currency||!raw)return {edges:defaults,custom:false,currency};
   const values=raw.split(',').map(Number),valid=values.length>=2&&values.length<=31&&values[0]===0&&values.every((x,i)=>finite(x)&&(!i||x>values[i-1]));

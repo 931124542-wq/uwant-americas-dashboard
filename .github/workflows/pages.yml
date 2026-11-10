@@ -23,6 +23,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Verify market data and scope contracts
+        run: |
+          node tests/public-release-contract.cjs
+          node tests/published-research.cjs
+          node tests/market-continuity.cjs
+          node tests/all-channel-catalog.cjs
+          node tests/coverage-system.cjs
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:

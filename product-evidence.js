@@ -1,7 +1,7 @@
 /* Read-only product evidence. A title claim never grants identity or sales eligibility. */
 (function(root){
  const decode=v=>String(v??'').replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/&#39;|&apos;/g,"'").replace(/&nbsp;/g,' ');
- const currency={CA:'CAD',MX:'MXN',US:'USD',BR:'BRL'};
+ const currency={CA:'CAD',MX:'MXN',US:'USD',BR:'BRL',AR:'ARS',CL:'CLP',CO:'COP'};
  const finite=v=>typeof v==='number'&&Number.isFinite(v)&&v>=0;
  const labels={power:'输入功率',heatingPower:'锅炉/加热功率',voltage:'电压标称',suction:'吸力标称',weight:'重量标称',capacity:'尘杯 / 尘袋容量',unspecifiedCapacity:'容量（用途待核）',cleanWater:'清水箱',dirtyWater:'污水箱',cord:'电线长度',hose:'软管长度',runtime:'续航标称',filter:'过滤',autoempty:'自集尘',powerSource:'供电形态',steam:'蒸汽标称',hotwater:'热水标称',tangle:'防缠绕',light:'照尘灯',accessories:'配件',warranty:'保修',uv:'UV标称',ultrasound:'超声波标称',selfclean:'自清洁标称',drying:'烘干标称'};
  function canonicalUrl(value){

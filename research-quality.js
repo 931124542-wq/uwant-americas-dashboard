@@ -1,7 +1,7 @@
 /* Source-level field quality. Visibility never grants sales eligibility. */
 (function(root){
  const HM=typeof module!=='undefined'?require('./history-metrics.js'):root.HistoryMetrics;
- const currencies={us:'USD',ca:'CAD',mx:'MXN',br:'BRL'};
+ const currencies={us:'USD',ca:'CAD',mx:'MXN',br:'BRL',ar:'ARS',cl:'CLP',co:'COP'};
  const typeLabels={portable:'Portable Spot Cleaner',steam:'Steam Spot Cleaner',upright:'Upright Carpet Cleaner',wash:'Wet Dry Floor Washer',steam_mop:'蒸汽吸尘拖地机（相邻）',dry:'干式吸尘器',mattress:'床褥除螨吸尘器',spray:'喷剂抽吸 · 相邻替代',bucket:'桶式干湿吸尘器 · 非同型',unknown:'产品类型待核'};
  const typeFilters={all:'全部产品类型',portable:'便携抽洗（含蒸汽）',steam:'蒸汽便携抽洗',upright:'推行式地毯机',wash:'硬地面洗地机',steam_mop:'蒸汽吸尘拖地机（相邻）',dry:'干式吸尘器',mattress:'除螨仪',spray:'喷剂抽吸（相邻）',bucket:'桶式干湿吸尘器（非同型）',unknown:'类型待核'};
  const platforms={amazon:'Amazon',ml:'Mercado Libre',bestbuy:'Best Buy',official:'品牌官网 / 分销站',retail:'当地零售',unknown:'渠道待核'};

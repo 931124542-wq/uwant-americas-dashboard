@@ -3,7 +3,7 @@
  const R=root.MonthlyRange,Q=root.ResearchQuality,C=root.ResearchContext,U=root.UIData,e=U.escape,n=x=>x==null?'—':x.toLocaleString('zh-CN',{maximumFractionDigits:2});
  function selected(c,s){const ids=new Set(root.MarketWorkbench.rows(c,s).map(r=>r.productId));return (c.metricSourceRows||[]).filter(r=>ids.has(r.asin));}
  function render(c,s){
-  const rs=selected(c,s),report=R.summary(rs,s,{universe:c.metricSourceRows}),ids=[...new Set(rs.map(r=>r.asin))],id=ids.includes(s.historyProduct)?s.historyProduct:ids[0],product=c.observed.find(r=>r.productId===id),ms=R.months(s),unitRows=Q.metricRows(rs,'units',{universe:c.metricSourceRows||rs}),amountRows=Q.metricRows(rs,'revenue',{universe:c.metricSourceRows||rs}),currency=({CA:'CAD',MX:'MXN',US:'USD',BR:'BRL'})[s.country],amount=U.knownTotal(report.months,'revenue');
+  const rs=selected(c,s),report=R.summary(rs,s,{universe:c.metricSourceRows}),ids=[...new Set(rs.map(r=>r.asin))],id=ids.includes(s.historyProduct)?s.historyProduct:ids[0],product=c.observed.find(r=>r.productId===id),ms=R.months(s),unitRows=Q.metricRows(rs,'units',{universe:c.metricSourceRows||rs}),amountRows=Q.metricRows(rs,'revenue',{universe:c.metricSourceRows||rs}),currency=({CA:'CAD',MX:'MXN',US:'USD',BR:'BRL',AR:'ARS',CL:'CLP',CO:'COP'})[s.country],amount=U.knownTotal(report.months,'revenue');
   const state=m=>m.open?'采集时未结，整月未确认':m.records?'有来源档案':m.calendarState==='future'?'月份尚未发生':m.calendarState==='current'?'当前月尚无记录':'未取得该月数据';
   const summary=U.table(report.months,[
    {key:'month',label:'月份',required:true,heading:true,value:m=>m.month},
