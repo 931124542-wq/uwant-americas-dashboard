@@ -12,7 +12,7 @@ function csv(t){const rows=[];let row=[],v='',q=false;for(let i=0;i<t.length;i++
  const download=async(sel,name)=>{const[d]=await Promise.all([p.waitForEvent('download'),p.locator(sel).click()]);await d.saveAs(out+'/'+name+'.csv');return csv(fs.readFileSync(out+'/'+name+'.csv','utf8'));};
  await test('Published-history shares use one 47-parent-month denominator in both charts',async()=>{
   await go({});const r=await report();assert.equal(r.selected.length,47);assert(Math.abs(r.total-5330501.66)<.001);assert.equal(await p.locator('[data-share-chart]').count(),2);
-  assert.equal(await p.evaluate(()=>!!window.UWANT_PRIVATE_CAPTURE),false);assert.equal(await p.locator('[data-operating-country]').count(),0);await p.screenshot({path:out+'/market-overview.png',fullPage:true});
+  assert.equal(await p.evaluate(()=>window.UWANT_PRIVATE_CAPTURE?.access),'public_sanitized');assert.equal(await p.evaluate(()=>window.UWANT_PUBLISHED_RESEARCH?.publication?.scope),'normalized_product_research_only');assert.equal(await p.locator('[data-operating-country]').count(),0);await p.screenshot({path:out+'/market-overview.png',fullPage:true});
  });
  await test('Brand drill and price-band drill expose the actual component months',async()=>{
   await p.locator('[data-share-drill="brand|Levoit"]').click();assert.equal(await p.locator('.sample-share-detail tbody tr').count(),9);await p.locator('[data-share-drill="price|1"]').click();assert.equal(await p.locator('.sample-share-detail tbody tr').count(),23);await p.locator('.sample-shares').screenshot({path:out+'/shares-and-monthly-drill.png'});

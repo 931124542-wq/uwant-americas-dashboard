@@ -32,6 +32,7 @@ jobs:
           node tests/market-continuity.cjs
           node tests/all-channel-catalog.cjs
           node tests/coverage-system.cjs
+          node tests/market-shipment-shares.cjs
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:

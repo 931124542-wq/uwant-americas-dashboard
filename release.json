@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-10-market-presentation",
+  "version": "2026-11-10-brand-share-and-local-shipments",
   "dataAsOf": "2026-10-28",
   "baseCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "products": 466,
@@ -41,7 +41,9 @@
     "source-model-verification-levels",
     "market-first-presentation",
     "source-exact-snapshot-export",
-    "searchable-paginated-brand-analysis"
+    "searchable-paginated-brand-analysis",
+    "uwant-highlighted-brand-donut",
+    "local-only-shipment-structure"
   ],
   "auditBaseline": "4a4cb86",
   "auditReport": "docs/data-audit-2026-10-29.md",
@@ -122,5 +124,6 @@
     "Mercado search terms entry reports unavailable data explicitly",
     "failed expansion asset shows a baseline-data warning"
   ],
-  "marketPresentation": "Market-first hierarchy; separate snapshot and calendar-history views; bounded source-exact charts and complete drill/export; focused product/brand routes; collapsed operations navigation"
+  "marketPresentation": "Market-first hierarchy; separate snapshot and calendar-history views; bounded source-exact charts and complete drill/export; focused product/brand routes; collapsed operations navigation",
+  "shipmentDataPolicy": "No bundled shipment records; actual monthly SKU summaries stay in the personal browser. Shipment structure and platform sample share have independent denominators and periods."
 }
