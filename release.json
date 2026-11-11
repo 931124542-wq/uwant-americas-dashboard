@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-11-unified-market-and-research-supplement",
+  "version": "2026-11-11-market-data-availability",
   "dataAsOf": "2026-10-28",
   "baseCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "products": 466,
@@ -52,7 +52,8 @@
     "local-actual-sales-inventory-linkage",
     "mobile-product-summary-cards",
     "amazon-mercado-shared-market-layout",
-    "isolated-source-history-supplement"
+    "isolated-source-history-supplement",
+    "explicit-uwant-and-market-data-availability"
   ],
   "auditBaseline": "4a4cb86",
   "auditReport": "docs/data-audit-2026-10-29.md",

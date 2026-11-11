@@ -35,6 +35,7 @@ jobs:
           node tests/market-shipment-shares.cjs
           node tests/market-decision.cjs
           node tests/amazon-overview.cjs
+          node tests/market-missing-data.cjs
           node tests/local-operating.cjs
       - name: Configure Pages
         uses: actions/configure-pages@v5
