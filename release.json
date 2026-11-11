@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-11-market-decision-workspace",
+  "version": "2026-11-11-unified-market-and-research-supplement",
   "dataAsOf": "2026-10-28",
   "baseCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "products": 466,
@@ -50,7 +50,9 @@
     "seven-country-research-readiness",
     "saved-local-research-and-quick-scopes",
     "local-actual-sales-inventory-linkage",
-    "mobile-product-summary-cards"
+    "mobile-product-summary-cards",
+    "amazon-mercado-shared-market-layout",
+    "isolated-source-history-supplement"
   ],
   "auditBaseline": "4a4cb86",
   "auditReport": "docs/data-audit-2026-10-29.md",
@@ -81,7 +83,7 @@
     "seller_and_receiving_context",
     "raw-provider-usage-and-credit-receipts"
   ],
-  "publicationBoundaryReason": "User authorized normalized research publication on 2026-11-09; raw responses, billing, internal business data and credentials remain excluded",
+  "publicationBoundaryReason": "User authorized this normalized research supplement for public website publication on 2026-11-11; raw provider responses, credits, internal operations and credentials stay excluded",
   "publicEvidenceDateNote": "2026-11-05 applies to the PX251C public quote recheck; other records retain their individual source dates.",
   "mercado": {
     "source": "大麦数据 MCP，复用用户已保存的规范化结果",
@@ -133,5 +135,18 @@
   ],
   "marketPresentation": "Market-first hierarchy; separate snapshot and calendar-history views; bounded source-exact charts and complete drill/export; focused product/brand routes; collapsed operations navigation",
   "shipmentDataPolicy": "No bundled shipment records; actual monthly SKU summaries stay in the personal browser. Shipment structure and platform sample share have independent denominators and periods.",
-  "decisionDataPolicy": "No new source data or MCP responses published. Original category market outputs retained. Sample scopes, fixed historical cohorts and personal actual operating records remain independent."
+  "decisionDataPolicy": "No new source data or MCP responses published. Original category market outputs retained. Sample scopes, fixed historical cohorts and personal actual operating records remain independent.",
+  "researchSupplement": {
+    "source": "SellerSprite",
+    "queriedAt": "2026-11-11",
+    "contentProducts": 5,
+    "detailProducts": 1,
+    "historicalProducts": 3,
+    "historicalProductMonths": 52,
+    "newListings": 0,
+    "newQualifiedMonthlyRows": 0,
+    "imagesAdded": 3,
+    "originalHistoricalRowsUnchanged": 4938,
+    "rawResponsesIncluded": false
+  }
 }

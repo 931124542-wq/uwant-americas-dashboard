@@ -1,0 +1,19 @@
+const assert=require('assert/strict'),fs=require('fs'),vm=require('vm'),cp=require('child_process'),fixture=require('./library-fixture.cjs');
+function context(source){const c=fixture();c.location={hostname:'public.example'};for(const f of ['mercado-data.js','market-insights.js','research-overlay.js'])vm.runInContext(fs.readFileSync(f,'utf8'),c);vm.runInContext(source,c);c.ResearchOverlay.apply(c,c.UWANT_PUBLISHED_RESEARCH);c.REVIEW_DATA.history=c.AmazonResearch.mergeHistory(c.REVIEW_HISTORY);return c;}
+const current=context(fs.readFileSync('published-research-data.js','utf8')),before=context(cp.execFileSync('git',['show','a35ff5a:published-research-data.js'],{encoding:'utf8',maxBuffer:30e6}));
+assert.equal(JSON.stringify(current.REVIEW_DATA.history.rows),JSON.stringify(before.REVIEW_DATA.history.rows),'Publication must not change existing historical values or eligibility');
+let scopes=0;for(const country of ['MX','CA','US','BR'])for(const category of ['wash','vacuum','fabric','mattress'])for(const shareMetric of ['revenue','units']){
+ const s={...current.ResearchModel.defaults,page:'market',view:'overview',country,platform:'amazon',category,shareMetric,dataset:'2026-09',startMonth:'2026-01',endMonth:'2026-09'};
+ const c=current.catalog(s),x=current.MarketSummary.overviewStats(c,s),r=current.SampleSalesShares.report(current.REVIEW_DATA.history,s),old=before.SampleSalesShares.report(before.REVIEW_DATA.history,s);
+ assert.equal(x.selected.total,r.total);assert.equal(r.total,old.total);assert.equal(x.selected.parents,r.parents);assert.equal(x.selected.selected.length,r.selected.length);
+ assert.equal(current.MarketSummary.overviewStats(c,{...s,evidenceQuery:'no match',evidenceBrand:'not a brand'}).selected.total,r.total);
+ const strict=current.MarketSummary.overviewStats(c,{...s,productType:category==='fabric'?'portable':category==='vacuum'?'dry':category}),strictSource=current.SampleSalesShares.report(current.REVIEW_DATA.history,{...s,productType:category==='fabric'?'portable':category==='vacuum'?'dry':category});assert.equal(strict.selected.total,strictSource.total);
+ const html=current.MarketSummary.overview(c,s);assert(html.includes('market-kpi-grid'));assert(html.includes('原类目报告与来源参考'));assert(!html.includes('undefined'));assert.equal((html.match(/class="market-kpi"/g)||[]).length,4);scopes++;
+}
+const P=current.UWANT_PUBLISHED_RESEARCH,latest=P.legacyCapture.listings.flatMap(r=>(r.capturedHistory||[]).filter(h=>h.retrievedAt?.startsWith('2026-11-11')).map(h=>({...h,country:r.country,asin:r.productId})));
+assert.equal(latest.length,52);assert.equal(new Set(latest.map(h=>[h.country,h.asin,h.month].join('|'))).size,52);for(const h of latest){assert.equal(h.unitsEligible,false);assert.equal(h.revenueEligible,false);assert.equal(h.parentAsin,null);assert(h.month<='2026-10');assert.notEqual(h.asin,'B0DGRZFHQ6');}
+for(const [co,id] of [['mx','B0FX9CDKGB'],['mx','B0FX9J2XNX'],['ca','B0D3PY11PW']]){const p=P.legacyCapture.evidencePatches.find(x=>x.country===co&&x.productId===id);assert(p.imageUrl.startsWith('https://'));assert.equal(p.imageEvidence.modelVerified,false);assert(!p.imageEvidence.locator);}
+const wap=P.legacyCapture.evidencePatches.find(x=>x.country==='br'&&x.productId==='B08FXSNGB8');assert(wap.title.includes('127V'));assert(wap.claims.some(x=>x.value.includes('160 mL')&&x.referenceOnly));
+const cal=P.legacyCapture.listings.find(x=>x.country==='ca'&&x.productId==='B0D3PY11PW');assert.equal(cal.historicalParentEvents.length,2);assert.equal(cal.historicalParentEvents[0].date,cal.historicalParentEvents[1].date);
+const txt=fs.readFileSync('published-research-data.js','utf8');assert(!/chargedUnits|remainingUnits|"billing"|\/Users\/|ss-CA-JV35|ss-MX-content/.test(txt));
+console.log('PASS: '+scopes+' country/category/metric scopes; headline-chart denominators, strict type filters, 52 isolated observations, image provenance, parent conflict and publication privacy');
