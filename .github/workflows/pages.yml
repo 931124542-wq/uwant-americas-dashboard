@@ -33,6 +33,8 @@ jobs:
           node tests/all-channel-catalog.cjs
           node tests/coverage-system.cjs
           node tests/market-shipment-shares.cjs
+          node tests/market-decision.cjs
+          node tests/local-operating.cjs
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:

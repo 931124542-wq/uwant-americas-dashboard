@@ -18,7 +18,9 @@
    if(empty&&shares&&!shares.querySelector('.market-coverage-fallback')){const c=root.decisionCatalog(),scope=root.MarketIntelligence.cleanScope(root.decisionState(c)),fallback=document.createElement('div');fallback.className='market-analysis-grid market-coverage-fallback';fallback.innerHTML=root.MarketSummary.brandChart(c,scope)+root.MarketWorkbench.pricing(c,scope,{market:true});shares.append(fallback);root.MarketWorkbench.wire(fallback,c,scope,change,download);}
   }
   const exportButton=document.getElementById('export');exportButton.textContent=s.page==='market'&&s.view==='products'?'↓ 导出商品':!admin&&s.page==='brands'?'↓ 导出品牌':overview&&s.platform==='ml'?'↓ 导出统计样本':'↓ 导出数据';
+  root.MarketDecisionUI?.mount(s,change,download);
   root.UwantShipments?.mount(s,change,download);
+  root.LocalOperating?.mount(s,change,download);
   document.querySelectorAll('.market-block-heading>span:first-child').forEach(x=>x.classList.add('market-section-number'));
  }
  root.MarketPresentation={sync};

@@ -4,7 +4,8 @@
  const countries=['MX','CA','US','BR','AR','CL','CO'],platforms=['amazon','ml','bestbuy','official','retail','all'],categories=['wash','vacuum','fabric','mattress'];
  const month=v=>/^20\d{2}-(0[1-9]|1[0-2])$/.test(v),currentMonth=()=>new Date().toISOString().slice(0,7),key='uwant.personal.shipments.v1';
  const e=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),n=x=>new Intl.NumberFormat('zh-CN').format(x);
- function parseCSV(text){
+ function parseCSV(text,customFields){
+  const required=customFields||fields;
   if(typeof text!=='string'||text.length>5000000)throw Error('请选择5MB以内的CSV月度汇总表。');
   const rows=[];let row=[],cell='',quoted=false,closed=false;
   text=text.replace(/^\uFEFF/,'');
@@ -14,9 +15,9 @@
    else if(c==='\r'||c==='\n'){if(c==='\r'&&text[i+1]==='\n')i++;row.push(cell);if(row.some(v=>v.trim()))rows.push(row);row=[];cell='';closed=false;}
    else{if(closed)throw Error('CSV引号后只能接逗号或换行。');cell+=c;}}
   if(quoted)throw Error('CSV引号未闭合。');if(cell||row.length){row.push(cell);if(row.some(v=>v.trim()))rows.push(row);}
-  const header=rows.shift()?.map(x=>x.trim());if(!header||new Set(header).size!==header.length||fields.some(f=>!header.includes(f)))throw Error('缺少必需字段，请使用出货模板。');
+  const header=rows.shift()?.map(x=>x.trim());if(!header||new Set(header).size!==header.length||required.some(f=>!header.includes(f)))throw Error('缺少必需字段，请使用出货模板。');
   if(!rows.length)throw Error('模板尚无出货记录。');if(rows.length>20000)throw Error('单次最多导入20,000条月度型号汇总。');
-  return validate(rows.map((r,i)=>{if(r.length!==header.length)throw Error('第'+(i+2)+'行列数不匹配。');return Object.fromEntries(fields.map(f=>[f,r[header.indexOf(f)]]));}));
+  const mapped=rows.map((r,i)=>{if(r.length!==header.length)throw Error('第'+(i+2)+'行列数不匹配。');return Object.fromEntries(required.map(f=>[f,r[header.indexOf(f)]]));});return customFields?mapped:validate(mapped);
  }
  function validate(input){
   if(!Array.isArray(input)||!input.length||input.length>20000)throw Error('出货记录为空或超过单次限制。');
@@ -51,5 +52,5 @@
   const ownSection=[...document.querySelectorAll('.market-block')].find(el=>el.querySelector('.market-block-heading h2')?.textContent==='UWANT对标');if(!ownSection||ownSection.querySelector('.shipment-overview'))return;ownSection.insertAdjacentHTML('beforeend',panel(s));const el=ownSection.querySelector('.shipment-overview');el.querySelector('[data-shipment-manage]')?.addEventListener('click',()=>change({page:'market',view:'data'}));const update=()=>change({shipmentStartMonth:el.querySelector('[data-shipment-start]').value,shipmentEndMonth:el.querySelector('[data-shipment-end]').value});el.querySelector('[data-shipment-start]')?.addEventListener('change',update);el.querySelector('[data-shipment-end]')?.addEventListener('change',update);el.querySelector('[data-shipment-export]')?.addEventListener('click',()=>{const r=report(load(),s);download([fields,...r.selected.map(x=>fields.map(f=>x[f]))],'UWANT_shipment_'+s.country+'_'+s.category+'_'+r.start+'_'+r.end+'.csv');});
  }
  root.addEventListener?.('storage',ev=>{if(ev.key===key||ev.key===null){loaded=false;memory=[];root.render?.();}});
- root.UwantShipments={fields,parseCSV,validate,report,mount,storageKey:key};if(typeof module!=='undefined')module.exports=root.UwantShipments;
+ root.UwantShipments={fields,parseCSV,validate,report,mount,load,storageKey:key};if(typeof module!=='undefined')module.exports=root.UwantShipments;
 })(typeof window==='undefined'?globalThis:window);
