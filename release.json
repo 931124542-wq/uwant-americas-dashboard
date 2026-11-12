@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-12-seven-market-expansion",
+  "version": "2026-11-12-amazon-country-consistency",
   "dataAsOf": "2026-10-28",
   "baseCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "products": 466,
@@ -58,7 +58,8 @@
     "query-filter-pagination-isolation",
     "failed-page-coverage-contract",
     "reviewed-household-forms",
-    "independent-supplement-history-dates"
+    "independent-supplement-history-dates",
+    "consistent-amazon-country-kpis-and-chart-states"
   ],
   "auditBaseline": "4a4cb86",
   "auditReport": "docs/data-audit-2026-10-29.md",
@@ -171,5 +172,35 @@
     "rawResponsesIncluded": false,
     "billingIncluded": false,
     "auditReport": "docs/market-expansion-2026-11-12.md"
+  },
+  "amazonCountryConsistency": {
+    "countries": [
+      "CA",
+      "MX",
+      "US",
+      "BR"
+    ],
+    "categories": [
+      "vacuum",
+      "wash",
+      "fabric",
+      "mattress"
+    ],
+    "referenceCountry": "CA",
+    "financialKpisUnchanged": true,
+    "stableKpis": [
+      "revenue",
+      "units",
+      "monthEndMedianPrice",
+      "qualifiedParents"
+    ],
+    "stableCharts": [
+      "brandSalesShare",
+      "priceBandSalesShare"
+    ],
+    "catalogueCountsReplaceSales": false,
+    "originalMonthlyFactsUnchanged": true,
+    "sourceSnapshotsRemainSeparate": true,
+    "report": "docs/amazon-country-consistency-2026-11-12.md"
   }
 }
