@@ -29,6 +29,9 @@ jobs:
         run: |
           node tests/public-release-contract.cjs
           node tests/published-research.cjs
+          node tests/market-increment.cjs
+          node tests/research-query-pages.cjs
+          python3 tests/test_research_intake.py
           node tests/market-continuity.cjs
           node tests/all-channel-catalog.cjs
           node tests/coverage-system.cjs

@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-11-market-data-availability",
+  "version": "2026-11-12-seven-market-expansion",
   "dataAsOf": "2026-10-28",
   "baseCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "products": 466,
@@ -53,18 +53,23 @@
     "mobile-product-summary-cards",
     "amazon-mercado-shared-market-layout",
     "isolated-source-history-supplement",
-    "explicit-uwant-and-market-data-availability"
+    "explicit-uwant-and-market-data-availability",
+    "dated-multi-market-intake",
+    "query-filter-pagination-isolation",
+    "failed-page-coverage-contract",
+    "reviewed-household-forms",
+    "independent-supplement-history-dates"
   ],
   "auditBaseline": "4a4cb86",
   "auditReport": "docs/data-audit-2026-10-29.md",
   "auditCheckpoint": "ffafdce8be300ed104c5db299f249c25c2053929",
   "operationsRevision": "d86f8e19420e",
-  "uiUpdatedAt": "2026-11-11",
+  "uiUpdatedAt": "2026-11-12",
   "previousPublicCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "verifiedDevelopmentCommit": "e0931bd7d7f9c0086348f3a3bf67683388c822ec",
   "publicPackage": true,
   "privateCaptureIncluded": false,
-  "publicProductEvidenceAsOf": "2026-11-05",
+  "publicProductEvidenceAsOf": "2026-11-12",
   "productionDataUnchanged": false,
   "verifiedDevelopmentCommits": [
     "48fdf41",
@@ -84,14 +89,14 @@
     "seller_and_receiving_context",
     "raw-provider-usage-and-credit-receipts"
   ],
-  "publicationBoundaryReason": "User authorized this normalized research supplement for public website publication on 2026-11-11; raw provider responses, credits, internal operations and credentials stay excluded",
-  "publicEvidenceDateNote": "2026-11-05 applies to the PX251C public quote recheck; other records retain their individual source dates.",
+  "publicationBoundaryReason": "Existing user authorization covers normalized research website updates; all provider responses, usage receipts, credentials and private operating records remain outside this public package.",
+  "publicEvidenceDateNote": "Latest supplement date; every listing, price and history retains its individual source date. The 2026-11-12 official CA offer does not refresh older quotes.",
   "mercado": {
-    "source": "大麦数据 MCP，复用用户已保存的规范化结果",
+    "source": "大麦数据MCP授权规范化研究档案及增量采集；原始响应本机保留",
     "sourceDate": "2026-11-06",
-    "records": 6207,
-    "countingRepresentatives": 5081,
-    "productsWithMonthlyOrders": 613,
+    "records": 7304,
+    "countingRepresentatives": 5059,
+    "productsWithMonthlyOrders": 930,
     "countries": [
       "MX",
       "BR",
@@ -110,18 +115,19 @@
     "monthlyRevenueAvailable": false,
     "monthlyPriceAvailable": false,
     "rawResponsesIncluded": false,
-    "newPaidCalls": 0,
-    "countingScope": "Current source snapshot; duplicate/conflicting signals excluded; listing and historical-profile totals are research coverage, not full-market denominators"
+    "countingScope": "Current source snapshot; duplicate/conflicting signals excluded; listing and historical-profile totals are research coverage, not full-market denominators",
+    "retainedSourceHistoryProfiles": 931,
+    "latestResearchDate": "2026-11-12"
   },
   "publicDataUnchanged": false,
   "privateResearchPublication": "User authorized normalized product research publication on 2026-11-09; raw responses, billing and internal operations remain excluded",
   "dataDatePolicy": "Per-record dates retained; a code release does not refresh quotes or sales",
   "researchPublication": {
     "sourceAsOf": "2026-11-06",
-    "mlListings": 6207,
-    "mlHistoricalProducts": 613,
-    "newSourceRecords": 5939,
-    "priorAmazonListings": 237,
+    "mlListings": 7304,
+    "mlHistoricalProducts": 930,
+    "newSourceRecords": 7065,
+    "priorAmazonListings": 238,
     "retainedAmazonMonths": 278
   },
   "marketContinuity": "Original category-market components and source scopes retained; normalized dated product snapshots restored; incomplete refresh cannot erase same-listing evidence",
@@ -136,7 +142,7 @@
   ],
   "marketPresentation": "Market-first hierarchy; separate snapshot and calendar-history views; bounded source-exact charts and complete drill/export; focused product/brand routes; collapsed operations navigation",
   "shipmentDataPolicy": "No bundled shipment records; actual monthly SKU summaries stay in the personal browser. Shipment structure and platform sample share have independent denominators and periods.",
-  "decisionDataPolicy": "No new source data or MCP responses published. Original category market outputs retained. Sample scopes, fixed historical cohorts and personal actual operating records remain independent.",
+  "decisionDataPolicy": "Normalized authorized product research and source calendar buckets have independent dates and eligibility; original Amazon historical facts and private actual operating data remain separate.",
   "researchSupplement": {
     "source": "SellerSprite",
     "queriedAt": "2026-11-11",
@@ -149,5 +155,21 @@
     "imagesAdded": 3,
     "originalHistoricalRowsUnchanged": 4938,
     "rawResponsesIncluded": false
+  },
+  "auditedFromPublicCommit": "e3d8ccd632345bfd3d08294aa62e19ac4a72394e",
+  "marketExpansion": {
+    "sourceDate": "2026-11-12",
+    "newListings": 1125,
+    "removedPriorListings": 28,
+    "correctedPriorCategories": 6,
+    "datedSourceObservations": 2416,
+    "newHistoricalProducts": 318,
+    "newSourceMonthBuckets": 3256,
+    "archiveHistoriesRetained": true,
+    "marketSnapshotDate": "2026-11-06",
+    "normalizedOfficialRetailProductsAdded": 1,
+    "rawResponsesIncluded": false,
+    "billingIncluded": false,
+    "auditReport": "docs/market-expansion-2026-11-12.md"
   }
 }

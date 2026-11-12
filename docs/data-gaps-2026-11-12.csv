@@ -1,0 +1,77 @@
+country,platform,category,productId,sourceBrand,claimedModel,archivePriceBand,currency,sourceDate,localKeyword,gapReasons,nextAction
+MX,ml,wash,MLM2412977689,Tineco,Ifloor3,4000–<8000,MXN,2026-11-05,Ifloor3 aspiradora trapeadora,no_source_history;parameters_unknown,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+MX,ml,wash,MLM1991211469,Tineco,floor One S2,4000–<8000,MXN,2026-11-05,floor One S2 aspiradora trapeadora,no_source_history;parameters_unknown,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+MX,ml,wash,MLM2002051493,Tineco,,4000–<8000,MXN,2026-11-12,Tineco aspiradora trapeadora,no_source_history;model_unidentified;parameters_unknown,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+MX,ml,vacuum,MLM44719607,Deerma,,500–<1000,MXN,2026-11-05,Deerma aspiradora vertical inalámbrica,no_source_history;model_unidentified,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+MX,ml,vacuum,MLM19711783,Gaabor,,500–<1000,MXN,2026-11-05,Gaabor aspiradora vertical inalámbrica,no_source_history;model_unidentified,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+MX,ml,vacuum,MLM74218997,LceA,,500–<1000,MXN,2026-11-05,LceA aspiradora vertical inalámbrica,no_source_history;model_unidentified;parameters_unknown,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+MX,ml,fabric,MLM5037197398,Bissell,Little Green,2000–<4000,MXN,2026-11-12,Little Green limpiador tapicería portátil,no_source_history;parameters_unknown,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+MX,ml,fabric,MLM5402160806,Bissell,Little Green Pet Pro,2000–<4000,MXN,2026-11-06,Little Green Pet Pro limpiador tapicería portátil,no_source_history;parameters_unknown,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+MX,ml,fabric,MLM5036895480,Bissell,Little Green,2000–<4000,MXN,2026-11-12,Little Green limpiador tapicería portátil,no_source_history;parameters_unknown,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+MX,ml,mattress,MLM6263155768,Genérica,,500–<1000,MXN,2026-11-12,Genérica aspiradora ácaros,no_source_history;model_unidentified;parameters_unknown,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+MX,ml,mattress,MLM5379347416,Geneal,,500–<1000,MXN,2026-11-12,Geneal aspiradora ácaros,no_source_history;model_unidentified;parameters_unknown,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+MX,ml,mattress,MLM2947876797,Uwant,M600,2000–<4000,MXN,2026-11-06,M600 aspiradora ácaros,no_source_history,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+BR,ml,wash,MLB2010106269,Tineco,Floor One S7,2400–<4800,BRL,2026-11-12,Floor One S7 limpadora pisos,no_source_history,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+BR,ml,wash,MLB4966484707,Tineco,Floor One S5,2400–<4800,BRL,2026-11-12,Floor One S5 limpadora pisos,no_source_history;parameters_unknown,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+BR,ml,wash,MLB4320311989,Tineco,Floor One S7 Steam,2400–<4800,BRL,2026-11-12,Floor One S7 Steam limpadora pisos,no_source_history,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+BR,ml,vacuum,MLB23414010,Wap,,0–<300,BRL,2026-11-05,Wap aspirador sem fio vertical,no_source_history;model_unidentified,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+BR,ml,vacuum,MLB18781058,Electrolux,,0–<300,BRL,2026-11-05,Electrolux aspirador sem fio vertical,no_source_history;model_unidentified,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+BR,ml,vacuum,MLB18238727,Electrolux,,0–<300,BRL,2026-11-05,Electrolux aspirador sem fio vertical,no_source_history;model_unidentified,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+BR,ml,fabric,MLB2780836242,Mi Uwant,B100,2400–<4800,BRL,2026-11-06,B100 extratora portátil,no_source_history;parameters_unknown,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+BR,ml,fabric,MLB4179350852,Xiaomi,B100,1200–<2400,BRL,2026-11-06,B100 extratora portátil,no_source_history;parameters_unknown,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+BR,ml,fabric,MLB23493012,Xiaomi,B100,unknown,BRL,2026-11-06,B100 extratora portátil,no_source_history;parameters_unknown,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+BR,ml,mattress,MLB3647235029,Luatek,,0–<300,BRL,2026-11-12,Luatek aspirador ácaros,no_source_history;model_unidentified,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+BR,ml,mattress,MLB2036988475,Genérica,,0–<300,BRL,2026-11-12,Genérica aspirador ácaros,no_source_history;model_unidentified,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+BR,ml,mattress,MLB4580365676,Luatek,,0–<300,BRL,2026-11-12,Luatek aspirador ácaros,no_source_history;model_unidentified,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+AR,ml,wash,MLA1467693239,Tineco,Ifloor 3 Breeze Complete,400000–<800000,ARS,2026-11-05,Ifloor 3 Breeze Complete aspiradora trapeadora,no_source_history;parameters_unknown,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+AR,ml,wash,MLA2024697297,Tineco,Ifloor 2,400000–<800000,ARS,2026-11-12,Ifloor 2 aspiradora trapeadora,no_source_history;parameters_unknown,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+AR,ml,wash,MLA2068797943,Tineco,Floor One S7 Stretch,800000+,ARS,2026-11-12,Floor One S7 Stretch aspiradora trapeadora,no_source_history;parameters_unknown,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+AR,ml,vacuum,MLA913598101,Liliana,,100000–<200000,ARS,2026-11-05,Liliana aspiradora vertical inalámbrica,no_source_history;model_unidentified,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+AR,ml,vacuum,MLA1473097081,Gadnic,,100000–<200000,ARS,2026-11-05,Gadnic aspiradora vertical inalámbrica,no_source_history;model_unidentified;parameters_unknown,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+AR,ml,vacuum,MLA36220624,Belarra,,50000–<100000,ARS,2026-11-05,Belarra aspiradora vertical inalámbrica,no_source_history;model_unidentified,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+AR,ml,fabric,MLA2007403305,Uwant,B100,200000–<400000,ARS,2026-11-06,B100 limpiador tapicería portátil,no_source_history,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+AR,ml,fabric,MLA1483884153,Gadnic,,100000–<200000,ARS,2026-11-05,Gadnic limpiador tapicería portátil,no_source_history;model_unidentified,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+AR,ml,fabric,MLA2032932514,Gadnic,,100000–<200000,ARS,2026-11-05,Gadnic limpiador tapicería portátil,no_source_history;model_unidentified,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+AR,ml,mattress,MLA1777462457,Genérica,,50000–<100000,ARS,2026-11-06,Genérica aspiradora ácaros,no_source_history;model_unidentified,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+AR,ml,mattress,MLA3484879696,Genérica,,0–<50000,ARS,2026-11-06,Genérica aspiradora ácaros,no_source_history;model_unidentified,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+AR,ml,mattress,MLA2345804564,Generic,,50000–<100000,ARS,2026-11-06,Generic aspiradora ácaros,no_source_history;model_unidentified,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+CL,ml,wash,MLC2790905926,Tineco,Floor One S5,480000+,CLP,2026-11-06,Floor One S5 aspiradora trapeadora,no_source_history;parameters_unknown,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+CL,ml,wash,MLC3169088268,Tineco,Floor One S5,120000–<240000,CLP,2026-11-06,Floor One S5 aspiradora trapeadora,no_source_history,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+CL,ml,wash,MLC2028750603,Dreame,H12 Pro Flexreach,240000–<480000,CLP,2026-11-06,H12 Pro Flexreach aspiradora trapeadora,no_source_history;parameters_unknown,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+CL,ml,vacuum,MLC18238727,Electrolux,,30000–<60000,CLP,2026-11-05,Electrolux aspiradora vertical inalámbrica,no_source_history;model_unidentified,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+CL,ml,vacuum,MLC18723888,Electrolux,,60000–<120000,CLP,2026-11-05,Electrolux aspiradora vertical inalámbrica,no_source_history;model_unidentified,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+CL,ml,vacuum,MLC55227679,Electrolux,,30000–<60000,CLP,2026-11-05,Electrolux aspiradora vertical inalámbrica,no_source_history;model_unidentified,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+CL,ml,fabric,MLC2232913904,Uwant,B100,240000–<480000,CLP,2026-11-06,B100 limpiador tapicería portátil,no_source_history,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+CL,ml,fabric,MLC2007403305,Uwant,B100,240000–<480000,CLP,2026-11-06,B100 limpiador tapicería portátil,no_source_history,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+CL,ml,fabric,MLC3190307886,Bissell,Little Green,120000–<240000,CLP,2026-11-06,Little Green limpiador tapicería portátil,no_source_history;parameters_unknown,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+CL,ml,mattress,MLC2821098776,Generic,,30000–<60000,CLP,2026-11-06,Generic aspiradora ácaros,no_source_history;model_unidentified,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+CL,ml,mattress,MLC2748821444,SMDJPU,,0–<30000,CLP,2026-11-06,SMDJPU aspiradora ácaros,no_source_history;model_unidentified,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+CL,ml,mattress,MLC1571445163,ACARID REMOVER,,0–<30000,CLP,2026-11-05,ACARID REMOVER aspiradora ácaros,no_source_history;model_unidentified,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+CO,ml,wash,MCO1492736499,Tineco,Ifloor 2,800000–<1600000,COP,2026-11-05,Ifloor 2 aspiradora trapeadora,no_source_history;parameters_unknown,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+CO,ml,wash,MCO1545768835,Tineco,Ifloor 2,800000–<1600000,COP,2026-11-05,Ifloor 2 aspiradora trapeadora,no_source_history;parameters_unknown,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+CO,ml,wash,MCO1454363863,Tineco,Ifloor 2,800000–<1600000,COP,2026-11-05,Ifloor 2 aspiradora trapeadora,no_source_history;parameters_unknown,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+CO,ml,vacuum,MCO18761378,Electrolux,,100000–<200000,COP,2026-11-05,Electrolux aspiradora vertical inalámbrica,no_source_history;model_unidentified,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+CO,ml,vacuum,MCO3100962710,Electrolux,,400000–<800000,COP,2026-11-05,Electrolux aspiradora vertical inalámbrica,no_source_history;model_unidentified;parameters_unknown,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+CO,ml,vacuum,MCO1537697247,Kärcher,,100000–<200000,COP,2026-11-05,Kärcher aspiradora vertical inalámbrica,no_source_history;model_unidentified;parameters_unknown,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+CO,ml,fabric,MCO2007403305,Uwant,B100,800000–<1600000,COP,2026-11-06,B100 limpiador tapicería portátil,no_source_history,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+CO,ml,fabric,MCO1383009491,Uwant,B100,800000–<1600000,COP,2026-11-06,B100 limpiador tapicería portátil,no_source_history,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+CO,ml,fabric,MCO17796643,Hoover,,800000–<1600000,COP,2026-11-05,Hoover limpiador tapicería portátil,no_source_history;model_unidentified;parameters_unknown,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+CO,ml,mattress,MCO1627247513,Uwant,,400000–<800000,COP,2026-11-06,Uwant aspiradora ácaros,no_source_history;model_unidentified,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+CO,ml,mattress,MCO1628917829,Uwant,,400000–<800000,COP,2026-11-06,Uwant aspiradora ácaros,no_source_history;model_unidentified,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+CO,ml,mattress,MCO2856887660,Uwant,,400000–<800000,COP,2026-11-06,Uwant aspiradora ácaros,no_source_history;model_unidentified,先核型号/地区版本，再取缺失历史；不回填价格或缺月
+MX,amazon,wash,B0DJ7LFXC6,Roborock,F25 ACE,unknown,MXN,2026-10-30,F25 ACE,calendar_history_or_parent_attribution_unresolved;source_currently_unavailable,取确切月份与父体沿革证据；不把30天信号当自然月，不解除隔离
+MX,amazon,vacuum,B0H1ZB67TP,UWANT,V500,unknown,MXN,2026-11-03,V500,calendar_history_or_parent_attribution_unresolved;source_currently_unavailable,取确切月份与父体沿革证据；不把30天信号当自然月，不解除隔离
+MX,amazon,fabric,B0HGDRZMSW,UWANT,,unknown,MXN,2026-11-03,limpiadora tapicería portátil,calendar_history_or_parent_attribution_unresolved;source_currently_unavailable,取确切月份与父体沿革证据；不把30天信号当自然月，不解除隔离
+MX,amazon,mattress,B0D5LDYQFZ,JIGOO,T600,unknown,MXN,2026-11-05,T600,calendar_history_or_parent_attribution_unresolved;source_currently_unavailable,取确切月份与父体沿革证据；不把30天信号当自然月，不解除隔离
+CA,amazon,wash,B09JF3BR78,Tineco,Floor ONE S5 Combo,unknown,CAD,2026-11-06,Floor ONE S5 Combo,calendar_history_or_parent_attribution_unresolved;source_currently_unavailable,取确切月份与父体沿革证据；不把30天信号当自然月，不解除隔离
+CA,amazon,vacuum,B0DDJZ7ZB8,Shark,Detect Clean & Empty,unknown,CAD,2026-10-30,Detect Clean & Empty,calendar_history_or_parent_attribution_unresolved;source_currently_unavailable,取确切月份与父体沿革证据；不把30天信号当自然月，不解除隔离
+CA,amazon,fabric,B0GQPLFH1R,UWANT,Y100 Steam,unknown,CAD,2026-11-05,Y100 Steam,calendar_history_or_parent_attribution_unresolved;source_currently_unavailable,取确切月份与父体沿革证据；不把30天信号当自然月，不解除隔离
+CA,amazon,mattress,B0D9VVTNPR,JIMMY,BX8,unknown,CAD,2026-11-05,BX8,calendar_history_or_parent_attribution_unresolved;source_currently_unavailable,取确切月份与父体沿革证据；不把30天信号当自然月，不解除隔离
+US,amazon,wash,B0BLGR4ZL7,Tineco,Floor ONE S7 Pro,unknown,USD,2026-11-06,Floor ONE S7 Pro,calendar_history_or_parent_attribution_unresolved;source_currently_unavailable,取确切月份与父体沿革证据；不把30天信号当自然月，不解除隔离
+US,amazon,vacuum,B0HJZ46WNL,roborock,H60,unknown,USD,2026-11-06,H60,calendar_history_or_parent_attribution_unresolved;source_currently_unavailable,取确切月份与父体沿革证据；不把30天信号当自然月，不解除隔离
+US,amazon,fabric,B0H4Q6237Y,STARRYBOT,Spot Clean,unknown,USD,2026-11-06,Spot Clean,calendar_history_or_parent_attribution_unresolved;source_currently_unavailable,取确切月份与父体沿革证据；不把30天信号当自然月，不解除隔离
+US,amazon,mattress,B0F65XP5NZ,Jimmy,BX7 Pro,unknown,USD,2026-11-06,BX7 Pro,calendar_history_or_parent_attribution_unresolved;source_currently_unavailable,取确切月份与父体沿革证据；不把30天信号当自然月，不解除隔离
+BR,amazon,wash,B0FCRJ3SYJ,dreame,H12 Pro,unknown,BRL,2026-11-06,H12 Pro,calendar_history_or_parent_attribution_unresolved;source_currently_unavailable,取确切月份与父体沿革证据；不把30天信号当自然月，不解除隔离
+BR,amazon,vacuum,B0GY4H64Y1,dreame,H60,unknown,BRL,2026-11-06,H60,calendar_history_or_parent_attribution_unresolved;source_currently_unavailable,取确切月份与父体沿革证据；不把30天信号当自然月，不解除隔离
+BR,amazon,fabric,B0G5PYYLXZ,WAP,SPOT CLEANER POWER BRUSH,unknown,BRL,2026-11-05,SPOT CLEANER POWER BRUSH,calendar_history_or_parent_attribution_unresolved;source_currently_unavailable,取确切月份与父体沿革证据；不把30天信号当自然月，不解除隔离
+BR,amazon,mattress,,,,unknown,BRL,,aspirador ácaros,calendar_history_or_parent_attribution_unresolved;source_currently_unavailable,取确切月份与父体沿革证据；不把30天信号当自然月，不解除隔离

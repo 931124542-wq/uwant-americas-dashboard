@@ -12,9 +12,10 @@ if not as_of:raise ValueError('Supply --as-of with the actual retrieval date or 
 date.fromisoformat(as_of)
 from intake_scope import review,norm
 from intake_quality import classify
+from research_query import query_key
 base=json.loads((work/'baseline-ml.json').read_text());baseline={(r['country'],'ml',r['product_code']):r for r in base['records']};markets={'MLM':'MX','MLB':'BR','MLA':'AR','MLC':'CL','MCO':'CO'}
-cache_known={tuple(k)for k in json.loads((work/'cache-known-asin-keys.json').read_text())}
-ssbaseline={(r['country'],'amazon',r['id']) for r in json.loads((work/'baseline-amazon.json').read_text())}
+cache_known={tuple(k)for k in json.loads((work/'cache-known-asin-keys.json').read_text())} if (work/'cache-known-asin-keys.json').exists() else set()
+ssbaseline={(r['country'],'amazon',r.get('productId')or r.get('id')) for r in json.loads((work/'baseline-amazon.json').read_text())}
 
 def ss_type(t,cat):
  x=classify(t,cat);return x["category"] if x["status"]=="included" else None
@@ -35,10 +36,11 @@ for p in sorted((work/'raw').glob('*.json')):
  items=d.get('records',[])if p.name.startswith('ml-')else d.get('items',[]);eligible=novel=0
  for item in items:
   if p.name.startswith('ml-'):
-   country=markets[q['market_code']];t=item.get('product_name','');category=q['category'];path=norm(' '.join(item.get('taxonomy_trail',[])));title=norm(t)
+   country=markets[q['market_code']];t=item.get('product_name','');category=q['category'];path=norm(' '.join(item.get('taxonomy_trail')or []));title=norm(t)
    status=classify(t,category,item.get('taxonomy_trail',[]),item.get('brand_label'))
    image_review=image_reviews.get(item.get('picture_link'))
-   if image_review and not image_review['formConfirmed']:status={'status':'excluded','reason':'image_verified_accessory_or_consumable','category':category,'form':None}
+   if image_review and not image_review['formConfirmed']:status={'status':image_review.get('status','excluded'),'reason':image_review.get('reason','source_image_incompatible_form'),'category':category,'form':None}
+   elif status['reason']=='car_or_mini_blower_not_household_stick' and image_review and image_review.get('formConfirmed') and image_review.get('category')=='vacuum':status={'status':'included','category':'vacuum','form':'stick','reason':'household_stick_source_image_reviewed','imageUrl':item['picture_link'],'reviewDate':image_review['reviewDate']}
    elif status['status']=='pending'and status['reason']=='taxonomy_conflict_requires_image'and image_review and image_review['formConfirmed']and image_review['category']==status['category']:status={**status,'status':'included','reason':'source_image_household_form_reviewed','imageUrl':item['picture_link'],'reviewDate':image_review['reviewDate']}
    if status['status']!='included':excluded.append({'id':item['product_code'],'country':country,'requestedCategory':category,'title':t,'reason':status['reason'],'file':p.name});continue
    category=status['category'];id=item['product_code'];key=(country,'ml',id);url=item.get('detail_link')or'';m=re.search(r'/p/([A-Z]{3}\d+)',url);stat=country+'|'+(m[1]if m else id)
@@ -54,7 +56,8 @@ for p in sorted((work/'raw').glob('*.json')):
    if any(prev.get(f)!=rec.get(f)for f in fields):
     prev.setdefault('conflictingSourceSnapshots',[]).append({f:rec.get(f)for f in fields}|{'file':p.name});prev['metricAggregationEligible']=False;prev['statIsolationReason']='same_id_conflicting_snapshots';prev['counted']=False
   else:records[key]=rec
- page_stats.append({'file':p.name,'request':q,'returned':len(items),'eligible':eligible,'newToBaseline':novel,'page':d.get('page'),'matched':d.get('matched_count')})
+ success=not r.get('isError') and isinstance(d.get('records'),list) and isinstance(d.get('matched_count'),(int,float))
+ page_stats.append({'file':p.name,'request':q,'querySignature':query_key(q),'success':success,'returned':len(items),'eligible':eligible,'newToBaseline':novel,'page':d.get('page'),'matched':d.get('matched_count')})
 # Snapshot duplicate identity is separate from title model identity.
 seen=set()
 for k,r in records.items():
@@ -64,9 +67,9 @@ for k,r in records.items():
 # Decide pagination from observed effective yield. This is not a product-count ceiling.
 mlgroups=collections.defaultdict(list)
 for p in page_stats:
- if p['file'].startswith('ml-'):mlgroups[(p['request']['market_code'],p['request']['category'],p['request']['keyword'])].append(p)
-for (m,c,kw),pages in mlgroups.items():
+ if p['file'].startswith('ml-') and p['success']:mlgroups[(p['request']['market_code'],p['request']['category'],p['request']['keyword'],p['querySignature'])].append(p)
+for (m,c,kw,signature),pages in mlgroups.items():
  pages.sort(key=lambda x:x['request']['page']);last=pages[-1];num=last['request']['page'];total=last['matched']or last['returned'];tail=pages[-2:];low=len(tail)==2 and all(x['newToBaseline']<max(1,x['returned']*.05)for x in tail)
- if num*100<total and not low:nextjobs.append({'market_code':m,'category':c,'keyword':kw,'page':num+1})
+ if num*100<total and not low:nextjobs.append({**last['request'],'page':num+1,'querySignature':signature})
 allrecords=list(records.values());result={'records':allrecords,'excluded':excluded,'calls':calls,'pages':page_stats,'nextJobs':nextjobs,'counts':dict(collections.Counter(r['country']+'/'+r['platform']+'/'+r['category']for r in allrecords)),'newToCacheAmazon':sum(k not in cache_known and k not in ssbaseline for k in records if k[1]=='amazon'),'newCounts':dict(collections.Counter(r['country']+'/'+r['platform']+'/'+r['category']for k,r in records.items()if k not in baseline and(r['platform']!='amazon'or k not in ssbaseline)))}
 (work/'research.json').write_text(json.dumps(result,ensure_ascii=False));print(json.dumps({k:len(v)if isinstance(v,list)else v for k,v in result.items()if k not in ['excluded','calls','pages']},ensure_ascii=False));(work/'next-jobs.json').write_text(json.dumps(nextjobs))
