@@ -39,6 +39,7 @@ jobs:
           node tests/market-decision.cjs
           node tests/amazon-overview.cjs
           node tests/amazon-country-consistency.cjs
+          node tests/market-overview-layout.cjs
           node tests/market-missing-data.cjs
           node tests/local-operating.cjs
       - name: Configure Pages

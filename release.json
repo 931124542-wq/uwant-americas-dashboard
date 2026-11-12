@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-12-amazon-country-consistency",
+  "version": "2026-11-12-shared-market-overview",
   "dataAsOf": "2026-10-28",
   "baseCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "products": 466,
@@ -59,7 +59,9 @@
     "failed-page-coverage-contract",
     "reviewed-household-forms",
     "independent-supplement-history-dates",
-    "consistent-amazon-country-kpis-and-chart-states"
+    "consistent-amazon-country-kpis-and-chart-states",
+    "shared-amazon-mercado-overview-template",
+    "legacy-market-dataset-route-normalization"
   ],
   "auditBaseline": "4a4cb86",
   "auditReport": "docs/data-audit-2026-10-29.md",
@@ -202,5 +204,20 @@
     "originalMonthlyFactsUnchanged": true,
     "sourceSnapshotsRemainSeparate": true,
     "report": "docs/amazon-country-consistency-2026-11-12.md"
+  },
+  "sharedMarketOverview": {
+    "template": "shared-market-2026-11-12",
+    "displayVersion": "11.12.3",
+    "exactUserRouteChecked": true,
+    "legacyMarketDatasets": [
+      "curated",
+      "focus",
+      "archive"
+    ],
+    "defaultCalendarMonth": "2026-09",
+    "productArchiveRoutesPreserved": true,
+    "irrelevantMercadoPriceBandsRemovedFromAmazon": true,
+    "originalSourceFactsUnchanged": true,
+    "report": "docs/shared-market-overview-2026-11-12.md"
   }
 }

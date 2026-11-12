@@ -80,6 +80,7 @@ function change(patch,{replace=false,scroll=false}={}){
  if(!('marketQuick'in patch)&&['dataset','startMonth','endMonth','own','priceBasis'].some(k=>k in patch&&patch[k]!==previous[k])){state.marketQuick='all';state.evidenceMin='';state.evidenceMax='';state.marketQuickDate='';state.marketQuickKind='';state.marketQuickCurrency='';}
  if(state.category!=='fabric'&&state.competitionGroup==='alternative')state.competitionGroup='direct';
  if(!('offset' in patch))state.offset='0';
+ state=M.normalizeMarketScope(state);
  history[replace?'replaceState':'pushState']({scrollY:scroll?0:window.scrollY,drawer:!!state.detail,rqDetail:!!state.evidenceDetail},'',M.encode(state));
  render();if(patch.evidenceDetail===undefined&&previous.evidenceDetail&&!state.evidenceDetail)document.querySelector('[data-rq-query]')?.focus({preventScroll:true});if(scroll)window.scrollTo({top:0,behavior:'auto'});
 }
