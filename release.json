@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-13-market-integrity",
+  "version": "2026-11-13-original-market-context",
   "dataAsOf": "2026-10-28",
   "baseCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "products": 466,
@@ -257,5 +257,17 @@
     "missingQualifiedSales": 10,
     "completeMarketCoverageClaimed": false,
     "report": "docs/market-integrity-2026-11-13.md"
+  },
+  "originalMarketContext": {
+    "displayVersion": "11.13.3",
+    "publicReportsRestored": [
+      "MX/amazon/vacuum",
+      "CA/amazon/vacuum",
+      "US/amazon/vacuum"
+    ],
+    "sourceDataUnchanged": true,
+    "monthlySampleEligibilityUnchanged": true,
+    "categoryReportsAndProductSamplesSeparate": true,
+    "report": "docs/original-market-context-2026-11-13.md"
   }
 }

@@ -15,7 +15,7 @@ for(const country of ['CA','MX','US','BR'])for(const category of ['vacuum','wash
  checked++;
 }
 const s={...c.ResearchModel.defaults,page:'market',platform:'amazon',country:'MX',category:'vacuum',dataset:'2026-09',startMonth:'2026-01',endMonth:'2026-09'},catalog=c.catalog(s),x=c.MarketSummary.overviewStats(catalog,s),snapshot=c.MarketSummary.snapshot(s);
-assert.equal(snapshot.stat.totalRevenue,10200593.41);assert.equal(x.revenue.total,null,'Independent category snapshot must not fill a monthly sales gap');assert(c.MarketSummary.overview(catalog,s).includes('data-market-source-open'));
+assert.equal(snapshot.stat.totalRevenue,10200593.41);assert.equal(x.revenue.total,null,'Independent category snapshot must not fill a monthly sales gap');assert(c.MarketSummary.overview(catalog,s).includes('data-original-category-report'));
 const history=c.REVIEW_DATA.history;c.REVIEW_DATA.history={...history,rows:history.rows.map(r=>({...r,parentSales:r.parentSales===null?null:0,parentSalesAmount:r.parentSalesAmount===null?null:0}))};
 const zeroScope={...s,country:'CA'},z=c.SampleSalesShares.report(c.REVIEW_DATA.history,zeroScope);assert.equal(z.total,0);const zero=c.SampleSharesUI.render(c.catalog(zeroScope),zeroScope);assert.equal((zero.match(/data-share-state="zero"/g)||[]).length,2);assert(!zero.includes('data-share-export disabled'),'Real zero-valued facts remain exportable');assert(!zero.includes('brand-share-visual'),'A zero denominator cannot draw a pie');c.REVIEW_DATA.history=history;
 console.log(`PASS Amazon country consistency: ${checked} scopes, ${missing} truthful missing states; six known markets, stable KPI/chart semantics, independent snapshots and real-zero exports`);

@@ -43,6 +43,7 @@ jobs:
           node tests/market-missing-data.cjs
           node tests/local-operating.cjs
           node tests/market-integrity.cjs
+          node tests/original-market-context.cjs
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:
