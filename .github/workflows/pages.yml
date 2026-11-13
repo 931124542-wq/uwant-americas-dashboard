@@ -44,6 +44,40 @@ jobs:
           node tests/local-operating.cjs
           node tests/market-integrity.cjs
           node tests/original-market-context.cjs
+          node tests/data-display-continuity.cjs
+      - name: Set up Node for browser checks
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - name: Install isolated browser test runtime
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/uwant-browser-tests/browsers
+        run: |
+          npm install --prefix "$RUNNER_TEMP/uwant-browser-tests" --no-save --no-package-lock playwright@1.62.1
+          "$RUNNER_TEMP/uwant-browser-tests/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Verify visible market continuity before upload
+        timeout-minutes: 8
+        env:
+          NODE_PATH: ${{ runner.temp }}/uwant-browser-tests/node_modules
+          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/uwant-browser-tests/browsers
+          UWANT_TEST_BASE: http://127.0.0.1:8842/
+        run: |
+          python3 -m http.server 8842 --bind 127.0.0.1 > "$RUNNER_TEMP/uwant-browser-server.log" 2>&1 &
+          uwant_server_pid=$!
+          trap 'kill "$uwant_server_pid"' EXIT
+          python3 - <<'PY'
+          import time, urllib.request
+          for attempt in range(50):
+              try:
+                  urllib.request.urlopen("http://127.0.0.1:8842/", timeout=1).close()
+                  break
+              except OSError:
+                  if attempt == 49:
+                      raise
+                  time.sleep(0.1)
+          PY
+          node tests/original-market-context-browser.cjs "$RUNNER_TEMP/uwant-browser-results/original"
+          node tests/data-display-continuity-browser.cjs "$RUNNER_TEMP/uwant-browser-results/continuity"
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:

@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-13-original-market-context",
+  "version": "2026-11-13-display-continuity",
   "dataAsOf": "2026-10-28",
   "baseCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "products": 466,
@@ -68,7 +68,7 @@
   "auditReport": "docs/data-audit-2026-10-29.md",
   "auditCheckpoint": "ffafdce8be300ed104c5db299f249c25c2053929",
   "operationsRevision": "d86f8e19420e",
-  "uiUpdatedAt": "2026-11-12",
+  "uiUpdatedAt": "2026-11-13",
   "previousPublicCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "verifiedDevelopmentCommit": "e0931bd7d7f9c0086348f3a3bf67683388c822ec",
   "publicPackage": true,
@@ -269,5 +269,20 @@
     "monthlySampleEligibilityUnchanged": true,
     "categoryReportsAndProductSamplesSeparate": true,
     "report": "docs/original-market-context-2026-11-13.md"
+  },
+  "displayContinuity": {
+    "displayVersion": "11.13.4",
+    "sourceRecordsUnchanged": true,
+    "monthlyEligibilityUnchanged": true,
+    "restoredTopLimits": [
+      5,
+      10,
+      20
+    ],
+    "siblingGroupReferenceIsNonAdditive": true,
+    "sourceRankModulePreserved": true,
+    "finalDomChecksBeforeCustomPagesUpload": true,
+    "nativePagesSourceStillSeparate": true,
+    "report": "docs/display-continuity-audit-2026-11-13.md"
   }
 }
