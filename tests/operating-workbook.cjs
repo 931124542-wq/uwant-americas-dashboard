@@ -1,0 +1,13 @@
+const assert=require('assert/strict'),W=require('../operating-workbook.js'),F=require('./operating-workbook-fixture.cjs'),M=require('../model.js');
+const d=W.validate(W.normalize(F(),{name:'synthetic_2026-09-03.xlsx',hash:'synthetic'})),r=W.analyze(d);
+assert.equal(r.units,7);assert.equal(r.stock,9);assert.equal(r.available,8);assert.equal(r.allocated,1);assert.equal(r.ordered,30);assert.equal(r.sampleUnits,0);
+assert.equal(d.sales.length,4,'Keep distinct source rows even on the same date/SKU');assert.equal(d.excluded.length,1,'Footer annotations are not transactions');assert.equal(d.excluded[0].units,9);assert.equal(d.period.orderDate,'2025-12-01');assert.equal(d.period.stockDate,'2026-09-02');assert.equal(d.sales[0].date,'2026-07-03');
+assert.equal(r.byChannel.find(x=>x.label==='Liverpool').units,0);assert.equal(r.byChannel.find(x=>x.label==="Sam's Club").units,null);
+assert.equal(W.analyze(d,{start:'2026-08',end:'2026-08',channel:'Mercado Libre'}).units,2);assert.equal(W.analyze(d,{channel:'Mercado Libre'}).stock,9,'Warehouse stock is not assigned to a platform');assert.equal(W.analyze(d,{sku:'M600'}).stock,4);assert.equal(W.analyze(d,{sku:'M600'}).units,2);
+assert.equal(W.csv(d,W.analyze(d,{channel:'Mercado Libre'}),'overview').length,2);assert.equal(W.csv(d,W.analyze(d,{sku:'M600'}),'inventory').length,2);
+const x=F();x['库存原始'][1].N.v=6;assert.throws(()=>W.normalize(x));const y=F();y['产品库存核算'][0].J.v=8;assert.throws(()=>W.normalize(y));
+const bad=JSON.parse(JSON.stringify(d));bad.sales[0].month='2026-08';assert.throws(()=>W.validate(bad));const duplicated=JSON.parse(JSON.stringify(d));duplicated.sales.push({...duplicated.sales[0]});assert.throws(()=>W.validate(duplicated));
+const upc=JSON.parse(JSON.stringify(d));upc.procurement[1].upc=upc.procurement[0].upc;assert.throws(()=>W.validate(upc));const nested=JSON.parse(JSON.stringify(d));nested.samples[0].type={address:'private'};assert.throws(()=>W.validate(nested));
+const projected=W.validate({...d,rawWorkbook:'DO NOT STORE',recipient:'DO NOT STORE',sales:d.sales.map(x=>({...x,address:'DO NOT STORE'}))});assert(!JSON.stringify(projected).includes('DO NOT STORE'));assert(!JSON.stringify(d).includes('Synthetic Recipient Name'));assert.equal(d.limits.shippedUnits,null);assert.equal(d.limits.salesRevenue,null);
+assert.equal(M.parse('#page=overview').page,'market');assert.equal(M.parse('#page=overview&module=operations').page,'overview');
+console.log('PASS operating workbook: independent source controls, duplicate-day transactions, zero vs missing channels, dates, signed samples, warehouse scope, filters/CSV, backup validation and private-field whitelist.');

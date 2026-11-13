@@ -14,9 +14,9 @@
  function sync(s,change,download){
   const operations=document.body.classList.contains('operations-open'),admin=root.ResearchDataAdmin?.isRoute(s),overview=!admin&&s.page==='market'&&s.view==='overview',monthly=s.view==='monthly';
   document.body.dataset.workspace=operations?'operations':admin?'data':'research';document.body.dataset.researchView=overview?'overview':monthly?'monthly':s.page==='market'?s.view:s.page;
-  const operationMenu=document.getElementById('operations-navigation');if(operationMenu)operationMenu.open=operations;
-  const managementMenu=document.getElementById('management-navigation');if(managementMenu)managementMenu.open=operations||admin;
-  if(operations)return;
+  const operationMenu=document.getElementById('operations-navigation');if(operationMenu)operationMenu.hidden=false;
+  const managementMenu=document.getElementById('management-navigation');if(managementMenu)managementMenu.open=admin;
+  if(operations){root.OperatingWorkbook?.mount(s,change);return;}
   const own=document.querySelector('.filters [data-wb-own]');if(own)own.closest('label').hidden=admin||s.page!=='competitors';
   const monthBox=document.getElementById('month-range-controls');if(monthBox)monthBox.hidden=admin||(s.platform==='ml'&&!monthly);
   const heading=document.querySelector('.heading');let context=document.getElementById('market-page-context');if(!context){context=document.createElement('p');context.id='market-page-context';heading.querySelector('div').append(context);}

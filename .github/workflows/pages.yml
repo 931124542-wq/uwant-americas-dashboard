@@ -45,6 +45,7 @@ jobs:
           node tests/market-integrity.cjs
           node tests/original-market-context.cjs
           node tests/data-display-continuity.cjs
+          node tests/operating-workbook.cjs
       - name: Set up Node for browser checks
         uses: actions/setup-node@v6
         with:
@@ -79,6 +80,7 @@ jobs:
           node tests/original-market-context-browser.cjs "$RUNNER_TEMP/uwant-browser-results/original"
           node tests/data-display-continuity-browser.cjs "$RUNNER_TEMP/uwant-browser-results/continuity"
           node tests/backstage-hidden-browser.cjs "$RUNNER_TEMP/uwant-browser-results/frontstage"
+          node tests/operating-workbook-browser.cjs "$RUNNER_TEMP/uwant-browser-results/operations"
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:
