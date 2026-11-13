@@ -29,9 +29,9 @@
    const localDreame=country(r)==='CA'&&brand==='dreame'&&model==='N20 STEAM';
    const localBissell=brand==='bissell'&&((country(r)==='CA'&&model==='3618C')||(country(r)==='MX'&&model==='3618B'));
    if(localDreame||localBissell){segment='steam';level=localDreame||model==='3618C'?'manufacturer_model':'local_title';basis=localDreame?'加拿大N20 Steam型号及品牌蒸汽抽洗资料':model==='3618C'?'加拿大3618C型号及品牌蒸汽抽洗资料':'墨西哥ASIN与3618B蒸汽抽洗标称；电压、套装及保修仍逐项核实';}
-   else basis='来源标称蒸汽，但准确型号、当地版本或抽吸配置证据尚不足；不默认同配置';
+   else basis='页面标注蒸汽，但准确型号、当地版本或抽吸产品参数尚不足；不默认同配置';
   }else if(type==='portable'){
-   segment='portable';level=model?'local_model':'source_form';basis=/ProHeat|2513E/i.test(t)?'便携抽洗；HeatWave维持水温不等同于产生蒸汽':'便携局部抽洗用途；缺少蒸汽证据不能认定具备或不具备蒸汽';
+   segment='portable';level=model?'local_model':'source_form';basis=/ProHeat|2513E/i.test(t)?'便携抽洗；HeatWave维持水温不等同于产生蒸汽':'便携局部抽洗用途；缺少蒸汽资料不能认定具备或不具备蒸汽';
   }
   return {segment,label:labels[segment],basis,evidenceLevel:level,modelCode:model,statisticsUnaffected:true,evidence:[{url:r.sourceUrl,date:r.sourceDate||null,locator:r.productTypeEvidence?.locator||'当地商品型号及产品形态'}]};
  }

@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-12-shared-market-overview",
+  "version": "2026-11-12-plain-language",
   "dataAsOf": "2026-10-28",
   "baseCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "products": 466,
@@ -61,7 +61,8 @@
     "independent-supplement-history-dates",
     "consistent-amazon-country-kpis-and-chart-states",
     "shared-amazon-mercado-overview-template",
-    "legacy-market-dataset-route-normalization"
+    "legacy-market-dataset-route-normalization",
+    "plain-language-market-and-product-copy"
   ],
   "auditBaseline": "4a4cb86",
   "auditReport": "docs/data-audit-2026-10-29.md",
@@ -219,5 +220,19 @@
     "irrelevantMercadoPriceBandsRemovedFromAmazon": true,
     "originalSourceFactsUnchanged": true,
     "report": "docs/shared-market-overview-2026-11-12.md"
+  },
+  "plainLanguageCopy": {
+    "displayVersion": "11.12.4",
+    "scope": [
+      "market",
+      "products",
+      "brands",
+      "comparison",
+      "monthly",
+      "shipments",
+      "inventory"
+    ],
+    "sourceRecordsUnchanged": true,
+    "metricEligibilityUnchanged": true
   }
 }
