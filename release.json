@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-12-plain-language",
+  "version": "2026-11-13-market-frontstage",
   "dataAsOf": "2026-10-28",
   "baseCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "products": 466,
@@ -234,5 +234,18 @@
     ],
     "sourceRecordsUnchanged": true,
     "metricEligibilityUnchanged": true
+  },
+  "frontstageCleanup": {
+    "displayVersion": "11.13.1",
+    "marketSections": [
+      "市场大盘",
+      "品牌与价格带",
+      "UWANT对标"
+    ],
+    "managementEntry": "管理与设置 / 数据管理",
+    "emptyPrivatePanelsHidden": true,
+    "sourceRecordsUnchanged": true,
+    "metricEligibilityUnchanged": true,
+    "report": "docs/frontstage-cleanup-2026-11-13.md"
   }
 }
