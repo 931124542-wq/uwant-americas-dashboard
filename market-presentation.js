@@ -1,6 +1,16 @@
 /* Shared visual hierarchy for the market research workspace. Data engines stay unchanged. */
 (function(root){
  const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const managementDetails=['[data-backstage-only]','.market-kpi>small','.market-overview-references','.market-catalogue-reference','.market-source-reference','.sample-share-evidence','.sample-share-scope','.wb-sample-note','.wb-missing-fields','.private-research-evidence','.coverage-monitor','.market-validation','.market-reviewed-exclusions','.ml-data-details'];
+ function hideManagementDetails(s){
+  if(root.ResearchDataAdmin?.isRoute(s)||document.body.dataset.workspace!=='research')return;
+  const host=document.getElementById('research-evidence');if(!host)return;
+  // Keep historical analysis accessible while removing collection/qualification panels.
+  const references=host.querySelector('.market-overview-references'),hero=host.querySelector('.market-hero');
+  const historical=[...(references?.querySelectorAll('.market-trend,.market-trend-compact')||[])];
+  if(hero&&historical.length){const d=document.createElement('details');d.className='decision-native-trend';d.innerHTML='<summary>月度走势与历史价格</summary>';for(const chart of historical)d.append(chart);hero.append(d);}
+  for(const node of host.querySelectorAll(managementDetails.join(','))){node.hidden=true;node.dataset.backstageOnly='';}
+ }
  function sync(s,change,download){
   const operations=document.body.classList.contains('operations-open'),admin=root.ResearchDataAdmin?.isRoute(s),overview=!admin&&s.page==='market'&&s.view==='overview',monthly=s.view==='monthly';
   document.body.dataset.workspace=operations?'operations':admin?'data':'research';document.body.dataset.researchView=overview?'overview':monthly?'monthly':s.page==='market'?s.view:s.page;
@@ -23,7 +33,8 @@
   root.LocalOperating?.mount(s,change,download);
   if(admin)root.MarketDecisionUI?.mountCoverage(s,change,download);
   if(admin)root.MarketValidation?.mount(s,download);
+  hideManagementDetails(s);
   document.querySelectorAll('.market-block-heading>span:first-child').forEach(x=>x.classList.add('market-section-number'));
  }
- root.MarketPresentation={sync};
+ root.MarketPresentation={sync,hideManagementDetails,managementDetails};
 })(window);

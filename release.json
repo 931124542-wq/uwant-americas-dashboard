@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-13-display-continuity",
+  "version": "2026-11-13-backstage-hidden",
   "dataAsOf": "2026-10-28",
   "baseCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "products": 466,
@@ -284,5 +284,14 @@
     "finalDomChecksBeforeCustomPagesUpload": true,
     "nativePagesSourceStillSeparate": true,
     "report": "docs/display-continuity-audit-2026-11-13.md"
+  },
+  "backstageDisplay": {
+    "displayVersion": "11.13.5",
+    "managementDetailsHiddenInAnalysis": true,
+    "managementRouteRetained": true,
+    "historicalChartsRetained": true,
+    "originalMarketReportsVisible": true,
+    "sourceRecordsUnchanged": true,
+    "report": "docs/backstage-hidden-2026-11-13.md"
   }
 }
