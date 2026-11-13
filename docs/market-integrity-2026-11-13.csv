@@ -1,0 +1,37 @@
+country,platform,category,sourceListingsBefore,eligibleListingsAfter,unitsBefore,unitsAfter,revenueBefore,revenueAfter,currency,period,marketDenominator
+MX,amazon,wash,24,24,1228,1228,10764825.620000001,10764825.620000001,MXN,2026-01—2026-09 · Amazon · 已核对商品数据,unknown
+MX,amazon,vacuum,100,100,,,,,MXN,2026-01—2026-09 · Amazon · 已核对商品数据,unknown
+MX,amazon,fabric,81,81,,,,,MXN,2026-01—2026-09 · Amazon · 已核对商品数据,unknown
+MX,amazon,mattress,9,9,,,,,MXN,2026-01—2026-09 · Amazon · 已核对商品数据,unknown
+MX,ml,wash,483,477,361,361,2116873,2116873,MXN,近30天估算 · 采集于 2026-11-06,unknown
+MX,ml,vacuum,270,270,8,8,117092,117092,MXN,近30天估算 · 采集于 2026-11-06,unknown
+MX,ml,fabric,376,376,507,507,1423293,1423293,MXN,近30天估算 · 采集于 2026-11-06,unknown
+MX,ml,mattress,343,343,224,224,148628,148628,MXN,近30天估算 · 采集于 2026-11-06,unknown
+CA,amazon,wash,61,61,3962,3962,1367138.47,1367138.47,CAD,2026-01—2026-09 · Amazon · 已核对商品数据,unknown
+CA,amazon,vacuum,113,113,38405,38405,5330501.659999998,5330501.659999998,CAD,2026-01—2026-09 · Amazon · 已核对商品数据,unknown
+CA,amazon,fabric,117,117,63676,63676,7251035.25,7251035.25,CAD,2026-01—2026-09 · Amazon · 已核对商品数据,unknown
+CA,amazon,mattress,25,25,,,,,CAD,2026-01—2026-09 · Amazon · 已核对商品数据,unknown
+US,amazon,wash,71,71,7966,7966,3611273.71,3611273.71,USD,2026-01—2026-09 · Amazon · 已核对商品数据,unknown
+US,amazon,vacuum,169,169,408677,408677,54585318.94933002,54585318.94933002,USD,2026-01—2026-09 · Amazon · 已核对商品数据,unknown
+US,amazon,fabric,50,50,,,,,USD,2026-01—2026-09 · Amazon · 已核对商品数据,unknown
+US,amazon,mattress,95,95,,,,,USD,2026-01—2026-09 · Amazon · 已核对商品数据,unknown
+BR,amazon,wash,8,8,,,,,BRL,2026-01—2026-09 · Amazon · 已核对商品数据,unknown
+BR,amazon,vacuum,18,18,,,,,BRL,2026-01—2026-09 · Amazon · 已核对商品数据,unknown
+BR,amazon,fabric,15,15,,,,,BRL,2026-01—2026-09 · Amazon · 已核对商品数据,unknown
+BR,amazon,mattress,1,1,,,,,BRL,2026-01—2026-09 · Amazon · 已核对商品数据,unknown
+BR,ml,wash,230,229,290,289,677169,676961,BRL,近30天估算 · 采集于 2026-11-06,unknown
+BR,ml,vacuum,1634,1634,4364,4364,2672779,2672779,BRL,近30天估算 · 采集于 2026-11-06,unknown
+BR,ml,fabric,865,865,6386,6386,3562822,3562822,BRL,近30天估算 · 采集于 2026-11-06,unknown
+BR,ml,mattress,252,252,191,191,22707,22707,BRL,近30天估算 · 采集于 2026-11-06,unknown
+AR,ml,wash,300,300,43,43,47926601,47926601,ARS,近30天估算 · 采集于 2026-11-06,unknown
+AR,ml,vacuum,454,454,189,189,39066209,39066209,ARS,近30天估算 · 采集于 2026-11-06,unknown
+AR,ml,fabric,73,73,3,3,2039868,2039868,ARS,近30天估算 · 采集于 2026-11-06,unknown
+AR,ml,mattress,135,135,116,116,10761909,10761909,ARS,近30天估算 · 采集于 2026-11-06,unknown
+CL,ml,wash,251,250,72,72,36673540,36673540,CLP,近30天估算 · 采集于 2026-11-06,unknown
+CL,ml,vacuum,249,249,39,39,4936447,4936447,CLP,近30天估算 · 采集于 2026-11-06,unknown
+CL,ml,fabric,51,51,11,11,2145336,2145336,CLP,近30天估算 · 采集于 2026-11-06,unknown
+CL,ml,mattress,273,273,70,70,1732108,1732108,CLP,近30天估算 · 采集于 2026-11-06,unknown
+CO,ml,wash,569,567,19,19,30707294,30707294,COP,近30天估算 · 采集于 2026-11-06,unknown
+CO,ml,vacuum,135,135,13,13,17957600,17957600,COP,近30天估算 · 采集于 2026-11-06,unknown
+CO,ml,fabric,110,108,14,14,7802308,7802308,COP,近30天估算 · 采集于 2026-11-06,unknown
+CO,ml,mattress,251,251,10,10,2186993,2186993,COP,近30天估算 · 采集于 2026-11-06,unknown

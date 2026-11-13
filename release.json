@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-13-market-frontstage",
+  "version": "2026-11-13-market-integrity",
   "dataAsOf": "2026-10-28",
   "baseCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "products": 466,
@@ -247,5 +247,15 @@
     "sourceRecordsUnchanged": true,
     "metricEligibilityUnchanged": true,
     "report": "docs/frontstage-cleanup-2026-11-13.md"
+  },
+  "marketIntegrity": {
+    "displayVersion": "11.13.2",
+    "reviewedAccessoryExclusions": 12,
+    "originalSourceRecordsUnchanged": true,
+    "supportedScopes": 36,
+    "withQualifiedSales": 26,
+    "missingQualifiedSales": 10,
+    "completeMarketCoverageClaimed": false,
+    "report": "docs/market-integrity-2026-11-13.md"
   }
 }
