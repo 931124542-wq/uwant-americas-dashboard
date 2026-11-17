@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-13-visible-operations-workbook",
+  "version": "2026-11-17-buenfin-event-orders",
   "dataAsOf": "2026-10-28",
   "baseCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "products": 466,
@@ -68,7 +68,7 @@
   "auditReport": "docs/data-audit-2026-10-29.md",
   "auditCheckpoint": "ffafdce8be300ed104c5db299f249c25c2053929",
   "operationsRevision": "d86f8e19420e",
-  "uiUpdatedAt": "2026-11-13",
+  "uiUpdatedAt": "2026-11-17",
   "previousPublicCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "verifiedDevelopmentCommit": "e0931bd7d7f9c0086348f3a3bf67683388c822ec",
   "publicPackage": true,
@@ -303,5 +303,15 @@
     "originalSourceFilesUnchanged": true,
     "separateSalesWarehouseSamplesAndProcurement": true,
     "report": "docs/operating-workbook-2026-11-13.md"
+  },
+  "operatingEventImport": {
+    "displayVersion": "11.17.1",
+    "htmlScriptsNotExecuted": true,
+    "cancelledOrdersExcluded": true,
+    "pendingOrdersRemainOrders": true,
+    "historicalSalesAndStockUnchanged": true,
+    "retainedSourceVersions": true,
+    "personalEventDataPublished": false,
+    "report": "docs/operating-event-2026-11-17.md"
   }
 }
