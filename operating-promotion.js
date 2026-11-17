@@ -1,0 +1,2 @@
+/* Public activity dates derived from the unchanged promotion calendar. No operating records. */
+(function(root){const data={"id":"mx-buenfin","market":"mx","country":"墨西哥","name":"El Buen Fin","year":2026,"start":"2026-11-13","end":"2026-11-17","dateState":"official","source":"https://www.elbuenfin.org/preguntas-frecuentes","sourceName":"El Buen Fin · 2026官方问答","checkedAt":"2026-10-19"};root.OPERATING_PROMOTION_DATA=data;if(typeof module!=="undefined")module.exports=data;})(typeof window==="undefined"?globalThis:window);

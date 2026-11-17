@@ -11,7 +11,7 @@ const {chromium}=require('playwright'),fs=require('fs'),path=require('path'),ass
  try{
   const context=await browser.newContext({viewport:{width:1440,height:1000}}),errors=[],writes=[],leaks=[];
   context.on('page',p=>p.on('pageerror',e=>errors.push(e.message)));context.on('request',r=>{if(['POST','PUT','PATCH'].includes(r.method()))writes.push(r.url());if(/operating-data|synthetic-history|synthetic-event|sourceUnits|netAmount/.test(r.url()))leaks.push(r.url());});
-  const empty=await context.newPage();await empty.goto(base+'#module=operations&page=overview');await empty.waitForSelector('.ow-empty');assert((await empty.locator('.ow-empty').innerText()).includes('尚未读取'));await empty.close();
+  const empty=await context.newPage();await empty.goto(base+'#module=operations&page=overview');await empty.waitForSelector('[data-oe-report-state=missing]');assert((await empty.locator('[data-oe-report-state=missing]').innerText()).includes('尚未载入'));await empty.close();
   const local=await context.newPage();await local.goto(pathToFileURL(actual||source).href);await local.waitForFunction(()=>window.OperatingTransfer&&OperatingEvent.load());
   await local.evaluate(target=>{const open=OperatingTransfer.openOnline;OperatingTransfer.openOnline=()=>open(target);document.querySelector('[data-private-online]').onclick=()=>OperatingTransfer.openOnline();},base);
   const opened=context.waitForEvent('page');await local.locator('[data-private-online]').click();const online=await opened;await online.waitForSelector('.oe-report');

@@ -1,0 +1,8 @@
+const assert=require('assert/strict'),vm=require('vm'),fs=require('fs'),P=require('../operating-promotion'),E=require('../operating-event'),F=require('./operating-event-fixture.cjs');
+const context=vm.createContext({});vm.runInContext(fs.readFileSync('intelligence.js','utf8')+';globalThis.original=promotionCalendar.find(x=>x.id==="mx-buenfin");',context);
+assert.deepEqual(P,Object.fromEntries(Object.keys(P).map(k=>[k,context.original[k]])),'Overview dates must match the original calendar');
+assert.deepEqual(Object.keys(P),['id','market','country','name','year','start','end','dateState','source','sourceName','checkedAt']);
+const empty=E.overview(P,null);assert(empty.includes('经营总览'));assert(empty.includes('2026-11-13 至 2026-11-17'));assert.equal((empty.match(/data-oe-overview-day=/g)||[]).length,5);assert.equal((empty.match(/ disabled/g)||[]).length,5);assert(empty.includes('尚未载入'));assert(!empty.includes('0<small>'));
+const report=E.parseHTML(F().html,{name:'synthetic.html',hash:'test'}),before=JSON.stringify(report),shown=E.overview(P,report);assert(shown.includes('Nov 16, 7:00 pm'));assert(shown.includes('报表全期 2026-11-13 至 2026-11-16'));assert.equal((shown.match(/ disabled/g)||[]).length,1);assert(shown.includes('报表未覆盖'));assert(shown.includes('0<small> 台非取消订单'));
+assert.equal(JSON.stringify(report),before);const otherYear={...P,start:'2027-11-13',end:'2027-11-17'};assert(E.overview(otherYear,report).includes('尚未载入'));
+console.log('PASS operating overview: public canonical dates always present, missing vs covered-zero days, report date/cutoff isolation and no source mutation.');
