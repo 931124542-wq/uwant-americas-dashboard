@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-17-operating-online-transfer",
+  "version": "2026-11-17-promotion-timepoints",
   "dataAsOf": "2026-10-28",
   "baseCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "products": 466,
@@ -67,7 +67,7 @@
   "auditBaseline": "4a4cb86",
   "auditReport": "docs/data-audit-2026-10-29.md",
   "auditCheckpoint": "ffafdce8be300ed104c5db299f249c25c2053929",
-  "operationsRevision": "d86f8e19420e",
+  "operationsRevision": "7df820520c03",
   "uiUpdatedAt": "2026-11-17",
   "previousPublicCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "verifiedDevelopmentCommit": "e0931bd7d7f9c0086348f3a3bf67683388c822ec",
@@ -321,5 +321,14 @@
     "existingHistoricalReportPreserved": true,
     "exactUserRouteChecked": true,
     "report": "docs/operating-online-transfer-2026-11-17.md"
+  },
+  "promotionTimepoints": {
+    "displayVersion": "11.17.3",
+    "pastPromotionsVisibleByDefault": true,
+    "calendarAndReportPeriodsSeparate": true,
+    "personalDailyDrillAndCutoffs": true,
+    "missingDatesNotZeroFilled": true,
+    "sourceRecordsUnchanged": true,
+    "report": "docs/promotion-timepoints-2026-11-17.md"
   }
 }

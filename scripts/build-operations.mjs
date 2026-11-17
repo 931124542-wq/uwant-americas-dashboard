@@ -2,8 +2,16 @@ import fs from 'node:fs';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 const source=fileURLToPath(new URL('../',import.meta.url)),out=source+'/operations';fs.mkdirSync(out,{recursive:true});
+const calendarOnly=process.argv.includes('--calendar-only');let html;
+if(calendarOnly){
+ html=fs.readFileSync(out+'/index.html','utf8');
+ const calendarJS=fs.readFileSync(source+'/calendar.js','utf8').replace(/<\/script/gi,'<\\/script'),calendarCSS=fs.readFileSync(source+'/calendar.css','utf8');let scripts=0,styles=0;
+ html=html.replace(/<script data-source="calendar\.js">[\s\S]*?<\/script>/g,()=>{scripts++;return '<script data-source="calendar.js">\n'+calendarJS+'\n</script>';});
+ html=html.replace(/<style>([\s\S]*?)<\/style>/g,(block,css)=>{if(!css.trim().startsWith('.calendar-hero{'))return block;styles++;return '<style>\n'+calendarCSS+'\n</style>';});
+ if(scripts!==1||styles!==1)throw Error('Calendar assets not uniquely found; original frame was not written.');
+}else{
 const sourceEntry=fs.existsSync(source+'/operations/source-entry.txt')?source+'/operations/source-entry.txt':source+'/index.html';
-let html=fs.readFileSync(sourceEntry,'utf8');
+html=fs.readFileSync(sourceEntry,'utf8');
 html=html.replace(/<link rel="stylesheet" href="([^"]+)">/g,(_,href)=>'<style>\n'+fs.readFileSync(source+'/'+href.split('?')[0],'utf8')+'\n</style>');
 const data=fs.readFileSync(source+'/data.json','utf8').trim(),csv=fs.readFileSync(source+'/market-import-template.csv').toString('base64');
 html=html.replace(/<script src="([^"]+)" defer><\/script>/g,(_,src)=>{
@@ -68,6 +76,7 @@ appReady().then(()=>{const content=document.querySelector('main>.content'),headi
 html=html.replace('</body>','<script>'+bridge+'</script></body>');
 // Keep shared evidence scripts external and content-versioned, without duplicating their data in the frame.
 html=html.replace(/src="\.\.\/(amazon-research-(?:data|model)\.js)(?:\?v=[^"]*)?"/g,(_,file)=>`src="../${file}?v=${createHash('sha256').update(fs.readFileSync(source+'/'+file)).digest('hex').slice(0,12)}"`);
+}
 fs.writeFileSync(out+'/index.html',html);
 // The iframe is cached independently of the outer workbench scripts.
 const revision=createHash('sha256').update(html).digest('hex').slice(0,12),reviewFile=source+'/review.js';

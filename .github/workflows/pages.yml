@@ -48,6 +48,7 @@ jobs:
           node tests/operating-workbook.cjs
           node tests/operating-event.cjs
           node tests/operating-transfer.cjs
+          node tests/promotion-timepoints.cjs
       - name: Set up Node for browser checks
         uses: actions/setup-node@v6
         with:
@@ -85,6 +86,7 @@ jobs:
           node tests/operating-workbook-browser.cjs "$RUNNER_TEMP/uwant-browser-results/operations"
           node tests/operating-event-browser.cjs "$RUNNER_TEMP/uwant-browser-results/events"
           node tests/operating-transfer-browser.cjs "$RUNNER_TEMP/uwant-browser-results/transfer"
+          node tests/promotion-timepoints-browser.cjs "$RUNNER_TEMP/uwant-browser-results/promotion"
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:

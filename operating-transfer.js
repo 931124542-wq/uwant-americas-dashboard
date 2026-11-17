@@ -1,7 +1,7 @@
 /* One-click local-file -> owned website handoff. Data travels through window messages, not HTTP. */
 (function(root){
  'use strict';
- const schema='uwant-operating-transfer-v1',site='https://931124542-wq.github.io/uwant-americas-dashboard/',version='11.17.2',pending=new Map();
+ const schema='uwant-operating-transfer-v1',site='https://931124542-wq.github.io/uwant-americas-dashboard/',version='11.17.3',pending=new Map();
  function targetAllowed(value){try{const u=new URL(value);return u.origin==='https://931124542-wq.github.io'&&u.pathname==='/uwant-americas-dashboard/'||['http://127.0.0.1:8842','http://localhost:8842'].includes(u.origin)&&u.pathname==='/';}catch{return false;}}
  function validateBundle(x){if(x?.schema!==schema||!x.historical&&!x.event||JSON.stringify(x).length>5000000)throw Error('本机经营数据格式无效或过大。');const historical=x.historical?root.OperatingWorkbook.validate(x.historical):null,event=x.event?root.OperatingEvent.validate(x.event):null;if(event&&!event.source.hash)throw Error('活动报表缺少来源标识。');return {schema,historical,event};}
  function importBundle(input){const data=validateBundle(input),old=root.OperatingWorkbook.load();let keptHistory=false,persisted=true;

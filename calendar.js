@@ -1,4 +1,4 @@
-let calendarYear='2026',calendarPeriod='upcoming',calendarKind='all',calendarState='all',calendarSearch='';
+let calendarYear='2026',calendarPeriod='all',calendarKind='all',calendarState='all',calendarSearch='';
 const calendarKindLabels={promo:'促销 / 零售节点',national:'全国 / 联邦假日',regional:'地方日期',admin:'行政 / 特定非工作日',bank:'银行行业',cultural:'文化 / 消费节日',context:'情境观察',seasonal:'季节窗口',deadline:'报名 / 入仓节点'};
 const calendarStateLabels={official:'日期已确认',calendar:'参考日期',pending:'等待公布',conflict:'日期有出入'};
 const calendarGroups={all:null,promo:['promo','deadline'],holiday:['national','regional','admin','bank'],culture:['cultural','context'],season:['seasonal']};
@@ -20,6 +20,17 @@ function calCopy(v){
 function calStatus(e){return '<span class="tag cal-state-'+e.dateState+'">'+calendarStateLabels[e.dateState]+'</span>';}
 function calSort(a,b){return (a.start||'9999').localeCompare(b.start||'9999')||a.name.localeCompare(b.name);}
 function calendarAnnual(){return promotionCalendar.filter(e=>e.market===market&&String(e.year)===calendarYear).sort(calSort);}
+function calendarPromoTimeline(){
+  const list=calendarFiltered().filter(e=>e.kind==='promo'&&e.importance==='major'&&e.start);
+  return '<section class="panel cal-promo-timeline"><div class="panel-heading"><div><h2>重点大促时间点</h2><p class="sub">活动起止日期 · '+calendarYear+'年 · 当地日期</p></div></div><div class="cal-promo-cards">'+list.map(e=>{
+    const today=calToday(),phase=today<e.start?'待开始':today>e.end?'已结束':'活动期间';let reportNote='';
+    try{const report=typeof parent!=='undefined'?parent.OperatingEvent?.load():null;if(e.id==='mx-buenfin'&&report?.country==='MX'&&report.start.slice(0,4)===String(e.year)){
+      const uncovered=[];for(let d=e.start;d<=e.end&&uncovered.length<366;d=new Date(Date.parse(d+'T00:00:00Z')+86400000).toISOString().slice(0,10)){if(d<report.start||d>report.end)uncovered.push(calDate(d));}
+      reportNote='<small class="cal-loaded-report">订单报表 '+calRange(report)+(uncovered.length?' · '+uncovered.join('、')+'尚无报表数据':'')+'</small>';
+    }}catch{}
+    return '<button class="cal-promo-card" data-event="'+calEscape(e.id)+'"><span>'+calEscape(e.name)+'<small>'+phase+'</small></span><strong>'+calRange(e)+'</strong><small>'+calendarStateLabels[e.dateState]+' · '+calEscape(e.platform)+'</small>'+reportNote+'</button>';
+  }).join('')+'</div>'+(list.length?'':'<p class="sub">当前筛选没有已排日期的重点大促；待公布活动仍在下方单列。</p>')+'</section>';
+}
 function calendarFiltered(ignorePeriod=false){
   return calendarAnnual().filter(e=>{
     if(calendarPlatform!=='all'&&!e.platforms.includes('all')&&!e.platforms.includes(calendarPlatform))return false;
@@ -124,7 +135,7 @@ calendarView=function(){
   const topNotice='<div class="cal-reading-key"><span><i class="key-official"></i>日期已确认</span><span><i class="key-calendar"></i>参考日期</span><span><i class="key-pending"></i>等待公布</span><small>是否参加请以运营计划为准</small></div>';
   const listTitle=calendarPeriod==='all'?'全年活动':calendarPeriod==='upcoming'?'接下来的活动':Number(calendarPeriod)+'月活动';
   const annualBody=panel('全年日历','点击月份查看活动。',calendarMonthGrid());
-  return controls+hero+metrics+topNotice+calendarSchedule()+'<div class="section-gap">'+panel(listTitle,known.length+'项 · 当地日期 '+calToday(),calendarTable(known))+'</div><div class="section-gap">'+calendarPending(pending)+'</div>'+(current?'<div class="section-gap">'+eventDetail(current)+'</div>':'')+'<details class="cal-reference-fold"><summary>全年月份、日期来源与适用范围</summary>'+calendarCoveragePanel()+annualBody+calendarRecheckPanel()+'</details>';
+  return controls+hero+calendarPromoTimeline()+metrics+topNotice+calendarSchedule()+'<div class="section-gap">'+panel(listTitle,known.length+'项 · 当地日期 '+calToday(),calendarTable(known))+'</div><div class="section-gap">'+calendarPending(pending)+'</div>'+(current?'<div class="section-gap">'+eventDetail(current)+'</div>':'')+'<details class="cal-reference-fold"><summary>全年月份、日期来源与适用范围</summary>'+calendarCoveragePanel()+annualBody+calendarRecheckPanel()+'</details>';
 };
 const originalIntelligenceWiring=wireIntelligence;
 wireIntelligence=function(){
@@ -137,7 +148,7 @@ wireIntelligence=function(){
   const form=document.querySelector('#calendar-search-form');
   if(form)form.addEventListener('submit',e=>{e.preventDefault();calendarSearch=document.querySelector('#calendar-search').value.trim();render();});
   const reset=document.querySelector('#calendar-reset');
-  if(reset)reset.addEventListener('click',()=>{calendarPeriod='upcoming';calendarPlatform='all';calendarKind='all';calendarState='all';calendarSearch='';render();});
+  if(reset)reset.addEventListener('click',()=>{calendarPeriod='all';calendarPlatform='all';calendarKind='all';calendarState='all';calendarSearch='';render();});
 };
 function calendarCsv(){
   const list=calendarFiltered(),head=['国家','年份','节点','类型','适用范围','开始日期','结束日期','纪念日期','休假日期','日期状态','平台','核对日','依据','备注','来源链接','UWANT参与'];

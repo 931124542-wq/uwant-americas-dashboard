@@ -1,0 +1,12 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert/strict'),E=require('../operating-event'),F=require('./operating-event-fixture.cjs');
+const ctx=vm.createContext({Date,Intl,console,data:null,market:'mx',render(){},wireIntelligence(){},sourceLink(){return '';},localDate:s=>new Date(s+'T12:00:00Z'),selectedEvent:'mx-buenfin',calendarPlatform:'all',parent:{OperatingEvent:{load:()=>null}}});
+vm.runInContext(fs.readFileSync('intelligence.js','utf8'),ctx);const original=vm.runInContext('JSON.stringify(promotionCalendar)',ctx);vm.runInContext(fs.readFileSync('calendar.js','utf8'),ctx);
+assert.equal(vm.runInContext('calendarValidationErrors.length',ctx),0);assert.equal(vm.runInContext('calendarPeriod',ctx),'all');
+let html=vm.runInContext('calendarPromoTimeline()',ctx);assert(html.includes('data-event="mx-hotsale"'));assert(html.includes('data-event="mx-buenfin"'));assert(html.includes('11月13日 — 11月17日'));
+const event=E.parseHTML(F().html,{name:'synthetic.html',hash:'test'});ctx.parent.OperatingEvent.load=()=>event;html=vm.runInContext('calendarPromoTimeline()',ctx);assert(html.includes('订单报表 11月13日 — 11月16日'));assert(html.includes('11月17日尚无报表数据'));
+vm.runInContext("calendarPeriod='11';calendarPlatform='amazon';calendarSearch='Buen Fin'",ctx);html=vm.runInContext('calendarPromoTimeline()',ctx);assert.equal((html.match(/data-event=/g)||[]).length,1);assert(!html.includes('mx-hotsale'));
+vm.runInContext("calendarState='pending'",ctx);assert(!vm.runInContext('calendarPromoTimeline()',ctx).includes('data-event='));vm.runInContext("calendarState='all';calendarSearch='';calendarYear='2027'",ctx);assert(!vm.runInContext('calendarPromoTimeline()',ctx).includes('data-event='));
+assert.equal(vm.runInContext('JSON.stringify(promotionCalendar)',ctx),original,'Rendering cannot rewrite source dates');
+const timing=E.timing(event);assert(timing.includes('2026-11-13'));assert(timing.includes('2026-11-16'));assert(!timing.includes('data-oe-open-day="2026-11-17"'));assert(timing.includes('Nov 16, 7:00 pm'));assert.equal((timing.match(/data-oe-open-day=/g)||[]).length,4);
+const partial=structuredClone(event);partial.coverage['Amazon MX']=['2026-11-13'];partial.coverage['Mercado Libre']=['2026-11-14'];partial.coverage.Liverpool=['2026-11-15'];assert(E.timing(E.validate(partial)).includes('<strong>—<small> 台非取消订单'));
+console.log('PASS promotion timepoints: retained past events, source-exact dates, platform/month/search filters, pending dates excluded, imported report window/cutoffs and no zero-filled missing days.');
