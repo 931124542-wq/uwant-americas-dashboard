@@ -24,7 +24,7 @@
 
   function summary(state, products, data) {
     const {start, end, profiles, coverage} = selection(state, products, data);
-    return '<section class="ml-history-summary" data-ml-history-summary><div><h3>商品月度历史</h3><p><strong>'+esc(start)+' 至 '+esc(end)+'</strong> · '+(profiles.length?number.format(profiles.length)+' 个商品链接有月销量记录，覆盖 '+coverage.length+' 个月':'该期间暂无单品月销量')+'</p><p>商品库收录 '+number.format(products.length)+' 条。全类目月度走势、单品月销售额和历史价格待补。</p></div><button class="rq-button" data-ml-route="monthly">查看商品月销量</button></section>';
+    return '<section class="ml-history-summary" data-ml-history-summary><div><h3>商品月度历史</h3><p><strong>'+esc(start)+' 至 '+esc(end)+'</strong> · '+(profiles.length?number.format(profiles.length)+' 个商品链接有月销量记录，覆盖 '+coverage.length+' 个月':'该期间暂无单品月销量')+'</p><p>全类目月度走势、单品月销售额和历史价格待补。</p></div><button class="rq-button" data-ml-route="monthly">查看商品月销量</button></section>';
   }
 
   function chart(rows, start, end) {

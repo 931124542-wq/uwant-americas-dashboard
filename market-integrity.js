@@ -15,6 +15,9 @@
   ['CO','fabric','MCO1554603377','原标题为便携布艺机收纳包，非整机；图片为占位图'],
   ['CO','fabric','MCO3204386442','原标题及原商品图均为收纳包，非整机']
  ].map(([country,category,id,reason])=>({country,platform:'ml',category,id,reason,reviewedAt:'2026-11-13',status:'excluded_accessory'}));
+ for(const id of ['MLM2017847932','MLM2003963698','MLM1420134604','MLM2033190670','MLM2030587012','MLM3355332430','MLM1379974982']){
+  reviewed.push({country:'MX',platform:'ml',category:'vacuum',id,reason:'原标题为 LANMU 扳机固定扣，仅与 Dyson 吸尘器兼容',reviewedAt:'2026-11-19',status:'excluded_accessory'});
+ }
  const byId=new Map(reviewed.map(r=>[r.country+'|'+r.id,r]));
  function review(r){return byId.get(String(r.country||'').toUpperCase()+'|'+(r.product_code||r.productId||r.asin||''))||null;}
  function allows(r){return !review(r);}

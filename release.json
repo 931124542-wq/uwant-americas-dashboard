@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-19-mercado-history-business-guide",
+  "version": "2026-11-19-mercado-vacuum-coverage",
   "dataAsOf": "2026-10-28",
   "baseCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "products": 466,
@@ -347,5 +347,27 @@
     "sourceRecordsUnchanged": true,
     "singleListingMonthlyExport": true,
     "businessGuide": "business-guide/"
+  },
+  "mercadoVacuumCoverage": {
+    "displayVersion": "11.19.2",
+    "country": "MX",
+    "category": "vacuum",
+    "catalogueBefore": 270,
+    "publicProductPagesAdded": 32,
+    "excludedAccessories": 7,
+    "catalogueAfter": 295,
+    "baseSnapshot": "2026-11-06",
+    "baseUnitSample": 139,
+    "basePositiveListings": 5,
+    "baseUnitsEstimate": 8,
+    "baseRevenueEstimateMXN": 117092,
+    "supplementalSnapshot": "2026-11-12",
+    "supplementalSample": 117,
+    "supplementalPositiveListings": 20,
+    "supplementalUnitsEstimate": 499,
+    "supplementalRevenueEstimateMXN": 1091300,
+    "historicalListings": 23,
+    "fullMarketCoverage": false,
+    "existingSourceRecordsUnchanged": true
   }
 }
