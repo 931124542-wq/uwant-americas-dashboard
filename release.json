@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-17-overview-promotion-timepoints",
+  "version": "2026-11-19-mercado-history-business-guide",
   "dataAsOf": "2026-10-28",
   "baseCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "products": 466,
@@ -68,7 +68,7 @@
   "auditReport": "docs/data-audit-2026-10-29.md",
   "auditCheckpoint": "ffafdce8be300ed104c5db299f249c25c2053929",
   "operationsRevision": "7df820520c03",
-  "uiUpdatedAt": "2026-11-17",
+  "uiUpdatedAt": "2026-11-19",
   "previousPublicCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "verifiedDevelopmentCommit": "e0931bd7d7f9c0086348f3a3bf67683388c822ec",
   "publicPackage": true,
@@ -340,5 +340,12 @@
     "privateOrdersPublished": false,
     "sourceRecordsUnchanged": true,
     "report": "docs/operating-overview-timepoints-2026-11-17.md"
+  },
+  "mercadoHistoryNavigation": {
+    "displayVersion": "11.19.1",
+    "scope": "Existing authorized listing history for all Mercado countries and categories",
+    "sourceRecordsUnchanged": true,
+    "singleListingMonthlyExport": true,
+    "businessGuide": "business-guide/"
   }
 }

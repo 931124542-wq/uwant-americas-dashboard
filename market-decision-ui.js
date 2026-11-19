@@ -40,7 +40,7 @@
   const blocks=[...host.querySelectorAll('.market-block')],first=blocks.find(b=>b.querySelector('h2')?.textContent==='市场大盘'),second=blocks.find(b=>b.querySelector('h2')?.textContent==='品牌与价格带'),third=blocks.find(b=>b.querySelector('h2')?.textContent==='UWANT对标'),fourth=blocks.find(b=>b.querySelector('h2')?.textContent==='市场分析');if(!first||host.querySelector('.decision-context'))return;
   (host.querySelector('.market-overview-references')||first).insertAdjacentHTML('beforeend','<div class="decision-context"><span class="decision-status">'+e(r.status)+'</span><span>'+e(r.period)+'</span><details><summary>分析范围</summary><p>本区为'+(r.sourceKind==='snapshot'?'近30天去重后的商品数据':'可统计历史商品组月份')+'，不是完整市场。'+(s.platform==='all'?'全部渠道的月度销售分析仅使用Amazon可统计历史，其他渠道资料不并入。':'')+'销量'+r.units.count+'、销售额'+r.revenue.count+'条记录分别统计。原类目报告按其原统计日期单独保留。尚未取得整个市场的销售总量。</p></details></div>');
   first.querySelectorAll('.market-kpi>span').forEach(el=>{if(el.textContent.startsWith('销售额'))el.textContent='样本'+el.textContent;if(el.textContent.startsWith('销量'))el.textContent='样本'+el.textContent;});
-  first.insertAdjacentHTML('beforeend',indicators(r)+trend(r));
+  first.insertAdjacentHTML('beforeend',indicators(r)+(s.platform==='ml'?'':trend(r)));
   const nativeTrend=first.querySelector(':scope>.market-trend,:scope>.market-trend-compact');if(nativeTrend){const d=document.createElement('details');d.className='decision-native-trend';d.innerHTML='<summary>原报告趋势和统计范围</summary>';nativeTrend.before(d);d.append(nativeTrend);}
   second?.insertAdjacentHTML('beforeend',opportunity(r));
   const shares=second?.querySelector('.sample-shares');if(shares){

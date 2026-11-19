@@ -89,6 +89,7 @@ jobs:
           node tests/operating-transfer-browser.cjs "$RUNNER_TEMP/uwant-browser-results/transfer"
           node tests/promotion-timepoints-browser.cjs "$RUNNER_TEMP/uwant-browser-results/promotion"
           node tests/operating-overview-timepoints-browser.cjs "$RUNNER_TEMP/uwant-browser-results/overview-promotion"
+          node tests/mercado-history-guide-browser.cjs "$RUNNER_TEMP/uwant-browser-results/mercado-history-guide"
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:

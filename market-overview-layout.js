@@ -23,7 +23,7 @@
   const box=document.createElement('div');box.className='market-overview';box.dataset.marketOverviewTemplate=version;box.innerHTML=shell(first.querySelector('.market-original-context')?'原类目 / 月度样本':r.sourceKind==='snapshot'?'近30天估算':'自然月估算',r.currency);first.before(box);
   const slot=k=>box.querySelector('[data-overview-slot="'+k+'"]'),move=(x,k)=>{if(x)slot(k).append(x);};
 
-  move(first.querySelector('.market-kpi-grid'),'kpis');move(first.querySelector('.market-reading'),'reading');
+  move(first.querySelector('.market-kpi-grid'),'kpis');move(first.querySelector('.market-reading'),'reading');move(first.querySelector('[data-ml-history-summary]'),'reading');
   for(const x of first.querySelectorAll(':scope>.market-catalogue-reference,:scope>.market-source-reference,:scope>.market-trend,:scope>.market-trend-compact'))move(x,'references');
   const shares=second.querySelector('.sample-shares');
   if(shares){const controls=shares.querySelector('.sample-share-toolbar');if(controls){controls.classList.add('market-chart-controls');move(controls,'controls');}for(const x of shares.querySelectorAll(':scope>.sample-share-scope,:scope>.sample-share-evidence'))move(x,'references');shares.querySelector('.sample-share-empty')?.remove();move(shares,'charts');}

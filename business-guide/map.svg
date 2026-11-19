@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1000" viewBox="0 0 1200 1000" role="img" aria-labelledby="map-title map-desc">
+<title id="map-title">UWANT美洲业务资料查找图</title>
+<desc id="map-desc">从市场机会、竞品选择、自身定位、经营表现、库存利润和数据可信度六个业务问题出发，分别列明要查什么、看板位置和原始资料来源。此图独立于网站目录。</desc>
+<style>text{font-family:"PingFang SC","Microsoft YaHei",Arial,sans-serif} .body{font-size:16px;fill:#193e31} .leaf-title{font-size:18px;font-weight:600;fill:#193e31} .where{fill:#176a50} .branch{font-size:20px;font-weight:600;fill:#176a50} .line{fill:none;stroke:#b8cfc2;stroke-width:1.6;stroke-linecap:round}</style>
+<rect width="1200" height="1000" fill="#fff"/>
+<text x="600" y="36" text-anchor="middle" font-size="28" font-weight="600" fill="#193e31">UWANT 美洲业务资料查找图</text>
+<text x="600" y="65" text-anchor="middle" font-size="16" fill="#60766b">从业务问题出发，找到要看的资料和来源</text>
+
+<path class="line" d="M 505 505 C 485 505, 485 217, 475 217"/>
+<path class="line" d="M 325 217 C 317 217, 317 137, 309 137"/>
+<path class="line" d="M 325 217 C 317 217, 317 217, 309 217"/>
+<path class="line" d="M 325 217 C 317 217, 317 297, 309 297"/>
+<path class="line" d="M 505 505 C 485 505, 485 505, 475 505"/>
+<path class="line" d="M 325 505 C 317 505, 317 425, 309 425"/>
+<path class="line" d="M 325 505 C 317 505, 317 505, 309 505"/>
+<path class="line" d="M 325 505 C 317 505, 317 585, 309 585"/>
+<path class="line" d="M 505 505 C 485 505, 485 793, 475 793"/>
+<path class="line" d="M 325 793 C 317 793, 317 713, 309 713"/>
+<path class="line" d="M 325 793 C 317 793, 317 793, 309 793"/>
+<path class="line" d="M 325 793 C 317 793, 317 873, 309 873"/>
+<path class="line" d="M 695 505 C 715 505, 715 217, 725 217"/>
+<path class="line" d="M 875 217 C 883 217, 883 137, 891 137"/>
+<path class="line" d="M 875 217 C 883 217, 883 217, 891 217"/>
+<path class="line" d="M 875 217 C 883 217, 883 297, 891 297"/>
+<path class="line" d="M 695 505 C 715 505, 715 505, 725 505"/>
+<path class="line" d="M 875 505 C 883 505, 883 425, 891 425"/>
+<path class="line" d="M 875 505 C 883 505, 883 505, 891 505"/>
+<path class="line" d="M 875 505 C 883 505, 883 585, 891 585"/>
+<path class="line" d="M 695 505 C 715 505, 715 793, 725 793"/>
+<path class="line" d="M 875 793 C 883 793, 883 713, 891 713"/>
+<path class="line" d="M 875 793 C 883 793, 883 793, 891 793"/>
+<path class="line" d="M 875 793 C 883 793, 883 873, 891 873"/>
+<rect x="505" y="443" width="190" height="124" rx="18" fill="#11523e"/>
+<text x="600" y="475" text-anchor="middle" font-size="16" fill="#d8ece2">UWANT 美洲业务</text>
+<text x="600" y="510" text-anchor="middle" font-size="23" font-weight="600" fill="#fff">我想知道什么？</text>
+<text x="600" y="540" text-anchor="middle" font-size="15" fill="#d8ece2">问题 → 资料 → 来源</text>
+<path class="line" d="M 600 576 V 592"/>
+<text x="600" y="615" text-anchor="middle" font-size="17" fill="#176a50">查之前，先选好</text>
+<text x="600" y="642" text-anchor="middle" font-size="16" fill="#60766b">国家 · 平台 · 品类</text>
+<text x="600" y="666" text-anchor="middle" font-size="16" fill="#60766b">月份 · 币种</text>
+
+<rect x="325" y="192" width="150" height="50" rx="9" fill="#edf5f0"/>
+<text x="400" y="224" text-anchor="middle" class="branch">市场有空间吗？</text>
+<text x="28" y="118" class="leaf-title">看规模和变化</text>
+<text x="28" y="143" class="body">类目销售额、销量、历史走势</text>
+<text x="28" y="198" class="leaf-title">看品牌和价位</text>
+<text x="28" y="223" class="body">品牌份额、价格带、畅销型号</text>
+<text x="28" y="278" class="leaf-title where">去哪里找</text>
+<text x="28" y="303" class="body">看板：市场总览、品牌分析</text>
+<text x="28" y="326" class="body">Amazon：卖家精灵或现有类目报告</text>
+<text x="28" y="349" class="body">美客多：大麦数据或已保存档案</text>
+<rect x="325" y="480" width="150" height="50" rx="9" fill="#edf5f0"/>
+<text x="400" y="512" text-anchor="middle" class="branch">竞品怎么选？</text>
+<text x="28" y="406" class="leaf-title">先找同类型产品</text>
+<text x="28" y="431" class="body">家用形态、品牌型号、当地版本</text>
+<text x="28" y="486" class="leaf-title">再比价格和配置</text>
+<text x="28" y="511" class="body">当地报价、图片、规格、评分</text>
+<text x="28" y="566" class="leaf-title where">去哪里找</text>
+<text x="28" y="591" class="body">看板：商品研究、竞品对比、搜索词</text>
+<text x="28" y="614" class="body">核对：品牌官网、当地商品页面</text>
+<text x="28" y="637" class="body">无对应来源的字段继续补资料</text>
+<rect x="325" y="768" width="150" height="50" rx="9" fill="#edf5f0"/>
+<text x="400" y="800" text-anchor="middle" class="branch">我们在哪里？</text>
+<text x="28" y="694" class="leaf-title">看UWANT竞争位置</text>
+<text x="28" y="719" class="body">样本销量、销售额占比；品牌排名</text>
+<text x="28" y="774" class="leaf-title">找产品和渠道差距</text>
+<text x="28" y="799" class="body">同价位配置、SKU及出货结构</text>
+<text x="28" y="854" class="leaf-title where">去哪里找</text>
+<text x="28" y="879" class="body">看板：市场总览、品牌分析、竞品对比</text>
+<text x="28" y="902" class="body">出货：载入实际出货台账</text>
+<text x="28" y="925" class="body">出货结构与市场样本份额分开看</text>
+<rect x="725" y="192" width="150" height="50" rx="9" fill="#edf5f0"/>
+<text x="800" y="224" text-anchor="middle" class="branch">经营表现怎样？</text>
+<text x="908" y="118" class="leaf-title">日常卖得怎样</text>
+<text x="908" y="143" class="body">历史实销、渠道、型号、月份</text>
+<text x="908" y="198" class="leaf-title">大促哪天表现好</text>
+<text x="908" y="223" class="body">活动日期、日订单、金额和状态</text>
+<text x="908" y="246" class="body">各平台报表的截数时间</text>
+<text x="908" y="278" class="leaf-title where">去哪里找</text>
+<text x="908" y="303" class="body">看板：经营总览、经营分析、SKU表现</text>
+<text x="908" y="326" class="body">资料：订单导出、销量表、大促HTML</text>
+<text x="908" y="349" class="body">取消、未付款与已收款分开</text>
+<rect x="725" y="480" width="150" height="50" rx="9" fill="#edf5f0"/>
+<text x="800" y="512" text-anchor="middle" class="branch">库存与利润呢？</text>
+<text x="908" y="406" class="leaf-title">先看真正可用的货</text>
+<text x="908" y="431" class="body">可用量、已分配量、库存记录日期</text>
+<text x="908" y="486" class="leaf-title">再判断补货和利润</text>
+<text x="908" y="511" class="body">实际发货、在途、成本和各项费用</text>
+<text x="908" y="534" class="body">相关资料仍需补齐</text>
+<text x="908" y="566" class="leaf-title where">去哪里找</text>
+<text x="908" y="591" class="body">看板：库存监控、利润与补货</text>
+<text x="908" y="614" class="body">资料：仓库报表、物流台账、财务费用</text>
+<text x="908" y="637" class="body">资料不齐时，暂不下毛利或在途结论</text>
+<rect x="725" y="768" width="150" height="50" rx="9" fill="#edf5f0"/>
+<text x="800" y="800" text-anchor="middle" class="branch">数据靠得住吗？</text>
+<text x="908" y="694" class="leaf-title">先核对统计范围</text>
+<text x="908" y="719" class="body">国家、币种、期间；实销还是估算</text>
+<text x="908" y="774" class="leaf-title">再查缺失和重复</text>
+<text x="908" y="799" class="body">历史缺月、商品组、型号和品类</text>
+<text x="908" y="822" class="body">同型号多链接不重复算</text>
+<text x="908" y="854" class="leaf-title where">去哪里找</text>
+<text x="908" y="879" class="body">看板：数据管理 → 来源、核验、缺口</text>
+<text x="908" y="902" class="body">回查：原报告、平台页或内部台账</text>
+<text x="908" y="925" class="body">按缺口补资料，再核对一次</text>
+<line x1="28" x2="1172" y1="940" y2="940" stroke="#e1eae4"/>
+<text x="600" y="966" text-anchor="middle" font-size="16" fill="#176a50">市场估算、实际销量、订单金额、出货和采购分别看；缺资料就标明缺口。</text>
+<text x="600" y="990" text-anchor="middle" font-size="14" fill="#60766b">各国家和品类的资料范围以看板与原始报告为准</text>
+</svg>

@@ -103,7 +103,15 @@ function renderWorkspace(){
  if(!window.UWANT_PUBLISHED_RESEARCH&&isOuterResearch(state)){if(!importWarning){const box=document.createElement('p');box.id='research-load-warning';box.className='research-load-warning';box.setAttribute('role','alert');box.textContent='扩充资料未加载，当前仅显示已保存的基础样本。请刷新重试。';$('research-content').prepend(box);}}else importWarning?.remove();
  $('export').onclick=()=>exportResults();
  if(window.ResearchDataAdmin?.isRoute(state)){renderDataWorkspace();return;}
- if(state.platform==='ml'&&isDecisionRoute(state)){Mercado.render(state,change,evidenceDownload);return;}
+ if(state.platform==='ml'&&isDecisionRoute(state)){
+  // Do not carry an Amazon product or monthly-share drill into a Mercado scope.
+  const product=state.historyProduct;
+  if(product&&window.MERCADO_DATA?.records&&!Mercado.rows(state).some(row=>row.product_code===product))state.historyProduct='';
+  state.shareDrill='';
+  Mercado.render(state,change,evidenceDownload);
+  if(M.encode(state)!==location.hash)history.replaceState(history.state,'',M.encode(state));
+  return;
+ }
  if(isDecisionRoute(state)){renderDecisionWorkspace();return;}
  const historical=M.isHistory(state.dataset);$('month-range-controls').innerHTML='';$('dataset').closest('label').hidden=false;
  if(!$('dataset').querySelector('optgroup')){const group=document.createElement('optgroup');group.label='2026 年 · 当前商品历史';for(const month of D.history.months){const option=document.createElement('option');option.value=month;option.textContent=month.replace('-','年')+'月'+(month===new Date().toISOString().slice(0,7)?' · 当前月':'');group.append(option);}$('dataset').prepend(group);}
