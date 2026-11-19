@@ -46,7 +46,10 @@ async function run() {
     await page.locator('.business-guide-link').click();
     await page.getByRole('heading',{name:'业务资料查找图',exact:true}).waitFor();
     assert.equal(await page.locator('details').count(),6);
-    assert(await page.locator('figure img').evaluate(img=>img.complete&&img.naturalWidth>0));
+    await page.waitForFunction(() => {
+      const img = document.querySelector('figure img');
+      return img?.complete && img.naturalWidth > 0;
+    });
     await page.setViewportSize({width:390,height:844});
     await page.getByText('经营表现怎样？',{exact:true}).click();
     assert(await page.getByRole('link',{name:'经营总览',exact:true}).isVisible());
