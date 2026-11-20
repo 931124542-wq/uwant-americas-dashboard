@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-20-all-market-coverage-review",
+  "version": "2026-11-20-mercado-brand-directory",
   "dataAsOf": "2026-10-28",
   "baseCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "products": 466,
@@ -383,5 +383,14 @@
     "mercadoQueryScopesWithUnfinishedPages": 12,
     "existingSourceRecordsUnchanged": true,
     "report": "docs/all-market-coverage-2026-11-20.md"
+  },
+  "mercadoBrandDirectory": {
+    "displayVersion": "11.20.2",
+    "scope": "All five Mercado Libre countries and four product categories",
+    "mexicoVacuumCatalogueBrands": 45,
+    "mexicoVacuumPositiveNamedBrandsNovember6": 3,
+    "mexicoVacuumPositiveNamedBrandsNovember12": 13,
+    "snapshotsPresentedSeparately": true,
+    "sourceRecordsUnchanged": true
   }
 }

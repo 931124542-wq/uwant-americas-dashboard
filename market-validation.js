@@ -18,7 +18,7 @@
  function meta(products,amz){
   return {
    listings:distinct(products.map(p=>p.product_code||p.productId)),
-   brands:distinct(products.map(p=>brand(amz?p.brand:p.brandGroup||p.brand_label))),
+   brands:amz?distinct(products.map(p=>brand(p.brand))):distinct(products.map(root.Mercado.brandOf).filter(root.Mercado.knownBrand)),
    modelGroups:distinct(products.map(p=>amz?p.modelIdentity?.status==='confirmed'&&p.modelIdentity.groupKey:p.modelGroup)),
    modelsWithEvidence:distinct(products.filter(p=>amz?p.modelIdentity?.status==='confirmed'&&p.modelIdentity.basis!=='confirmed_in_current_title':p.modelEvidence?.verified===true).map(p=>p.product_code||p.productId)),
    images:products.filter(p=>/^https:\/\//i.test(p.picture_link||p.imageUrl||'')&&p.imageLinkValid!==false).length,

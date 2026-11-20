@@ -4,7 +4,7 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 
 const base = process.env.UWANT_TEST_BASE || 'http://127.0.0.1:8842/';
-const mexico = '#country=MX&platform=ml&category=vacuum&page=market';
+const mexico = '#country=MX&platform=ml&category=vacuum&page=market&shareMetric=units';
 const out = path.resolve(process.argv[2]);
 
 async function run() {
@@ -33,6 +33,36 @@ async function run() {
     assert(!csv.includes('2026-11-06'));
     await page.screenshot({path:out+'/mexico-overview.png'});
 
+    const brandsChart=page.locator('.market-analysis-chart').filter({hasText:'样本品牌销量占比'});
+    assert.match(await brandsChart.innerText(),/2026-11-06 · 3 个品牌有销量 · 商品库 45 个来源品牌/);
+    await page.locator('[data-overview-page="brands"]').click();
+    const brands=page.locator('.market-brand-performance');
+    await brands.waitFor();
+    assert.match(await page.locator('.market-brand-sample').innerText(),/2026-11-06 有 3 个.*2026-11-12 有 13 个/);
+    assert.equal(await brands.locator('tbody tr').count(),20);
+    await page.locator('[data-market-brand-next]').click();
+    assert.match(await page.locator('.market-brand-footer').innerText(),/第2 \/ 3页/);
+    const brandSearch=page.locator('[data-market-brand-query]');
+    await brandSearch.fill('rowenta');
+    const rowenta=brands.getByRole('row').filter({hasText:'ROWENTA'});
+    assert.equal(await rowenta.count(),1);
+    assert.equal((await rowenta.locator('td').allTextContents()).filter(x=>x.startsWith('—')).length,2);
+    const brandDownload=page.waitForEvent('download');
+    await page.locator('#export').click();
+    const brandCsv=await brandDownload;
+    await brandCsv.saveAs(out+'/brands-rowenta.csv');
+    const selectedBrand=await fs.readFile(out+'/brands-rowenta.csv','utf8');
+    assert.match(selectedBrand,/"ROWENTA","2","units","MXN","2026-11-06","0","","","2026-11-12","0","",""/);
+    await brandSearch.fill('Shark');
+    const shark=brands.getByRole('row').filter({hasText:'SHARK'});
+    assert.equal(await shark.count(),1);
+    assert.match(await shark.innerText(),/16\s+—.*34/s);
+    await shark.getByRole('button',{name:'查看商品'}).click();
+    assert.equal(await page.locator('[data-ml-filter]').inputValue(),'SHARK');
+    assert.equal(await page.locator('.ml-product').count(),16);
+    await page.goto(base+mexico,{waitUntil:'domcontentloaded'});
+    await card.waitFor();
+
     await card.getByRole('button',{name:'查看商品库'}).click();
     const search = page.locator('[data-ml-query]');
     await search.fill('MLM49842392');
@@ -52,8 +82,11 @@ async function run() {
     assert(!await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2));
     await card.scrollIntoViewIfNeeded();
     await page.screenshot({path:out+'/mexico-mobile.png'});
+    await page.locator('[data-overview-page="brands"]').click();
+    await brands.waitFor();
+    assert(!await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2));
     assert.deepEqual(errors,[]);
-    console.log('PASS Mexico market coverage, separate batches and export, source-backed catalogue, accessory isolation and mobile.');
+    console.log('PASS Mexico coverage and all brands, separate batches, search, drilldown, export, accessory isolation and mobile.');
   } finally {
     await browser.close();
   }
