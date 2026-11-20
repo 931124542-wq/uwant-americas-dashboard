@@ -1,5 +1,5 @@
 const fs=require('fs'),vm=require('vm'),cp=require('child_process'),assert=require('assert/strict'),F=require('./library-fixture.cjs');
-const c=F();c.location={hostname:'public.example'};for(const f of ['mercado-data.js','market-insights.js','published-research-data.js','research-overlay.js','research-snapshot.js','mercado.js','market-decision-model.js','market-validation.js','market-overview-layout.js'])vm.runInContext(fs.readFileSync(f,'utf8'),c);
+const c=F();c.location={hostname:'public.example'};for(const f of ['mercado-data.js','market-insights.js','published-research-data.js','research-overlay.js','research-snapshot.js','mercado-history.js','mercado-coverage-summary.js','mercado.js','market-decision-model.js','market-validation.js','market-overview-layout.js'])vm.runInContext(fs.readFileSync(f,'utf8'),c);
 c.REVIEW_DATA.history=c.AmazonResearch.mergeHistory(c.REVIEW_HISTORY);const original={};original.window=original;vm.createContext(original);vm.runInContext(cp.execFileSync('git',['show','5c47837:review-data.js'],{encoding:'utf8'}),original);
 const expected={MX:[6750,10200593.41,'MXN'],CA:[64344,17829511.7,'CAD'],US:[495068,86136156.25,'USD']};
 for(const [country,[units,revenue,currency]]of Object.entries(expected)){

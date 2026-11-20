@@ -20,7 +20,7 @@ async function run() {
     const summary = page.locator('[data-ml-history-summary]');
     await summary.waitFor();
     assert.match(await summary.innerText(), /2026-01 至 2026-10.*44 个商品链接/);
-    assert.match(await page.locator('.ml-coverage-summary').innerText(), /商品库 249 条/);
+    assert.match(await page.locator('.ml-coverage-summary').innerText(), /商品库 244 条/);
     assert.deepEqual((await page.locator('.market-kpi>strong').allTextContents()).slice(0,2), ['4,936,447','39']);
     assert(!page.url().includes('B0F84H88C1') && !page.url().includes('Shark'));
     await page.screenshot({path:output+'/overview.png'});

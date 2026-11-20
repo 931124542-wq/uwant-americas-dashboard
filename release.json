@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-19-mercado-vacuum-coverage",
+  "version": "2026-11-20-all-market-coverage-review",
   "dataAsOf": "2026-10-28",
   "baseCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "products": 466,
@@ -369,5 +369,19 @@
     "historicalListings": 23,
     "fullMarketCoverage": false,
     "existingSourceRecordsUnchanged": true
+  },
+  "allMarketCoverageReview": {
+    "displayVersion": "11.20.1",
+    "amazonMonthRange": ["2026-01", "2026-10"],
+    "platformScopesReviewed": 56,
+    "applicablePlatformScopes": 36,
+    "scopesWithSampleUnitsAndRevenue": 26,
+    "scopesWithCategoryReportOnly": 1,
+    "localRetailCountryCategoriesChecked": 28,
+    "localRetailCountryCategoriesWithEvidence": 11,
+    "accessoryExclusionsAdded": 87,
+    "mercadoQueryScopesWithUnfinishedPages": 12,
+    "existingSourceRecordsUnchanged": true,
+    "report": "docs/all-market-coverage-2026-11-20.md"
   }
 }

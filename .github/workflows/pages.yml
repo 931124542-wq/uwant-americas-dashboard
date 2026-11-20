@@ -91,6 +91,7 @@ jobs:
           node tests/operating-overview-timepoints-browser.cjs "$RUNNER_TEMP/uwant-browser-results/overview-promotion"
           node tests/mercado-history-guide-browser.cjs "$RUNNER_TEMP/uwant-browser-results/mercado-history-guide"
           node tests/mercado-coverage-browser.cjs "$RUNNER_TEMP/uwant-browser-results/mercado-coverage"
+          node tests/all-market-coverage-browser.cjs "$RUNNER_TEMP/uwant-browser-results/all-market-coverage"
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:

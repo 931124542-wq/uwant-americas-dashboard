@@ -19,7 +19,7 @@ async function run() {
     await page.goto(base+mexico,{waitUntil:'domcontentloaded'});
     const card = page.locator('.ml-coverage-summary');
     await card.waitFor();
-    assert.match(await card.innerText(),/商品库 295 条.*139 个可统计销量.*5 个有销量.*32 条公开商品资料/);
+    assert.match(await card.innerText(),/商品库 294 条.*138 个可统计销量.*5 个有销量.*32 条公开商品资料/);
     assert.deepEqual((await page.locator('.market-kpi>strong').allTextContents()).slice(0,2),['117,092','8']);
     const supplement = card.locator('[data-ml-extra-snapshot]');
     assert.match(await supplement.innerText(),/117 个统计样本.*20 个有销量/);
