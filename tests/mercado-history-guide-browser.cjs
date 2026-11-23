@@ -23,6 +23,15 @@ async function run() {
     assert.match(await page.locator('.ml-coverage-summary').innerText(), /商品库 244 条/);
     assert.deepEqual((await page.locator('.market-kpi>strong').allTextContents()).slice(0,2), ['4,936,447','39']);
     assert(!page.url().includes('B0F84H88C1') && !page.url().includes('Shark'));
+    const period=page.locator('#market-period');
+    assert.match(await period.innerText(),/商品历史月份\s+2026年1月–10月/);
+    await period.getByRole('button',{name:'近3个月',exact:true}).click();
+    const range=await page.evaluate(()=>[state.startMonth,state.endMonth]);
+    assert.notDeepEqual(range,['2026-01','2026-10']);
+    assert.match(await summary.innerText(),new RegExp(range.join(' 至 ')));
+    assert.deepEqual((await page.locator('.market-kpi>strong').allTextContents()).slice(0,2), ['4,936,447','39']);
+    await page.goBack();
+    await page.waitForFunction(()=>state.startMonth==='2026-01'&&state.endMonth==='2026-10');
     await page.screenshot({path:output+'/overview.png'});
 
     await summary.getByRole('button', {name:'查看商品月销量'}).click();
@@ -44,12 +53,17 @@ async function run() {
     await page.screenshot({path:output+'/history.png'});
 
     await page.locator('.business-guide-link').click();
-    await page.getByRole('heading',{name:'业务资料查找图',exact:true}).waitFor();
+    await page.getByRole('heading',{name:'业务思维导图',exact:true}).waitFor();
     assert.equal(await page.locator('details').count(),6);
-    await page.waitForFunction(() => {
-      const img = document.querySelector('figure img');
-      return img?.complete && img.naturalWidth > 0;
-    });
+    assert.equal(await page.locator('.guide-branch').count(),3);
+    assert.match(await page.locator('[data-guide-scope]').innerText(),/智利.*Mercado Libre.*2026-01 至 2026-10/);
+    await page.screenshot({path:output+'/guide-desktop.png'});
+    await page.getByText('市场有空间吗？',{exact:true}).click();
+    await page.getByRole('link',{name:'商品月度历史',exact:true}).click();
+    await picker.waitFor();
+    assert.match(page.url(),/country=CL.*platform=ml/);
+    assert.match(page.url(),/startMonth=2026-01.*endMonth=2026-10/);
+    await page.locator('.business-guide-link').click();
     await page.setViewportSize({width:390,height:844});
     await page.getByText('经营表现怎样？',{exact:true}).click();
     assert(await page.getByRole('link',{name:'经营总览',exact:true}).isVisible());
@@ -59,6 +73,15 @@ async function run() {
     await page.locator('.oe-overview').waitFor();
     await page.goto(base + exactHash, {waitUntil:'domcontentloaded'});
     await summary.waitFor();
+    assert(await period.isVisible());
+    assert.equal(await page.locator('#scope-toggle').getAttribute('aria-expanded'),'false');
+    await period.getByLabel('起始月份').fill('2026-02');
+    await period.getByLabel('结束月份').fill('2026-05');
+    await period.getByRole('button',{name:'应用',exact:true}).click();
+    assert.match(await summary.innerText(),/2026-02 至 2026-05/);
+    assert.deepEqual((await page.locator('.market-kpi>strong').allTextContents()).slice(0,2), ['4,936,447','39']);
+    await page.reload({waitUntil:'domcontentloaded'});
+    assert.match(await period.innerText(),/2026年2月–5月/);
     assert(!await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2));
     assert.deepEqual(errors,[]);
     console.log('PASS Chile exact route, snapshot and monthly history, scoped CSV and refresh, guide and mobile layout.');

@@ -71,3 +71,29 @@ body[data-workspace=research] [data-backstage-only][hidden]{display:none!importa
 .market-brand-sample{padding:0 22px;color:var(--market-muted);font-size:12px}
 .market-brand-performance small{display:block;margin-top:4px;color:var(--market-muted);font-size:11px;white-space:nowrap}
 @media(max-width:700px){.market-brand-sample{padding:0 16px}}
+
+#market-period:not([hidden]){display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px 20px;margin:0 0 16px;padding:14px 18px;border:1px solid var(--market-line);border-radius:10px;background:var(--market-paper)}
+.market-period-heading{min-width:0;display:flex;align-items:center;flex-wrap:wrap;gap:9px 16px}
+.market-period-heading>div:first-child{display:flex;flex-wrap:wrap;align-items:baseline;gap:5px 10px}
+.market-period-heading h2{font-size:12px;font-weight:600;line-height:1.45;margin:0;color:var(--market-muted)}
+.market-period-heading strong{font-size:15px;font-variant-numeric:tabular-nums;color:var(--market-ink)}
+.market-period-presets,.market-period-fields{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.market-period-presets button,.market-period-apply{min-height:33px;padding:5px 9px;border:1px solid var(--market-line);border-radius:6px;color:var(--market-ink);background:#fff;font:inherit;font-size:11px;white-space:nowrap;cursor:pointer}
+.market-period-presets button:hover,.market-period-presets button[aria-pressed="true"]{border-color:#83b5a0;background:#e9f4ed;color:#165f4a}
+.market-period-fields label{display:flex;gap:4px;align-items:center;font-size:11px;color:var(--market-muted)}
+.market-period-fields input{box-sizing:border-box;width:123px;min-height:33px;padding:4px 6px;border:1px solid var(--market-line);border-radius:6px;color:var(--market-ink);font:inherit;background:#fff}
+.market-period-fields input[aria-invalid="true"]{border-color:#b14f48}
+.market-period-apply{background:#176449;color:#fff;border-color:#176449}
+.market-period-apply:hover{background:#12543e}
+.market-period-note,.market-period-error{grid-column:1/-1;margin:0;font-size:11px;color:var(--market-muted);line-height:1.45}
+.market-period-error{color:#9c332e}.market-period-error:empty{display:none}
+.sidebar-guide-link{display:block;padding:9px 10px;margin:0 0 5px;color:inherit;text-decoration:none;border-radius:6px;font-size:13px}
+.sidebar-guide-link:hover{background:#ffffff18}
+@media(max-width:1100px){#market-period:not([hidden]){grid-template-columns:minmax(0,1fr);gap:9px}}
+@media(max-width:540px){
+  #market-period:not([hidden]){padding:11px 12px;margin-bottom:12px}
+  .market-period-fields{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;align-items:end;gap:7px}
+  .market-period-fields label{display:grid;gap:3px}
+  .market-period-fields input{width:100%;min-width:0;min-height:38px}
+  .market-period-apply,.market-period-presets button{min-height:38px}
+}
