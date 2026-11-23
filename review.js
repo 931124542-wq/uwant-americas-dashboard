@@ -100,7 +100,7 @@ function render(){
  window.MarketPeriod.mount(state,D.history,change);
  const keys=['country','platform','category','dataset','startMonth','endMonth','own','module','page','view'];
  const guideScope=new URLSearchParams(keys.filter(k=>state[k]).map(k=>[k,state[k]]));
- document.querySelectorAll('[data-business-guide]').forEach(link=>link.href='business-guide/#'+guideScope);
+ document.querySelectorAll('[data-business-guide]').forEach(link=>{link.hash=guideScope.toString();});
 }
 function renderWorkspace(){
  if(window.Mercado)Mercado.restore();

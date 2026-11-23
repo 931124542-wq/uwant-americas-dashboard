@@ -56,6 +56,7 @@ async function run() {
     await page.getByRole('heading',{name:'业务思维导图',exact:true}).waitFor();
     assert.equal(await page.locator('details').count(),6);
     assert.equal(await page.locator('.guide-branch').count(),3);
+    await page.locator('[data-guide-scope]').waitFor();
     assert.match(await page.locator('[data-guide-scope]').innerText(),/智利.*Mercado Libre.*2026-01 至 2026-10/);
     await page.screenshot({path:output+'/guide-desktop.png'});
     await page.getByText('市场有空间吗？',{exact:true}).click();
