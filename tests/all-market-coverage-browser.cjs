@@ -179,6 +179,39 @@ async function run() {
     assert.ok(archiveCsv.trim().split(/\r?\n/).slice(1).every(line=>line.startsWith('"BR","mattress","2026-11-05"')));
     await go({country:'BR',platform:'ml',category:'mattress',...selectedMonths});
     await page.screenshot({path:out+'/market-mobile.png'});
+    await go({country:'BR',platform:'ml',category:'fabric',view:'products',evidenceQuery:'MLB26797988'});
+    const listing=page.locator('.ml-product');
+    await listing.getByText('商品信息与来源',{exact:true}).click();
+    const listedSnapshots=listing.locator('[data-ml-listing-snapshots]');
+    assert.deepEqual(await listedSnapshots.locator('time').allTextContents(),['2026-11-05','2026-11-06','2026-11-12']);
+    assert.match(await listedSnapshots.locator('[data-ml-observation-date="2026-11-05"]').innerText(),/539\.9 BRL.*2,239 台.*1,167,719 BRL/);
+    assert.match(await listedSnapshots.locator('[data-ml-observation-date="2026-11-12"]').innerText(),/539\.9 BRL.*3,223 台.*1,660,259 BRL/);
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2),false);
+
+    await go({country:'MX',category:'fabric',view:'products',evidenceDetail:'amazon:mx:B0D11TKT2Z'});
+    const priceArchive=page.locator('#rq-dialog [data-amazon-price-archive]');
+    await priceArchive.getByText('历史价格参考 · 10 个月',{exact:true}).click();
+    assert.equal(await priceArchive.locator('tbody tr').count(),10);
+    assert.match(await priceArchive.locator('thead').innerText(),/来源月度价格 \/ MXN/);
+    assert.match(await priceArchive.locator('[data-archive-month="2026-01"]').innerText(),/3,199\s+3,162\.43/);
+    assert.match(await priceArchive.locator('[data-archive-month="2026-10"]').innerText(),/采集时未结月/);
+    assert.equal(await priceArchive.getByText(/销量|销售额/).count(),0);
+    assert.equal(await page.locator('.private-research-evidence:visible').count(),0);
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2),false);
+    await page.screenshot({path:out+'/amazon-price-archive-mobile.png'});
+    const archiveCoverage=await page.evaluate(()=>{
+      const listingKeys=new Map(UWANT_PUBLISHED_RESEARCH.cachedCalendar.map(r=>[
+        [r.country,r.category,r.asin].join('|'),{country:r.country,platform:'amazon',category:r.category,productId:r.asin}
+      ]));
+      return {
+        products:[...listingKeys.values()].length,
+        prices:[...listingKeys.values()].flatMap(r=>ResearchArchive.publicPrices(r)).length,
+        mercadoListings:MERCADO_DATA.records.filter(r=>ResearchSnapshot.observations(r).length>1).length,
+        mxJanuary:ResearchArchive.publicPrices({country:'MX',platform:'amazon',category:'fabric',productId:'B0D11TKT2Z'},
+          {startMonth:'2026-01',endMonth:'2026-01'}).map(r=>r.price)
+      };
+    });
+    assert.deepEqual(archiveCoverage,{products:22,prices:220,mercadoListings:1550,mxJanuary:[3199]});
     assert.deepEqual(errors,[]);
     const retail = await page.evaluate(months=>MarketValidation.localCatalogue(months,decisionCatalog),months);
     await fs.writeFile(out+'/audit.json',JSON.stringify({...audit,retail,browserScopes:36,mobile:true,exported:true},null,2));

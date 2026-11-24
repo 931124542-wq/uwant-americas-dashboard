@@ -452,5 +452,14 @@
     "verifiedProductGroupMonthsWithUnits": 4801,
     "newVerifiedCalendarMonthRevenueRecords": 0,
     "sourceRecordsUnchanged": true
+  },
+  "productArchiveVisibility": {
+    "displayVersion": "11.24.8",
+    "mercadoListingsWithMultipleVisibleCaptureDates": 1550,
+    "mercadoOlderCaptureRowsPreviouslyHiddenInProductDetails": 474,
+    "amazonListingsWithVisibleHistoricalPriceReferences": 22,
+    "amazonHistoricalPriceReferences": 220,
+    "sourceRecordsUnchanged": true,
+    "marketTotalsUnchanged": true
   }
 }
