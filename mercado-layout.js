@@ -37,6 +37,41 @@
    'Mercado_'+s.country+'_'+s.category+'_brands.csv'
   );
  }
+ function monthComparison(state,data,download){
+  const details=document.createElement('details');
+  details.className='market-block ml-month-comparison';
+  details.innerHTML='<summary>查看五国月度销量样本</summary><div data-ml-month-comparison></div>';
+  const body=details.querySelector('[data-ml-month-comparison]');
+  details.addEventListener('toggle',()=>{
+   if(!details.open||body.childElementCount)return;
+   const {start,end}=root.MercadoHistory.bounds(state,data);
+   const countries=Object.entries(root.ResearchModel.countries).filter(([code])=>root.MarketIntegrity.applicable(code,'ml'));
+   const entries=countries.flatMap(([country,info])=>Object.entries(cats).map(([category,label])=>{
+    const scope={country,category,platform:'ml',page:'market',view:'overview',marketPeriod:'monthly',dataset:end,startMonth:start,endMonth:end};
+    const history=root.MercadoHistory.selection(scope,root.Mercado.rows(scope),data);
+    return {country,category,name:info.name,label,scope,sample:root.MercadoHistory.monthlySample(history)};
+   }));
+   const months=entries[0]?.sample.months||[];
+   const showMonths=months.length<=3;
+   const value=units=>units===null?'—':fmt(units);
+   const monthHeaders=showMonths?months.map(m=>'<th>'+esc(m.month)+'</th>').join(''):'';
+   const rows=entries.map(row=>{
+    const {scope,sample}=row,href=root.ResearchModel.encode(scope);
+    const monthCells=showMonths?sample.months.map(m=>'<td>'+value(m.units)+'</td>').join(''):'';
+    return '<tr data-country="'+row.country+'" data-category="'+row.category+'"><th scope="row"><a href="'+esc(href)+'">'+esc(row.name+' / '+row.label)+'</a></th>'+
+     monthCells+'<td data-comparison-units>'+value(sample.total)+'</td><td>'+fmt(sample.groups)+'</td><td>'+sample.covered+' / '+months.length+'</td></tr>';
+   }).join('');
+   body.innerHTML='<p>'+esc(start)+' 至 '+esc(end)+' · 各范围按已核实的样本统计，— 表示暂无可统计的完整月样本。</p>'+
+    '<button class="rq-button" data-export-month-comparison>导出五国逐月样本</button><div class="table-scroll"><table><thead><tr><th>市场 / 品类</th>'+
+    monthHeaders+'<th>区间样本 / 台</th><th>商品组</th><th>有完整样本的月份</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+   body.querySelector('[data-export-month-comparison]').onclick=()=>download(
+    [['国家','品类','起始月','结束月','月份','完整月样本销量','统计商品组','有历史的商品链接数','记录情况'],
+     ...entries.flatMap(row=>row.sample.months.map(m=>[row.name,row.label,start,end,m.month,m.units,m.groups.length,m.links,m.status]))],
+    'MercadoLibre_五国月度样本_'+start+'_'+end+'.csv'
+   );
+  });
+  return details;
+ }
  function arrange(s,change,download){
   const host=document.getElementById('research-evidence'),workspace=host.querySelector('.ml-workbench');if(!workspace)return;
   const data=root.MERCADO_DATA,all=root.Mercado.rows(s),report=root.Mercado.report(s),currency=all[0]?.currency||'',panels=[...workspace.querySelectorAll(':scope > .panel')],catalog=panels.find(x=>x.querySelector('h2')?.textContent.startsWith('商品列表')),history=panels.find(x=>x.querySelector('h2')?.textContent==='商品月度销量'),shares=workspace.querySelector('.ml-two'),kpis=workspace.querySelector('.ml-kpis'),summary=workspace.querySelector('.ml-summary'),notes=workspace.querySelector('.ml-data-details'),comparison=workspace.querySelector('.ml-comparison'),coverage=workspace.querySelector('.coverage-monitor'),sourceEvidence=workspace.querySelector('.private-research-evidence'),detail=workspace.querySelector('[data-ml-detail]');
@@ -54,6 +89,7 @@
    const period=document.createElement('div');
    period.dataset.marketOverviewTemplate='mercado-monthly';
    period.innerHTML=root.MercadoHistory.overview(s,all,data);
+   period.append(monthComparison(s,data,download));
    if(history)period.append(history);
    workspace.append(period);
   }else if(overview){
@@ -95,6 +131,8 @@
   host.querySelectorAll('[data-market-product-image]').forEach(img=>{const loaded=()=>{if(img.naturalWidth>=32&&img.naturalHeight>=32)img.style.opacity='1';else img.hidden=true;};img.onerror=()=>img.hidden=true;img.onload=loaded;if(img.complete)loaded();});
   host.querySelectorAll('[data-ml-band]').forEach(b=>b.onclick=()=>{const selected=b.dataset.mlBand,rs=report.all.filter(r=>{const v=root.ResearchSnapshot.priceEligible(r)?r.selling_price:null;if(selected==='价位待归类')return v===null;if(selected.startsWith('>='))return v>=report.cuts.at(-1);const [a,z]=selected.split(' \u2013 < ').map(Number);return v!==null&&v>=a&&v<z;}),target=host.querySelector('[data-ml-detail]');target.className='market-band-detail';target.innerHTML='<div class="market-section-heading"><h3>'+esc(bandName(selected))+' \u00b7 '+rs.length+'件统计商品</h3><div><button class="rq-button" data-market-band-export>导出本组</button><button class="rq-button" data-market-detail-close>收起</button></div></div><div class="table-scroll"><table><thead><tr><th>商品 / 型号</th><th>档案价</th><th>近30天销量</th><th>近30天销售额</th></tr></thead><tbody>'+rs.map(r=>'<tr><td><button data-market-detail-product="'+esc(r.product_code)+'">'+esc(r.brand_label)+' \u00b7 '+esc(r.model||r.product_code)+'</button></td><td>'+fmt(r.selling_price>0?r.selling_price:null)+' '+esc(r.currency)+'</td><td>'+fmt(root.ResearchSnapshot.eligible(r,data,'orders_last_30_days')?r.orders_last_30_days:null)+'</td><td>'+fmt(root.ResearchSnapshot.eligible(r,data,'revenue_last_30_days')?r.revenue_last_30_days:null)+'</td></tr>').join('')+'</tbody></table></div>';target.querySelector('[data-market-detail-close]').onclick=()=>target.replaceChildren();target.querySelectorAll('[data-market-detail-product]').forEach(x=>x.onclick=()=>change({page:'market',view:'products',evidenceQuery:x.dataset.marketDetailProduct,evidenceBrand:'',mlMin:'',mlMax:'',evidenceStatus:'all',evidencePage:'0'}));target.querySelector('[data-market-band-export]').onclick=()=>download([['country','platform','category','productId','brand','model','archivePrice','currency','units30dEstimate','revenue30dEstimate','sourceDate','selectedMetric'],...rs.map(r=>[r.country,'Mercado Libre',r.category,r.product_code,r.brand_label,r.model,r.selling_price,r.currency,root.ResearchSnapshot.eligible(r,data,'orders_last_30_days')?r.orders_last_30_days:null,root.ResearchSnapshot.eligible(r,data,'revenue_last_30_days')?r.revenue_last_30_days:null,r.sourceDate,report.metric])],'Mercado_'+s.country+'_'+s.category+'_price_band.csv');target.scrollIntoView({block:'nearest'});});
   host.querySelectorAll('[data-ml-route]').forEach(b=>b.onclick=()=>change({page:'market',view:b.dataset.mlRoute}));host.querySelectorAll('[data-ml-page]').forEach(b=>b.onclick=()=>change({page:b.dataset.mlPage,view:'overview',brandQuery:'',brandOffset:'0'}));
+  const rangeOverview=host.querySelector('[data-ml-range-overview]');
+  if(rangeOverview)rangeOverview.onclick=()=>change({page:'market',view:'overview',marketPeriod:'monthly'});
   host.querySelectorAll('[data-ml-brand]').forEach(b=>b.onclick=()=>change({page:'market',view:'products',evidenceBrand:b.dataset.mlBrand,evidenceQuery:'',mlMin:'',mlMax:'',evidenceStatus:'all',evidencePage:'0',marketQuick:'all',evidenceMin:'',evidenceMax:''}));
  }
  root.Mercado.render=function(s,change,download){original(s,change,download);arrange(s,change,download);};

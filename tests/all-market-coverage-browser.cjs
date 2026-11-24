@@ -76,6 +76,51 @@ async function run() {
     await page.reload({waitUntil:'domcontentloaded'});
     await page.locator('.ml-coverage-summary').waitFor();
     assert.equal(await page.evaluate(()=>state.country+'|'+state.platform+'|'+state.category),'CL|ml|wash');
+    const selectedMonths={startMonth:'2026-09',endMonth:'2026-11',marketPeriod:'monthly'};
+    const completeSamples={
+      MX:[[578,373],[314,253],[7395,3430],[253,173]],
+      BR:[[569,436],[3411,1981],[6108,4498],[47,205]],
+      AR:[[215,11],[1917,1474],[2403,729],[213,76]],
+      CL:[[72,36],[217,171],[138,541],[79,60]],
+      CO:[[22,47],[53,38],[147,46],[36,8]]
+    };
+    const categories=['wash','vacuum','fabric','mattress'];
+    await go({country:'MX',platform:'ml',category:'vacuum',...selectedMonths});
+    const comparison=page.locator('.ml-month-comparison');
+    await comparison.locator('summary').click();
+    await comparison.locator('tbody tr').first().waitFor();
+    assert.equal(await comparison.locator('tbody tr').count(),20);
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2),false);
+    for(const [country,scopes] of Object.entries(completeSamples)){
+      for(const [index,[sep,oct]] of scopes.entries()){
+        const row=comparison.locator(`tr[data-country="${country}"][data-category="${categories[index]}"]`);
+        const values=await row.locator('td').allTextContents();
+        assert.deepEqual(values.slice(0,4),[value(sep),value(oct),'—',value(sep+oct)]);
+        assert.equal(values.at(-1),'2 / 3');
+      }
+    }
+    const comparisonDownload=page.waitForEvent('download');
+    await comparison.getByRole('button',{name:'导出五国逐月样本'}).click();
+    await (await comparisonDownload).saveAs(out+'/mercado-five-countries.csv');
+    const comparisonCsv=await fs.readFile(out+'/mercado-five-countries.csv','utf8');
+    const comparisonLines=comparisonCsv.trim().split(/\r?\n/);
+    assert.equal(comparisonLines.length,61);
+    assert.equal(comparisonLines.filter(line=>line.includes('"2026-11","","0"')).length,20);
+    await comparison.locator('tr[data-country="AR"][data-category="fabric"] a').click();
+    await page.waitForFunction(()=>state.country==='AR'&&state.category==='fabric'&&state.endMonth==='2026-11');
+    assert.equal(await page.locator('[data-ml-period-overview] [data-market-kpi="units"] strong').innerText(),'3,132');
+
+    for(const [country,scopes] of Object.entries(completeSamples)){
+      for(const [index,[sep,oct]] of scopes.entries()){
+        await go({country,platform:'ml',category:categories[index],...selectedMonths});
+        const overview=page.locator('[data-ml-period-overview]');
+        assert.equal(await overview.locator('[data-market-kpi="units"] strong').innerText(),value(sep+oct));
+        assert.equal(await overview.locator('[data-period-month="2026-11"] [data-month-sample-units]').innerText(),'—');
+        await page.getByRole('button',{name:'最近可统计月',exact:true}).click();
+        assert.equal(await overview.locator('[data-market-kpi="units"] strong').innerText(),value(oct));
+        assert.equal(await page.evaluate(()=>state.startMonth+'|'+state.endMonth),'2026-10|2026-10');
+      }
+    }
     await page.screenshot({path:out+'/market-mobile.png'});
     assert.deepEqual(errors,[]);
     const retail = await page.evaluate(months=>MarketValidation.localCatalogue(months,decisionCatalog),months);

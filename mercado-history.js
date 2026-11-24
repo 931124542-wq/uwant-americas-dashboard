@@ -7,11 +7,17 @@
   const monthIndex = month => Number(month.slice(0,4))*12 + Number(month.slice(5))-1;
   const monthName = index => Math.floor(index/12)+'-'+String(index%12+1).padStart(2,'0');
 
-  function selection(state, products, data) {
+  function bounds(state, data) {
     const validMonth = root.ResearchModel.isCalendarMonth;
     const savedMonth = validMonth(state.dataset) ? state.dataset : null;
-    const start = state.startMonth || savedMonth || data.asOf.slice(0, 4) + '-01';
-    const end = state.endMonth || savedMonth || data.asOf.slice(0, 7);
+    return {
+      start:state.startMonth || savedMonth || data.asOf.slice(0, 4) + '-01',
+      end:state.endMonth || savedMonth || data.asOf.slice(0, 7)
+    };
+  }
+
+  function selection(state, products, data) {
+    const {start,end}=bounds(state,data);
     const profiles = products.flatMap(product => {
       const source = data.trends[product.product_code];
       const months = source?.monthly_order_series?.filter(row => row.month >= start && row.month <= end && Number.isFinite(row.orders) && row.orders >= 0) || [];
@@ -27,8 +33,14 @@
   }
 
   function summary(state, products, data) {
-    const {start, end, profiles, coverage} = selection(state, products, data);
-    return '<section class="ml-history-summary" data-ml-history-summary><div><h3>商品月度历史</h3><p><strong>'+esc(start)+' 至 '+esc(end)+'</strong> · '+(profiles.length?number.format(profiles.length)+' 个商品链接有月销量记录，覆盖 '+coverage.length+' 个月':'该期间暂无单品月销量')+'</p><p>全类目月度走势、单品月销售额和历史价格待补。</p></div><button class="rq-button" data-ml-route="monthly">查看商品月销量</button></section>';
+    const history=selection(state,products,data),{start,end,profiles,coverage}=history;
+    const sample=monthlySample(history);
+    const detail=sample.total===null?'所选期间暂无可统计的整月销量样本。':
+      '完整月样本 '+number.format(sample.total)+' 台 · '+number.format(sample.groups)+' 个商品组 · '+sample.covered+'/'+sample.months.length+' 个月有完整样本';
+    return '<section class="ml-history-summary" data-ml-history-summary><div><h3>商品月度历史</h3><p><strong>'+
+      esc(start)+' 至 '+esc(end)+'</strong> · '+(profiles.length?number.format(profiles.length)+' 个商品链接有月销量记录，覆盖 '+coverage.length+' 个月':'该期间暂无单品月销量')+
+      '</p><p data-ml-history-sample>'+detail+'</p></div><div class="ml-history-actions"><button class="rq-button" data-ml-range-overview>查看月度样本</button>'+
+      '<button class="rq-button" data-ml-route="monthly">查看商品月销量</button></div></section>';
   }
 
   function continuousCoverage(source) {
@@ -162,5 +174,5 @@
     ])];
   }
 
-  root.MercadoHistory = { isPeriodOverview, selection, summary, overview, panel, exportRows, sampleExportRows };
+  root.MercadoHistory = { isPeriodOverview, bounds, selection, monthlySample, summary, overview, panel, exportRows, sampleExportRows };
 })(window);

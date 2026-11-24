@@ -10,16 +10,17 @@
   function recentMonth(scope, history) {
     if (scope.platform === 'ml') {
       const data = root.MERCADO_DATA;
-      const coverage = root.MercadoHistory.selection(
+      const archive = root.MercadoHistory.selection(
         {...scope, startMonth:'2000-01', endMonth:data.asOf.slice(0,7)},
         root.Mercado.rows(scope), data
-      ).coverage;
-      return coverage.at(-1)?.[0];
+      );
+      const complete = root.MercadoHistory.monthlySample(archive).months.findLast(month=>month.units!==null);
+      return {month:complete?.month||archive.coverage.at(-1)?.[0],complete:!!complete};
     }
     const facts = root.SampleSalesShares.report(history, {
       ...scope, startMonth:'2026-01', endMonth:'2026-12', dataset:'2026-12'
     }).facts;
-    return facts.filter(fact => fact.units !== null || fact.revenue !== null).map(fact => fact.month).sort().at(-1);
+    return {month:facts.filter(fact => fact.units !== null || fact.revenue !== null).map(fact => fact.month).sort().at(-1),complete:false};
   }
 
   function mount(scope, history, change) {
@@ -33,15 +34,15 @@
 
     const valid = mercado ? root.ResearchModel.isCalendarMonth : root.MonthlyRange.valid;
     const bounds = mercado
-      ? root.MercadoHistory.selection(scope, root.Mercado.rows(scope), data)
+      ? root.MercadoHistory.bounds(scope, data)
       : root.MonthlyRange.bounds(scope);
     const start = valid(bounds.start) ? bounds.start : '';
     const end = valid(bounds.end) ? bounds.end : '';
     const name = '统计月份';
-    const latest = recentMonth(scope, history);
+    const {month:latest,complete}=recentMonth(scope, history);
     const year = latest?.slice(0,4);
     const presets = latest ? [
-      ['最近有记录月', latest, latest],
+      [complete?'最近可统计月':'最近有记录月', latest, latest],
       ...(mercado || Number(latest.slice(5))>=3 ? [['近3个月', twoMonthsBefore(latest), latest]] : []),
       ['年初至最近月', year+'-01', latest]
     ] : [];
@@ -60,7 +61,7 @@
         <label><span>结束月</span><input type="month" ${limits} data-month-end aria-label="结束月份" value="${end}"></label>
         <button type="submit" class="market-period-apply" data-month-apply>应用</button>
       </form>
-      <p class="market-period-note">${mercado ? '应用后查看所选月份的单品历史。近30天快照可从上方切换。' : '样本按所选自然月更新。原类目报告保留原期间。'}</p>
+      <p class="market-period-note">${mercado ? (complete?'快捷区间截至最近可统计月（'+format(latest)+'）。其他月份也可手动选择。':'应用后查看所选月份的单品历史。') : '样本按所选自然月更新。原类目报告保留原期间。'}</p>
       <p class="market-period-error" data-month-error role="status"></p>`;
 
     const update = (a,b,focus) => {

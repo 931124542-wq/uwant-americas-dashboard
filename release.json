@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-24-mercado-continuous-month-coverage",
+  "version": "2026-11-24-mercado-five-country-month-review",
   "dataAsOf": "2026-10-28",
   "baseCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "products": 466,
@@ -423,6 +423,14 @@
     "scope": "Full calendar months contained in a continuous observed daily-record span",
     "mexicoVacuumSeptemberOctoberSampleUnits": 567,
     "mexicoVacuumDistinctGroups": 9,
+    "sourceRecordsUnchanged": true
+  },
+  "mercadoFiveCountryMonthReview": {
+    "displayVersion": "11.24.5",
+    "countryCategoryScopes": 20,
+    "verifiedProductGroupMonthsAcrossArchivedRange": 4801,
+    "scopesWithSeptemberAndOctober2026Sample": 20,
+    "scopesWithVerifiedNovember2026Sample": 0,
     "sourceRecordsUnchanged": true
   }
 }

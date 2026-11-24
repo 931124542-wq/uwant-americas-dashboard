@@ -114,3 +114,15 @@ body[data-workspace=research] [data-backstage-only][hidden]{display:none!importa
  .market-original-reference{padding-left:16px;padding-right:16px}
  .market-period-detail,.market-period-coverage{margin-left:16px;margin-right:16px}
 }
+
+.ml-history-actions{display:flex;flex-wrap:wrap;gap:8px}
+.ml-month-comparison>summary{cursor:pointer;padding:14px 22px;color:var(--market-ink);font-weight:600}
+.ml-month-comparison>[data-ml-month-comparison]{margin:0 22px 16px}
+.ml-month-comparison p{margin:0 0 10px}
+.ml-month-comparison .table-scroll{margin-top:12px}
+.ml-month-comparison table{min-width:585px}
+.ml-month-comparison td{font-variant-numeric:tabular-nums}
+@media(max-width:700px){
+ .ml-month-comparison>summary{padding-left:16px;padding-right:16px}
+ .ml-month-comparison>[data-ml-month-comparison]{margin-left:16px;margin-right:16px}
+}

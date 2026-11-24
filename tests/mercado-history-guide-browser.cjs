@@ -20,6 +20,7 @@ async function run() {
     const summary = page.locator('[data-ml-history-summary]');
     await summary.waitFor();
     assert.match(await summary.innerText(), /2026-01 至 2026-10.*44 个商品链接/);
+    assert.match(await summary.locator('[data-ml-history-sample]').innerText(),/完整月样本 1,134 台/);
     assert.match(await page.locator('.ml-coverage-summary').innerText(), /商品库 244 条/);
     assert.deepEqual((await page.locator('.market-kpi>strong').allTextContents()).slice(0,2), ['4,936,447','39']);
     assert(!page.url().includes('B0F84H88C1') && !page.url().includes('Shark'));
@@ -27,9 +28,9 @@ async function run() {
     assert.match(await period.innerText(),/统计月份\s+2026年1月–10月/);
     await period.getByRole('button',{name:'近3个月',exact:true}).click();
     const range=await page.evaluate(()=>[state.startMonth,state.endMonth]);
-    assert.notDeepEqual(range,['2026-01','2026-10']);
+    assert.deepEqual(range,['2026-08','2026-10']);
     assert.match(await page.locator('[data-ml-period-overview]').innerText(),new RegExp(range.join(' 至 ')));
-    assert.deepEqual((await page.locator('.market-kpi>strong').allTextContents()).slice(0,2), ['388','—']);
+    assert.deepEqual((await page.locator('.market-kpi>strong').allTextContents()).slice(0,2), ['508','—']);
     await page.goBack();
     await page.waitForFunction(()=>state.startMonth==='2026-01'&&state.endMonth==='2026-10');
     await page.screenshot({path:output+'/overview.png'});
