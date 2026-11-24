@@ -31,13 +31,27 @@
     return '<section class="ml-history-summary" data-ml-history-summary><div><h3>商品月度历史</h3><p><strong>'+esc(start)+' 至 '+esc(end)+'</strong> · '+(profiles.length?number.format(profiles.length)+' 个商品链接有月销量记录，覆盖 '+coverage.length+' 个月':'该期间暂无单品月销量')+'</p><p>全类目月度走势、单品月销售额和历史价格待补。</p></div><button class="rq-button" data-ml-route="monthly">查看商品月销量</button></section>';
   }
 
-  function completeMonth(row, source) {
-    if(row.monthStatus!=='closed_full_daily_coverage'||source.data_coverage?.full_coverage!==true||
-       !(source.covered_day_count>0)||source.covered_day_count!==source.requested_day_count) return false;
+  function continuousCoverage(source) {
+    const {coverage_start_date:start,coverage_end_date:end,covered_day_count:count}=source.data_coverage||{};
+    const day=date=>/^\d{4}-\d{2}-\d{2}$/.test(date||'')?Date.parse(date+'T00:00:00Z')/86400000:NaN;
+    const span=day(end)-day(start)+1;
+    // The requested window can start before the first saved record. Only the days between
+    // the observed endpoints must be present to verify months wholly inside that span.
+    if(!(count>0&&count===span&&count===source.covered_day_count&&count<=source.requested_day_count&&
+         source.range_start_date<=start&&end<=source.range_end_date))return null;
+    return {start,end};
+  }
+
+  function completeMonth(row, coverage) {
+    if(!coverage||row.monthStatus==='open')return false;
     const [year,month]=row.month.split('-').map(Number);
     const lastDay=new Date(Date.UTC(year,month,0)).getUTCDate();
-    return source.data_coverage.coverage_start_date<=row.month+'-01' &&
-      source.data_coverage.coverage_end_date>=row.month+'-'+lastDay;
+    return coverage.start<=row.month+'-01'&&coverage.end>=row.month+'-'+lastDay;
+  }
+
+  function monthCoverageLabel(row, coverage, asOf) {
+    if(completeMonth(row,coverage))return '有完整日记录';
+    return row.monthStatus==='open'||row.month===asOf.slice(0,7)?'采集时未结月':'整月覆盖未确认';
   }
 
   function monthlySample({start,end,profiles,coverage}) {
@@ -48,8 +62,10 @@
       if(product.statIsolationReason||product.catalogueOnly||product.sourceScopeTier==='adjacent'||
          !product.statisticalKey||source.product_code!==product.product_code||source.market_code!==product.product_code.slice(0,3)||
          source.data_available!==true||root.MarketIntegrity.snapshotIssue(product)) continue;
+      const recorded=continuousCoverage(source);
+      if(!recorded)continue;
       for(const row of months){
-        if(!completeMonth(row,source))continue;
+        if(!completeMonth(row,recorded))continue;
         if(!byMonth.has(row.month))byMonth.set(row.month,new Map());
         const groups=byMonth.get(row.month),key=product.statisticalKey;
         if(!groups.has(key))groups.set(key,{values:new Set(),representative:null});
@@ -74,7 +90,7 @@
   }
 
   function overview(state, products, data) {
-    const history=selection(state,products,data),{start,end,profiles,coverage}=history;
+    const history=selection(state,products,data),{start,end,profiles}=history;
     const sample=monthlySample(history);
     const rows=sample.months.map(m=>{
       const units=m.units===null?'—':'<strong>'+number.format(m.units)+' 台</strong><small>'+number.format(m.groups.length)+' 个商品组</small>';
@@ -87,7 +103,7 @@
     return '<section class="market-block market-hero" data-ml-period-overview><div class="market-block-heading"><h2>市场大盘</h2><span class="market-period-tag">'+esc(start)+' 至 '+esc(end)+'</span></div>'+
       '<div class="market-kpi-grid">'+card('units','完整月样本销量 · 台',sample.total===null?'—':number.format(sample.total))+card('revenue','类目月销售额','—')+
       card('listings','有月销量记录的商品链接',number.format(profiles.length))+
-      card('months','有记录的月份',number.format(coverage.length)+' / '+sample.months.length)+'</div>'+
+      card('months','有完整样本的月份',number.format(sample.covered)+' / '+sample.months.length)+'</div>'+
       '<p class="market-period-detail">'+basis+'市场整体月销量与销售额仍缺来源。单品明细见下方。</p>'+
       '<div class="market-period-coverage table-scroll"><table><thead><tr><th>月份</th><th>完整月样本销量</th><th>有记录的商品链接</th><th>记录情况</th></tr></thead><tbody>'+rows.join('')+'</tbody></table></div></section>';
   }
@@ -128,7 +144,8 @@
     const title = p => [p.brandGroup || p.brand_label, p.model || p.product_name, p.product_code].filter(Boolean).join(' · ');
     const picker = selected ? '<label class="ml-history-picker">查看商品<select data-ml-history-product>'+profiles.map(({product})=>'<option value="'+esc(product.product_code)+'" '+(product===selected.product?'selected':'')+'>'+esc(title(product))+'</option>').join('')+'</select></label>' : '';
     const rows = selected?.months || [];
-    const detail = selected ? '<p>原始记录覆盖 '+esc(selected.source.data_coverage?.coverage_start_date || '—')+' 至 '+esc(selected.source.data_coverage?.coverage_end_date || '—')+'</p><button class="rq-button" data-ml-single-export="'+esc(selected.product.product_code)+'">导出所选商品月度明细</button><div class="table-scroll"><table><thead><tr><th>月份</th><th>来源销量 / 台</th><th>覆盖说明</th></tr></thead><tbody>'+rows.map(row=>'<tr><td>'+esc(row.month)+'</td><td>'+number.format(row.orders)+'</td><td>'+(row.monthStatus==='closed_full_daily_coverage'?'有完整日记录':(row.monthStatus==='open'||row.month===data.asOf.slice(0,7))?'采集时未结月':'整月覆盖未确认')+'</td></tr>').join('')+'</tbody></table></div>' : '<p>所选月份暂无该品类的单品销量。可调整月份或回到近30天快照。</p>';
+    const recorded = selected ? continuousCoverage(selected.source) : null;
+    const detail = selected ? '<p>原始记录覆盖 '+esc(selected.source.data_coverage?.coverage_start_date || '—')+' 至 '+esc(selected.source.data_coverage?.coverage_end_date || '—')+'</p><button class="rq-button" data-ml-single-export="'+esc(selected.product.product_code)+'">导出所选商品月度明细</button><div class="table-scroll"><table><thead><tr><th>月份</th><th>来源销量 / 台</th><th>覆盖说明</th></tr></thead><tbody>'+rows.map(row=>'<tr><td>'+esc(row.month)+'</td><td>'+number.format(row.orders)+'</td><td>'+monthCoverageLabel(row,recorded,data.asOf)+'</td></tr>').join('')+'</tbody></table></div>' : '<p>所选月份暂无该品类的单品销量。可调整月份或回到近30天快照。</p>';
     return '<section class="panel ml-history-panel"><h2>商品月度销量</h2>'+controls+intro+picker+chart(rows,start,end)+detail+'<p>缺月留空。历史销售额和历史价格暂无来源。</p></section>';
   }
 
@@ -136,11 +153,12 @@
     const header = ['商品ID','月份','来源销量','覆盖开始日','覆盖结束日','请求天数','实际天数','全窗口覆盖完整','该月状态','统计方式'];
     if (!selected) return [header];
     const {product, source, months} = selected;
+    const recorded=continuousCoverage(source);
     return [header, ...months.map(row => [
       product.product_code, row.month, row.orders, source.data_coverage?.coverage_start_date,
       source.data_coverage?.coverage_end_date, source.requested_day_count, source.covered_day_count,
       source.data_coverage?.full_coverage, row.monthStatus || (row.month===data.asOf.slice(0,7)?'open_at_collection':'daily_completeness_unknown'),
-      '来源日记录汇总，整月覆盖未确认'
+      '来源日记录汇总 · '+monthCoverageLabel(row,recorded,data.asOf)
     ])];
   }
 

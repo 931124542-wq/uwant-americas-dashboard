@@ -29,7 +29,7 @@ async function run() {
     const range=await page.evaluate(()=>[state.startMonth,state.endMonth]);
     assert.notDeepEqual(range,['2026-01','2026-10']);
     assert.match(await page.locator('[data-ml-period-overview]').innerText(),new RegExp(range.join(' 至 ')));
-    assert.deepEqual((await page.locator('.market-kpi>strong').allTextContents()).slice(0,2), ['—','—']);
+    assert.deepEqual((await page.locator('.market-kpi>strong').allTextContents()).slice(0,2), ['388','—']);
     await page.goBack();
     await page.waitForFunction(()=>state.startMonth==='2026-01'&&state.endMonth==='2026-10');
     await page.screenshot({path:output+'/overview.png'});
@@ -83,7 +83,7 @@ async function run() {
     await period.getByLabel('结束月份').fill('2026-05');
     await period.getByRole('button',{name:'应用',exact:true}).click();
     assert.match(await page.locator('[data-ml-period-overview]').innerText(),/2026-02 至 2026-05/);
-    assert.deepEqual((await page.locator('.market-kpi>strong').allTextContents()).slice(0,2), ['—','—']);
+    assert.deepEqual((await page.locator('.market-kpi>strong').allTextContents()).slice(0,2), ['358','—']);
     await page.reload({waitUntil:'domcontentloaded'});
     assert.match(await period.innerText(),/2026年2月–5月/);
     assert(!await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2));

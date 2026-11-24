@@ -25,17 +25,28 @@ const monthTotals=history=>Array.from(
  c.MercadoHistory.sampleExportRows(history,mexicoMonths).filter(row=>row[0]==='月份'),
  row=>[row[6],row[7],row[8]]
 );
-assert.deepEqual(monthTotals(listingHistory),[['2026-09',4,1],['2026-10',4,1],['2026-11',null,0]]);
+assert.deepEqual(monthTotals(listingHistory),[['2026-09',314,9],['2026-10',253,6],['2026-11',null,0]]);
 const mak=listingHistory.profiles.find(p=>p.product.product_code==='MLM18995515');
 const aliasId='MLM9999999999',september=mak.months.find(m=>m.month==='2026-09');
 const alias={product:{...mak.product,product_code:aliasId,counted:false},source:{...mak.source,product_code:aliasId},months:[september]};
 assert.deepEqual(monthTotals({...listingHistory,profiles:[alias,...listingHistory.profiles]}),monthTotals(listingHistory));
 assert.deepEqual(monthTotals({...listingHistory,profiles:[...listingHistory.profiles,{...alias,months:[{...september,orders:400}]}]}),
- [['2026-09',null,0],['2026-10',4,1],['2026-11',null,0]],'Conflicting monthly aliases must not be summed or substituted');
+ [['2026-09',310,8],['2026-10',253,6],['2026-11',null,0]],'Conflicting monthly aliases must not be summed or substituted');
 const directSample={...listingHistory,profiles:[{...mak,months:[{...september,orders:0}]}]};
 assert.deepEqual(monthTotals(directSample),[['2026-09',0,1],['2026-10',null,0],['2026-11',null,0]],'Reported zero and unavailable history are different');
 const incomplete={...mak,source:{...mak.source,data_coverage:{...mak.source.data_coverage,coverage_end_date:'2026-09-25'}},months:[september]};
 assert.deepEqual(monthTotals({...listingHistory,profiles:[incomplete]}),[['2026-09',null,0],['2026-10',null,0],['2026-11',null,0]]);
+const partialWindow={...mak.source,covered_day_count:30,data_coverage:{
+ ...mak.source.data_coverage,full_coverage:false,covered_day_count:30,
+ coverage_start_date:'2026-09-01',coverage_end_date:'2026-09-30'
+}};
+const septemberOnly={...listingHistory,profiles:[{
+ ...mak,source:partialWindow,months:[{...september,monthStatus:'closed_daily_completeness_unknown'}]
+}]};
+assert.deepEqual(monthTotals(septemberOnly),[['2026-09',4,1],['2026-10',null,0],['2026-11',null,0]],'A shorter continuous source window can verify a whole month');
+const gapped={...partialWindow,data_coverage:{...partialWindow.data_coverage,coverage_end_date:'2026-10-01'}};
+assert.deepEqual(monthTotals({...septemberOnly,profiles:[{...septemberOnly.profiles[0],source:gapped}]}),
+ [['2026-09',null,0],['2026-10',null,0],['2026-11',null,0]],'A gap between the coverage endpoints prevents the same inference');
 assert.equal(JSON.stringify(data),original,'Review and audit must not mutate source records or histories');
 const csv=c.MarketValidation.csv(r);assert.equal(csv.length,57);assert(csv.slice(1).filter(x=>x[3]===false).every(x=>x[5]===null&&x[6]===null),'Unavailable markets cannot become zero sales');assert(r.rows.filter(x=>x.status==='missing_sales').every(x=>x.units===null&&x.revenue===null));
 for(const p of [...fs.readdirSync('.').filter(f=>f.endsWith('-data.js')),'data.json'])assert.equal(cp.execFileSync('git',['hash-object',p],{encoding:'utf8'}).trim(),cp.execFileSync('git',['rev-parse','b144d08:'+p],{encoding:'utf8'}).trim(),p+' original source file changed');

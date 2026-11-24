@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-24-mercado-verified-monthly-sample",
+  "version": "2026-11-24-mercado-continuous-month-coverage",
   "dataAsOf": "2026-10-28",
   "baseCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "products": 466,
@@ -416,6 +416,13 @@
     "displayVersion": "11.24.3",
     "scope": "Complete months only, one counted representative per statistical group",
     "openOrUnverifiedMonthsRemainSeparate": true,
+    "sourceRecordsUnchanged": true
+  },
+  "mercadoContinuousMonthCoverage": {
+    "displayVersion": "11.24.4",
+    "scope": "Full calendar months contained in a continuous observed daily-record span",
+    "mexicoVacuumSeptemberOctoberSampleUnits": 567,
+    "mexicoVacuumDistinctGroups": 9,
     "sourceRecordsUnchanged": true
   }
 }
