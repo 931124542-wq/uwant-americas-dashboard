@@ -30,8 +30,6 @@ const data=fs.readFileSync(source+'/data.json','utf8').trim(),csv=fs.readFileSyn
 html=html.replace(/<script src="([^"]+)" defer><\/script>/g,(_,src)=>{
  const name=src.split('?')[0];let js=fs.readFileSync(source+'/'+name,'utf8');
  if(name==='app.js')js=js.replace("fetch('data.json')",`Promise.resolve({ok:true,json:async()=>(${data})})`);
- if(name==='app.js')js=js.replace('当前仅你可访问此预览站点。企业微信登录和团队只读访问尚未启用，链接暂不能作为团队正式入口。','当前网站公开可访问。企业微信登录和成员权限尚未启用。工作记录使用文件备份。').replace('工作记录在线保存</span><span class="tag">已接入','工作记录文件备份</span><span class="tag">已接入');
- if(name==='shared-state.js')js=js.replace("csOffline?'离线版'", "csOffline?'文件备份'");
  js=js.replaceAll('href="market-import-template.csv"',`href="data:text/csv;base64,${csv}"`);
  return '<script data-source="'+name+'">\n'+js.replace(/<\/script/gi,'<\\/script')+'\n</script>';
 });

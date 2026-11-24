@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<title>月度市场数据 · UWANT</title>
+<link rel="stylesheet" href="history.css">
+<script src="history.js" defer></script>
+</head>
+<body>
+<header><a href="https://931124542-wq.github.io/uwant-americas-dashboard/">UWANT · 美洲市场</a><a id="market-overview" href="https://931124542-wq.github.io/uwant-americas-dashboard/">市场总览</a></header>
+<main>
+<h1>月度市场数据</h1>
+<section class="load">
+  <label class="button">打开月度数据文件<input type="file" id="archive-file" accept=".json,application/json"></label>
+  <p id="file-status" role="status">请选择 UWANT 月度市场数据文件。文件在当前页面读取。</p>
+</section>
+<form method="get" id="scope" class="filters">
+  <label>数据来源<select name="platform" id="platform"><option value="ml">大麦 · 美客多类目历史</option><option value="amazon">卖家精灵 · Amazon 商品历史</option></select></label>
+  <label>国家<select name="country" id="country"></select></label>
+  <label id="category-field">品类<select name="category" id="category"></select></label>
+  <label>起始月<input name="startMonth" id="startMonth" type="month" required></label>
+  <label>结束月<input name="endMonth" id="endMonth" type="month" required></label>
+  <button>应用</button>
+</form>
+<div id="report" aria-live="polite"></div>
+</main>
+</body>
+</html>

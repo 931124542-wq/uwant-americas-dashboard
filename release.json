@@ -521,8 +521,8 @@
     "originalSnapshotValuesPreserved": true
   },
   "mercadoDamaiArchiveLink": {
-    "displayVersion": "11.24.19",
-    "categoryReportRequiresLogin": true,
+    "displayVersion": "11.24.20",
+    "localFileMarketReader": true,
     "separateFromSameTypeMarket": true
   }
 }

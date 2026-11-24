@@ -34,13 +34,13 @@
 
   function categoryArchiveLink(state) {
     if(state.platform!=='ml'||state.category!=='vacuum'||!root.MarketIntegrity?.applicable(state.country,'ml'))return '';
-    const query=new URLSearchParams({country:state.country});
+    const query=new URLSearchParams({platform:'ml',country:state.country});
     if(root.ResearchModel.isCalendarMonth(state.startMonth)&&root.ResearchModel.isCalendarMonth(state.endMonth)){
       query.set('startMonth',state.startMonth);
       query.set('endMonth',state.endMonth);
     }
-    return '<a class="rq-button" data-ml-category-archive href="https://uwant-americas-dashboard.sweettoast1.chatgpt.site/mercado-category-history?'+
-      esc(query.toString())+'" target="_blank" rel="noopener noreferrer">大麦类目历史（需登录）</a>';
+    return '<a class="rq-button" data-ml-category-archive href="market-history/?'+
+      esc(query.toString())+'" target="_blank" rel="noopener noreferrer">大麦类目历史</a>';
   }
 
   function summary(state, products, data) {

@@ -135,6 +135,11 @@
 
   move(first.querySelector('.market-kpi-grid'),'kpis');move(first.querySelector('.market-reading'),'reading');move(first.querySelector('.ml-coverage-summary'),'reading');move(first.querySelector('[data-ml-history-summary]'),'reading');
   move(first.querySelector('[data-ml-lifetime]'),'reading');
+  if(s.platform==='amazon'&&root.MarketIntegrity.applicable(s.country,'amazon')){
+   const query=new URLSearchParams({platform:'amazon',country:s.country,category:s.category});
+   if(s.startMonth&&s.endMonth){query.set('startMonth',s.startMonth);query.set('endMonth',s.endMonth);}
+   slot('reading').insertAdjacentHTML('beforeend','<div class="ml-archive-reference"><a class="rq-button" data-amazon-history href="market-history/?'+e(query.toString())+'" target="_blank" rel="noopener noreferrer">Amazon 月度研究文件</a></div>');
+  }
   if(range){
    if(original)move(original.querySelector('.market-sample-heading'),'category');
    slot('reading').insertAdjacentHTML('beforeend',monthlyResults(months,r.facts,r.currency));

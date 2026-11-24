@@ -9,7 +9,7 @@ const url=r=>`https://www.${country().domain}/dp/${r.asin}`;
 const tier=r=>({T1:'核心竞品（自集尘）',T2:'同价位竞品',T3:'白牌 / 低价商品'})[r.tier]||'其他商品';
 const brandLabel=brand=>{const b=D.focus.roster.find(b=>b.name.toLowerCase()===String(brand).toLowerCase());return b?`${b.zh} ${b.name}`:brand;};
 const featureLabel=r=>state.category==='vacuum'?(r.autoEmpty?'自动集尘（商品标题标注）':'—'):(r.classificationReason||'—');
-const pageNames={brands:'品牌分析',competitors:'竞品对比',market:'市场总览',overview:'经营总览',analysis:'销售分析',products:'SKU 表现',profit:'利润与补货',inventory:'库存监控',calendar:'促销日历',tasks:'运营任务',access:'权限设置'};
+const pageNames={brands:'品牌分析',competitors:'竞品对比',market:'市场总览',overview:'经营总览',analysis:'销售分析',products:'SKU 表现',profit:'利润与补货',inventory:'库存监控',calendar:'促销日历',tasks:'运营任务',access:'工作记录备份'};
 let operationsReady=false,operationsTimer,frameRoute='';
 function operationPayload(){return {type:'uwant:navigate',page:state.page,country:state.country.toLowerCase(),platform:state.platform,category:state.category,dataset:state.dataset,view:state.view,own:state.own,marketQuery:state.marketQuery,marketSort:state.marketSort,marketOffset:state.marketOffset,marketTop:state.marketTop,priceBand:state.priceBand,opsPeriod:state.opsPeriod,opsChannel:state.opsChannel,opsSku:state.opsSku,...ResearchCatalog.stateFrom(state),historyRows:M.isHistory(state.dataset)?D.history.rows.filter(r=>r.country===state.country&&r.category===state.category&&r.month===state.dataset):[],historyAsOf:D.history.asOf};}
 function isDecisionRoute(s){return ['brands','competitors'].includes(s.page)||s.page==='market'&&['overview','products','brands','competitors','opportunities','coverage','research','data','changes','keywords','macro','pricing'].includes(s.view)||s.page==='market'&&s.platform==='ml'&&s.view==='monthly';}
@@ -37,7 +37,7 @@ function operationPage(){
  const frame=$('operations-frame');
  if(!frame.dataset.started){
   frame.dataset.started='true';
-  if(typeof window.REVIEW_OPERATIONS_HTML==='string')frame.srcdoc=window.REVIEW_OPERATIONS_HTML;else frame.src='operations/index.html?v=a5262655ea4d&country='+state.country.toLowerCase()+'#'+state.page;frameRoute=state.page;
+  if(typeof window.REVIEW_OPERATIONS_HTML==='string')frame.srcdoc=window.REVIEW_OPERATIONS_HTML;else frame.src='operations/index.html?v=01e5b2e8b840&country='+state.country.toLowerCase()+'#'+state.page;frameRoute=state.page;
   operationsTimer=setTimeout(()=>{if(!operationsReady){$('operations-status').textContent='加载尚未完成，请重试。';$('operations-retry').hidden=false;}},15000);
  }else if(operationsReady){frame.contentWindow.postMessage(operationPayload(),location.origin==='null'?'*':location.origin);frameRoute=state.page;}
  return true;

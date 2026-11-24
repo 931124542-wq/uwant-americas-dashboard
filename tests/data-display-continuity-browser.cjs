@@ -26,10 +26,10 @@ const {chromium}=require('playwright'),fs=require('fs'),path=require('path'),ass
   assert(asNumbers.every((value,i)=>value>0&&(!i||asNumbers[i-1]>=value)));
   assert.equal(new Set(await amazonRank.locator('[data-ranked-product]').evaluateAll(rows=>rows.map(row=>row.dataset.rankedProduct))).size,7);
   await go({country:'MX',platform:'ml',shareMetric:'revenue'});
-  const categoryArchive=new URL(await p.locator('[data-ml-category-archive]').getAttribute('href'));
-  assert.equal(categoryArchive.origin,'https://uwant-americas-dashboard.sweettoast1.chatgpt.site');
-  assert.equal(categoryArchive.pathname,'/mercado-category-history');
-  assert.deepEqual(Object.fromEntries(categoryArchive.searchParams),{country:'MX',startMonth:'2026-01',endMonth:'2026-09'});
+  const categoryArchive=new URL(await p.locator('[data-ml-category-archive]').getAttribute('href'),p.url());
+  assert.equal(categoryArchive.origin,new URL(p.url()).origin);
+  assert(categoryArchive.pathname.endsWith('/market-history/'));
+  assert.deepEqual(Object.fromEntries(categoryArchive.searchParams),{platform:'ml',country:'MX',startMonth:'2026-01',endMonth:'2026-09'});
 
   const supplemental=p.locator('[data-ml-batch="2026-11-12"]');
   assert.match(await supplemental.innerText(),/499 台 · 1,091,300 MXN/);
