@@ -52,7 +52,10 @@ async function run() {
     assert.equal(await picker.inputValue(),listing);
     await page.screenshot({path:output+'/history.png'});
 
-    await page.locator('.business-guide-link').click();
+    const desktopGuide = page.locator('.dashboard-top [data-business-guide]');
+    assert.equal(await page.locator('[data-business-guide]:visible').count(),1);
+    assert(await desktopGuide.evaluate(link=>link.parentElement.firstElementChild===link));
+    await desktopGuide.click();
     await page.getByRole('heading',{name:'业务思维导图',exact:true}).waitFor();
     assert.equal(await page.locator('details').count(),6);
     assert.equal(await page.locator('.guide-branch').count(),3);
@@ -84,6 +87,27 @@ async function run() {
     await page.reload({waitUntil:'domcontentloaded'});
     assert.match(await period.innerText(),/2026年2月–5月/);
     assert(!await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2));
+    const mobileGuide=page.locator('.sidebar-top [data-business-guide]');
+    for(const width of [320,390]){
+      await page.setViewportSize({width,height:844});
+      await page.evaluate(()=>window.scrollTo(0,0));
+      assert.equal(await page.locator('#sidebar-menu').getAttribute('aria-expanded'),'false');
+      assert.equal(await page.locator('[data-business-guide]:visible').count(),1);
+      assert(await mobileGuide.isVisible());
+      assert(await mobileGuide.evaluate(link=>{
+        const bounds=link.getBoundingClientRect();
+        return bounds.top>=0&&bounds.bottom<document.querySelector('nav[aria-label="市场研究"]').getBoundingClientRect().top&&bounds.right<=innerWidth;
+      }));
+      assert(!await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2));
+    }
+    await page.screenshot({path:output+'/guide-entry-mobile.png'});
+    await mobileGuide.click();
+    await page.locator('[data-guide-scope]').waitFor();
+    assert.match(await page.locator('[data-guide-scope]').innerText(),/智利.*2026-02 至 2026-05/);
+    assert.equal(await page.locator('header [aria-current="page"]').innerText(),'思维导图');
+    await page.locator('[data-guide-return]').click();
+    await period.waitFor();
+    assert.match(await period.innerText(),/2026年2月–5月/);
     assert.deepEqual(errors,[]);
     console.log('PASS Chile exact route, snapshot and monthly history, scoped CSV and refresh, guide and mobile layout.');
   } finally {

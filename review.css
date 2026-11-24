@@ -112,7 +112,7 @@ a:hover{
   height:5px;
   background:#90b896;
   border-radius:50%}
-.sidebar-menu{
+.sidebar-top-actions{
   display:none}
 main{
   margin-left:var(--sidebar)}
@@ -767,16 +767,33 @@ td,th{
   padding:0}
 .logo span,.sidebar>small,.sidebar-note{
   display:none}
-.sidebar-menu{
-  display:block;
-  position:absolute;
-  top:12px;
-  right:16px;
-  border-color:#557460;
-  background:#315440;
+.sidebar-top,.sidebar-top-actions{
+  display:flex;
+  align-items:center;
+  gap:6px}
+.sidebar-top-actions{
+  margin-left:auto}
+.sidebar-menu,.business-guide-mobile-link{
+  display:inline-flex;
+  align-items:center;
+  min-height:36px;
+  border:1px solid #ffffff38;
+  border-radius:6px;
   color:white;
-  padding:5px 12px;
-  font-size:12px}
+  padding:5px 8px;
+  font-size:12px;
+  white-space:nowrap}
+.sidebar-menu{
+  background:#315440}
+.sidebar-menu:hover{
+  background:#456652}
+.business-guide-mobile-link{
+  background:#d9eee2;
+  color:#123d2a;
+  border-color:#d9eee2;
+  font-weight:650}
+.dashboard-top .business-guide-link{
+  display:none}
 .sidebar nav{
   display:none}
 .sidebar nav[aria-label=市场研究]{
