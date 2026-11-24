@@ -41,6 +41,7 @@ async function run() {
       assert.deepEqual([revenue,units],[value(row.revenue),value(row.units)],name);
       assert.match(await overview.locator('.market-period-tag').innerText(),new RegExp(row.currency+'$'),name);
       assert.equal(await page.locator('.market-validation,.market-reviewed-exclusions').count(),0,name);
+      if(platform==='ml')assert.equal(await overview.locator('[data-lifetime-revenue]').innerText(),'—',name);
     }
     const chile = {country:'CL',platform:'ml',category:'wash'};
     await go(chile);
@@ -106,6 +107,12 @@ async function run() {
     const comparisonLines=comparisonCsv.trim().split(/\r?\n/);
     assert.equal(comparisonLines.length,61);
     assert.equal(comparisonLines.filter(line=>line.includes('"2026-11","","0"')).length,20);
+    const allLifetimeDownload=page.waitForEvent('download');
+    await comparison.getByRole('button',{name:'导出五国累计销量'}).click();
+    await (await allLifetimeDownload).saveAs(out+'/mercado-five-countries-lifetime.csv');
+    const allLifetimeCsv=await fs.readFile(out+'/mercado-five-countries-lifetime.csv','utf8');
+    assert.equal(allLifetimeCsv.trim().split(/\r?\n/).length,21);
+    assert.match(allLifetimeCsv,/"巴西","Mercado Libre","布艺清洗机","2026-11-05","2026-11-12","144664","790","","BRL"/);
     await comparison.locator('tr[data-country="AR"][data-category="fabric"] a').click();
     await page.waitForFunction(()=>state.country==='AR'&&state.category==='fabric'&&state.endMonth==='2026-11');
     assert.equal(await page.locator('[data-ml-period-overview] [data-market-kpi="units"] strong').innerText(),'3,132');
@@ -118,10 +125,22 @@ async function run() {
       CL:[[36378744,17],[5234807,2],[34399615,6],[2450887,109]],
       CO:[[89239031,71],[32831320,9],[70296387,9],[1312120,59]]
     };
+    const lifetime={
+      MX:[[6261,382],[17569,246],[63768,342],[4321,323]],
+      BR:[[8230,194],[112813,1513],[144664,790],[2579,250]],
+      AR:[[4679,256],[47779,408],[27285,66],[1841,119]],
+      CL:[[1934,178],[19302,226],[1201,34],[3627,256]],
+      CO:[[874,501],[4521,116],[493,100],[1403,237]]
+    };
     for(const [country,scopes] of Object.entries(completeSamples)){
       for(const [index,[sep,oct]] of scopes.entries()){
         await go({country,platform:'ml',category:categories[index],...selectedMonths});
         const overview=page.locator('[data-ml-period-overview]');
+        const cumulative=overview.locator('[data-ml-lifetime]');
+        const [total,groups]=lifetime[country][index];
+        assert.equal(await cumulative.locator('[data-lifetime-units]').innerText(),value(total)+' 台');
+        assert.equal(await cumulative.locator('[data-lifetime-revenue]').innerText(),'—');
+        assert.match(await cumulative.innerText(),new RegExp(value(groups)+' 个去重商品组'));
         const snapshots=overview.locator('[data-ml-month-revenue]');
         assert.equal(await overview.locator('[data-market-kpi="units"] strong').innerText(),value(sep+oct));
         assert.equal(await overview.locator('[data-market-kpi="revenue"] strong').innerText(),'—');
@@ -135,12 +154,19 @@ async function run() {
         assert.equal(await previous.locator('span').innerText(),value(count)+' 个金额样本');
         await page.getByRole('button',{name:'最近可统计月',exact:true}).click();
         assert.equal(await overview.locator('[data-market-kpi="units"] strong').innerText(),value(oct));
+        assert.equal(await cumulative.locator('[data-lifetime-units]').innerText(),value(total)+' 台');
         assert.deepEqual(await snapshots.locator('article > strong').allTextContents(),amounts);
         assert.equal(await page.evaluate(()=>state.startMonth+'|'+state.endMonth),'2026-10|2026-10');
       }
     }
     await go({country:'BR',platform:'ml',category:'fabric',...selectedMonths});
     const snapshots=page.locator('[data-ml-month-revenue]');
+    const lifetimeDownload=page.waitForEvent('download');
+    await page.getByRole('button',{name:'导出累计销量'}).click();
+    await (await lifetimeDownload).saveAs(out+'/mercado-br-fabric-lifetime.csv');
+    const lifetimeCsv=await fs.readFile(out+'/mercado-br-fabric-lifetime.csv','utf8');
+    assert.equal(lifetimeCsv.trim().split(/\r?\n/).length,791);
+    assert.match(lifetimeCsv,/"MLB26797988","[^"]+","2026-11-12","69031","","BRL"/);
     assert.equal(await snapshots.locator('[data-revenue-snapshot="2026-11-05"] > strong').textContent(),'3,738,252 BRL');
     assert.equal(await snapshots.locator('[data-revenue-snapshot="2026-11-06"] > strong').textContent(),'3,562,822 BRL');
     assert.equal(await snapshots.locator('[data-revenue-snapshot="2026-11-12"] > strong').textContent(),'4,139,728 BRL');
@@ -182,6 +208,7 @@ async function run() {
     await go({country:'BR',platform:'ml',category:'fabric',view:'products',evidenceQuery:'MLB26797988'});
     const listing=page.locator('.ml-product');
     await listing.getByText('商品信息与来源',{exact:true}).click();
+    assert.match(await listing.innerText(),/上架以来累计销量 69,031 台 · 2026-11-12 采集/);
     const listedSnapshots=listing.locator('[data-ml-listing-snapshots]');
     assert.deepEqual(await listedSnapshots.locator('time').allTextContents(),['2026-11-05','2026-11-06','2026-11-12']);
     assert.match(await listedSnapshots.locator('[data-ml-observation-date="2026-11-05"]').innerText(),/539\.9 BRL.*2,239 台.*1,167,719 BRL/);
@@ -196,6 +223,13 @@ async function run() {
     assert.match(await priceArchive.locator('[data-archive-month="2026-01"]').innerText(),/3,199\s+3,162\.43/);
     assert.match(await priceArchive.locator('[data-archive-month="2026-10"]').innerText(),/采集时未结月/);
     assert.equal(await priceArchive.getByText(/销量|销售额/).count(),0);
+    const priceDownload=page.waitForEvent('download');
+    await priceArchive.getByRole('button',{name:'导出历史价格参考'}).click();
+    await (await priceDownload).saveAs(out+'/amazon-mx-product-prices.csv');
+    const priceCsv=await fs.readFile(out+'/amazon-mx-product-prices.csv','utf8');
+    assert.equal(priceCsv.trim().split(/\r?\n/).length,11);
+    assert.match(priceCsv,/"MX","Amazon","fabric","B0D11TKT2Z","2026-01","2026-10-30","MXN","3199","3162\.43"/);
+    assert.doesNotMatch(priceCsv,/销售额|销量/);
     assert.equal(await page.locator('.private-research-evidence:visible').count(),0);
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2),false);
     await page.screenshot({path:out+'/amazon-price-archive-mobile.png'});

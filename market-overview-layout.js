@@ -34,6 +34,7 @@
   const slot=k=>box.querySelector('[data-overview-slot="'+k+'"]'),move=(x,k)=>{if(x)slot(k).append(x);};
 
   move(first.querySelector('.market-kpi-grid'),'kpis');move(first.querySelector('.market-reading'),'reading');move(first.querySelector('.ml-coverage-summary'),'reading');move(first.querySelector('[data-ml-history-summary]'),'reading');
+  move(first.querySelector('[data-ml-lifetime]'),'reading');
   if(range){
    if(original)move(original.querySelector('.market-sample-heading'),'category');
    slot('reading').insertAdjacentHTML('afterbegin',monthCoverage(months,r.facts));

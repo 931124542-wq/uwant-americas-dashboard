@@ -12,7 +12,13 @@ const oldIds=new Set(b.MERCADO_DATA.records.map(r=>r.product_code)),newRows=D.re
 for(const r of newRows)assert.equal(a.ResearchOverlay.validate(r),null);
 const newest=Object.values(P.histories).filter(t=>t.sourceDate==='2026-11-12');assert.equal(newest.length,318);assert.equal(newest.reduce((n,t)=>n+t.monthly_order_series.length,0),3256);assert(newest.every(t=>t.monthly_order_series.every(m=>m.orders>=0&&!('revenue'in m)&&!('price'in m))));
 assert(newest.some(t=>t.monthly_order_series.some(m=>m.monthStatus==='closed_full_daily_coverage')));
-const fresh=newRows[0],csv=a.Mercado.csvRows({...a.ResearchModel.defaults,country:fresh.country,category:fresh.category,evidenceQuery:fresh.product_code});assert.equal(csv.length,2);assert(csv.every(r=>r.length===40));assert.equal(csv[1][34],'2026-11-12');assert.equal(csv[1][39],false);
+const fresh=newRows[0],csv=a.Mercado.csvRows({...a.ResearchModel.defaults,country:fresh.country,category:fresh.category,evidenceQuery:fresh.product_code});
+assert.equal(csv.length,2);
+assert(csv.every(r=>r.length===43));
+assert.equal(csv[1][34],'2026-11-12');
+assert.equal(csv[1][39],false);
+assert.deepEqual(Array.from(csv[0].slice(-3)),['上架以来累计销量','累计销量采集日期','上架以来累计销售额']);
+assert.equal(csv[1][42],null);
 const official=a.LOCAL_CHANNEL_PRODUCTS.records.find(r=>r.country==='ca'&&r.channel==='bissell_ca_official'&&r.productId==='3605Y');assert(official);assert.equal(official.currency,'CAD');assert.equal(official.price,279.99);assert.equal(official.metricAggregationEligible,false);assert.equal(official.modelEvidence.verified,true);
 const ref=P.manufacturerReferences.find(r=>r.country==='CA'&&r.model==='Floor One S5');assert.equal(a.ResearchOverlay.references({country:'ca',category:'wash',brand:'Tineco',model:'Floor ONE S5'},[ref]).length,1);assert.equal(a.ResearchOverlay.references({country:'US',category:'wash',brand:'Tineco',model:'Floor One S5'},[ref]).length,0);assert.equal(a.ResearchOverlay.references({country:'CA',category:'wash',brand:'Tineco',model:'Floor One S5 Pro'},[ref]).length,0);
 const co=P.mlCoverage.find(q=>q.sourceDate==='2026-11-12'&&q.market==='MCO'&&q.category==='vacuum'&&q.keyword==='aspiradora inalámbrica');assert.equal(co.matched,1255);assert.deepEqual(Array.from(co.pageNumbers),[1,2,3,4,5,6,7]);assert.deepEqual(Array.from(co.failedPageNumbers),[8]);assert.equal(co.complete,false);

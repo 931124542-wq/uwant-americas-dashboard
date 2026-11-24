@@ -461,5 +461,16 @@
     "amazonHistoricalPriceReferences": 220,
     "sourceRecordsUnchanged": true,
     "marketTotalsUnchanged": true
+  },
+  "lifetimeAndPeriodSales": {
+    "displayVersion": "11.24.9",
+    "mercadoMarkets": 20,
+    "mercadoCumulativeListingRepresentatives": 6537,
+    "mercadoInvalidCumulativeObservationsExcluded": 16,
+    "mercadoDecreasingCumulativeListingsExcluded": 4,
+    "mercadoCumulativeRevenueAvailable": false,
+    "mercadoCalendarRevenueAvailable": false,
+    "amazonPeriodTotalsExplicit": true,
+    "sourceRecordsUnchanged": true
   }
 }

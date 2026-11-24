@@ -11,7 +11,7 @@ for(const country of ['CA','MX','US','BR'])for(const category of ['vacuum','wash
  assert(html.includes('market-catalogue-reference')&&html.includes('原类目报告与来源参考'));
  assert(!/undefined|NaN/.test(html+charts));
  if(x.selected.total===null){missing++;assert(charts.includes('data-share-export disabled'));assert.equal((charts.match(/data-share-state="missing"/g)||[]).length,2);assert(!charts.includes('data-share-drill='));}
- if(period.startMonth){const value=expected[country]?.[category];if(value){assert.equal(x.units.total,value[0]);assert(Math.abs(x.revenue.total-value[1])<.00001);}else{assert.equal(x.units.total,null);assert.equal(x.revenue.total,null);assert(html.includes('data-market-kpi="revenue"><span>样本销售额估算 · '+x.selected.currency+'</span><strong class="market-kpi-missing">—</strong>'));}}
+ if(period.startMonth){const value=expected[country]?.[category];if(value){assert.equal(x.units.total,value[0]);assert(Math.abs(x.revenue.total-value[1])<.00001);}else{assert.equal(x.units.total,null);assert.equal(x.revenue.total,null);assert(html.includes('data-market-kpi="revenue"><span>所选月份样本总销售额估算 · '+x.selected.currency+'</span><strong class="market-kpi-missing">—</strong>'));}}
  checked++;
 }
 const s={...c.ResearchModel.defaults,page:'market',platform:'amazon',country:'MX',category:'vacuum',dataset:'2026-09',startMonth:'2026-01',endMonth:'2026-09'},catalog=c.catalog(s),x=c.MarketSummary.overviewStats(catalog,s),snapshot=c.MarketSummary.snapshot(s);

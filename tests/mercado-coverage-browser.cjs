@@ -46,13 +46,16 @@ async function run() {
     await brandSearch.fill('rowenta');
     const rowenta=brands.getByRole('row').filter({hasText:'ROWENTA'});
     assert.equal(await rowenta.count(),1);
-    assert.equal((await rowenta.locator('td').allTextContents()).filter(x=>x.startsWith('—')).length,2);
+    assert.equal((await rowenta.locator('td').allTextContents()).slice(1,3).filter(x=>x.startsWith('—')).length,2);
+    assert.match(await brands.locator('thead [data-ml-brand-archive]').innerText(),/2026-11-05/);
+    assert.match(await brands.locator('thead').innerText(),/累计总销量/);
     const brandDownload=page.waitForEvent('download');
     await page.locator('#export').click();
     const brandCsv=await brandDownload;
     await brandCsv.saveAs(out+'/brands-rowenta.csv');
     const selectedBrand=await fs.readFile(out+'/brands-rowenta.csv','utf8');
     assert.match(selectedBrand,/"ROWENTA","2","units","MXN","2026-11-06","0","","","2026-11-12","0","",""/);
+    assert.match(selectedBrand,/archiveDate.*lifetimeUnits/);
     await brandSearch.fill('Shark');
     const shark=brands.getByRole('row').filter({hasText:'SHARK'});
     assert.equal(await shark.count(),1);

@@ -24,11 +24,17 @@
   if(!rows.length)return '';
   return '<details class="rq-price-archive" data-amazon-price-archive><summary>历史价格参考 · '+rows.length+' 个月</summary>'+
    '<p>卖家精灵档案。价格采样时点和均价算法未核实，仅供单品价格参考。</p>'+
+   '<button class="rq-button" data-amazon-price-export>导出历史价格参考</button>'+
    '<div class="rq-table-scroll"><table><thead><tr><th>月份</th><th>来源月度价格 / '+e(rows[0].currency)+'</th>'+
    '<th>来源均价字段</th><th>采集日期</th></tr></thead><tbody>'+
    rows.map(row=>'<tr data-archive-month="'+e(row.month)+'"><th scope="row">'+e(row.month)+(row.open?'<small>采集时未结月</small>':'')+
     '</th><td>'+n(row.price)+'</td><td>'+n(row.average)+'</td><td>'+e(row.date||'—')+'</td></tr>').join('')+
    '</tbody></table></div></details>';
+ }
+ function priceExportRows(record,scope){
+  return [['国家','平台','品类','商品ID','月份','采集日期','币种','来源月度价格','来源均价字段','月份状态'],
+   ...publicPrices(record,scope).map(row=>[record.country.toUpperCase(),'Amazon',record.category,record.productId,
+    row.month,row.date,row.currency,row.price,row.average,row.open?'采集时未结月':'已结束'])];
  }
  function cachedView(s){const rs=cached(s);return rs.length?'<details><summary>复用的Amazon月度来源字段 · '+rs.length+'条商品月份</summary><p>沿用现有缓存，按页面所选起止月筛选；不是本轮新增历史。父体销量及金额未获得归属资格时保持隔离，价格时点以原字段依据为准，不认证为月末价。</p><div class="table-scroll"><table><thead><tr><th>ASIN / 月份</th><th>来源父体销量 / 金额（隔离）</th><th>来源价格字段</th><th>月份 / 归属状态</th></tr></thead><tbody>'+rs.map(r=>'<tr><td>'+e(r.productId)+' / '+e(r.month)+'</td><td>'+n(r.parentUnitSales)+' / '+n(r.parentSalesRevenue)+'</td><td>'+n(r.price)+' '+e(r.currency)+'<small>'+e(r.priceBasis||'时点定义未核')+'</small></td><td>'+e(r.monthStatus)+' / '+e(r.recordStatus)+'</td></tr>').join('')+'</tbody></table></div></details>':'';}
  function csv(s){return [['country','platform','category','productId','brand_source','model_source_unconfirmed','snapshot_price','currency','units_source_estimate','revenue_source_estimate','source_date','period_kind','aggregate_eligible','isolation_reason','source_files','source_url','rating_source','feedback_count_source','feedback_count_basis','rank_source','shop_source','image_source','claims_source','manufacturer_model_reference'],...rows(s).map(r=>{const m=metrics(r);return [r.country,r.platform,r.category,r.productId,r.brand_label||r.brand,r.model||'',m.price??'',r.currency||'',m.units??'',m.revenue??'',r.sourceDate,r.metricPeriod,r.counted===true&&r.platform==='ml'&&root.ResearchSnapshot.matches(r,root.MERCADO_DATA),r.metricIsolationReason||r.statIsolationReason||'',r.sourceFiles.join(';'),r.detail_link||r.sourceUrl||'',r.feedback_score??r.rating??'',r.feedback_count??r.monthlyReviewCount??'',r.platform==='amazon'?'monthlyReviewCount source field; rating/review semantics unresolved':'platform feedback count',r.bsr??'',r.merchant_name||'',r.picture_link||root.PRIVATE_RESEARCH?.amazonListings?.find(x=>x.country.toUpperCase()===r.country&&x.productId===r.productId)?.imageUrl||'',JSON.stringify(r.claims||{}),JSON.stringify(r.modelReferences||[])];})];}
@@ -37,5 +43,5 @@
  }
  function serialize(data){return '\ufeff'+data.map(row=>row.map(v=>'"'+String(v??'').replace(/^[=+@]/,"'").replace(/"/g,'""')+'"').join(',')).join('\r\n');}
  if(root.document)root.document.addEventListener('click',ev=>{if(!ev.target.closest('[data-private-export]'))return;const box=ev.target.closest('[data-private-country]'),s={country:box.dataset.privateCountry,platform:box.dataset.privatePlatform,category:box.dataset.privateCategory},url=URL.createObjectURL(new Blob([serialize(csv(s))],{type:'text/csv;charset=utf-8'})),a=root.document.createElement('a');a.href=url;a.download='source-products-'+s.country+'-'+s.platform+'-'+s.category+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
- const api={rows,metrics,csv,cached,render,serialize,publicPrices,renderPublicPrices};if(typeof module!=='undefined')module.exports=api;else root.ResearchArchive=api;
+ const api={rows,metrics,csv,cached,render,serialize,publicPrices,renderPublicPrices,priceExportRows};if(typeof module!=='undefined')module.exports=api;else root.ResearchArchive=api;
 })(typeof window==='undefined'?globalThis:window);

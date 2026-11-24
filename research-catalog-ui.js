@@ -71,6 +71,10 @@
   const close=()=>onState({evidenceDetail:''},{close:true});container.querySelector('[data-rq-close]')?.addEventListener('click',close);
   const dialog=container.querySelector('#rq-dialog');dialog?.addEventListener('cancel',ev=>{ev.preventDefault();close();});dialog?.addEventListener('click',ev=>{if(ev.target===dialog){const r=dialog.getBoundingClientRect();if(ev.clientX<r.left||ev.clientX>r.right||ev.clientY<r.top||ev.clientY>r.bottom)close();}});
   if(dialog&&s.evidenceDetail&&!dialog.open)dialog.showModal();
+  dialog?.querySelector('[data-amazon-price-export]')?.addEventListener('click',()=>{
+    const record=[...c.observed,...c.candidates].find(r=>matchesId(r,s.evidenceDetail));
+    if(record)download(root.ResearchArchive.priceExportRows(record,s),'UWANT_'+record.country+'_'+record.productId+'_historical_prices.csv');
+  });
   container.querySelectorAll('[data-rq-export]').forEach(b=>b.onclick=()=>download((root.AmazonResearch?root.AmazonResearch.exportRows(rowsFor(c,{...s,researchLayer:b.dataset.rqExport}),Q,{...c.scope,...s}):Q.exportRows(rowsFor(c,{...s,researchLayer:b.dataset.rqExport}))),`UWANT_${(c.observed[0]||c.candidates[0])?.country||'research'}_${b.dataset.rqExport}_evidence.csv`));
   container.querySelectorAll('.rq-thumbnail img,.library-detail-image img').forEach(img=>{const unavailable=()=>{img.hidden=true;const figure=img.closest('.library-detail-image');if(figure&&!figure.querySelector('.image-unavailable')){const note=document.createElement('span');note.className='image-unavailable';note.textContent='暂无数据有效图片';figure.prepend(note);}},loaded=()=>{if(Q.validImageDimensions(img.naturalWidth,img.naturalHeight))img.dataset.loaded='';else if(img.complete)unavailable();};img.addEventListener('load',loaded);img.addEventListener('error',unavailable);if(img.complete)loaded();});
   if(!s.evidenceDetail&&hadDetail&&lastDetail)container.querySelector(`[data-rq-detail="${CSS.escape(lastDetail)}"]`)?.focus({preventScroll:true});hadDetail=!!s.evidenceDetail;

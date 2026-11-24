@@ -47,6 +47,34 @@ assert.deepEqual(monthTotals(septemberOnly),[['2026-09',4,1],['2026-10',null,0],
 const gapped={...partialWindow,data_coverage:{...partialWindow.data_coverage,coverage_end_date:'2026-10-01'}};
 assert.deepEqual(monthTotals({...septemberOnly,profiles:[{...septemberOnly.profiles[0],source:gapped}]}),
  [['2026-09',null,0],['2026-10',null,0],['2026-11',null,0]],'A gap between the coverage endpoints prevents the same inference');
+for(const f of ['mercado-lifetime-observations.js','mercado-lifetime.js'])vm.runInContext(fs.readFileSync(f,'utf8'),c);
+const projection=c.MERCADO_LIFETIME_OBSERVATIONS;
+assert.deepEqual(Object.keys(projection),['source','period','rows']);
+assert.equal(Object.keys(projection.rows).length,6537);
+assert(Object.values(projection.rows).every(v=>Array.isArray(v)&&v.length===2&&
+ ['2026-11-05','2026-11-06','2026-11-12'].includes(v[0])&&Number.isSafeInteger(v[1])&&v[1]>=0));
+const publishedIds=new Set(data.records.map(r=>r.product_code));
+assert(Object.keys(projection.rows).every(id=>publishedIds.has(id)));
+const totals=c.MercadoLifetime.report(c.Mercado.rows({...scope,category:'fabric'}));
+assert.equal(totals.total,144664);
+assert.equal(totals.rows.length,new Set(totals.rows.map(v=>v.product.statisticalKey)).size);
+assert.equal(c.MercadoLifetime.report([]).total,null);
+for(const country of ['MX','BR','AR','CL','CO'])for(const category of ['wash','vacuum','fabric','mattress']){
+  const products=c.Mercado.rows({...scope,country,category});
+  const supplement=c.MercadoCoverageSummary.report(products,data);
+  const archive=c.MercadoCoverageSummary.archiveReport(products,data);
+  const lifetime=c.MercadoLifetime.report(products);
+  for(const metric of ['units','revenue']){
+    const active=c.Mercado.report({...scope,country,category,shareMetric:metric});
+    const groups=c.Mercado.brandDirectory(products,active,supplement,metric,archive).rows;
+    const expected={baseValue:active.total,extraValue:supplement[metric],archiveValue:archive[metric],lifetimeValue:lifetime.total};
+    for(const [field,total] of Object.entries(expected)){
+      const values=groups.map(row=>row[field]).filter(value=>value!==null);
+      if(total===null)assert.equal(values.length,0);
+      else assert(Math.abs(values.reduce((sum,value)=>sum+value,0)-total)<0.001,[country,category,metric,field].join('/'));
+    }
+  }
+}
 assert.equal(JSON.stringify(data),original,'Review and audit must not mutate source records or histories');
 const csv=c.MarketValidation.csv(r);assert.equal(csv.length,57);assert(csv.slice(1).filter(x=>x[3]===false).every(x=>x[5]===null&&x[6]===null),'Unavailable markets cannot become zero sales');assert(r.rows.filter(x=>x.status==='missing_sales').every(x=>x.units===null&&x.revenue===null));
 for(const p of [...fs.readdirSync('.').filter(f=>f.endsWith('-data.js')),'data.json'])assert.equal(cp.execFileSync('git',['hash-object',p],{encoding:'utf8'}).trim(),cp.execFileSync('git',['rev-parse','b144d08:'+p],{encoding:'utf8'}).trim(),p+' original source file changed');
