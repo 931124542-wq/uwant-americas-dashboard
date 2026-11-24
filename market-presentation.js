@@ -73,6 +73,7 @@
   if(admin)root.MarketDecisionUI?.mountCoverage(s,change,download);
   if(admin)root.MarketValidation?.mount(s,download);
   hideManagementDetails(s);
+  if(overview)root.SellerMonthly?.mount(s,change,download);
   document.querySelectorAll('.market-block-heading>span:first-child').forEach(x=>x.classList.add('market-section-number'));
  }
  root.MarketPresentation={sync,hideManagementDetails,managementDetails};

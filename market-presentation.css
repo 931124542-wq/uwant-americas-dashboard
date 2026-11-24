@@ -159,3 +159,6 @@ body[data-workspace=research] [data-backstage-only][hidden]{display:none!importa
  .all-channel-market--pair{grid-template-columns:minmax(0,1fr);gap:0}
 }
 @media(max-width:700px){.market-channel-footer{padding-left:16px;padding-right:16px}}
+
+.seller-monthly-controls{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin:0 0 12px}
+.seller-monthly-controls [role="status"]{font-size:13px;color:var(--muted,#54635f)}

@@ -24,7 +24,10 @@
     const facts = root.SampleSalesShares.report(history, {
       ...scope, startMonth:'2026-01', endMonth:'2026-12', dataset:'2026-12'
     }).facts;
-    return {month:facts.filter(fact => fact.units !== null || fact.revenue !== null).map(fact => fact.month).sort().at(-1),complete:false};
+    const months = facts.filter(fact => fact.units !== null || fact.revenue !== null).map(fact => fact.month);
+    const sellerMonth = root.SellerMonthly?.latestMonth(scope);
+    if (sellerMonth) months.push(sellerMonth);
+    return {month:months.sort().at(-1),complete:false};
   }
 
   function mount(scope, history, change) {

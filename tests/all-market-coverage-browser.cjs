@@ -310,6 +310,47 @@ async function run() {
       };
     });
     assert.deepEqual(archiveCoverage,{products:22,prices:220,mercadoListings:1550,mxJanuary:[3199]});
+    assert.equal(await page.locator('.seller-monthly-controls').count(),0);
+    const sellerUrl=new URL(base);
+    sellerUrl.searchParams.set('research','seller');
+    sellerUrl.hash=new URLSearchParams({
+      page:'market',view:'overview',country:'MX',platform:'all',category:'vacuum',...selectedMonths
+    }).toString();
+    await page.goto(sellerUrl.href,{waitUntil:'domcontentloaded'});
+    const seller=page.locator('[data-seller-monthly]');
+    const localFile=page.locator('.seller-monthly-controls input[type="file"]');
+    await localFile.waitFor({state:'attached'});
+    assert.equal(await seller.count(),0);
+    const fact={country:'MX',category:'vacuum',currency:'MXN',month:'2026-10',form:'dry',units:17,revenue:1240.5,
+      parentAsin:'B0TEST0001',asins:['B0TEST0001'],brand:'Study sample',retrievedAt:'2026-11-24'};
+    const file=(rows)=>({name:'research.json',mimeType:'application/json',
+      buffer:Buffer.from(JSON.stringify({format:'uwant-sellersprite-monthly-v1',facts:rows}))});
+    const requestLeak=[];
+    page.on('request',request=>{
+      if([request.url(),request.postData()||''].some(value=>value.includes(fact.parentAsin))) requestLeak.push(request.url());
+    });
+    await localFile.setInputFiles(file([fact]));
+    await seller.waitFor();
+    assert.equal(await seller.locator('[data-seller-kpi="units"] strong').innerText(),'17');
+    assert.equal(await seller.locator('[data-seller-kpi="revenue"] strong').innerText(),'1,240.5');
+    assert.equal(await seller.locator('tr[data-period-month="2026-11"] td').allTextContents().then(row=>row.join('|')),'—|—');
+    assert.equal(await page.locator('[data-market-channel="ml"] [data-market-kpi="units"] strong').innerText(),'567');
+    const importedDownload=page.waitForEvent('download');
+    await seller.getByRole('button',{name:'导出本机月度样本'}).click();
+    await (await importedDownload).saveAs(out+'/imported-seller-study.csv');
+    assert.match(await fs.readFile(out+'/imported-seller-study.csv','utf8'),/"B0TEST0001","B0TEST0001","Study sample","17","1240.5"/);
+    await localFile.setInputFiles(file([fact,fact]));
+    await page.getByRole('status').filter({hasText:'重复的商品组月度记录'}).waitFor();
+    assert.equal(await seller.locator('[data-seller-kpi="units"] strong').innerText(),'17');
+    await page.setViewportSize({width:1440,height:960});
+    await page.locator('#platform').selectOption('ml');
+    assert.equal(await seller.count(),0);
+    await page.locator('#platform').selectOption('all');
+    assert.equal(await seller.locator('[data-seller-kpi="units"] strong').innerText(),'17');
+    await page.reload({waitUntil:'domcontentloaded'});
+    await localFile.waitFor({state:'attached'});
+    assert.equal(await seller.count(),0);
+    assert.deepEqual(requestLeak,[]);
     assert.deepEqual(errors,[]);
     const retail = await page.evaluate(months=>MarketValidation.localCatalogue(months,decisionCatalog),months);
     await fs.writeFile(out+'/audit.json',JSON.stringify({...audit,retail,browserScopes:36,mobile:true,exported:true},null,2));

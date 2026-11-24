@@ -500,5 +500,11 @@
     "scopesWithConflictingRecords": 14,
     "sameListingArchiveConflicts": 46,
     "sourceRecordsUnchanged": true
+  },
+  "sellerMonthlyReader": {
+    "displayVersion": "11.24.14",
+    "userSelectedLocalResearchFile": true,
+    "localDataTransfer": false,
+    "sourceRecordsUnchanged": true
   }
 }
