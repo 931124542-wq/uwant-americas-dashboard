@@ -37,7 +37,7 @@
       : root.MonthlyRange.bounds(scope);
     const start = valid(bounds.start) ? bounds.start : '';
     const end = valid(bounds.end) ? bounds.end : '';
-    const name = mercado ? '商品历史月份' : '统计月份';
+    const name = '统计月份';
     const latest = recentMonth(scope, history);
     const year = latest?.slice(0,4);
     const presets = latest ? [
@@ -60,11 +60,13 @@
         <label><span>结束月</span><input type="month" ${limits} data-month-end aria-label="结束月份" value="${end}"></label>
         <button type="submit" class="market-period-apply" data-month-apply>应用</button>
       </form>
-      <p class="market-period-note">${mercado ? '月份用于下方单品历史。近30天快照按原采集日期显示。' : '样本按所选自然月更新。原类目报告保留原期间。'}</p>
+      <p class="market-period-note">${mercado ? '应用后查看所选月份的单品历史。近30天快照可从上方切换。' : '样本按所选自然月更新。原类目报告保留原期间。'}</p>
       <p class="market-period-error" data-month-error role="status"></p>`;
 
     const update = (a,b,focus) => {
-      if (a!==start || b!==end || !scope.startMonth) change({startMonth:a,endMonth:b,evidenceGroup:'',historyProduct:''});
+      if (a!==start || b!==end || !scope.startMonth || mercado&&!root.MercadoHistory.isPeriodOverview(scope)) {
+        change({startMonth:a,endMonth:b,marketPeriod:'monthly',evidenceGroup:'',historyProduct:'',shareDrill:''});
+      }
       else {
         box.querySelector('[data-month-start]').value=a;
         box.querySelector('[data-month-end]').value=b;

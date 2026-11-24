@@ -98,7 +98,7 @@ function render(){
  renderWorkspace();
  window.MarketPresentation?.sync(state,change,evidenceDownload);
  window.MarketPeriod.mount(state,D.history,change);
- const keys=['country','platform','category','dataset','startMonth','endMonth','own','module','page','view'];
+ const keys=['country','platform','category','dataset','startMonth','endMonth','marketPeriod','own','module','page','view'];
  const guideScope=new URLSearchParams(keys.filter(k=>state[k]).map(k=>[k,state[k]]));
  document.querySelectorAll('[data-business-guide]').forEach(link=>{link.hash=guideScope.toString();});
 }
@@ -274,7 +274,13 @@ function renderDecisionWorkspace(){
  document.querySelector('[data-wb-scope-data]')?.addEventListener('click',ev=>{ev.preventDefault();onState({page:'market',view:'research',researchLayer:'candidates'});});
  if(M.encode(state)!==location.hash)history.replaceState(history.state,'',M.encode(state));
 }
-function exportDecisionWorkspace(){const c=decisionCatalog();if((state.page==='market'&&state.view==='overview')||(state.page==='brands'&&state.view==='overview')){evidenceDownload(MarketIntelligence.exportRows(c,state),`UWANT_${state.country}_${state.category}_market_analysis.csv`);return;}if(state.view==='macro'){evidenceDownload(MarketSummary.exportRows(state),`UWANT_${state.country}_market_context.csv`);return;}if(state.view==='keywords'){evidenceDownload(KeywordResearch.csv(c,state),`UWANT_${state.country}_${state.category}_search_terms.csv`);return;}if(state.view==='monthly'){evidenceDownload(MonthlyRange.exportRows(MonthlyWorkbench.selected(c,state),state,{universe:c.metricSourceRows}),`UWANT_${state.country}_${state.startMonth}_${state.endMonth}_monthly.csv`);return;}evidenceDownload(state.view==='research'?AmazonResearch.exportRows(ResearchCatalog.rowsFor(c,{...state,researchLayer:'candidates'}),ResearchQuality,decisionState(c)):MarketWorkbench.exportRows(c,decisionState(c),state.page==='competitors'),`UWANT_${state.country}_${state.own}_${state.view==='research'?'candidates':'research'}.csv`);}
+function exportDecisionWorkspace(){
+ const selectedRange=state.page==='market'&&state.view==='overview'&&['amazon','all'].includes(state.platform)&&MonthlyRange.bounds(state).range;
+ if(selectedRange){
+  evidenceDownload(MarketSummary.rangeExportRows(state),`UWANT_${state.country}_${state.category}_${state.startMonth}_${state.endMonth}.csv`);
+  return;
+ }
+ const c=decisionCatalog();if((state.page==='market'&&state.view==='overview')||(state.page==='brands'&&state.view==='overview')){evidenceDownload(MarketIntelligence.exportRows(c,state),`UWANT_${state.country}_${state.category}_market_analysis.csv`);return;}if(state.view==='macro'){evidenceDownload(MarketSummary.exportRows(state),`UWANT_${state.country}_market_context.csv`);return;}if(state.view==='keywords'){evidenceDownload(KeywordResearch.csv(c,state),`UWANT_${state.country}_${state.category}_search_terms.csv`);return;}if(state.view==='monthly'){evidenceDownload(MonthlyRange.exportRows(MonthlyWorkbench.selected(c,state),state,{universe:c.metricSourceRows}),`UWANT_${state.country}_${state.startMonth}_${state.endMonth}_monthly.csv`);return;}evidenceDownload(state.view==='research'?AmazonResearch.exportRows(ResearchCatalog.rowsFor(c,{...state,researchLayer:'candidates'}),ResearchQuality,decisionState(c)):MarketWorkbench.exportRows(c,decisionState(c),state.page==='competitors'),`UWANT_${state.country}_${state.own}_${state.view==='research'?'candidates':'research'}.csv`);}
 
 function decisionState(c){if(state.priceBasis!=='auto')return state;const rs=MarketWorkbench.rows(c,state),basis=rs.some(r=>ProductEvidence.price(r,{...state,priceBasis:'history'}))?'history':rs.some(r=>ProductEvidence.price(r,{...state,priceBasis:'public'}))?'public':rs.some(r=>ProductEvidence.price(r,{...state,priceBasis:'source'}))?'source':'history';return {...state,priceBasis:basis,autoBasis:true};}
 

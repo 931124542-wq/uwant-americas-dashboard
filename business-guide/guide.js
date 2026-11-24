@@ -12,6 +12,7 @@
   for (const [key,value] of Object.entries({country,platform,category})) if (value) scope.set(key,value);
   if (month(dataset)||['archive','curated','focus'].includes(dataset)) scope.set('dataset',dataset);
   if (month(start)&&month(end)&&start<=end){scope.set('startMonth',start);scope.set('endMonth',end);}
+  if (['monthly','snapshot'].includes(incoming.get('marketPeriod'))) scope.set('marketPeriod',incoming.get('marketPeriod'));
   const own=incoming.get('own');
   if (/^[A-Z][0-9]{3}[A-Z]?$/.test(own||'')) scope.set('own',own);
   const period = scope.has('startMonth') ? start===end?start:start+' 至 '+end : month(dataset)?dataset:'';

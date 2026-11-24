@@ -76,6 +76,37 @@ async function run() {
     assert.equal(sources.length,32);
     assert(sources.every(([country,category,units,revenue,counted])=>country==='MX'&&category==='vacuum'&&units===null&&revenue===null&&counted===false));
 
+    await page.goto(base+mexico,{waitUntil:'domcontentloaded'});
+    await card.waitFor();
+    const dates=page.locator('#market-period');
+    await dates.getByLabel('起始月份').fill('2026-09');
+    await dates.getByLabel('结束月份').fill('2026-11');
+    await dates.getByRole('button',{name:'应用',exact:true}).click();
+    const monthly=page.locator('[data-ml-period-overview]');
+    await monthly.waitFor();
+    assert.match(await monthly.locator('.market-period-tag').innerText(),/2026-09 至 2026-11/);
+    assert.deepEqual(await monthly.locator('tbody tr td:first-of-type').allTextContents(),['19','23','11']);
+    assert.match(await monthly.locator('[data-period-month="2026-11"]').innerText(),/采集时未结月/);
+    assert.deepEqual((await monthly.locator('.market-kpi>strong').allTextContents()).slice(0,2),['—','—']);
+    assert.equal(await card.count(),0);
+    const monthlyDownload=page.waitForEvent('download');
+    await page.locator('#export').click();
+    const csvFile=await monthlyDownload;
+    assert.match(csvFile.suggestedFilename(),/_monthly\.csv$/);
+    await csvFile.saveAs(out+'/sep-nov-monthly.csv');
+    const historyCsv=await fs.readFile(out+'/sep-nov-monthly.csv','utf8');
+    assert.match(historyCsv,/"2026-09"/);
+    assert.match(historyCsv,/"2026-11"/);
+    assert(!historyCsv.includes('"2026-08"'));
+    await page.reload({waitUntil:'domcontentloaded'});
+    await monthly.waitFor();
+    await page.locator('[data-market-time="overview"]').click();
+    await card.waitFor();
+    assert.deepEqual((await page.locator('.market-kpi>strong').allTextContents()).slice(0,2),['117,092','8']);
+    await page.goBack();
+    await monthly.waitFor();
+    await page.screenshot({path:out+'/mexico-sept-nov.png'});
+
     await page.setViewportSize({width:390,height:844});
     await page.goto(base+mexico,{waitUntil:'domcontentloaded'});
     await card.waitFor();

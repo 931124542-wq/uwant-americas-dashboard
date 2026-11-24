@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-24-mind-map-top-navigation",
+  "version": "2026-11-24-applied-market-months",
   "dataAsOf": "2026-10-28",
   "baseCommit": "5c47837c773ed4b3288ee1495a5ecba7fbbbbde1",
   "products": 466,
@@ -405,5 +405,11 @@
     "desktopEntry": "Top bar before the workspace breadcrumb",
     "mobileEntry": "First navigation row",
     "marketContextPreserved": true
+  },
+  "appliedMarketMonths": {
+    "displayVersion": "11.24.2",
+    "amazon": "Selected calendar-month sample leads, original category report remains separately expandable",
+    "mercado": "Applying a range opens the period and single-listing history, with a separate rolling snapshot view",
+    "sourceRecordsUnchanged": true
   }
 }

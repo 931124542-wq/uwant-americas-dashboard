@@ -50,7 +50,13 @@
   const overview=s.page==='market'&&s.view==='overview',product=s.page==='market'&&s.view==='products',brand=s.page==='brands',compare=s.page==='competitors',monthly=s.page==='market'&&s.view==='monthly';
   // Retain the original controls and listeners; move each module into its proper route.
   workspace.replaceChildren();
-  if(overview){
+  if(root.MercadoHistory.isPeriodOverview(s)){
+   const period=document.createElement('div');
+   period.dataset.marketOverviewTemplate='mercado-monthly';
+   period.innerHTML=root.MercadoHistory.overview(s,all,data);
+   if(history)period.append(history);
+   workspace.append(period);
+  }else if(overview){
    const unitsReport=root.Mercado.report({...s,shareMetric:'units'}),revenueReport=root.Mercado.report({...s,shareMetric:'revenue'}),current=all.filter(r=>r.counted&&root.ResearchSnapshot.matches(r,data)),quotes=current.filter(root.ResearchSnapshot.priceEligible).map(r=>r.selling_price).sort((a,b)=>a-b),median=quotes.length?(quotes[Math.floor((quotes.length-1)/2)]+quotes[Math.floor(quotes.length/2)])/2:null;
    document.getElementById('export').onclick=()=>{const ids=new Set(current.map(r=>r.product_code)),csv=root.Mercado.csvRows({...s,marketQuick:'all',evidenceBrand:'',evidenceQuery:'',evidenceStatus:'all',mlMin:'',mlMax:''});download(csv.filter((row,i)=>i===0||ids.has(row[3])),'MercadoLibre_'+s.country+'_'+s.category+'_snapshot.csv');};
    const card=(label,value,note)=>'<article class="market-kpi"><span>'+label+'</span><strong>'+fmt(value)+'</strong><small>'+esc(note)+'</small></article>';

@@ -19,7 +19,7 @@ async function run() {
     const errors = [];
     page.on('pageerror',error=>errors.push(error.message));
     const go = async route => {
-      const scope = {page:'market',view:'overview',country:'MX',platform:'amazon',category:'wash',...months,...route};
+      const scope = {page:'market',view:'overview',country:'MX',platform:'amazon',category:'wash',...months,...(route.platform==='ml'?{marketPeriod:'snapshot'}:{}),...route};
       await page.goto(base+'#'+new URLSearchParams(scope),{waitUntil:'domcontentloaded'});
       await page.waitForFunction(expected => typeof state!=='undefined' &&
         ['country','platform','category','view'].every(key=>state[key]===expected[key]),scope);

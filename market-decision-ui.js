@@ -18,6 +18,7 @@
  function mount(s,change,download){
   if(document.body.dataset.workspace!=='research'||!M())return;
   saved(s,change);
+  if(root.MercadoHistory?.isPeriodOverview(s))return;
   const host=document.getElementById('research-evidence'),overview=s.page==='market'&&s.view==='overview',product=s.page==='market'&&s.view==='products';
   if(!overview&&!product)return;const c=s.platform==='ml'?null:root.decisionCatalog(),r=M().report(s.platform==='ml'?s:root.decisionState(c),c);if(!r)return;
   if(product){
