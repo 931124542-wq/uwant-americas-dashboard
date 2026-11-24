@@ -67,7 +67,7 @@
       '<div class="ml-month-revenue-values">'+snapshots.map(batch =>
         '<article data-revenue-snapshot="'+batch.date+'"><time datetime="'+batch.date+'">'+batch.date+' 采集</time>'+
         '<strong>'+fmt(batch.amount)+' <small>'+currency+'</small></strong><span>'+num.format(batch.count)+' 个金额样本</span></article>'
-      ).join('')+'</div><p>第三方估算。各批近30天窗口可能重叠，金额单独查看。月份选择仅用于自然月统计。</p>';
+      ).join('')+'</div><p>各日为独立的近30天估算。</p>';
     block.querySelector('[data-export-snapshot-revenue]').onclick = () => download(
       [['国家','平台','品类','采集日期','统计口径','销售额估算','币种','金额样本数'],
        ...snapshots.map(batch => [state.country,'Mercado Libre',state.category,batch.date,'近30天；起止日期未提供',batch.amount,currency,batch.count])],
@@ -86,7 +86,7 @@
     scope.innerHTML = '<div class="ml-coverage-head"><div><h3>样本覆盖</h3><p>商品库 <strong>'+num.format(products.length)+'</strong> 条 · 上方快照 <strong>'+num.format(base.all.length)+'</strong> 个可统计销量 · '+num.format(positive)+' 个有销量'+(publicCount?' · 含 '+publicCount+' 条公开商品资料':'')+'</p></div><button class="rq-button" data-coverage-catalogue>查看商品库</button></div>';
     if (extra.rows.length) {
       const currency = products[0].currency;
-      scope.insertAdjacentHTML('beforeend','<div class="ml-extra-snapshot" data-ml-extra-snapshot><div><h4>'+date+' 补采快照</h4><p>'+num.format(extra.rows.length)+' 个统计样本 · '+num.format(extra.positive)+' 个有销量</p></div><div><strong>'+fmt(extra.units)+'</strong> 台 · <strong>'+fmt(extra.revenue)+'</strong> '+currency+'</div><button class="rq-button" data-extra-export>导出该批</button><p>第三方近30天估算。该批独立统计，采样不同，不能与上方相加或计算增长。</p></div>');
+      scope.insertAdjacentHTML('beforeend','<div class="ml-extra-snapshot" data-ml-extra-snapshot><div><h4>'+date+' 补采快照</h4><p>'+num.format(extra.rows.length)+' 个统计样本 · '+num.format(extra.positive)+' 个有销量</p></div><div><strong>'+fmt(extra.units)+'</strong> 台 · <strong>'+fmt(extra.revenue)+'</strong> '+currency+'</div><button class="rq-button" data-extra-export>导出该批</button><p>各日为独立的近30天估算。</p></div>');
       scope.querySelector('[data-extra-export]').onclick = () => download(
         [['国家','品类','快照日期','商品ID','品牌','近30天销量估算','近30天销售额估算','币种'],
          ...extra.rows.map(row => [state.country,state.category,date,row.id,row.brand,row.units,row.revenue,currency])],

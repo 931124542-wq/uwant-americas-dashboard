@@ -135,7 +135,7 @@ calendarView=function(){
   const topNotice='<div class="cal-reading-key"><span><i class="key-official"></i>日期已确认</span><span><i class="key-calendar"></i>参考日期</span><span><i class="key-pending"></i>等待公布</span><small>是否参加请以运营计划为准</small></div>';
   const listTitle=calendarPeriod==='all'?'全年活动':calendarPeriod==='upcoming'?'接下来的活动':Number(calendarPeriod)+'月活动';
   const annualBody=panel('全年日历','点击月份查看活动。',calendarMonthGrid());
-  return controls+hero+calendarPromoTimeline()+metrics+topNotice+calendarSchedule()+'<div class="section-gap">'+panel(listTitle,known.length+'项 · 当地日期 '+calToday(),calendarTable(known))+'</div><div class="section-gap">'+calendarPending(pending)+'</div>'+(current?'<div class="section-gap">'+eventDetail(current)+'</div>':'')+'<details class="cal-reference-fold"><summary>全年月份、日期来源与适用范围</summary>'+calendarCoveragePanel()+annualBody+calendarRecheckPanel()+'</details>';
+  return controls+hero+calendarPromoTimeline()+metrics+topNotice+calendarSchedule()+'<div class="section-gap">'+panel(listTitle,known.length+'项 · 当地日期 '+calToday(),calendarTable(known))+'</div><div class="section-gap">'+calendarPending(pending)+'</div>'+(current?'<div class="section-gap">'+eventDetail(current)+'</div>':'')+'<details class="cal-reference-fold"><summary>全年月份、日期来源与适用范围</summary>'+'<div data-operations-backstage>'+calendarCoveragePanel()+'</div>'+annualBody+'<div data-operations-backstage>'+calendarRecheckPanel()+'</div>'+'</details>';
 };
 const originalIntelligenceWiring=wireIntelligence;
 wireIntelligence=function(){

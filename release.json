@@ -472,5 +472,12 @@
     "mercadoCalendarRevenueAvailable": false,
     "amazonPeriodTotalsExplicit": true,
     "sourceRecordsUnchanged": true
+  },
+  "businessPagesCleanup": {
+    "displayVersion": "11.24.10",
+    "marketAndProductManagementDetailsHidden": true,
+    "operatingReportToolsCollapsed": true,
+    "operatingAndPromotionMetricsRetained": true,
+    "sourceRecordsUnchanged": true
   }
 }

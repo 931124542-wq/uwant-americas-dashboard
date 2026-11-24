@@ -137,3 +137,4 @@ body[data-workspace=research] [data-backstage-only][hidden]{display:none!importa
  .ml-month-comparison>summary{padding-left:16px;padding-right:16px}
  .ml-month-comparison>[data-ml-month-comparison]{margin-left:16px;margin-right:16px}
 }
+.content #scope:empty{display:none}

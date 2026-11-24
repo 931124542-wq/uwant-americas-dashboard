@@ -24,7 +24,12 @@ with zipfile.ZipFile(sys.argv[1],'w',compression=zipfile.ZIP_DEFLATED) as z:
  try{
   const p=await b.newPage({viewport:{width:1440,height:1000},acceptDownloads:true}),errors=[],writes=[],base=process.env.UWANT_TEST_BASE||'http://127.0.0.1:8842/';p.on('pageerror',e=>errors.push(e.message));p.on('request',r=>{if(r.method()==='POST'||r.method()==='PUT')writes.push(r.url());});
   await p.goto(base+'#page=market&country=MX',{waitUntil:'domcontentloaded'});await p.waitForSelector('[data-market-overview-template]');assert.equal(await p.locator('#operations-navigation nav a:visible').count(),7);assert(!(await p.locator('#management-navigation').evaluate(x=>x.open)));
-  await p.locator('#operations-navigation [data-route="overview"]').click();await p.waitForSelector('[data-ow-import]');assert.equal(new URLSearchParams(new URL(p.url()).hash.slice(1)).get('module'),'operations');
+  await p.locator('#operations-navigation [data-route="overview"]').click();
+  const settings=p.locator('.ow-report-tools');
+  await settings.waitFor();
+  assert.equal(await p.locator('[data-ow-import]').isVisible(),false);
+  await settings.locator('summary').first().click();
+  await p.waitForSelector('[data-ow-import]');assert.equal(new URLSearchParams(new URL(p.url()).hash.slice(1)).get('module'),'operations');
   await p.locator('[data-ow-import]').setInputFiles(file);await p.waitForSelector('body.personal-operating-active');assert.deepEqual(await p.locator('.ow-metrics strong').allTextContents(),expected.metrics);assert.equal(await p.evaluate(()=>OperatingWorkbook.load().sales.length),expected.salesRows);assert(!(await p.locator('#operations-frame').isVisible()));assert(!(await p.locator('#management-navigation').evaluate(x=>x.open)));
   await p.screenshot({path:out+'/overview-desktop.png',fullPage:false});
   await p.locator('[data-ow-filter="channel"]').selectOption(expected.channel);assert.equal(await p.locator('[data-ow-metric="units"] strong').innerText(),expected.channelUnits);assert.equal(await p.locator('[data-ow-metric="stock"] strong').innerText(),expected.metrics[1]);

@@ -22,10 +22,37 @@ const {chromium}=require('playwright'),fs=require('fs'),path=require('path'),ass
   }
   await go({country:'BR',platform:'ml',category:'mattress',own:'M600'});await hidden();await p.screenshot({path:out+'/br-mattress-desktop.png',fullPage:false});
   for(const country of ['MX','CA','US']){await go({country});await hidden();await p.locator('.market-original-reference summary').click();assert(await p.locator('[data-original-category-report]').isVisible());assert(await p.locator('[data-original-report-export]').isVisible());}
+  await go({country:'MX',category:'fabric',view:'products',evidenceDetail:'amazon:mx:B0D11TKT2Z'});
+  const dialog=p.locator('#rq-dialog[open]');
+  await dialog.waitFor();
+  assert.equal(await dialog.locator('.rq-reviewed-history,.rq-quality-grid,.rq-quarantine').filter({visible:true}).count(),0);
+  assert.equal(await dialog.getByText('图片证据',{exact:true}).isVisible(),false);
+  assert.equal(await dialog.getByText('库存：not_independently_verified',{exact:true}).count(),0);
+  await dialog.getByText('历史价格参考 · 9 个月',{exact:true}).click();
+  assert.equal(await dialog.locator('[data-amazon-price-archive] tbody tr:visible').count(),9);
+  await go({country:'BR',platform:'ml',category:'fabric',view:'products',evidenceQuery:'MLB26797988'});
+  const listing=p.locator('.ml-product').first();
+  await listing.getByText('商品信息与来源',{exact:true}).click();
+  assert.match(await listing.innerText(),/上架以来累计销量 69,031 台/);
+  assert.doesNotMatch(await listing.innerText(),/positive_household_form|参数见对比表|履约 缺失/);
+  assert.equal(await listing.locator('[data-ml-listing-snapshots] li:visible').count(),3);
+  await go({country:'CA'});
   const menu=p.locator('#management-navigation');await menu.locator(':scope>summary').click();await p.locator('.sidebar [data-view="data"]').click();await p.waitForSelector('.research-data-admin');assert(await p.locator('.coverage-monitor').isVisible());assert(await p.locator('.market-validation').isVisible());assert(await p.locator('.data-admin-source-report').isVisible());await p.reload({waitUntil:'domcontentloaded'});await p.waitForSelector('.research-data-admin');assert(await p.locator('.coverage-monitor').isVisible());
   await p.locator('[data-admin-return]').click();await p.waitForSelector('[data-market-overview-template]');await hidden();
   await p.setViewportSize({width:390,height:844});await go({country:'BR',platform:'ml',category:'mattress',own:'M600'});await hidden();assert(!await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2));await p.screenshot({path:out+'/br-mattress-mobile.png',fullPage:false});
   await go({country:'US',page:'brands',view:'monthly',dataset:'2026-08',startMonth:'',endMonth:'',historyProduct:'B0HCZJV1NJ'});await hidden();assert((await p.locator('.monthly-product').innerText()).includes('442'));assert((await p.locator('.monthly-summary').innerText()).includes('月份说明'));assert(!(await p.locator('.monthly-summary').innerText()).includes('商品月份记录'));assert(await p.locator('[data-monthly-group-reference]').isVisible());await p.screenshot({path:out+'/monthly-mobile.png',fullPage:false});
+  await p.setViewportSize({width:1440,height:1000});
+  for(const [page,visible,management] of [
+   ['analysis','需要关注的商品','报表来源与数据核验'],
+   ['inventory','库存明细','库存管理待补充'],
+   ['tasks','运营计划','策略验证记录']
+  ]){
+   await p.goto(base+'#country=MX&module=operations&page='+page,{waitUntil:'domcontentloaded'});
+   const frame=p.frameLocator('#operations-frame');
+   await frame.locator('#view').getByText(visible,{exact:true}).first().waitFor();
+   assert.equal(await frame.locator('#view').getByText(management,{exact:true}).isVisible(),false);
+   assert.equal(await p.locator('[data-ow-import]').isVisible(),false);
+  }
   assert.deepEqual(errors,[]);fs.writeFileSync(out+'/result.json',JSON.stringify({scopes,adminPanelsHidden:true,openingDetailsCannotReveal:true,originalReportsVisible:3,sourceReportsInManagement:true,managementRefreshReturn:true,historicalChartsRetained:true,groupReferenceRetained:true,mobile:true,errors},null,2));console.log('PASS backstage hidden: ten analysis routes, BR mattress, original three-country reports, historical charts, monthly values, management access/refresh/return and mobile.');
  }finally{await b.close();}
 })().catch(e=>{console.error(e);process.exit(1)});

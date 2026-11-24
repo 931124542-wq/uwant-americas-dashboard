@@ -36,7 +36,7 @@
       '<div class="ml-month-revenue-values"><article><span>样本累计总销量</span><strong data-lifetime-units>'+number.format(totals.total)+' <small>台</small></strong>'+
       '<span>'+number.format(totals.rows.length)+' 个去重商品组</span></article>'+
       '<article><span>样本累计总销售额 / '+local+'</span><strong data-lifetime-revenue>—</strong><span>来源未提供累计金额</span></article></div>'+
-      '<p>取每个商品组最近一次有效的上架以来累计订单数。采集 '+date+'。此处与所选月份独立。</p>';
+      '<p>累计订单数 · '+date+' 采集。</p>';
     block.querySelector('[data-export-lifetime]').onclick = () => download(
       [['国家','平台','品类','商品ID','品牌','采集日期','上架以来累计销量','累计销售额','币种','来源'],
        ...totals.rows.map(({product,date,units})=>[state.country,'Mercado Libre',state.category,product.product_code,

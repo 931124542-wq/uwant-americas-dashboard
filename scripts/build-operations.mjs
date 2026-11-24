@@ -2,13 +2,26 @@ import fs from 'node:fs';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 const source=fileURLToPath(new URL('../',import.meta.url)),out=source+'/operations';fs.mkdirSync(out,{recursive:true});
-const calendarOnly=process.argv.includes('--calendar-only');let html;
-if(calendarOnly){
+const calendarOnly=process.argv.includes('--calendar-only');
+const presentationOnly=process.argv.includes('--presentation-only');
+let html;
+if(calendarOnly||presentationOnly){
  html=fs.readFileSync(out+'/index.html','utf8');
+ if(calendarOnly){
  const calendarJS=fs.readFileSync(source+'/calendar.js','utf8').replace(/<\/script/gi,'<\\/script'),calendarCSS=fs.readFileSync(source+'/calendar.css','utf8');let scripts=0,styles=0;
  html=html.replace(/<script data-source="calendar\.js">[\s\S]*?<\/script>/g,()=>{scripts++;return '<script data-source="calendar.js">\n'+calendarJS+'\n</script>';});
  html=html.replace(/<style>([\s\S]*?)<\/style>/g,(block,css)=>{if(!css.trim().startsWith('.calendar-hero{'))return block;styles++;return '<style>\n'+calendarCSS+'\n</style>';});
  if(scripts!==1||styles!==1)throw Error('Calendar assets not uniquely found; original frame was not written.');
+ }
+ if(presentationOnly){
+  for(const name of ['analysis.js','accuracy.js','operations.js']){
+   const script=fs.readFileSync(source+'/'+name,'utf8').replace(/<\/script/gi,'<\\/script');
+   const tag='<script data-source="'+name+'">';
+   const start=html.indexOf(tag),end=html.indexOf('</script>',start);
+   if(start<0||end<0||html.indexOf(tag,start+tag.length)>=0)throw Error('Embedded script not uniquely found: '+name);
+   html=html.slice(0,start+tag.length)+'\n'+script+'\n'+html.slice(end);
+  }
+ }
 }else{
 const sourceEntry=fs.existsSync(source+'/operations/source-entry.txt')?source+'/operations/source-entry.txt':source+'/index.html';
 html=fs.readFileSync(sourceEntry,'utf8');
