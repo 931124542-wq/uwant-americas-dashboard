@@ -7,11 +7,33 @@ const {chromium}=require('playwright'),fs=require('fs'),path=require('path'),ass
   const p=await b.newPage({viewport:{width:1440,height:1000},acceptDownloads:true}),errors=[],base=process.env.UWANT_TEST_BASE||'http://127.0.0.1:8842/';p.on('pageerror',e=>errors.push(e.message));
   const go=async patch=>{await p.goto(base+'#'+new URLSearchParams({page:'market',view:'overview',country:'CA',platform:'amazon',category:'vacuum',dataset:'2026-09',startMonth:'2026-01',endMonth:'2026-09',competitionGroup:'all',own:'V500',...(patch.platform==='ml'?{marketPeriod:'snapshot'}:{}),...patch}),{waitUntil:'domcontentloaded'});await p.waitForSelector(patch?.view==='monthly'?'.monthly-product':'[data-market-overview-template]');};
   for(const patch of [{},{country:'BR',platform:'ml'},{country:'US',category:'fabric',own:'Y100S'}]){
-   await go(patch);const available=await p.evaluate(()=>{const c=state.platform==='ml'?null:decisionCatalog();return MarketOverviewLayout.leaderRows({...state,marketTop:'20'},c,MarketDecisionModel.report(c?decisionState(c):state,c)).rows.length;});assert(available>5);assert.equal(await p.locator('.market-leaders tbody tr').count(),5);await p.locator('[data-overview-top]').selectOption('10');assert.equal(await p.locator('.market-leaders tbody tr').count(),Math.min(10,available));
+   await go(patch);const available=await p.evaluate(()=>{const c=state.platform==='ml'?null:decisionCatalog();return MarketOverviewLayout.leaderRows({...state,marketTop:'20'},c,MarketDecisionModel.report(c?decisionState(c):state,c)).rows.length;});assert(available>5);assert.equal(await p.locator('.market-leaders tbody tr').count(),Math.min(10,available));await p.locator('[data-overview-top]').selectOption('5');assert.equal(await p.locator('.market-leaders tbody tr').count(),5);await p.locator('[data-overview-top]').selectOption('10');assert.equal(await p.locator('.market-leaders tbody tr').count(),Math.min(10,available));
    await p.locator('[data-overview-top]').selectOption('20');const count=await p.locator('.market-leaders tbody tr').count();assert.equal(count,available);assert.equal(new URLSearchParams(new URL(p.url()).hash.slice(1)).get('marketTop'),'20');
    await p.reload({waitUntil:'domcontentloaded'});await p.waitForSelector('[data-overview-top]');assert.equal(await p.locator('[data-overview-top]').inputValue(),'20');assert.equal(await p.locator('.market-leaders tbody tr').count(),count);
    await p.goBack();await p.waitForFunction(()=>document.querySelector('[data-overview-top]')?.value==='10');assert.equal(await p.locator('.market-leaders tbody tr').count(),Math.min(10,available));await p.goForward();await p.waitForFunction(()=>document.querySelector('[data-overview-top]')?.value==='20');
   }
+  await go({shareMetric:'revenue'});
+  const band=p.locator('[data-share-drill="price|1"]');
+  await band.click();
+  const amazonRank=p.locator('.sample-share-detail [data-market-ranking]');
+  assert.equal(await amazonRank.locator('tbody tr').count(),7);
+  const revenues=await amazonRank.locator('tbody tr td:last-child').allTextContents();
+  const asNumbers=revenues.map(value=>Number(value.replaceAll(',','')));
+  assert(asNumbers.every((value,i)=>value>0&&(!i||asNumbers[i-1]>=value)));
+  assert.equal(new Set(await amazonRank.locator('[data-ranked-product]').evaluateAll(rows=>rows.map(row=>row.dataset.rankedProduct))).size,7);
+  await go({country:'MX',platform:'ml',shareMetric:'revenue'});
+  await p.locator('[data-ml-band="4000 – < 8000"]').click();
+  const mlRank=p.locator('[data-ml-detail] [data-market-ranking]');
+  assert.equal(await mlRank.locator('tbody tr').count(),1);
+  assert.equal(await mlRank.locator('[data-ranked-product]').first().getAttribute('data-ranked-product'),'MLM72234235');
+  assert.equal(await p.locator('[data-ml-detail] .market-price-detail-all tbody tr').count(),4);
+  await go({country:'BR',platform:'ml',category:'fabric',own:'Y100S',marketPeriod:'monthly',startMonth:'2026-09',endMonth:'2026-11'});
+  const monthlyRank=p.locator('[data-market-ranking]');
+  assert((await monthlyRank.innerText()).includes('销量 Top 10'));
+  assert.equal(await monthlyRank.getByRole('columnheader',{name:'销量（台）'}).count(),1);
+  assert.equal(await monthlyRank.getByRole('columnheader',{name:/销售额|报价/}).count(),0);
+  await go({country:'BR',platform:'all',category:'fabric',own:'Y100S',marketPeriod:'monthly',startMonth:'2026-09',endMonth:'2026-11'});
+  assert((await p.locator('[data-market-channel="ml"] [data-market-ranking]').innerText()).includes('销量 Top 10'));
   // Hard-coded historical expectations: model and UI changing together cannot hide a regression.
   const expected=[['CA','vacuum','5,330,501.66','38,405'],['CA','fabric','7,251,035.25','63,676'],['US','vacuum','54,585,318.95','408,677'],['MX','wash','10,764,825.62','1,228']];
   for(const [country,category,revenue,units]of expected){await go({country,category});assert.equal(await p.locator('[data-market-kpi="revenue"]>strong').innerText(),revenue);assert.equal(await p.locator('[data-market-kpi="units"]>strong').innerText(),units);}

@@ -506,5 +506,11 @@
     "userSelectedLocalResearchFile": true,
     "localDataTransfer": false,
     "sourceRecordsUnchanged": true
+  },
+  "marketTopTen": {
+    "displayVersion": "11.24.16",
+    "defaultTop": 10,
+    "priceBandRanking": true,
+    "sourceRecordsUnchanged": true
   }
 }

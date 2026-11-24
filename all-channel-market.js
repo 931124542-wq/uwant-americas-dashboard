@@ -47,6 +47,14 @@
    (note?'<p class="market-period-detail">'+note+'</p>':'')+
    root.MarketOverviewLayout.monthlyResults(months,amazon.facts,currency);
   panel.querySelector('.market-monthly-results').open=amazon.facts.length>0&&months.length<=12;
+  if(amazon.facts.length){
+   const kind=amazon.scope.shareMetric==='units'?'units':'revenue';
+   const products=root.decisionCatalog().observed.filter(row=>row.platform==='amazon');
+   panel.insertAdjacentHTML('beforeend',root.MarketOverviewLayout.rankTable(
+    root.MarketOverviewLayout.rankAmazon(amazon.facts,products,kind),{kind,currency,
+     note:'按所选月份的估算数据排序，同款规格合并。'}
+   ));
+  }
   const original=root.MarketSummary.originalContext(null,amazon.scope);
   if(original){
    const details=document.createElement('details');
@@ -67,7 +75,7 @@
 
  function render(state,history,change,download){
   const result=report(state,history);
-  const {mercado,products,data,amazon,start,end}=result;
+  const {mercado,products,data,sample,amazon,start,end}=result;
   const host=document.createElement('div');
   host.className='all-channel-market';
   host.dataset.marketOverviewTemplate='all-channels';
@@ -76,6 +84,10 @@
   mlPanel.dataset.marketChannel='ml';
   root.MercadoCoverageSummary.mountRevenue(mlPanel,mercado,products,data,download);
   root.MercadoLifetime.mount(mlPanel,mercado,products,download,mlPanel.querySelector('[data-ml-month-revenue]'));
+  mlPanel.insertAdjacentHTML('beforeend',root.MarketOverviewLayout.rankTable(
+   root.MarketOverviewLayout.rankMercadoMonths(sample),{kind:'units',price:false,
+    note:'按所选月份的整月销量排序。同期商品报价和销售额暂无数据。'}
+  ));
   mlPanel.insertAdjacentHTML('beforeend','<div class="market-channel-footer"><button class="rq-button">查看美客多大盘 →</button></div>');
   mlPanel.querySelector('.market-channel-footer button').onclick=()=>change({
    platform:'ml',marketPeriod:'monthly',startMonth:start,endMonth:end

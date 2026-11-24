@@ -15,7 +15,7 @@ function csv(t){const rows=[];let row=[],v='',q=false;for(let i=0;i<t.length;i++
   assert.equal(await p.evaluate(()=>window.UWANT_PRIVATE_CAPTURE?.access),'public_sanitized');assert.equal(await p.evaluate(()=>window.UWANT_PUBLISHED_RESEARCH?.publication?.scope),'normalized_product_research_only');assert.equal(await p.locator('[data-operating-country]').count(),0);await p.screenshot({path:out+'/market-overview.png',fullPage:true});
  });
  await test('Brand drill and price-band drill expose the actual component months',async()=>{
-  await p.locator('[data-share-drill="brand|Levoit"]').click();assert.equal(await p.locator('.sample-share-detail tbody tr').count(),9);await p.locator('[data-share-drill="price|1"]').click();assert.equal(await p.locator('.sample-share-detail tbody tr').count(),23);await p.locator('.sample-shares').screenshot({path:out+'/shares-and-monthly-drill.png'});
+  await p.locator('[data-share-drill="brand|Levoit"]').click();assert.equal(await p.locator('.sample-share-detail .rq-table-scroll tbody tr').count(),9);await p.locator('[data-share-drill="price|1"]').click();assert.equal(await p.locator('.sample-share-detail .rq-table-scroll tbody tr').count(),23);await p.locator('.sample-shares').screenshot({path:out+'/shares-and-monthly-drill.png'});
  });
  await test('Downloaded share CSV and global CSV agree with visible qualified revenue',async()=>{
   const r=await report(),table=await download('[data-share-export]','qualified-share-facts'),h=table[0],facts=table.slice(1).filter(r=>r[0]==='fact');assert.equal(facts.length,r.selected.length);assert(Math.abs(facts.reduce((n,r)=>n+Number(r[h.indexOf('value')]),0)-r.total)<.001);

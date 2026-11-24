@@ -7,7 +7,7 @@ const base={...c.ResearchModel.defaults,page:'market',view:'overview',country:'C
 for(const patch of [{},{country:'BR',platform:'ml'},{country:'US',category:'fabric'}]){
  const s={...base,...patch},cat=s.platform==='ml'?null:c.catalog(s),r=c.MarketDecisionModel.report(s,cat),rows=top=>c.MarketOverviewLayout.leaderRows({...s,marketTop:String(top)},cat,r).rows;
  const five=rows(5),ten=rows(10),twenty=rows(20);assert(five.length>0);assert(ten.length>five.length);assert(twenty.length>=ten.length);assert(twenty.length<=20);
- assert.deepEqual(ten.slice(0,5).map(x=>x.id),five.map(x=>x.id));assert.equal(rows(999).length,five.length);
+ assert.deepEqual(ten.slice(0,5).map(x=>x.id),five.map(x=>x.id));assert.deepEqual(rows(999),ten);
 }
 // Real source case: 442 units belong to one parent and are counted at another ASIN.
 // The differing revenue values remain conflicted; no revenue reference may be released.
