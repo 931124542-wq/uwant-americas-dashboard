@@ -519,5 +519,10 @@
     "verifiedPublicProductPages": 8,
     "datedSnapshotRanking": true,
     "originalSnapshotValuesPreserved": true
+  },
+  "mercadoDamaiArchiveLink": {
+    "displayVersion": "11.24.19",
+    "categoryReportRequiresLogin": true,
+    "separateFromSameTypeMarket": true
   }
 }

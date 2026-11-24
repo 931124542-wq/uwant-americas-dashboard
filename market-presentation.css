@@ -180,3 +180,6 @@ body[data-workspace=research] [data-backstage-only][hidden]{display:none!importa
 .ml-batch-detail{flex:0 0 100%;min-width:0}
 .ml-batch-controls label{display:grid;gap:4px}
 .ml-batch-controls select{min-height:32px}
+
+.ml-archive-reference{margin:0 22px 14px}
+@media(max-width:700px){.ml-archive-reference{margin-inline:16px}}

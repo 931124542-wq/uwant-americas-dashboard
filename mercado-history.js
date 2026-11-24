@@ -32,13 +32,24 @@
     return { start, end, profiles, coverage: [...coverage].sort(), selected: profiles.find(p => p.product.product_code === state.historyProduct) || profiles[0] };
   }
 
+  function categoryArchiveLink(state) {
+    if(state.platform!=='ml'||state.category!=='vacuum'||!root.MarketIntegrity?.applicable(state.country,'ml'))return '';
+    const query=new URLSearchParams({country:state.country});
+    if(root.ResearchModel.isCalendarMonth(state.startMonth)&&root.ResearchModel.isCalendarMonth(state.endMonth)){
+      query.set('startMonth',state.startMonth);
+      query.set('endMonth',state.endMonth);
+    }
+    return '<a class="rq-button" data-ml-category-archive href="https://uwant-americas-dashboard.sweettoast1.chatgpt.site/mercado-category-history?'+
+      esc(query.toString())+'" target="_blank" rel="noopener noreferrer">大麦类目历史（需登录）</a>';
+  }
+
   function summary(state, products, data) {
     const history=selection(state,products,data),{start,end}=history;
     const sample=monthlySample(history);
     const detail=sample.total===null?'暂无完整月销量':'完整月样本 '+number.format(sample.total)+' 台';
     return '<section class="ml-history-summary" data-ml-history-summary><div><h3>月度销量</h3><p data-ml-history-sample><strong>'+
       esc(start)+' 至 '+esc(end)+'</strong> · '+detail+'</p></div><div class="ml-history-actions"><button class="rq-button" data-ml-range-overview>查看月度销量</button>'+
-      '<button class="rq-button" data-ml-route="monthly">查看商品月销量</button></div></section>';
+      '<button class="rq-button" data-ml-route="monthly">查看商品月销量</button>'+categoryArchiveLink(state)+'</div></section>';
   }
 
   function continuousCoverage(source) {
@@ -111,10 +122,12 @@
     const card = (key,label,value) => '<article class="market-kpi" data-market-kpi="'+key+'"><span>'+label+'</span><strong>'+value+'</strong></article>';
     const basis=sample.covered===sample.months.length?'':'整月销量已覆盖 '+sample.covered+' / '+sample.months.length+' 个月 · ';
     const local=root.MarketIntegrity.currencies[state.country];
+    const archive=categoryArchiveLink(state);
     return '<section class="market-block market-hero" data-ml-period-overview><div class="market-block-heading"><h2>'+esc(title)+'</h2><span class="market-period-tag">'+esc(start)+' 至 '+esc(end)+'</span></div>'+
       '<div class="market-kpi-grid market-kpi-grid--two">'+card('units','期间总销量（台）',sample.total===null?'—':number.format(sample.total))+
       card('revenue','期间销售额（'+esc(local)+'）','—')+'</div>'+
-      '<p class="market-period-detail">'+basis+'暂无月度销售额数据</p>'+
+      '<p class="market-period-detail">'+basis+'暂无同类商品月度销售额数据</p>'+
+      (archive?'<div class="ml-archive-reference">'+archive+'</div>':'')+
       '<div class="market-period-coverage table-scroll"><table><thead><tr><th>月份</th><th>销量</th><th>备注</th></tr></thead><tbody>'+rows.join('')+'</tbody></table></div></section>';
   }
 
