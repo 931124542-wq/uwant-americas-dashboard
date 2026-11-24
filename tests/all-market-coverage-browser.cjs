@@ -192,6 +192,60 @@ async function run() {
     await go({country:'MX',platform:'ml',category:'mattress',...selectedMonths});
     await page.getByRole('button',{name:'全部历史',exact:true}).click();
     assert.equal(await page.evaluate(()=>state.startMonth+'|'+state.endMonth),'2025-09|2026-10');
+
+    await page.setViewportSize({width:1440,height:960});
+    await go({country:'BR',platform:'ml',category:'fabric',...selectedMonths});
+    await page.locator('#platform').selectOption('all');
+    const allChannels=page.locator('[data-market-overview-template="all-channels"]');
+    const mlChannel=allChannels.locator('[data-market-channel="ml"]');
+    const amazonChannel=allChannels.locator('[data-market-channel="amazon"]');
+    await allChannels.waitFor();
+    assert.equal(await page.evaluate(()=>state.platform+'|'+state.startMonth+'|'+state.endMonth),'all|2026-09|2026-11');
+    assert.equal(await mlChannel.locator('[data-market-kpi="units"] strong').innerText(),'10,606');
+    assert.equal(await mlChannel.locator('[data-lifetime-units]').innerText(),'144,664 台');
+    assert.equal(await mlChannel.locator('[data-period-month="2026-09"] [data-month-sample-units]').innerText(),'6,108 台');
+    assert.equal(await mlChannel.locator('[data-period-month="2026-10"] [data-month-sample-units]').innerText(),'4,498 台');
+    assert.equal(await mlChannel.locator('[data-period-month="2026-11"] [data-month-sample-units]').innerText(),'—');
+    assert.equal(await mlChannel.locator('[data-revenue-snapshot="2026-11-12"] > strong').innerText(),'4,139,728 BRL');
+    assert.equal(await amazonChannel.locator('[data-market-kpi="revenue"] strong').innerText(),'—');
+    const channelDownload=page.waitForEvent('download');
+    await page.locator('#export').click();
+    await (await channelDownload).saveAs(out+'/br-fabric-sales-by-channel.csv');
+    const salesByChannel=await fs.readFile(out+'/br-fabric-sales-by-channel.csv','utf8');
+    assert.match(salesByChannel,/"自然月","BR","Mercado Libre","fabric","BRL","2026-09","2026-11","2026-09","","6108",""/);
+    assert.match(salesByChannel,/"上架以来累计","BR","Mercado Libre","fabric","BRL","","","","2026-11-05 至 2026-11-12","144664",""/);
+    assert.match(salesByChannel,/"近30天快照","BR","Mercado Libre","fabric","BRL","","","","2026-11-12","","4139728"/);
+    await page.screenshot({path:out+'/all-channels-desktop.png'});
+    await page.setViewportSize({width:390,height:844});
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2),false);
+    await page.screenshot({path:out+'/all-channels-mobile.png'});
+    await page.getByRole('button',{name:'全部历史',exact:true}).click();
+    assert.equal(await mlChannel.locator('[data-market-kpi="units"] strong').innerText(),'120,791');
+    await page.reload({waitUntil:'domcontentloaded'});
+    await allChannels.waitFor();
+    assert.equal(await page.evaluate(()=>state.startMonth+'|'+state.endMonth),'2024-12|2026-10');
+    await page.goBack({waitUntil:'domcontentloaded'});
+    assert.equal(await mlChannel.locator('[data-market-kpi="units"] strong').innerText(),'10,606');
+
+    for(const [country,scopes] of Object.entries(completeSamples)){
+      for(const [index,[sep,oct]] of scopes.entries()){
+        await go({country,platform:'all',category:categories[index],...selectedMonths});
+        assert.equal(await mlChannel.locator('[data-market-kpi="units"] strong').innerText(),value(sep+oct));
+        assert.equal(await mlChannel.locator('[data-lifetime-units]').innerText(),value(lifetime[country][index][0])+' 台');
+        assert.equal(await amazonChannel.count(),['MX','BR'].includes(country)?1:0);
+      }
+    }
+    await go({country:'MX',platform:'all',category:'wash',...selectedMonths});
+    assert.equal(await amazonChannel.locator('[data-market-kpi="units"] strong').innerText(),'308');
+    assert.equal(await amazonChannel.locator('[data-market-kpi="revenue"] strong').innerText(),'2,418,839.9');
+    assert.equal(await mlChannel.locator('[data-market-kpi="units"] strong').innerText(),'951');
+    await go({country:'CA',platform:'all',category:'fabric'});
+    const amazonOnly=page.locator('[data-market-overview-template]');
+    await amazonOnly.waitFor();
+    assert.equal(await allChannels.count(),0);
+    assert.equal(await amazonOnly.locator('[data-market-kpi="revenue"] strong').innerText(),'8,635,388.45');
+    assert.equal(await amazonOnly.locator('[data-market-kpi="units"] strong').innerText(),'74,154');
+
     await go({country:'BR',platform:'ml',category:'mattress'});
     const archive=page.locator('.ml-archived-snapshot');
     await page.locator('.ml-coverage-summary>summary').click();

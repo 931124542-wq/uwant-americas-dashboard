@@ -69,7 +69,7 @@ function notify(text){$('toast').textContent=text;$('toast').hidden=false;clearT
 function change(patch,{replace=false,scroll=false}={}){
  if(window.Mercado?.rendering)return;
  history.replaceState({...history.state,scrollY:window.scrollY},'',location.href);
- const previous=state;if(patch.view==='products'&&previous.view!=='products'&&!('marketQuick'in patch))patch={...patch,marketQuick:'all',evidenceMin:'',evidenceMax:''};state={...state,...patch};if('dataset' in patch&&!('startMonth' in patch)){state.startMonth='';state.endMonth='';}if(state.startMonth&&state.endMonth)state.dataset=state.endMonth;if(['AR','CL','CO'].includes(state.country)&&!['ml','all'].includes(state.platform)&&['brands','competitors','market'].includes(state.page)){state.country='MX';notify('此国家尚无当前渠道研究数据，已切换墨西哥。');}if(state.platform==='ml'&&['CA','US'].includes(state.country)&&['market','brands','competitors'].includes(state.page)){state.country='MX';notify('美客多当前采集五个拉美站点，已切换墨西哥。');}if(!['market','brands','competitors'].includes(state.page)&&['CL','CO'].includes(state.country)){state.country='MX';notify('该国家尚无经营管理数据，已切换墨西哥。');}if(state.platform!=='ml'&&state.startMonth&&(!M.isHistory(state.startMonth)||!M.isHistory(state.endMonth))){state.startMonth='';state.endMonth='';state.dataset='2026-09';notify('Amazon历史仅支持2026年，已返回可用月份。');}
+ const previous=state;if(patch.view==='products'&&previous.view!=='products'&&!('marketQuick'in patch))patch={...patch,marketQuick:'all',evidenceMin:'',evidenceMax:''};state={...state,...patch};if('dataset' in patch&&!('startMonth' in patch)){state.startMonth='';state.endMonth='';}if(state.startMonth&&state.endMonth)state.dataset=state.endMonth;if(['AR','CL','CO'].includes(state.country)&&!['ml','all'].includes(state.platform)&&['brands','competitors','market'].includes(state.page)){state.country='MX';notify('此国家尚无当前渠道研究数据，已切换墨西哥。');}if(state.platform==='ml'&&['CA','US'].includes(state.country)&&['market','brands','competitors'].includes(state.page)){state.country='MX';notify('美客多当前采集五个拉美站点，已切换墨西哥。');}if(!['market','brands','competitors'].includes(state.page)&&['CL','CO'].includes(state.country)){state.country='MX';notify('该国家尚无经营管理数据，已切换墨西哥。');}if(!M.usesMercadoMonths(state)&&state.startMonth&&(!M.isHistory(state.startMonth)||!M.isHistory(state.endMonth))){state.startMonth='';state.endMonth='';state.dataset='2026-09';notify('Amazon历史仅支持2026年，已返回可用月份。');}
  if(patch.page==='brands'){state.mode='all';state.tier='all';}
  if(['country','platform','category','dataset'].some(k=>k in patch&&patch[k]!==previous[k])){
   state={...state,brand:'',band:'',q:'',picked:[],detail:'',offset:'0',tier:'all',mode:'all'};
@@ -267,7 +267,13 @@ function renderDecisionWorkspace(){
  renderMonthControls();
  $('scope-toggle').innerHTML=`<span>${esc(country().name)} / ${esc(ResearchQuality.platforms[state.platform]||'全部已采集渠道')} / ${esc(({fabric:'布艺清洗机',vacuum:'吸尘器',wash:'洗地机',mattress:'除螨仪'})[state.category])}<small>${esc(state.startMonth?state.startMonth+'—'+state.endMonth:state.dataset)} · UWANT ${esc(state.own)}</small></span><b>筛选⌄</b>`;
  for(const el of [document.querySelector('.result-panel'),$('price-panel'),document.querySelector('.data-note'),$('kpis'),$('comparison-options'),$('compare-tray')])el.hidden=true;
- $('research-layers').innerHTML='';$('research-evidence').innerHTML=MarketWorkbench.render(c,decisionState(c))+ResearchCatalog.extras(c,{...decisionState(c),evidencePicks:''},null,{dialogOnly:true});
+ $('research-layers').innerHTML='';
+ if(window.AllChannelMarket.applies(state)){
+  $('research-evidence').replaceChildren(AllChannelMarket.render(state,D.history,change,evidenceDownload));
+  if(M.encode(state)!==location.hash)history.replaceState(history.state,'',M.encode(state));
+  return;
+ }
+ $('research-evidence').innerHTML=MarketWorkbench.render(c,decisionState(c))+ResearchCatalog.extras(c,{...decisionState(c),evidencePicks:''},null,{dialogOnly:true});
  $('research-evidence').insertAdjacentHTML('beforeend',window.CoverageMonitor?.render(state,c)||'');const onState=(patch,opt={})=>{if(opt.close&&history.state?.rqDetail){history.back();return;}change(patch,{replace:opt.replace});if(opt.focusWorkbench){const q=document.querySelector('[data-wb-query]');q?.focus({preventScroll:true});q?.setSelectionRange(q.value.length,q.value.length);}if(opt.focusKeyword){const q=document.querySelector('[data-keyword-query]');q?.focus({preventScroll:true});q?.setSelectionRange(q.value.length,q.value.length);}if(opt.focusQuery){document.querySelector('[data-rq-query]')?.focus({preventScroll:true});}};
  const evidenceDialog=$('research-evidence').querySelector('#rq-dialog');if(evidenceDialog?.closest('.workspace-evidence'))$('research-evidence').append(evidenceDialog);
  if(keepOpen&&document.querySelector('.wb-compare-selection'))document.querySelector('.wb-compare-selection').open=true;ResearchCatalog.wire($('research-content'),{catalog:c,state,own:null,onState,download:evidenceDownload,notify});MarketWorkbench.wire($('research-content'),c,decisionState(c),onState,evidenceDownload);
@@ -275,6 +281,10 @@ function renderDecisionWorkspace(){
  if(M.encode(state)!==location.hash)history.replaceState(history.state,'',M.encode(state));
 }
 function exportDecisionWorkspace(){
+ if(window.AllChannelMarket.applies(state)){
+  evidenceDownload(AllChannelMarket.exportRows(state,D.history),`UWANT_${state.country}_${state.category}_sales_by_channel.csv`);
+  return;
+ }
  const selectedRange=state.page==='market'&&state.view==='overview'&&['amazon','all'].includes(state.platform)&&MonthlyRange.bounds(state).range;
  if(selectedRange){
   evidenceDownload(MarketSummary.rangeExportRows(state),`UWANT_${state.country}_${state.category}_${state.startMonth}_${state.endMonth}.csv`);

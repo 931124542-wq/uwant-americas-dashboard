@@ -99,7 +99,7 @@
     return {months,covered:covered.length,total,groups:new Set(covered.flatMap(m=>m.groups.map(g=>g.key))).size};
   }
 
-  function overview(state, products, data) {
+  function overview(state, products, data, title='市场大盘') {
     const history=selection(state,products,data),{start,end}=history;
     const sample=monthlySample(history);
     const rows=sample.months.map(m=>{
@@ -111,7 +111,7 @@
     const card = (key,label,value) => '<article class="market-kpi" data-market-kpi="'+key+'"><span>'+label+'</span><strong>'+value+'</strong></article>';
     const basis=sample.covered===sample.months.length?'':'有完整销量记录 '+sample.covered+' / '+sample.months.length+' 月 · ';
     const local=root.MarketIntegrity.currencies[state.country];
-    return '<section class="market-block market-hero" data-ml-period-overview><div class="market-block-heading"><h2>市场大盘</h2><span class="market-period-tag">'+esc(start)+' 至 '+esc(end)+'</span></div>'+
+    return '<section class="market-block market-hero" data-ml-period-overview><div class="market-block-heading"><h2>'+esc(title)+'</h2><span class="market-period-tag">'+esc(start)+' 至 '+esc(end)+'</span></div>'+
       '<div class="market-kpi-grid market-kpi-grid--two">'+card('units','样本总销量 · 台',sample.total===null?'—':number.format(sample.total))+
       card('revenue','样本总销售额 · '+esc(local),'—')+'</div>'+
       '<p class="market-period-detail">'+basis+'暂无自然月销售额</p>'+

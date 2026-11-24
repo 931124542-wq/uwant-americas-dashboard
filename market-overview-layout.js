@@ -66,5 +66,5 @@
   box.querySelector('[data-original-report-export]')?.addEventListener('click',()=>{if(typeof download==='function')download(root.MarketSummary.originalExportRows(s),'UWANT_'+s.country+'_'+s.category+'_original_category_report.csv');});
   box.querySelectorAll('[data-overview-image]').forEach(img=>{const loaded=()=>{if(img.naturalWidth>=32&&img.naturalHeight>=32)img.style.opacity='1';else img.hidden=true;};img.onload=loaded;img.onerror=()=>img.hidden=true;if(img.complete)loaded();});
  }
- root.MarketOverviewLayout={version,shell,leaderRows,leaders,mount};
+ root.MarketOverviewLayout={version,shell,leaderRows,leaders,monthlyResults,mount};
 })(window);

@@ -486,5 +486,12 @@
     "amazonMonthlySalesAndRevenueTable": true,
     "mercadoRollingAndLifetimeFiguresRetained": true,
     "sourceRecordsUnchanged": true
+  },
+  "allChannelMarketOverview": {
+    "displayVersion": "11.24.12",
+    "mercadoMonthlyAndLifetimeVisibleForAllChannels": true,
+    "separatePlatformTotalsAndCurrency": true,
+    "allChannelRangeAndExportVerified": true,
+    "sourceRecordsUnchanged": true
   }
 }

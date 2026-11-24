@@ -48,16 +48,20 @@
     return summarize(archiveDate,candidates,data);
   }
 
-  function mountRevenue(section, state, products, data, download) {
+  function revenueSnapshots(state, products, data) {
     const base = root.Mercado.report({...state,shareMetric:'revenue'});
     const extra = report(products,data);
     const archive = archiveReport(products,data);
-    const currency = root.MarketIntegrity.currencies[state.country];
-    const snapshots = [
+    return [
       {date:archive.date, amount:archive.revenue, count:archive.rows.filter(row => row.revenue !== null).length},
       {date:data.researchSnapshot || data.asOf, amount:base.total, count:base.all.length},
       {date:extra.date, amount:extra.revenue, count:extra.rows.filter(row => row.revenue !== null).length}
     ].filter(batch => batch.amount !== null);
+  }
+
+  function mountRevenue(section, state, products, data, download) {
+    const currency = root.MarketIntegrity.currencies[state.country];
+    const snapshots = revenueSnapshots(state,products,data);
     if (!snapshots.length) return;
 
     const block = document.createElement('section');
@@ -110,5 +114,5 @@
     });
     section.append(scope);
   }
-  root.MercadoCoverageSummary = {report, archiveReport, mount, mountRevenue};
+  root.MercadoCoverageSummary = {report, archiveReport, revenueSnapshots, mount, mountRevenue};
 })(window);

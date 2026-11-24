@@ -8,11 +8,11 @@
   }
 
   function recentMonth(scope, history) {
-    if (scope.platform === 'ml') {
+    if (root.ResearchModel.usesMercadoMonths(scope) && root.MERCADO_DATA?.records) {
       const data = root.MERCADO_DATA;
       const archive = root.MercadoHistory.selection(
-        {...scope, startMonth:'2000-01', endMonth:data.asOf.slice(0,7)},
-        root.Mercado.rows(scope), data
+        {...scope, platform:'ml', startMonth:'2000-01', endMonth:data.asOf.slice(0,7)},
+        root.Mercado.rows({...scope,evidenceRelation:'all'}), data
       );
       const complete = root.MercadoHistory.monthlySample(archive).months.filter(month=>month.units!==null);
       return {
@@ -29,7 +29,7 @@
 
   function mount(scope, history, change) {
     const box = document.getElementById('market-period');
-    const mercado = scope.platform === 'ml';
+    const mercado = root.ResearchModel.usesMercadoMonths(scope)&&!!root.MERCADO_DATA?.records;
     const data = root.MERCADO_DATA;
     const visible = scope.page === 'market' && scope.view === 'overview' &&
       (mercado ? Array.isArray(data?.records) : ['amazon','all'].includes(scope.platform));
@@ -69,7 +69,7 @@
       <p class="market-period-error" data-month-error role="status"></p>`;
 
     const update = (a,b,focus) => {
-      if (a!==start || b!==end || !scope.startMonth || mercado&&!root.MercadoHistory.isPeriodOverview(scope)) {
+      if (a!==start || b!==end || !scope.startMonth || scope.platform==='ml'&&!root.MercadoHistory.isPeriodOverview(scope)) {
         change({startMonth:a,endMonth:b,marketPeriod:'monthly',evidenceGroup:'',historyProduct:'',shareDrill:''});
       }
       else {
