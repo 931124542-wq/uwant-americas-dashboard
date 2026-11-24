@@ -14,8 +14,12 @@
         {...scope, startMonth:'2000-01', endMonth:data.asOf.slice(0,7)},
         root.Mercado.rows(scope), data
       );
-      const complete = root.MercadoHistory.monthlySample(archive).months.findLast(month=>month.units!==null);
-      return {month:complete?.month||archive.coverage.at(-1)?.[0],complete:!!complete};
+      const complete = root.MercadoHistory.monthlySample(archive).months.filter(month=>month.units!==null);
+      return {
+        month:complete.at(-1)?.month||archive.coverage.at(-1)?.[0],
+        first:complete[0]?.month||archive.coverage[0]?.[0],
+        complete:complete.length>0
+      };
     }
     const facts = root.SampleSalesShares.report(history, {
       ...scope, startMonth:'2026-01', endMonth:'2026-12', dataset:'2026-12'
@@ -39,12 +43,13 @@
     const start = valid(bounds.start) ? bounds.start : '';
     const end = valid(bounds.end) ? bounds.end : '';
     const name = '统计月份';
-    const {month:latest,complete}=recentMonth(scope, history);
+    const {month:latest,first,complete}=recentMonth(scope, history);
     const year = latest?.slice(0,4);
     const presets = latest ? [
       [complete?'最近可统计月':'最近有记录月', latest, latest],
       ...(mercado || Number(latest.slice(5))>=3 ? [['近3个月', twoMonthsBefore(latest), latest]] : []),
-      ['年初至最近月', year+'-01', latest]
+      ['年初至最近月', year+'-01', latest],
+      ...(first && first!==year+'-01' && first<latest ? [['全部历史', first, latest]] : [])
     ] : [];
     const summary = !start||!end ? '请选择月份' : start===end ? format(start) : start.slice(0,4)===end.slice(0,4)
       ? format(start)+'–'+monthLabel(end) : format(start)+'–'+format(end);

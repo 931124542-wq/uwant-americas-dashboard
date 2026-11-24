@@ -111,6 +111,13 @@ async function run() {
     assert.equal(await page.locator('[data-ml-period-overview] [data-market-kpi="units"] strong').innerText(),'3,132');
 
     const currencies={MX:'MXN',BR:'BRL',AR:'ARS',CL:'CLP',CO:'COP'};
+    const archived={
+      MX:[[1585839,28],[755059,3],[9410010,84],[25223,38]],
+      BR:[[87606,67],[827543,4],[3738252,27],[13057,245]],
+      AR:[[294715949,114],[106929477,7],[320606274,18],[7553971,32]],
+      CL:[[36378744,17],[5234807,2],[34399615,6],[2450887,109]],
+      CO:[[89239031,71],[32831320,9],[70296387,9],[1312120,59]]
+    };
     for(const [country,scopes] of Object.entries(completeSamples)){
       for(const [index,[sep,oct]] of scopes.entries()){
         await go({country,platform:'ml',category:categories[index],...selectedMonths});
@@ -120,8 +127,12 @@ async function run() {
         assert.equal(await overview.locator('[data-market-kpi="revenue"] strong').innerText(),'—');
         assert.equal(await overview.locator('[data-period-month="2026-11"] [data-month-sample-units]').innerText(),'—');
         const amounts=await snapshots.locator('article > strong').allTextContents();
-        assert.equal(amounts.length,2,country+'/'+categories[index]);
+        assert.equal(amounts.length,3,country+'/'+categories[index]);
         assert.ok(amounts.every(amount=>amount.endsWith(' '+currencies[country])));
+        const previous=snapshots.locator('[data-revenue-snapshot="2026-11-05"]');
+        const [amount,count]=archived[country][index];
+        assert.equal(await previous.locator('strong').innerText(),value(amount)+' '+currencies[country]);
+        assert.equal(await previous.locator('span').innerText(),value(count)+' 个金额样本');
         await page.getByRole('button',{name:'最近可统计月',exact:true}).click();
         assert.equal(await overview.locator('[data-market-kpi="units"] strong').innerText(),value(oct));
         assert.deepEqual(await snapshots.locator('article > strong').allTextContents(),amounts);
@@ -130,6 +141,7 @@ async function run() {
     }
     await go({country:'BR',platform:'ml',category:'fabric',...selectedMonths});
     const snapshots=page.locator('[data-ml-month-revenue]');
+    assert.equal(await snapshots.locator('[data-revenue-snapshot="2026-11-05"] > strong').textContent(),'3,738,252 BRL');
     assert.equal(await snapshots.locator('[data-revenue-snapshot="2026-11-06"] > strong').textContent(),'3,562,822 BRL');
     assert.equal(await snapshots.locator('[data-revenue-snapshot="2026-11-12"] > strong').textContent(),'4,139,728 BRL');
     assert.match(await snapshots.locator('[data-revenue-snapshot="2026-11-06"]').innerText(),/772 个金额样本/);
@@ -139,12 +151,33 @@ async function run() {
     await snapshots.getByRole('button',{name:'导出销售额快照'}).click();
     await (await revenueDownload).saveAs(out+'/mercado-br-fabric-revenue.csv');
     const revenueCsv=await fs.readFile(out+'/mercado-br-fabric-revenue.csv','utf8');
-    assert.equal(revenueCsv.trim().split(/\r?\n/).length,3);
+    assert.equal(revenueCsv.trim().split(/\r?\n/).length,4);
+    assert.match(revenueCsv,/"2026-11-05","近30天；起止日期未提供","3738252","BRL","27"/);
     assert.match(revenueCsv,/"2026-11-06","近30天；起止日期未提供","3562822","BRL","772"/);
     assert.match(revenueCsv,/"2026-11-12","近30天；起止日期未提供","4139728","BRL","191"/);
     await page.reload({waitUntil:'domcontentloaded'});
     await snapshots.waitFor();
     assert.equal(await page.evaluate(()=>state.startMonth+'|'+state.endMonth),'2026-09|2026-11');
+    await page.getByRole('button',{name:'全部历史',exact:true}).click();
+    assert.equal(await page.evaluate(()=>state.startMonth+'|'+state.endMonth),'2024-12|2026-10');
+    assert.equal(await page.locator('[data-period-month]').count(),23);
+    assert.equal(await page.locator('[data-ml-period-overview] [data-market-kpi="units"] strong').innerText(),'120,791');
+    await go({country:'MX',platform:'ml',category:'mattress',...selectedMonths});
+    await page.getByRole('button',{name:'全部历史',exact:true}).click();
+    assert.equal(await page.evaluate(()=>state.startMonth+'|'+state.endMonth),'2025-09|2026-10');
+    await go({country:'BR',platform:'ml',category:'mattress'});
+    const archive=page.locator('.ml-archived-snapshot');
+    await archive.locator('summary').click();
+    assert.match(await archive.innerText(),/73 台 · 13,057 BRL/);
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2),false);
+    const archiveDownload=page.waitForEvent('download');
+    await archive.getByRole('button',{name:'导出该批'}).click();
+    const archiveFile=await archiveDownload;
+    await archiveFile.saveAs(out+'/mercado-br-mattress-archived.csv');
+    const archiveCsv=await fs.readFile(out+'/mercado-br-mattress-archived.csv','utf8');
+    assert.equal(archiveCsv.trim().split(/\r?\n/).length,246);
+    assert.ok(archiveCsv.trim().split(/\r?\n/).slice(1).every(line=>line.startsWith('"BR","mattress","2026-11-05"')));
+    await go({country:'BR',platform:'ml',category:'mattress',...selectedMonths});
     await page.screenshot({path:out+'/market-mobile.png'});
     assert.deepEqual(errors,[]);
     const retail = await page.evaluate(months=>MarketValidation.localCatalogue(months,decisionCatalog),months);

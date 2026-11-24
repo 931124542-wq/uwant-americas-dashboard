@@ -440,5 +440,17 @@
     "marketScopesWithVerifiedCalendarMonthRevenue": 0,
     "snapshotRevenueShownSeparatelyInMonthlyView": true,
     "sourceRecordsUnchanged": true
+  },
+  "mercadoPriorArchiveRecovery": {
+    "displayVersion": "11.24.7",
+    "restoredSnapshotDate": "2026-11-05",
+    "restoredSnapshotScopes": 20,
+    "restoredSnapshotRevenueRecords": 949,
+    "restoredSnapshotPositiveRevenueRecords": 204,
+    "fullMonthlySampleRange": ["2024-12", "2026-10"],
+    "verifiedCountryCategoryMonthsWithUnits": 437,
+    "verifiedProductGroupMonthsWithUnits": 4801,
+    "newVerifiedCalendarMonthRevenueRecords": 0,
+    "sourceRecordsUnchanged": true
   }
 }
