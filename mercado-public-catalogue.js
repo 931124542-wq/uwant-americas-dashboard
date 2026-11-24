@@ -37,18 +37,33 @@
     ['Electrolux','Ergorapido Pet','www','aspiradora-inalambrica-electrolux-ergorapido-pet-2-en-1/p/MLM2088848771'],
     ['Black+Decker','Powerseries+ BHFEA420J','www','blackdecker-powerseries-16v-max-aspirador-sin-cable-c/p/MLM2057407493']
   ];
+  // Direct product pages indexed by Mercado Libre on review. A cached price has no observation date.
+  const reviewedPages = [
+    ['Dreame','Z30 Essential','www','aspiradora-inalambrica-dreame-z30-essential-negro/p/MLM62352435'],
+    ['Dyson','V12 Detect Slim Fluffy','www','aspiradora-sin-cable-dyson-v12-detect-slim-fluffy/p/MLM39476093'],
+    ['Xiaomi','G20','www','aspiradora-de-mano-xiaomi-vacuum-cleaner-g20/up/MLMU3516087583','MLM2529501663'],
+    ['LG','CordZero Charge Plus','www','aspirador-inalambrico-lg-cordzero-charge-plus-recargable-plateado-cordzero/p/MLM28495604'],
+    ['Koblenz','Venus SVM-350','www','aspiradora-inalambrica-koblenz-venus-svm-350-6-accesorios-gris/p/MLM20507640'],
+    ['Electrolux','Ergorapido EHVS2510AW','www','electrolux-ergorapido-aspiradora-inalambrica-ligera-con-color-blanco-satinado/p/MLM27518508'],
+    ['Electrolux','Ergorapido ERG15','www','aspiradora-electrolux-ergorapido-2-en-1-erg15-bateria-litio/p/MLM22200352'],
+    ['Tineco','A30S','www','aspiradora-tineco-a30s-inalambrica-160w-cap-1l-82dba/p/MLM2067755088']
+  ];
   function add(data) {
     const known = new Set(data.records.map(record => record.product_code));
     const records = [];
-    for (const [brand, model, host, path, autoEmpty] of pages) {
-      const id = 'MLM' + path.match(/MLM-?(\d+)/)[1];
+    const dated = [
+      ...pages.map(([brand,model,host,path,autoEmpty])=>({brand,model,host,path,autoEmpty,date:checkedOn})),
+      ...reviewedPages.map(([brand,model,host,path,listingId])=>({brand,model,host,path,listingId,date:'2026-11-24'}))
+    ];
+    for (const {brand,model,host,path,autoEmpty,date,listingId} of dated) {
+      const id = listingId || 'MLM' + path.match(/MLM-?(\d+)/)[1];
       if (known.has(id)) continue;
       const title = brand + ' ' + model + ' · Aspiradora inalámbrica de varilla';
       const record = {
         country:'MX', category:'vacuum', platform:'ml', currency:'MXN', product_code:id, productId:id,
         product_name:title, title, detail_link:'https://'+host+'.mercadolibre.com.mx/'+path,
         brand_label:brand, brandGroup:brand, model, modelGroup:'MX|vacuum|'+brand+'|'+model,
-        counted:false, catalogueOnly:true, sourceDate:checkedOn, form:'stick',
+        counted:false, catalogueOnly:true, sourceDate:date, form:'stick',
         modelEvidence:{status:'source_label', verified:false}, metricPeriod:null, priceKind:null,
         selling_price:null, orders_last_30_days:null, revenue_last_30_days:null, picture_link:null,
         feedback_count:null, feedback_score:null,

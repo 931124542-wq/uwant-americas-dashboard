@@ -26,6 +26,19 @@ const {chromium}=require('playwright'),fs=require('fs'),path=require('path'),ass
   assert(asNumbers.every((value,i)=>value>0&&(!i||asNumbers[i-1]>=value)));
   assert.equal(new Set(await amazonRank.locator('[data-ranked-product]').evaluateAll(rows=>rows.map(row=>row.dataset.rankedProduct))).size,7);
   await go({country:'MX',platform:'ml',shareMetric:'revenue'});
+  const supplemental=p.locator('[data-ml-batch="2026-11-12"]');
+  assert.match(await supplemental.innerText(),/499 台 · 1,091,300 MXN/);
+  assert.match(await supplemental.innerText(),/20 款有销量 · 20 款有销售额/);
+  await supplemental.getByRole('button',{name:'查看该日榜单'}).click();
+  assert.equal(await supplemental.locator('[data-market-ranking] tbody tr').count(),10);
+  assert.equal(await supplemental.locator('[data-market-ranking] tbody .market-product-link').count(),10);
+  await supplemental.locator('[data-ml-batch-metric]').selectOption('units');
+  assert.equal(await supplemental.locator('[data-market-ranking] h3').innerText(),'销量 Top 10');
+  const reviewed=await p.evaluate(()=>Mercado.rows(state).filter(r=>r.catalogueOnly&&r.sourceDate==='2026-11-24').map(r=>[r.form,r.counted,r.selling_price,r.orders_last_30_days,r.revenue_last_30_days]));
+  assert.equal(reviewed.length,8);
+  assert(reviewed.every(r=>JSON.stringify(r)===JSON.stringify(['stick',false,null,null,null])));
+  assert.equal(await p.locator('.market-kpi>strong').first().innerText(),'117,092');
+
   await p.locator('[data-ml-band="4000 – < 8000"]').click();
   const mlRank=p.locator('[data-ml-detail] [data-market-ranking]');
   assert.equal(await mlRank.locator('tbody tr').count(),1);
@@ -65,6 +78,6 @@ const {chromium}=require('playwright'),fs=require('fs'),path=require('path'),ass
   const pending=p.waitForEvent('download');await p.locator('[data-month-export]').click();await(await pending).saveAs(out+'/monthly-source.csv');assert(fs.readFileSync(out+'/monthly-source.csv','utf8').includes('B0HCZJV1NJ'));await p.screenshot({path:out+'/group-reference-desktop.png',fullPage:false});
   await p.setViewportSize({width:390,height:844});assert(!await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2));await p.locator('.monthly-product tbody td').last().scrollIntoViewIfNeeded();await p.screenshot({path:out+'/group-reference-mobile.png',fullPage:false});
   await go({country:'BR',platform:'ml',marketTop:'20'});assert(await p.locator('[data-overview-top]').isVisible());assert(!await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2));await p.locator('.market-leaders .market-section-heading').scrollIntoViewIfNeeded();await p.screenshot({path:out+'/top-limit-mobile.png',fullPage:false});
-  assert.deepEqual(errors,[]);fs.writeFileSync(out+'/result.json',JSON.stringify({topLimitsAcrossThreePaths:true,marketplaceProductLinks:true,refreshBackForward:true,fixedHistoricalBaselineScopes:expected.length,sourceRankModulePreserved:true,noPrivateRanksPublished:true,groupReferenceWithoutDoubleCounting:true,conflictingRevenueStillExcluded:true,csv:true,mobile:true,errors},null,2));console.log('PASS final-DOM continuity: Top5/10/20 on all paths, direct product links, URL/refresh/back/forward, four fixed historical totals, rank module, safe parent reference, CSV and mobile.');
+  assert.deepEqual(errors,[]);fs.writeFileSync(out+'/result.json',JSON.stringify({topLimitsAcrossThreePaths:true,marketplaceProductLinks:true,datedSupplementalRank:true,refreshBackForward:true,fixedHistoricalBaselineScopes:expected.length,sourceRankModulePreserved:true,noPrivateRanksPublished:true,groupReferenceWithoutDoubleCounting:true,conflictingRevenueStillExcluded:true,csv:true,mobile:true,errors},null,2));console.log('PASS final-DOM continuity: Top5/10/20 on all paths, direct product links, URL/refresh/back/forward, four fixed historical totals, rank module, safe parent reference, CSV and mobile.');
  }finally{await b.close();}
 })().catch(e=>{console.error(e);process.exit(1)});

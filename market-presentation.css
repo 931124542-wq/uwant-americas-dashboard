@@ -175,3 +175,8 @@ body[data-workspace=research] [data-backstage-only][hidden]{display:none!importa
 .market-product-link{color:var(--market-accent);text-decoration:underline;text-underline-offset:2px}
 .market-product-link:hover{color:var(--market-ink)}
 .market-product-link:focus-visible{outline:2px solid var(--market-accent);outline-offset:3px;border-radius:2px}
+
+.ml-batch-actions,.ml-batch-controls{display:flex;align-items:end;flex-wrap:wrap;gap:8px 12px}
+.ml-batch-detail{flex:0 0 100%;min-width:0}
+.ml-batch-controls label{display:grid;gap:4px}
+.ml-batch-controls select{min-height:32px}

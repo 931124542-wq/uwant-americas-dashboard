@@ -7,6 +7,9 @@
   const qualified = value => typeof value === 'number' && Number.isFinite(value) && value >= 0;
   const num = new Intl.NumberFormat('zh-CN', {maximumFractionDigits:2});
   const fmt = value => value === null ? '—' : num.format(value);
+  const esc = value => String(value ?? '').replace(/[&<>"']/g, char =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char])
+  );
 
   function summarize(date, candidates, data) {
     const snapshot = {...data, researchSnapshot:date};
@@ -20,7 +23,13 @@
       if (prior) {
         if (prior.units !== values[0] || prior.revenue !== values[1]) prior.conflict = true;
       } else {
-        groups.set(row.statisticalKey, {id:product.product_code,brand:product.brandGroup || product.brand_label,units:values[0],revenue:values[1]});
+        groups.set(row.statisticalKey, {
+          id:product.product_code,brand:product.brandGroup || product.brand_label,units:values[0],revenue:values[1],
+          listing:{
+            ...row, brand_label:product.brandGroup || product.brand_label, model:product.model || row.model,
+            modelGroup:product.modelGroup || row.modelGroup, detail_link:row.detail_link || product.detail_link
+          }
+        });
       }
     }
     const rows = [...groups.values()].filter(row => !row.conflict);
@@ -80,34 +89,63 @@
     section.querySelector('.market-period-coverage').after(block);
   }
 
+  function mountBatch(card, batch, state, data, download) {
+    const currency = root.MarketIntegrity.currencies[state.country];
+    const cuts = root.Mercado.report(state).cuts;
+    const edges = [0,...cuts];
+    const priceOf = row => root.ResearchSnapshot.priceEligible(row.listing) ? row.listing.selling_price : null;
+    const bands = edges.map((low,i) => ({low,high:edges[i+1] ?? Infinity})).map(({low,high}) => ({
+      label:high===Infinity ? fmt(low)+' 及以上' : (low ? fmt(low)+' 至低于 '+fmt(high) : '低于 '+fmt(high)),
+      rows:batch.rows.filter(row => {const price=priceOf(row);return price!==null && price>=low && price<high;})
+    })).filter(band => band.rows.some(row => row.units>0 || row.revenue>0));
+    const detail = card.querySelector('[data-ml-batch-detail]');
+    const reveal = card.querySelector('[data-ml-batch-open]');
+    reveal.onclick = () => {
+      detail.hidden = !detail.hidden;
+      reveal.setAttribute('aria-expanded',String(!detail.hidden));
+      if (detail.hidden || detail.childElementCount) return;
+      detail.innerHTML = '<div class="ml-batch-controls"><label>排序<select data-ml-batch-metric><option value="revenue">销售额</option>'+
+        '<option value="units">销量</option></select></label><label>价格带（'+esc(currency)+'）<select data-ml-batch-band>'+
+        '<option value="">全部价格带</option>'+bands.map((band,i) => '<option value="'+i+'">'+esc(band.label)+'</option>').join('')+
+        '</select></label></div><div data-ml-batch-ranking></div>';
+      const metric = detail.querySelector('[data-ml-batch-metric]');
+      const band = detail.querySelector('[data-ml-batch-band]');
+      metric.value = state.shareMetric==='units'?'units':'revenue';
+      const render = () => {
+        const selected = band.value===''?batch.rows:bands[Number(band.value)].rows;
+        const rank = root.MarketOverviewLayout;
+        const ranked = rank.rankMercado(selected.map(row=>row.listing),metric.value,10,{...data,researchSnapshot:batch.date});
+        detail.querySelector('[data-ml-batch-ranking]').innerHTML = rank.rankTable(ranked,{
+          kind:metric.value,currency,note:batch.date+' · 近30天估算 · 仅查看该次有记录的商品'
+        });
+      };
+      metric.onchange=render;
+      band.onchange=render;
+      render();
+    };
+    card.querySelector('[data-ml-batch-export]').onclick = () => download(
+      [['国家','品类','数据日期','商品ID','品牌','近30天销量估算','近30天销售额估算','币种','当时报价','商品页'],
+       ...batch.rows.map(row => [state.country,state.category,batch.date,row.id,row.brand,row.units,row.revenue,currency,priceOf(row),row.listing.detail_link])],
+      'MercadoLibre_'+state.country+'_'+state.category+'_'+batch.date+'_snapshot.csv'
+    );
+  }
+
   function mount(section, state, products, data, change, download) {
-    const extra = report(products,data);
-    const archive = archiveReport(products,data);
-    if (!extra.rows.length && !archive.rows.length) return;
+    const batches = [report(products,data),archiveReport(products,data)].filter(batch=>batch.rows.length);
+    if (!batches.length) return;
+    const currency = root.MarketIntegrity.currencies[state.country];
     const scope = document.createElement('details');
     scope.className = 'ml-coverage-summary';
-    scope.innerHTML = '<summary>其他近30天数据</summary>';
-    if (extra.rows.length) {
-      const currency = products[0].currency;
-      scope.insertAdjacentHTML('beforeend','<div class="ml-extra-snapshot" data-ml-extra-snapshot><h4>'+date+'</h4><div><strong>'+fmt(extra.units)+'</strong> 台 · <strong>'+fmt(extra.revenue)+'</strong> '+currency+'</div><button class="rq-button" data-extra-export>导出该批</button></div>');
-      scope.querySelector('[data-extra-export]').onclick = () => download(
-        [['国家','品类','快照日期','商品ID','品牌','近30天销量估算','近30天销售额估算','币种'],
-         ...extra.rows.map(row => [state.country,state.category,date,row.id,row.brand,row.units,row.revenue,currency])],
-        'MercadoLibre_'+state.country+'_'+state.category+'_'+date+'_snapshot.csv'
-      );
-    }
-    if (archive.rows.length) {
-      const currency = root.MarketIntegrity.currencies[state.country];
-      scope.insertAdjacentHTML('beforeend','<div class="ml-extra-snapshot ml-archived-snapshot"><h4>'+archive.date+'</h4>'+
-        '<div><strong>'+fmt(archive.units)+'</strong> 台 · <strong>'+fmt(archive.revenue)+'</strong> '+currency+'</div>'+
-        '<button class="rq-button" data-archived-export>导出该批</button></div>');
-      scope.querySelector('[data-archived-export]').onclick = () => download(
-        [['国家','品类','快照日期','商品ID','品牌','近30天销量估算','近30天销售额估算','币种'],
-         ...archive.rows.map(row => [state.country,state.category,archive.date,row.id,row.brand,row.units,row.revenue,currency])],
-        'MercadoLibre_'+state.country+'_'+state.category+'_'+archive.date+'_snapshot.csv'
-      );
-    }
-    scope.insertAdjacentHTML('beforeend','<div class="ml-coverage-head ml-snapshot-footer"><p>各日期分别统计，覆盖的商品可能不同。</p><button class="rq-button" data-coverage-catalogue>查看商品库</button></div>');
+    scope.open = state.country==='MX' && state.category==='vacuum';
+    scope.innerHTML = '<summary>其他近30天数据</summary>'+batches.map(batch =>
+      '<section '+(batch.date===date?'data-ml-extra-snapshot ':'')+'data-ml-batch="'+batch.date+'" class="ml-extra-snapshot '+(batch.date===date?'':'ml-archived-snapshot')+'">'+
+      '<div><h4>'+batch.date+'</h4><div><strong>'+fmt(batch.units)+'</strong> 台 · <strong>'+fmt(batch.revenue)+'</strong> '+esc(currency)+'</div>'+
+      '<p>'+fmt(batch.positive)+' 款有销量 · '+fmt(batch.rows.filter(row=>row.revenue>0).length)+' 款有销售额</p></div>'+
+      '<div class="ml-batch-actions"><button class="rq-button" data-ml-batch-open aria-expanded="false">查看该日榜单</button>'+
+      '<button class="rq-button" data-ml-batch-export '+(batch.date===date?'data-extra-export':'data-archived-export')+'>导出该批</button></div>'+
+      '<div class="ml-batch-detail" data-ml-batch-detail hidden></div></section>'
+    ).join('')+'<div class="ml-coverage-head ml-snapshot-footer"><p>各日期分别统计，覆盖的商品可能不同。</p><button class="rq-button" data-coverage-catalogue>查看商品库</button></div>';
+    for (const batch of batches) mountBatch(scope.querySelector('[data-ml-batch="'+batch.date+'"]'),batch,state,data,download);
     scope.querySelector('[data-coverage-catalogue]').onclick = () => change({
       page:'market',view:'products',evidenceQuery:'',evidenceBrand:'',evidenceStatus:'all',competitionGroup:'all',
       evidencePage:'0',mlMin:'',mlMax:'',marketQuick:'all'

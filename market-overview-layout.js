@@ -46,8 +46,7 @@
    title:product.product_name,image:product.picture_link,productUrl:mercadoProductUrl(product)};
  }
 
- function rankMercado(items,kind,limit=10){
-  const data=root.MERCADO_DATA;
+ function rankMercado(items,kind,limit=10,data=root.MERCADO_DATA){
   const value=(product,field)=>root.ResearchSnapshot.eligible(product,data,field)?product[field]:null;
   const rows=items.map(product=>({...mercadoProduct(product),
    price:root.ResearchSnapshot.priceEligible(product)?product.selling_price:null,priceDate:product.sourceDate,

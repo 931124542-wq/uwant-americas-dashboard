@@ -513,5 +513,11 @@
     "priceBandRanking": true,
     "marketplaceProductLinks": true,
     "sourceRecordsUnchanged": true
+  },
+  "mercadoMexicoVacuumReview": {
+    "displayVersion": "11.24.18",
+    "verifiedPublicProductPages": 8,
+    "datedSnapshotRanking": true,
+    "originalSnapshotValuesPreserved": true
   }
 }
