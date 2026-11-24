@@ -49,10 +49,10 @@
     const {month:latest,first,complete}=recentMonth(scope, history);
     const year = latest?.slice(0,4);
     const presets = latest ? [
-      [complete?'最近可统计月':'最近有记录月', latest, latest],
+      [complete?'最近1个月':'最近1个月', latest, latest],
       ...(mercado || Number(latest.slice(5))>=3 ? [['近3个月', twoMonthsBefore(latest), latest]] : []),
-      ['年初至最近月', year+'-01', latest],
-      ...(first && first!==year+'-01' && first<latest ? [['全部历史', first, latest]] : [])
+      ['今年以来', year+'-01', latest],
+      ...(first && first!==year+'-01' && first<latest ? [['全部时间', first, latest]] : [])
     ] : [];
     const summary = !start||!end ? '请选择月份' : start===end ? format(start) : start.slice(0,4)===end.slice(0,4)
       ? format(start)+'–'+monthLabel(end) : format(start)+'–'+format(end);

@@ -37,13 +37,13 @@
   const panel=document.createElement('section');
   panel.className='market-block market-hero';
   panel.dataset.marketChannel='amazon';
-  const note=!amazon.facts.length?'所选月份暂无可统计的销量和销售额。':
-   amazon.includesOpenMonth?'样本估算含采集时未结月记录。':'';
+  const note=!amazon.facts.length?'所选月份暂无销量和销售额数据。':
+   amazon.includesOpenMonth?'估算包含更新时尚未结束的月份。':'';
   const card=(key,label,value)=>'<article class="market-kpi" data-market-kpi="'+key+'"><span>'+label+
    '</span><strong>'+number(value)+'</strong></article>';
   panel.innerHTML='<div class="market-block-heading"><h2>Amazon</h2><span class="market-period-tag">'+esc(start)+' 至 '+esc(end)+'</span></div>'+
-   '<div class="market-kpi-grid market-kpi-grid--two">'+card('units','样本总销量 · 台',amazon.units)+
-   card('revenue','样本总销售额 · '+esc(currency),amazon.revenue)+'</div>'+
+   '<div class="market-kpi-grid market-kpi-grid--two">'+card('units','期间总销量（台）',amazon.units)+
+   card('revenue','期间销售额（'+esc(currency)+'）',amazon.revenue)+'</div>'+
    (note?'<p class="market-period-detail">'+note+'</p>':'')+
    root.MarketOverviewLayout.monthlyResults(months,amazon.facts,currency);
   panel.querySelector('.market-monthly-results').open=amazon.facts.length>0&&months.length<=12;

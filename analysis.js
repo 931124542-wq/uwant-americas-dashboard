@@ -35,7 +35,7 @@ function analysisView(){
 
 function wireAnalysis(){document.querySelectorAll('[data-analysis-sku]').forEach(b=>b.addEventListener('click',()=>{analysisSku=b.dataset.analysisSku;render();}));}
 const renderWithStrategy=render;
-render=function(){renderWithStrategy();if(!data)return;if(page==='analysis'){$('#page-title').textContent=marketProfiles[market].name+' · 经营分析';$('#view').innerHTML=analysisView();wireAnalysis();}};
+render=function(){renderWithStrategy();if(!data)return;if(page==='analysis'){$('#page-title').textContent=marketProfiles[market].name+' · 销售分析';$('#view').innerHTML=analysisView();wireAnalysis();}};
 const overviewBeforeAnalysis=overview;
-overview=function(){const html=overviewBeforeAnalysis();const list=period==='event'?eventDiagnostics():historyDiagnostics();const count=list.filter(r=>r.priority===1).length;return html+`<a class="analysis-summary-link" href="#analysis">经营分析 · ${count}个SKU需优先排查 <span>查看策略与验证指标 ↗</span></a>`;};
+overview=function(){const html=overviewBeforeAnalysis();const list=period==='event'?eventDiagnostics():historyDiagnostics();const count=list.filter(r=>r.priority===1).length;return html+`<a class="analysis-summary-link" href="#analysis">销售分析 · ${count}个SKU需优先排查 <span>查看策略与验证指标 ↗</span></a>`;};
 if(data)render();

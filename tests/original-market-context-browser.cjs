@@ -8,7 +8,7 @@ const {chromium}=require('playwright'),fs=require('fs'),path=require('path'),ass
  await p.setViewportSize({width:390,height:844});for(const country of ['MX','CA','US']){await go({country});assert(await p.locator('[data-original-category-report]').isVisible());assert(await p.locator('#market-period').isVisible());assert(!await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2));await p.screenshot({path:out+'/'+country+'-restored-mobile.png',fullPage:false});}
  await go({country:'CA'});
  const period=p.locator('#market-period');
- await period.getByRole('button',{name:'年初至最近月',exact:true}).click();
+ await period.getByRole('button',{name:'今年以来',exact:true}).click();
  assert.equal(await period.locator('[data-period-selection]').innerText(),'2026年1月–10月');
  assert.equal(await p.locator('[data-original-revenue]').getAttribute('data-original-revenue'),'17829511.7');
  const rangeUrl=p.url();
@@ -26,14 +26,14 @@ const {chromium}=require('playwright'),fs=require('fs'),path=require('path'),ass
  assert.equal(await p.locator('.heading-actions a[download]').isVisible(),false);
  await monthlyResults.locator('summary').click();
  assert.deepEqual(await monthlyResults.locator('tbody tr').evaluateAll(rows=>rows.map(r=>r.dataset.periodMonth)),['2026-09','2026-10','2026-11']);
- assert.match(await monthlyResults.locator('[data-period-month="2026-11"]').innerText(),/暂无可统计数据/);
+ assert.match(await monthlyResults.locator('[data-period-month="2026-11"]').innerText(),/暂无数据/);
  assert.deepEqual(await monthlyResults.locator('[data-period-month="2026-11"] td').allTextContents(),['—','—']);
  assert(!await p.locator('[data-original-revenue]').isVisible());
  const scopedSales=await p.evaluate(()=>MarketSummary.overviewStats(decisionCatalog(),state));
  assert.equal(await p.locator('[data-market-kpi="units"]>strong').innerText(),new Intl.NumberFormat('zh-CN').format(scopedSales.units.total));
  assert.equal(scopedSales.units.total,16571);
  assert.equal(await p.locator('[data-market-kpi="revenue"]>strong').innerText(),'2,879,884.14');
- assert.match(await monthlyResults.locator('[data-period-month="2026-10"]').innerText(),/采集时未结月/);
+ assert.match(await monthlyResults.locator('[data-period-month="2026-10"]').innerText(),/更新时该月尚未结束/);
  const selectedExport=p.waitForEvent('download');
  await p.locator('#export').click();
  await (await selectedExport).saveAs(out+'/selected-sept-nov.csv');

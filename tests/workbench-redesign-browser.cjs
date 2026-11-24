@@ -34,7 +34,7 @@ const {chromium}=require('playwright'),assert=require('assert/strict'),fs=requir
   await go({view:'pricing',country:'MX',category:'wash',platform:'amazon',own:'D600',priceBasis:'history'});await p.locator('[data-wb-band]').filter({has:p.locator('rect.price-band-bar')}).first().click();await p.locator('.price-band-detail').waitFor();const band=await p.evaluate(()=>state.priceBand),group=await p.evaluate(()=>state.evidenceGroup);await p.locator('[data-wb-band-products]').click();await p.locator('.wb-products').waitFor();assert.equal(await p.evaluate(()=>state.priceBand),band);assert.equal(await p.evaluate(()=>state.evidenceGroup),group);await p.goBack();await p.locator('.price-band-detail').waitFor();
  });
  await check('Operations retain real data, inventory, profit, calendar and tasks with the compact shared toolbar',async()=>{
-  for(const [page,title]of [['overview','经营总览'],['analysis','经营分析'],['products','SKU 表现'],['profit','利润'],['inventory','库存监控'],['calendar','促销日历'],['tasks','运营任务']]){
+  for(const [page,title]of [['overview','经营总览'],['analysis','销售分析'],['products','SKU 表现'],['profit','利润'],['inventory','库存监控'],['calendar','促销日历'],['tasks','运营任务']]){
    await p.goto(base+'#page='+page+'&country=MX',{waitUntil:'domcontentloaded'});const f=p.frameLocator('#operations-frame');await f.locator('.operations-toolbar').waitFor();await f.locator('#view').waitFor();assert((await f.locator('#page-title').innerText()).includes(title));if(['overview','analysis','inventory','calendar'].includes(page))await shot('operations-'+page);
   }
  });

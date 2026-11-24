@@ -19,7 +19,7 @@ async function run() {
     await page.goto(base+mexico,{waitUntil:'domcontentloaded'});
     const card = page.locator('.ml-coverage-summary');
     await card.waitFor();
-    assert.equal(await card.innerText(),'其他近30天快照');
+    assert.equal(await card.innerText(),'其他近30天数据');
     assert.equal(await card.locator('[data-ml-extra-snapshot]').isVisible(),false);
     assert.deepEqual((await page.locator('.market-kpi>strong').allTextContents()).slice(0,2),['117,092','8']);
     assert.equal(await page.locator('.market-kpi:visible').count(),3);
@@ -94,10 +94,10 @@ async function run() {
     assert.equal(await monthly.locator('.market-kpi:visible').count(),2);
     assert.doesNotMatch(await monthly.innerText(),/有记录的商品链接|个去重商品组/);
     assert.deepEqual(await monthly.locator('[data-month-sample-units] strong').allTextContents(),['314 台','253 台']);
-    assert.match(await monthly.locator('[data-period-month="2026-11"]').innerText(),/采集时未结月/);
+    assert.match(await monthly.locator('[data-period-month="2026-11"]').innerText(),/更新时该月尚未结束/);
     assert.equal(await monthly.locator('[data-period-month="2026-11"] [data-month-sample-units]').innerText(),'—');
     assert.deepEqual((await monthly.locator('.market-kpi>strong').allTextContents()).slice(0,2),['567','—']);
-    assert.match(await monthly.innerText(),/有完整销量记录 2 \/ 3 月/);
+    assert.match(await monthly.innerText(),/整月销量已覆盖 2 \/ 3 个月/);
     const productHistory=page.locator('.ml-product-history-fold');
     assert.equal(await productHistory.locator('[data-ml-history-product]').isVisible(),false);
     await productHistory.locator(':scope>summary').click();

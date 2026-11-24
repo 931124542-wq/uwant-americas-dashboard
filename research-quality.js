@@ -2,9 +2,9 @@
 (function(root){
  const HM=typeof module!=='undefined'?require('./history-metrics.js'):root.HistoryMetrics;
  const currencies={us:'USD',ca:'CAD',mx:'MXN',br:'BRL',ar:'ARS',cl:'CLP',co:'COP'};
- const typeLabels={portable:'Portable Spot Cleaner',steam:'Steam Spot Cleaner',upright:'Upright Carpet Cleaner',wash:'Wet Dry Floor Washer',steam_mop:'蒸汽吸尘拖地机（相邻）',dry:'干式吸尘器',mattress:'床褥除螨吸尘器',spray:'喷剂抽吸 · 相邻替代',bucket:'桶式干湿吸尘器 · 非同型',unknown:'产品类型待核'};
- const typeFilters={all:'全部产品类型',portable:'便携抽洗（含蒸汽）',steam:'蒸汽便携抽洗',upright:'推行式地毯机',wash:'硬地面洗地机',steam_mop:'蒸汽吸尘拖地机（相邻）',dry:'干式吸尘器',mattress:'除螨仪',spray:'喷剂抽吸（相邻）',bucket:'桶式干湿吸尘器（非同型）',unknown:'类型待核'};
- const platforms={amazon:'Amazon',ml:'Mercado Libre',bestbuy:'Best Buy',official:'品牌官网 / 分销站',retail:'当地零售',unknown:'渠道待核'};
+ const typeLabels={portable:'Portable Spot Cleaner',steam:'Steam Spot Cleaner',upright:'Upright Carpet Cleaner',wash:'Wet Dry Floor Washer',steam_mop:'蒸汽吸尘拖地机（相邻）',dry:'干式吸尘器',mattress:'床褥除螨吸尘器',spray:'喷剂抽吸 · 相邻替代',bucket:'桶式干湿吸尘器 · 非同型',unknown:'其他类型'};
+ const typeFilters={all:'全部产品类型',portable:'便携抽洗（含蒸汽）',steam:'蒸汽便携抽洗',upright:'推行式地毯机',wash:'硬地面洗地机',steam_mop:'蒸汽吸尘拖地机（相邻）',dry:'干式吸尘器',mattress:'除螨仪',spray:'喷剂抽吸（相邻）',bucket:'桶式干湿吸尘器（非同型）',unknown:'其他类型'};
+ const platforms={amazon:'Amazon',ml:'Mercado Libre',bestbuy:'Best Buy',official:'官网 / 独立站',retail:'线下零售',unknown:'其他渠道'};
  const finite=v=>typeof v==='number'&&Number.isFinite(v)&&v>=0;
  const validImageDimensions=(width,height)=>Number.isFinite(width)&&Number.isFinite(height)&&width>=32&&height>=32;
  const name=b=>HM.brandName(b)||'品牌待核';
@@ -48,7 +48,7 @@
  function historyProfiles(rows,scope){return rows.filter(r=>String(r.country||'').toLowerCase()===scope.country.toLowerCase()&&(!r.category||r.category===scope.category)&&(scope.catalogAllPeriods||!r.month||r.month===scope.dataset)&&(r.platform||'amazon')==='amazon').map(r=>{
   const country=scope.country.toLowerCase(),id=r.asin||r.product_id;
   return {id:'history:'+country+':'+id+':'+scope.dataset,country,platform:'amazon',category:scope.category,productId:id,brand:name(r.brand),model:r.model||null,title:r.title||r.model,productType:productType(r),source:r.source||'SellerSprite 商品档案',sourceDate:r.retrievedAt||r.sourceDate||r.snapshot||null,period:r.month||r.period||(r.period_start&&r.period_end?r.period_start+'—'+r.period_end:scope.dataset),sourceUrl:r.source?.startsWith('http')?r.source:'https://www.'+{ca:'amazon.ca',us:'amazon.com',mx:'amazon.com.mx',br:'amazon.com.br'}[country]+'/dp/'+id,price:r.price??r.avgPrice??null,currency:r.currency||currencies[country],priceKind:r.month?'month_end':r.origin==='sellersprite'||scope.dataset==='archive'?'archive_mean':'snapshot',imageUrl:r.imageUrl||null,dataNature:'estimate',origin:'history_profile',identityStatus:r.brandConflict?'conflict':'source_record',quality:quality({...r,priceKind:r.month?'month_end':r.origin==='sellersprite'||scope.dataset==='archive'?'archive_mean':'snapshot'},{universe:rows}),evidenceReferences:[{label:'原商品来源',url:r.source?.startsWith('http')?r.source:'https://www.'+{ca:'amazon.ca',us:'amazon.com',mx:'amazon.com.mx',br:'amazon.com.br'}[country]+'/dp/'+id}],unresolvedIssues:['销量只按原数据集、原期间及合格父体计算；不在研究目录另行加总'],originalRow:r};});}
- function channelOf(url){try{const h=new URL(url).hostname.toLowerCase().replace(/^www\./,'');return {id:h,label:({'tsc.ca':'TSC Canada','walmart.ca':'Walmart Canada','walmart.com.mx':'Walmart México','sharkninja.ca':'Shark Canada','hoover.ca':'Hoover Canada'})[h]||h};}catch{return {id:'unknown',label:'渠道待核'};}}
+ function channelOf(url){try{const h=new URL(url).hostname.toLowerCase().replace(/^www\./,'');return {id:h,label:({'tsc.ca':'TSC Canada','walmart.ca':'Walmart Canada','walmart.com.mx':'Walmart México','sharkninja.ca':'Shark Canada','hoover.ca':'Hoover Canada'})[h]||h};}catch{return {id:'unknown',label:'其他渠道'};}}
  function observations(cp=[],br=[],profiles=[]){
   const cat=s=>({D:'wash',V:'vacuum',Y:'fabric',M:'mattress'})[s?.[0]];
   return [...cp,...br,...profiles.map(p=>({...p,id:'official-'+p.key,country:'br',platform:'official',price:p.offer?.eligible?p.offer.amount:null,currency:'BRL'}))].map(r=>{

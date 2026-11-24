@@ -1,7 +1,7 @@
 (function () {
   const incoming = new URLSearchParams(location.hash.slice(1));
   const countries = {MX:'墨西哥',CA:'加拿大',US:'美国',BR:'巴西',AR:'阿根廷',CL:'智利',CO:'哥伦比亚'};
-  const platforms = {amazon:'Amazon',ml:'Mercado Libre',all:'全部渠道',bestbuy:'Best Buy',retail:'当地零售',official:'品牌官网',unknown:'渠道待核'};
+  const platforms = {amazon:'Amazon',ml:'Mercado Libre',all:'全部渠道',bestbuy:'Best Buy',retail:'线下零售',official:'品牌官网',unknown:'其他渠道'};
   const categories = {wash:'洗地机',vacuum:'吸尘器',fabric:'布艺清洗机',mattress:'除螨仪'};
   const select = (options,key) => Object.hasOwn(options,incoming.get(key)) ? incoming.get(key) : '';
   const country = select(countries,'country'), platform = select(platforms,'platform'), category = select(categories,'category');

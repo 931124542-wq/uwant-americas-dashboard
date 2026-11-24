@@ -29,7 +29,7 @@
   const own=document.querySelector('.filters [data-wb-own]');if(own)own.closest('label').hidden=admin||s.page!=='competitors';
   const monthBox=document.getElementById('month-range-controls');if(monthBox)monthBox.hidden=admin||byChannel||(s.platform==='ml'&&!monthly);
   const heading=document.querySelector('.heading');let context=document.getElementById('market-page-context');if(!context){context=document.createElement('p');context.id='market-page-context';heading.querySelector('div').append(context);}
-  const country=root.ResearchModel.countries[s.country]?.name||s.country,category=({wash:'洗地机',vacuum:'吸尘器',fabric:'布艺清洗机',mattress:'除螨仪'})[s.category],platform=root.ResearchQuality.platforms[s.platform]||'全部已采集渠道';
+  const country=root.ResearchModel.countries[s.country]?.name||s.country,category=({wash:'洗地机',vacuum:'吸尘器',fabric:'布艺清洗机',mattress:'除螨仪'})[s.category],platform=root.ResearchQuality.platforms[s.platform]||'全部平台';
   context.textContent=country+' / '+platform+' / '+category;
   const scope=document.getElementById('scope');
   scope.hidden=overview&&s.platform!=='all';
@@ -42,7 +42,7 @@
   if((overview||monthly)&&!byChannel){
    if(!tabs){tabs=document.createElement('div');tabs.id='market-time-views';tabs.className='market-time-views';document.getElementById('scope').after(tabs);}
    const tab=(key,label,active)=>'<button type="button" class="'+(active?'active':'')+'" data-market-time="'+key+'" aria-pressed="'+active+'">'+label+'</button>';
-   tabs.innerHTML=tab('overview',ml?'近30天快照':'市场概览',!monthly&&!period)+tab('monthly',ml?'所选月份':'月度历史',monthly||period);
+   tabs.innerHTML=tab('overview',ml?'近30天数据':'市场概览',!monthly&&!period)+tab('monthly',ml?'按月统计':'月度历史',monthly||period);
    tabs.querySelector('[data-market-time="overview"]').onclick=()=>change({page:'market',view:'overview',...(ml?{marketPeriod:'snapshot'}:{})});
    tabs.querySelector('[data-market-time="monthly"]').onclick=()=>change(ml?{page:'market',view:'overview',marketPeriod:'monthly'}:{page:'brands',view:'monthly'});
   }else tabs?.remove();
@@ -51,22 +51,22 @@
    const summary=document.querySelector('#scope-toggle small');
    if(period&&data){
     const {start,end}=root.MercadoHistory.selection(s,root.Mercado.rows(s),data);
-    scope.textContent='所选月份 '+start+' 至 '+end;
-    if(summary)summary.textContent='所选月份 · '+start+' 至 '+end;
+    scope.textContent='按月统计 · '+start+' 至 '+end;
+    if(summary)summary.textContent='按月统计 · '+start+' 至 '+end;
    }else if(overview){
-    scope.textContent='近30天样本估算 · '+(date||'日期未提供');
+    scope.textContent='近30天估算 · '+(date||'日期未提供');
     if(summary)summary.textContent='近30天数据 · '+(date||'日期未知');
    }else if(!monthly){
     scope.textContent='';
    }else if(summary)summary.textContent=s.startMonth?s.startMonth+'—'+s.endMonth:s.dataset;
   }
-  const exportButton=document.getElementById('export');exportButton.textContent=byChannel?'↓ 导出各平台':period?'↓ 导出月度样本':ml&&monthly?'↓ 导出所选商品月销量':s.page==='market'&&s.view==='products'?'↓ 导出商品':!admin&&s.page==='brands'?'↓ 导出品牌':overview&&ml?'↓ 导出统计样本':overview&&['amazon','all'].includes(s.platform)&&s.startMonth?'↓ 导出所选月份':'↓ 导出数据';
+  const exportButton=document.getElementById('export');exportButton.textContent=byChannel?'↓ 导出各平台':period?'↓ 导出月度数据':ml&&monthly?'↓ 导出该商品月度数据':s.page==='market'&&s.view==='products'?'↓ 导出商品':!admin&&s.page==='brands'?'↓ 导出品牌':overview&&ml?'↓ 导出统计数据':overview&&['amazon','all'].includes(s.platform)&&s.startMonth?'↓ 导出所选月份':'↓ 导出数据';
   if(overview){
    root.MarketOverviewLayout?.mount(s,change,download);
    document.querySelector('.heading-actions a[download]').hidden=true;
    if(s.platform!=='ml'){const dataset=document.getElementById('dataset');if(dataset)dataset.closest('label').hidden=true;}
   }
-  const footer=document.querySelector('#research-content footer'),version=document.querySelector('meta[name="uwant-release"]')?.content;if(footer&&version){let note=footer.querySelector('span');if(!note){note=document.createElement('span');footer.append(note);}note.textContent='市场销量与销售额为第三方估算 · 市场版 '+version;}
+  const footer=document.querySelector('#research-content footer'),version=document.querySelector('meta[name="uwant-release"]')?.content;if(footer&&version){let note=footer.querySelector('span');if(!note){note=document.createElement('span');footer.append(note);}note.textContent='注：市场销量及销售额为第三方估算数据 · v'+version;}
   root.MarketDecisionUI?.mount(s,change,download);
   root.UwantShipments?.mount(s,change,download);
   root.LocalOperating?.mount(s,change,download);

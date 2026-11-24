@@ -60,8 +60,8 @@
   }
 
   function monthCoverageLabel(row, coverage, asOf) {
-    if(completeMonth(row,coverage))return '有完整日记录';
-    return row.monthStatus==='open'||row.month===asOf.slice(0,7)?'采集时未结月':'整月覆盖未确认';
+    if(completeMonth(row,coverage))return '整月完整';
+    return row.monthStatus==='open'||row.month===asOf.slice(0,7)?'更新时该月尚未结束':'整月数据待确认';
   }
 
   function monthlySample({start,end,profiles,coverage}) {
@@ -104,18 +104,18 @@
     const sample=monthlySample(history);
     const rows=sample.months.map(m=>{
       const units=m.units===null?'—':'<strong>'+number.format(m.units)+' 台</strong>';
-      const status=m.status.includes('未结月')?'采集时未结月':m.units===null?'暂无完整月销量':'';
+      const status=m.status.includes('未结月')?'更新时该月尚未结束':m.units===null?'暂无完整月销量':'';
       return '<tr data-period-month="'+m.month+'"><th scope="row">'+m.month+'</th><td data-month-sample-units>'+units+
         '</td><td>'+status+'</td></tr>';
     });
     const card = (key,label,value) => '<article class="market-kpi" data-market-kpi="'+key+'"><span>'+label+'</span><strong>'+value+'</strong></article>';
-    const basis=sample.covered===sample.months.length?'':'有完整销量记录 '+sample.covered+' / '+sample.months.length+' 月 · ';
+    const basis=sample.covered===sample.months.length?'':'整月销量已覆盖 '+sample.covered+' / '+sample.months.length+' 个月 · ';
     const local=root.MarketIntegrity.currencies[state.country];
     return '<section class="market-block market-hero" data-ml-period-overview><div class="market-block-heading"><h2>'+esc(title)+'</h2><span class="market-period-tag">'+esc(start)+' 至 '+esc(end)+'</span></div>'+
-      '<div class="market-kpi-grid market-kpi-grid--two">'+card('units','所选月份样本销量 · 台',sample.total===null?'—':number.format(sample.total))+
-      card('revenue','所选月份样本销售额 · '+esc(local),'—')+'</div>'+
-      '<p class="market-period-detail">'+basis+'暂无自然月销售额</p>'+
-      '<div class="market-period-coverage table-scroll"><table><thead><tr><th>月份</th><th>样本销量</th><th>说明</th></tr></thead><tbody>'+rows.join('')+'</tbody></table></div></section>';
+      '<div class="market-kpi-grid market-kpi-grid--two">'+card('units','期间总销量（台）',sample.total===null?'—':number.format(sample.total))+
+      card('revenue','期间销售额（'+esc(local)+'）','—')+'</div>'+
+      '<p class="market-period-detail">'+basis+'暂无月度销售额数据</p>'+
+      '<div class="market-period-coverage table-scroll"><table><thead><tr><th>月份</th><th>销量</th><th>备注</th></tr></thead><tbody>'+rows.join('')+'</tbody></table></div></section>';
   }
 
   function sampleExportRows(history,state) {
@@ -150,13 +150,13 @@
   function panel(state, products, data) {
     const {start, end, profiles, selected} = selection(state, products, data);
     const controls = '<div class="ml-controls"><label>起始月 <input data-ml-start type="month" value="'+esc(start)+'"></label><label>截止月 <input data-ml-end type="month" value="'+esc(end)+'"></label></div>';
-    const intro = '<p>所选期间 '+esc(start)+' 至 '+esc(end)+'，共 '+number.format(profiles.length)+' 个商品链接有月销量记录。部分月份可能只覆盖部分日期。</p>';
+    const intro = '<p>'+esc(start)+' 至 '+esc(end)+' 期间，共收录 '+number.format(profiles.length)+' 款商品的月度销量（部分月份数据可能未覆盖整月）。</p>';
     const title = p => [p.brandGroup || p.brand_label, p.model || p.product_name, p.product_code].filter(Boolean).join(' · ');
-    const picker = selected ? '<label class="ml-history-picker">查看商品<select data-ml-history-product>'+profiles.map(({product})=>'<option value="'+esc(product.product_code)+'" '+(product===selected.product?'selected':'')+'>'+esc(title(product))+'</option>').join('')+'</select></label>' : '';
+    const picker = selected ? '<label class="ml-history-picker">选择商品<select data-ml-history-product>'+profiles.map(({product})=>'<option value="'+esc(product.product_code)+'" '+(product===selected.product?'selected':'')+'>'+esc(title(product).replace(/^未识别品牌/,'其他品牌').replace(/^品牌待核/,'待确认品牌'))+'</option>').join('')+'</select></label>' : '';
     const rows = selected?.months || [];
     const recorded = selected ? continuousCoverage(selected.source) : null;
-    const detail = selected ? '<p>原始记录覆盖 '+esc(selected.source.data_coverage?.coverage_start_date || '—')+' 至 '+esc(selected.source.data_coverage?.coverage_end_date || '—')+'</p><button class="rq-button" data-ml-single-export="'+esc(selected.product.product_code)+'">导出所选商品月度明细</button><div class="table-scroll"><table><thead><tr><th>月份</th><th>来源销量 / 台</th><th>覆盖说明</th></tr></thead><tbody>'+rows.map(row=>'<tr><td>'+esc(row.month)+'</td><td>'+number.format(row.orders)+'</td><td>'+monthCoverageLabel(row,recorded,data.asOf)+'</td></tr>').join('')+'</tbody></table></div>' : '<p>所选月份暂无该品类的单品销量。可调整月份或回到近30天快照。</p>';
-    return '<section class="panel ml-history-panel"><h2>商品月度销量</h2>'+controls+intro+picker+chart(rows,start,end)+detail+'<p>缺月留空。历史销售额和历史价格暂无来源。</p></section>';
+    const detail = selected ? '<p>数据时间跨度：'+esc(selected.source.data_coverage?.coverage_start_date || '—')+' 至 '+esc(selected.source.data_coverage?.coverage_end_date || '—')+'</p><button class="rq-button" data-ml-single-export="'+esc(selected.product.product_code)+'">导出该商品月度数据</button><div class="table-scroll"><table><thead><tr><th>月份</th><th>月销量（台）</th><th>数据完整度</th></tr></thead><tbody>'+rows.map(row=>'<tr><td>'+esc(row.month)+'</td><td>'+number.format(row.orders)+'</td><td>'+monthCoverageLabel(row,recorded,data.asOf)+'</td></tr>').join('')+'</tbody></table></div>' : '<p>所选月份暂无该品类的单品销量。可调整月份或回到近30天数据。</p>';
+    return '<section class="panel ml-history-panel"><h2>商品月度销量</h2>'+controls+intro+picker+chart(rows,start,end)+detail+'<p>注：空白表示该月暂无销量记录；暂不支持查看历史销售额与历史价格。</p></section>';
   }
 
   function exportRows({selected}, data) {

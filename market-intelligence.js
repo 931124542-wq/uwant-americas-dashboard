@@ -44,7 +44,7 @@
   const end=endPeriod(s),ms=monthly(c,s).months.find(x=>x.month===end),lookup=new Map(c.observed.filter(r=>r.platform==='amazon').map(r=>[r.productId,r]));
   if(ms?.unitsRows.length)return {basis:'family_units',label:end+' 已核对商品组月销量估算',note:'每个商品组只展示一个代表链接，不能解释为该子体销量。',rows:ms.unitsRows.slice().sort((a,b)=>b.units-a.units).slice(0,limit).map(x=>({r:lookup.get(x.asin)||{id:'',brand:x.brand,model:null,productId:x.asin,title:x.title,sourceUrl:'https://'+({CA:'www.amazon.ca',MX:'www.amazon.com.mx',US:'www.amazon.com',BR:'www.amazon.com.br'})[s.country]+'/dp/'+x.asin},value:x.units,parentAsin:x.parentAsin||x.parent_id,period:end}))};
   const ranked=productRows(c,{...cleanScope(s),productSort:'rank'}).filter(r=>r.signals.sourceRank!=null);
-  if(ranked.length)return {basis:'source_rank',label:end+' 来源类目榜单',note:'仅展示已收录商品的原来源名次，可能缺位；不称完整Top榜单，也不按未核销量重排。',rows:ranked.slice(0,limit).map(r=>({r,value:r.signals.sourceRank,period:end}))};
+  if(ranked.length)return {basis:'source_rank',label:end+' 来源类目榜单',note:'仅展示已收录商品的原平台排名，可能缺位；不称完整Top榜单，也不按未核销量重排。',rows:ranked.slice(0,limit).map(r=>({r,value:r.signals.sourceRank,period:end}))};
   return {basis:'products',label:'重点研究产品',note:'当前没有可用的可统计销量或同期间来源榜单，按对标相关度展示。',rows:productRows(c,{...cleanScope(s),competitionGroup:'direct'}).slice(0,5).map(r=>({r,value:null,period:end}))};
  }
  function priceSeries(c,s){

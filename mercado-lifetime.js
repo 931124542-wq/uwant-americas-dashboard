@@ -58,12 +58,12 @@
     block.dataset.mlLifetime = '';
     const date = totals.start===totals.end?totals.start:totals.start+' 至 '+totals.end;
     const flagged = new Set(archiveConflicts(totals,products,root.MERCADO_DATA).map(row=>row.id));
-    block.innerHTML = '<div class="ml-coverage-head"><h3>上架以来累计</h3><button class="rq-button" data-export-lifetime>导出累计销量</button></div>'+
-      '<div class="ml-month-revenue-values"><article><span>上架以来样本累计销量</span><strong data-lifetime-units>'+number.format(totals.total)+' <small>台</small></strong>'+
+    block.innerHTML = '<div class="ml-coverage-head"><h3>历史累计表现</h3><button class="rq-button" data-export-lifetime>导出累计数据</button></div>'+
+      '<div class="ml-month-revenue-values"><article><span>累计销量</span><strong data-lifetime-units>'+number.format(totals.total)+' <small>台</small></strong>'+
       '<span data-backstage-only>'+number.format(totals.rows.length)+' 个去重商品组</span></article>'+
-      '<article><span>样本累计总销售额 / '+local+'</span><strong data-lifetime-revenue>—</strong><span>来源未提供累计金额</span></article></div>'+
-      '<p>累计档案采集日期 '+date+'</p>'+
-      (flagged.size?'<p data-lifetime-review>有 '+number.format(flagged.size)+' 个商品组的历史月销量之和超过累计销量，档案待核。</p>':'');
+      '<article><span>累计销售额（'+local+'）</span><strong data-lifetime-revenue>—</strong><span>平台暂未提供累计销售额</span></article></div>'+
+      '<p>数据更新时间：'+date+'</p>'+
+      (flagged.size?'<p data-lifetime-review>注：有 '+number.format(flagged.size)+' 款商品的分月销量合计高于累计值，数据正在核对中。</p>':'');
     block.querySelector('[data-export-lifetime]').onclick = () => download(
       [['国家','平台','品类','商品ID','品牌','采集日期','上架以来累计销量','累计销售额','币种','来源','销量档案核对'],
        ...totals.rows.map(({product,date,units})=>[state.country,'Mercado Libre',state.category,product.product_code,

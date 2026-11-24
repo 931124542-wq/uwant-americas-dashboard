@@ -114,10 +114,10 @@
       '</span><strong>'+display(total(key))+'</strong></article>';
     section.innerHTML = '<div class="market-block-heading"><h2>Amazon 月度销售样本</h2>'+
       '<span class="market-period-tag">本机研究 · '+currency+'</span></div>'+
-      '<div class="market-kpi-grid market-kpi-grid--two">'+card('units','所选月份样本总销量 · 台')+
-      card('revenue','所选月份样本总销售额 · '+currency)+'</div>'+
-      '<p class="market-period-detail">卖家精灵归档估算 · 有数据 '+rows.filter(row=>row.groups).length+
-      ' / '+months.length+' 月 · 每月按来源报告的父体去重</p>'+
+      '<div class="market-kpi-grid market-kpi-grid--two">'+card('units','期间总销量（台）')+
+      card('revenue','期间销售额（'+currency+'）')+'</div>'+
+      '<p class="market-period-detail">卖家精灵月度估算 · 有数据 '+rows.filter(row=>row.groups).length+
+      ' / '+months.length+' 月 · 同款商品每月只计一次</p>'+
       root.MarketOverviewLayout.monthlyResults(months,selected,currency)+
       '<div class="market-channel-footer"><button type="button" class="rq-button" data-seller-export>导出本机月度样本</button></div>';
     section.querySelector('details').open = true;
