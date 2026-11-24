@@ -112,8 +112,8 @@
     const basis=sample.covered===sample.months.length?'':'有完整销量记录 '+sample.covered+' / '+sample.months.length+' 月 · ';
     const local=root.MarketIntegrity.currencies[state.country];
     return '<section class="market-block market-hero" data-ml-period-overview><div class="market-block-heading"><h2>'+esc(title)+'</h2><span class="market-period-tag">'+esc(start)+' 至 '+esc(end)+'</span></div>'+
-      '<div class="market-kpi-grid market-kpi-grid--two">'+card('units','样本总销量 · 台',sample.total===null?'—':number.format(sample.total))+
-      card('revenue','样本总销售额 · '+esc(local),'—')+'</div>'+
+      '<div class="market-kpi-grid market-kpi-grid--two">'+card('units','所选月份样本销量 · 台',sample.total===null?'—':number.format(sample.total))+
+      card('revenue','所选月份样本销售额 · '+esc(local),'—')+'</div>'+
       '<p class="market-period-detail">'+basis+'暂无自然月销售额</p>'+
       '<div class="market-period-coverage table-scroll"><table><thead><tr><th>月份</th><th>样本销量</th><th>说明</th></tr></thead><tbody>'+rows.join('')+'</tbody></table></div></section>';
   }

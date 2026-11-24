@@ -493,5 +493,12 @@
     "separatePlatformTotalsAndCurrency": true,
     "allChannelRangeAndExportVerified": true,
     "sourceRecordsUnchanged": true
+  },
+  "mercadoArchiveReconciliation": {
+    "displayVersion": "11.24.13",
+    "scopesChecked": 20,
+    "scopesWithConflictingRecords": 14,
+    "sameListingArchiveConflicts": 46,
+    "sourceRecordsUnchanged": true
   }
 }

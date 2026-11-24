@@ -132,6 +132,7 @@ async function run() {
       CL:[[1934,178],[19302,226],[1201,34],[3627,256]],
       CO:[[874,501],[4521,116],[493,100],[1403,237]]
     };
+    const conflicts={MX:[7,3,3,0],BR:[0,3,4,2],AR:[1,6,6,2],CL:[0,4,0,0],CO:[2,2,0,1]};
     for(const [country,scopes] of Object.entries(completeSamples)){
       for(const [index,[sep,oct]] of scopes.entries()){
         await go({country,platform:'ml',category:categories[index],...selectedMonths});
@@ -140,6 +141,10 @@ async function run() {
         const [total,groups]=lifetime[country][index];
         assert.equal(await cumulative.locator('[data-lifetime-units]').innerText(),value(total)+' 台');
         assert.equal(await cumulative.locator('[data-lifetime-revenue]').innerText(),'—');
+        const flag=cumulative.locator('[data-lifetime-review]');
+        const conflictCount=conflicts[country][index];
+        if(conflictCount)assert.match(await flag.innerText(),new RegExp('有 '+conflictCount+' 个商品组'));
+        else assert.equal(await flag.count(),0);
         assert.equal(await cumulative.locator('[data-backstage-only]:visible').count(),0);
         assert.match(await cumulative.locator('[data-backstage-only]').textContent(),new RegExp(value(groups)+' 个去重商品组'));
         const snapshots=overview.locator('[data-ml-month-revenue]');
@@ -169,6 +174,7 @@ async function run() {
     const lifetimeCsv=await fs.readFile(out+'/mercado-br-fabric-lifetime.csv','utf8');
     assert.equal(lifetimeCsv.trim().split(/\r?\n/).length,791);
     assert.match(lifetimeCsv,/"MLB26797988","[^"]+","2026-11-12","69031","","BRL"/);
+    assert.equal(lifetimeCsv.trim().split(/\r?\n/).filter(line=>line.includes('历史月销量之和超过累计销量，待核')).length,4);
     assert.equal(await snapshots.locator('[data-revenue-snapshot="2026-11-05"] > strong').textContent(),'3,738,252 BRL');
     assert.equal(await snapshots.locator('[data-revenue-snapshot="2026-11-06"] > strong').textContent(),'3,562,822 BRL');
     assert.equal(await snapshots.locator('[data-revenue-snapshot="2026-11-12"] > strong').textContent(),'4,139,728 BRL');
@@ -202,7 +208,9 @@ async function run() {
     await allChannels.waitFor();
     assert.equal(await page.evaluate(()=>state.platform+'|'+state.startMonth+'|'+state.endMonth),'all|2026-09|2026-11');
     assert.equal(await mlChannel.locator('[data-market-kpi="units"] strong').innerText(),'10,606');
+    assert.match(await mlChannel.locator('[data-market-kpi="units"] span').innerText(),/所选月份样本销量/);
     assert.equal(await mlChannel.locator('[data-lifetime-units]').innerText(),'144,664 台');
+    assert.match(await mlChannel.locator('[data-lifetime-review]').innerText(),/有 4 个商品组/);
     assert.equal(await mlChannel.locator('[data-period-month="2026-09"] [data-month-sample-units]').innerText(),'6,108 台');
     assert.equal(await mlChannel.locator('[data-period-month="2026-10"] [data-month-sample-units]').innerText(),'4,498 台');
     assert.equal(await mlChannel.locator('[data-period-month="2026-11"] [data-month-sample-units]').innerText(),'—');
@@ -214,6 +222,7 @@ async function run() {
     const salesByChannel=await fs.readFile(out+'/br-fabric-sales-by-channel.csv','utf8');
     assert.match(salesByChannel,/"自然月","BR","Mercado Libre","fabric","BRL","2026-09","2026-11","2026-09","","6108",""/);
     assert.match(salesByChannel,/"上架以来累计","BR","Mercado Libre","fabric","BRL","","","","2026-11-05 至 2026-11-12","144664",""/);
+    assert.match(salesByChannel,/4 个商品组的销量档案待核/);
     assert.match(salesByChannel,/"近30天快照","BR","Mercado Libre","fabric","BRL","","","","2026-11-12","","4139728"/);
     await page.screenshot({path:out+'/all-channels-desktop.png'});
     await page.setViewportSize({width:390,height:844});
