@@ -105,7 +105,8 @@ body[data-workspace=research] [data-backstage-only][hidden]{display:none!importa
 .market-original-reference .market-original-context{padding:4px 0 14px}
 .market-period-detail{color:var(--market-muted);margin:0 22px 14px;font-size:12px}
 .market-period-coverage{margin:0 22px 20px}
-.market-period-coverage table{min-width:275px}
+.market-period-coverage table{min-width:380px}
+.market-period-coverage [data-month-sample-units] small{display:block;white-space:nowrap}
 [data-market-overview-template="mercado-monthly"]{min-width:0;max-width:100%}
 [data-market-overview-template="mercado-monthly"] .ml-history-panel{min-width:0}
 @media(max-width:700px){

@@ -31,24 +31,77 @@
     return '<section class="ml-history-summary" data-ml-history-summary><div><h3>商品月度历史</h3><p><strong>'+esc(start)+' 至 '+esc(end)+'</strong> · '+(profiles.length?number.format(profiles.length)+' 个商品链接有月销量记录，覆盖 '+coverage.length+' 个月':'该期间暂无单品月销量')+'</p><p>全类目月度走势、单品月销售额和历史价格待补。</p></div><button class="rq-button" data-ml-route="monthly">查看商品月销量</button></section>';
   }
 
-  function overview(state, products, data) {
-    const {start,end,profiles,coverage} = selection(state,products,data);
+  function completeMonth(row, source) {
+    if(row.monthStatus!=='closed_full_daily_coverage'||source.data_coverage?.full_coverage!==true||
+       !(source.covered_day_count>0)||source.covered_day_count!==source.requested_day_count) return false;
+    const [year,month]=row.month.split('-').map(Number);
+    const lastDay=new Date(Date.UTC(year,month,0)).getUTCDate();
+    return source.data_coverage.coverage_start_date<=row.month+'-01' &&
+      source.data_coverage.coverage_end_date>=row.month+'-'+lastDay;
+  }
+
+  function monthlySample({start,end,profiles,coverage}) {
     const counts = new Map(coverage);
     const open = new Set(profiles.flatMap(p => p.months.filter(m=>m.monthStatus==='open').map(m=>m.month)));
-    const rows = [];
-    const first=monthIndex(start),last=monthIndex(end);
-    for(let i=first;i<=last;i++){
-      const month=monthName(i),count=counts.get(month);
-      const status = !count ? '暂无记录' : open.has(month) ? '含采集时未结月记录' : '有单品月销量记录';
-      rows.push('<tr data-period-month="'+month+'"><th>'+month+'</th><td>'+(count?number.format(count):'—')+'</td><td>'+status+'</td></tr>');
+    const byMonth=new Map();
+    for(const {product,source,months} of profiles){
+      if(product.statIsolationReason||product.catalogueOnly||product.sourceScopeTier==='adjacent'||
+         !product.statisticalKey||source.product_code!==product.product_code||source.market_code!==product.product_code.slice(0,3)||
+         source.data_available!==true||root.MarketIntegrity.snapshotIssue(product)) continue;
+      for(const row of months){
+        if(!completeMonth(row,source))continue;
+        if(!byMonth.has(row.month))byMonth.set(row.month,new Map());
+        const groups=byMonth.get(row.month),key=product.statisticalKey;
+        if(!groups.has(key))groups.set(key,{values:new Set(),representative:null});
+        const group=groups.get(key);
+        group.values.add(row.orders);
+        if(product.counted===true&&!group.representative)group.representative={key,product,source,orders:row.orders};
+      }
     }
+    const months=[];
+    for(let i=monthIndex(start);i<=monthIndex(end);i++){
+      const month=monthName(i),links=counts.get(month)||0;
+      const groups=[...(byMonth.get(month)?.values()||[])]
+        .filter(group=>group.values.size===1&&group.representative)
+        .map(group=>group.representative);
+      const units=groups.length?groups.reduce((sum,row)=>sum+row.orders,0):null;
+      const status=!links?'暂无记录':open.has(month)?'含采集时未结月记录':groups.length?'有完整月样本':'整月覆盖待核';
+      months.push({month,links,groups,units,status});
+    }
+    const covered=months.filter(m=>m.units!==null);
+    const total=covered.length?covered.reduce((sum,m)=>sum+m.units,0):null;
+    return {months,covered:covered.length,total,groups:new Set(covered.flatMap(m=>m.groups.map(g=>g.key))).size};
+  }
+
+  function overview(state, products, data) {
+    const history=selection(state,products,data),{start,end,profiles,coverage}=history;
+    const sample=monthlySample(history);
+    const rows=sample.months.map(m=>{
+      const units=m.units===null?'—':'<strong>'+number.format(m.units)+' 台</strong><small>'+number.format(m.groups.length)+' 个商品组</small>';
+      return '<tr data-period-month="'+m.month+'"><th>'+m.month+'</th><td data-month-sample-units>'+units+
+        '</td><td data-month-history-links>'+number.format(m.links)+'</td><td>'+m.status+'</td></tr>';
+    });
     const card = (key,label,value) => '<article class="market-kpi" data-market-kpi="'+key+'"><span>'+label+'</span><strong>'+value+'</strong></article>';
+    const basis=sample.total===null?'所选期间暂无可计入的完整月样本。':
+      '样本销量来自 '+number.format(sample.groups)+' 个商品组、'+number.format(sample.covered)+' 个有完整样本记录的月份。';
     return '<section class="market-block market-hero" data-ml-period-overview><div class="market-block-heading"><h2>市场大盘</h2><span class="market-period-tag">'+esc(start)+' 至 '+esc(end)+'</span></div>'+
-      '<div class="market-kpi-grid">'+card('units','类目月销量','—')+card('revenue','类目月销售额','—')+
+      '<div class="market-kpi-grid">'+card('units','完整月样本销量 · 台',sample.total===null?'—':number.format(sample.total))+card('revenue','类目月销售额','—')+
       card('listings','有月销量记录的商品链接',number.format(profiles.length))+
-      card('months','有记录的月份',number.format(coverage.length)+' / '+Math.max(0,last-first+1))+'</div>'+
-      '<p class="market-period-detail">'+(profiles.length?'所选期间有单品月销量，明细见下方。':'所选期间暂无单品月销量。')+'类目月度销量、销售额和价格仍缺来源。</p>'+
-      '<div class="market-period-coverage table-scroll"><table><thead><tr><th>月份</th><th>有记录的商品链接</th><th>记录情况</th></tr></thead><tbody>'+rows.join('')+'</tbody></table></div></section>';
+      card('months','有记录的月份',number.format(coverage.length)+' / '+sample.months.length)+'</div>'+
+      '<p class="market-period-detail">'+basis+'市场整体月销量与销售额仍缺来源。单品明细见下方。</p>'+
+      '<div class="market-period-coverage table-scroll"><table><thead><tr><th>月份</th><th>完整月样本销量</th><th>有记录的商品链接</th><th>记录情况</th></tr></thead><tbody>'+rows.join('')+'</tbody></table></div></section>';
+  }
+
+  function sampleExportRows(history,state) {
+    const sample=monthlySample(history);
+    const base=[state.country,'Mercado Libre',state.category,history.start,history.end];
+    return [
+      ['记录类型','国家','平台','品类','起始月份','结束月份','月份','完整月样本销量','统计商品组数','有历史的商品链接数','记录情况','来源商品ID','来源商品链接','记录覆盖开始日','记录覆盖结束日'],
+      ...sample.months.flatMap(m=>[
+        ['月份',...base,m.month,m.units,m.groups.length,m.links,m.status,null,null,null,null],
+        ...m.groups.map(g=>['商品组',...base,m.month,g.orders,1,null,'完整日记录',g.product.product_code,g.product.detail_link,g.source.data_coverage.coverage_start_date,g.source.data_coverage.coverage_end_date])
+      ])
+    ];
   }
 
   function chart(rows, start, end) {
@@ -91,5 +144,5 @@
     ])];
   }
 
-  root.MercadoHistory = { isPeriodOverview, selection, summary, overview, panel, exportRows };
+  root.MercadoHistory = { isPeriodOverview, selection, summary, overview, panel, exportRows, sampleExportRows };
 })(window);

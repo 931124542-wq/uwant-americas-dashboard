@@ -44,7 +44,7 @@
     if(summary)summary.textContent='近30天数据 · '+(date||'日期未知');
    }else if(summary)summary.textContent=s.startMonth?s.startMonth+'—'+s.endMonth:s.dataset;
   }
-  const exportButton=document.getElementById('export');exportButton.textContent=ml&&(monthly||period)?'↓ 导出所选商品月销量':s.page==='market'&&s.view==='products'?'↓ 导出商品':!admin&&s.page==='brands'?'↓ 导出品牌':overview&&ml?'↓ 导出统计样本':overview&&['amazon','all'].includes(s.platform)&&s.startMonth?'↓ 导出所选月份':'↓ 导出数据';
+  const exportButton=document.getElementById('export');exportButton.textContent=period?'↓ 导出月度样本':ml&&monthly?'↓ 导出所选商品月销量':s.page==='market'&&s.view==='products'?'↓ 导出商品':!admin&&s.page==='brands'?'↓ 导出品牌':overview&&ml?'↓ 导出统计样本':overview&&['amazon','all'].includes(s.platform)&&s.startMonth?'↓ 导出所选月份':'↓ 导出数据';
   if(overview){root.MarketOverviewLayout?.mount(s,change,download);if(s.platform!=='ml'){const dataset=document.getElementById('dataset');if(dataset)dataset.closest('label').hidden=true;}}
   const footer=document.querySelector('#research-content footer'),version=document.querySelector('meta[name="uwant-release"]')?.content;if(footer&&version){let note=footer.querySelector('span');if(!note){note=document.createElement('span');footer.append(note);}note.textContent='市场销量与销售额为第三方估算 · 市场版 '+version;}
   root.MarketDecisionUI?.mount(s,change,download);
