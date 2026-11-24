@@ -113,10 +113,10 @@
     const basis=sample.total===null?'所选期间暂无可计入的完整月样本。':
       '样本销量来自 '+number.format(sample.groups)+' 个商品组、'+number.format(sample.covered)+' 个有完整样本记录的月份。';
     return '<section class="market-block market-hero" data-ml-period-overview><div class="market-block-heading"><h2>市场大盘</h2><span class="market-period-tag">'+esc(start)+' 至 '+esc(end)+'</span></div>'+
-      '<div class="market-kpi-grid">'+card('units','完整月样本销量 · 台',sample.total===null?'—':number.format(sample.total))+card('revenue','类目月销售额','—')+
+      '<div class="market-kpi-grid">'+card('units','完整月样本销量 · 台',sample.total===null?'—':number.format(sample.total))+card('revenue','自然月销售额','—')+
       card('listings','有月销量记录的商品链接',number.format(profiles.length))+
       card('months','有完整样本的月份',number.format(sample.covered)+' / '+sample.months.length)+'</div>'+
-      '<p class="market-period-detail">'+basis+'市场整体月销量与销售额仍缺来源。单品明细见下方。</p>'+
+      '<p class="market-period-detail">'+basis+'当前品类暂无可核实的自然月销售额。</p>'+
       '<div class="market-period-coverage table-scroll"><table><thead><tr><th>月份</th><th>完整月样本销量</th><th>有记录的商品链接</th><th>记录情况</th></tr></thead><tbody>'+rows.join('')+'</tbody></table></div></section>';
   }
 

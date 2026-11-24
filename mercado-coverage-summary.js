@@ -31,6 +31,32 @@
     return {date, rows, units:total('units'), revenue:total('revenue'), positive:rows.filter(row => row.units > 0).length};
   }
 
+  function mountRevenue(section, state, products, data, download) {
+    const base = root.Mercado.report({...state,shareMetric:'revenue'});
+    const extra = report(products,data);
+    const currency = root.MarketIntegrity.currencies[state.country];
+    const snapshots = [
+      {date:data.researchSnapshot || data.asOf, amount:base.total, count:base.all.length},
+      {date:extra.date, amount:extra.revenue, count:extra.rows.filter(row => row.revenue !== null).length}
+    ].filter(batch => batch.amount !== null);
+    if (!snapshots.length) return;
+
+    const block = document.createElement('section');
+    block.className = 'ml-month-revenue';
+    block.dataset.mlMonthRevenue = '';
+    block.innerHTML = '<div class="ml-coverage-head"><h3>近30天销售额估算</h3><button class="rq-button" data-export-snapshot-revenue>导出销售额快照</button></div>'+
+      '<div class="ml-month-revenue-values">'+snapshots.map(batch =>
+        '<article data-revenue-snapshot="'+batch.date+'"><time datetime="'+batch.date+'">'+batch.date+' 采集</time>'+
+        '<strong>'+fmt(batch.amount)+' <small>'+currency+'</small></strong><span>'+num.format(batch.count)+' 个金额样本</span></article>'
+      ).join('')+'</div><p>第三方估算。各批近30天窗口可能重叠，金额单独查看。月份选择仅用于自然月统计。</p>';
+    block.querySelector('[data-export-snapshot-revenue]').onclick = () => download(
+      [['国家','平台','品类','采集日期','统计口径','销售额估算','币种','金额样本数'],
+       ...snapshots.map(batch => [state.country,'Mercado Libre',state.category,batch.date,'近30天；起止日期未提供',batch.amount,currency,batch.count])],
+      'MercadoLibre_'+state.country+'_'+state.category+'_revenue_snapshots.csv'
+    );
+    section.querySelector('.market-period-coverage').before(block);
+  }
+
   function mount(section, state, products, data, base, change, download) {
     const extra = report(products,data);
     const publicCount = products.filter(row => row.catalogueOnly).length;
@@ -53,5 +79,5 @@
     });
     section.append(scope);
   }
-  root.MercadoCoverageSummary = {report, mount};
+  root.MercadoCoverageSummary = {report, mount, mountRevenue};
 })(window);

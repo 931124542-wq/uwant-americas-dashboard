@@ -110,17 +110,41 @@ async function run() {
     await page.waitForFunction(()=>state.country==='AR'&&state.category==='fabric'&&state.endMonth==='2026-11');
     assert.equal(await page.locator('[data-ml-period-overview] [data-market-kpi="units"] strong').innerText(),'3,132');
 
+    const currencies={MX:'MXN',BR:'BRL',AR:'ARS',CL:'CLP',CO:'COP'};
     for(const [country,scopes] of Object.entries(completeSamples)){
       for(const [index,[sep,oct]] of scopes.entries()){
         await go({country,platform:'ml',category:categories[index],...selectedMonths});
         const overview=page.locator('[data-ml-period-overview]');
+        const snapshots=overview.locator('[data-ml-month-revenue]');
         assert.equal(await overview.locator('[data-market-kpi="units"] strong').innerText(),value(sep+oct));
+        assert.equal(await overview.locator('[data-market-kpi="revenue"] strong').innerText(),'—');
         assert.equal(await overview.locator('[data-period-month="2026-11"] [data-month-sample-units]').innerText(),'—');
+        const amounts=await snapshots.locator('article > strong').allTextContents();
+        assert.equal(amounts.length,2,country+'/'+categories[index]);
+        assert.ok(amounts.every(amount=>amount.endsWith(' '+currencies[country])));
         await page.getByRole('button',{name:'最近可统计月',exact:true}).click();
         assert.equal(await overview.locator('[data-market-kpi="units"] strong').innerText(),value(oct));
+        assert.deepEqual(await snapshots.locator('article > strong').allTextContents(),amounts);
         assert.equal(await page.evaluate(()=>state.startMonth+'|'+state.endMonth),'2026-10|2026-10');
       }
     }
+    await go({country:'BR',platform:'ml',category:'fabric',...selectedMonths});
+    const snapshots=page.locator('[data-ml-month-revenue]');
+    assert.equal(await snapshots.locator('[data-revenue-snapshot="2026-11-06"] > strong').textContent(),'3,562,822 BRL');
+    assert.equal(await snapshots.locator('[data-revenue-snapshot="2026-11-12"] > strong').textContent(),'4,139,728 BRL');
+    assert.match(await snapshots.locator('[data-revenue-snapshot="2026-11-06"]').innerText(),/772 个金额样本/);
+    assert.match(await snapshots.locator('[data-revenue-snapshot="2026-11-12"]').innerText(),/191 个金额样本/);
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2),false);
+    const revenueDownload=page.waitForEvent('download');
+    await snapshots.getByRole('button',{name:'导出销售额快照'}).click();
+    await (await revenueDownload).saveAs(out+'/mercado-br-fabric-revenue.csv');
+    const revenueCsv=await fs.readFile(out+'/mercado-br-fabric-revenue.csv','utf8');
+    assert.equal(revenueCsv.trim().split(/\r?\n/).length,3);
+    assert.match(revenueCsv,/"2026-11-06","近30天；起止日期未提供","3562822","BRL","772"/);
+    assert.match(revenueCsv,/"2026-11-12","近30天；起止日期未提供","4139728","BRL","191"/);
+    await page.reload({waitUntil:'domcontentloaded'});
+    await snapshots.waitFor();
+    assert.equal(await page.evaluate(()=>state.startMonth+'|'+state.endMonth),'2026-09|2026-11');
     await page.screenshot({path:out+'/market-mobile.png'});
     assert.deepEqual(errors,[]);
     const retail = await page.evaluate(months=>MarketValidation.localCatalogue(months,decisionCatalog),months);

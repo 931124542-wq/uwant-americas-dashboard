@@ -432,5 +432,13 @@
     "scopesWithSeptemberAndOctober2026Sample": 20,
     "scopesWithVerifiedNovember2026Sample": 0,
     "sourceRecordsUnchanged": true
+  },
+  "mercadoRevenueVisibility": {
+    "displayVersion": "11.24.6",
+    "snapshotDates": ["2026-11-06", "2026-11-12"],
+    "marketScopesWithRevenueSnapshots": 20,
+    "marketScopesWithVerifiedCalendarMonthRevenue": 0,
+    "snapshotRevenueShownSeparatelyInMonthlyView": true,
+    "sourceRecordsUnchanged": true
   }
 }

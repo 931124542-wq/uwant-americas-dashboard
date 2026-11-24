@@ -89,6 +89,7 @@
    const period=document.createElement('div');
    period.dataset.marketOverviewTemplate='mercado-monthly';
    period.innerHTML=root.MercadoHistory.overview(s,all,data);
+   root.MercadoCoverageSummary.mountRevenue(period,s,all,data,download);
    period.append(monthComparison(s,data,download));
    if(history)period.append(history);
    workspace.append(period);
