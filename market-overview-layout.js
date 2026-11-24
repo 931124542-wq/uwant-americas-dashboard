@@ -4,6 +4,31 @@
  const version='shared-market-2026-11-12';
  const topLimit=s=>[5,10,20].includes(Number(s.marketTop))?Number(s.marketTop):10;
  const metricName=kind=>kind==='units'?'销量':'销售额';
+ const amazonDomains={MX:'amazon.com.mx',CA:'amazon.ca',US:'amazon.com',BR:'amazon.com.br'};
+ const mercadoDomains={MX:'mercadolibre.com.mx',BR:'mercadolivre.com.br',AR:'mercadolibre.com.ar',
+  CL:'mercadolibre.cl',CO:'mercadolibre.com.co'};
+ function amazonProductUrl(country,asin){
+  const domain=amazonDomains[String(country).toUpperCase()];
+  return domain&&/^[A-Z0-9]{10}$/.test(asin||'')?'https://www.'+domain+'/dp/'+asin:null;
+ }
+ function mercadoProductUrl(product){
+  const domain=mercadoDomains[product.country];
+  if(!domain||!product.detail_link)return null;
+  try{
+   const url=new URL(product.detail_link);
+   if(url.protocol!=='https:'||url.username||url.password||url.port||
+      !(url.hostname===domain||url.hostname.endsWith('.'+domain)))return null;
+   url.searchParams.delete('matt_tool');
+   url.searchParams.delete('ua');
+   return url.href;
+  }catch{return null;}
+ }
+ function productName(row){
+  const name=e(row.name||row.id);
+  return row.productUrl?'<a class="market-product-link" href="'+e(row.productUrl)+
+   '" target="_blank" rel="noopener noreferrer" title="在新标签页打开商品页">'+name+
+   ' <span aria-hidden="true">↗</span></a>':name;
+ }
  function shell(period,currency){return ['市场大盘','品牌与价格带','UWANT对标'].map((title,i)=>'<section class="market-block '+['market-hero','market-competition','market-next-card'][i]+'" data-overview-section="'+i+'"><div class="market-block-heading"><span>'+String(i+1).padStart(2,'0')+'</span><h2>'+title+'</h2>'+(i===0?'<span class="market-period-tag">'+e(period)+' · '+e(currency)+'</span>':i===1?'<button class="rq-button" data-overview-page="brands">全部品牌 →</button>':'<button class="rq-button" data-overview-page="competitors">竞品对比 →</button>')+'</div>'+(['<div data-overview-slot="category"></div><div data-overview-slot="kpis"></div><div data-overview-slot="reading"></div>','<div data-overview-slot="controls"></div><div data-overview-slot="charts"></div><div data-overview-slot="leaders"></div><details class="market-overview-references"><summary>统计说明与数据来源</summary><div data-overview-slot="references"></div></details>','<div data-overview-slot="own"></div>'][i])+'</section>').join('');}
  function rankedRows(rows,kind,limit,key=row=>row.id){
   const seen=new Set();
@@ -18,7 +43,7 @@
  function mercadoProduct(product){
   return {id:product.product_code,modelKey:product.modelGroup||product.product_code,
    name:[product.brand_label,product.model||product.product_code].filter(Boolean).join(' · '),
-   title:product.product_name,image:product.picture_link};
+   title:product.product_name,image:product.picture_link,productUrl:mercadoProductUrl(product)};
  }
 
  function rankMercado(items,kind,limit=10){
@@ -43,7 +68,7 @@
   const byId=new Map(profiles.map(profile=>[profile.productId,profile])),groups=new Map();
   for(const fact of facts){
    const id=fact.parentAsin;
-   if(!groups.has(id))groups.set(id,{id,brand:fact.brand,ids:new Set(),units:null,revenue:null,month:'',price:null});
+   if(!groups.has(id))groups.set(id,{id,country:fact.country,brand:fact.brand,ids:new Set(),units:null,revenue:null,month:'',price:null});
    const group=groups.get(id);
    for(const asin of fact.ids||fact.asins||[])group.ids.add(asin);
    for(const key of ['units','revenue'])if(Number.isFinite(fact[key]))group[key]=(group[key]??0)+fact[key];
@@ -55,8 +80,9 @@
   }
   return rankedRows([...groups.values()],kind,limit).map(group=>{
    const ids=[...group.ids],product=ids.map(id=>byId.get(id)).find(Boolean);
-   return {...group,ids,parentAsin:group.id,historicalBrand:group.brand,id:product?.productId||ids[0]||group.id,
-    name:product?root.ResearchContext.name(product):group.brand,title:product?.title,image:product?.imageUrl,priceDate:group.month};
+   const listing=product?.productId||ids[0];
+   return {...group,ids,parentAsin:group.id,historicalBrand:group.brand,id:listing||group.id,
+    productUrl:amazonProductUrl(group.country,listing),name:product?root.ResearchContext.name(product):group.brand,title:product?.title,image:product?.imageUrl,priceDate:group.month};
   });
  }
 
@@ -71,7 +97,7 @@
   if(ranked.length)return {basis:'按所选月份的'+metricName(r.kind)+'估算排序，同款规格合并统计',
    period:'所选区间',ranked:true,rows:ranked};
   const suitable=profiles.filter(p=>{const type=root.ResearchQuality.productType(p),t=p.title||'';if(s.category==='fabric')return ['portable','steam'].includes(type)&&/spot|upholstery|little\s*green|stainstriker|cleanslate/i.test(t)&&!/handheld steam|pressure steam|industrial|commercial/i.test(t);if(s.category==='vacuum')return type==='dry'&&!/canister|shop[ -]?vac|industrial|commercial/i.test(t);return type===s.category;});
-  const seen=new Set(),rows=suitable.slice().sort((a,b)=>String(a.brand).localeCompare(String(b.brand))||a.productId.localeCompare(b.productId)).filter(p=>{const k=p.modelKey||p.productId;if(seen.has(k))return false;seen.add(k);return true;}).slice(0,topLimit(s)).map(p=>{const quote=root.ProductEvidence.price(p,{...s,priceBasis:'public'})||root.ProductEvidence.price(p,{...s,priceBasis:'source'});return {id:p.productId,name:root.ResearchContext.name(p),title:p.title,image:p.imageUrl,price:quote?.value??null,priceDate:quote?.date,units:null,revenue:null};});
+  const seen=new Set(),rows=suitable.slice().sort((a,b)=>String(a.brand).localeCompare(String(b.brand))||a.productId.localeCompare(b.productId)).filter(p=>{const k=p.modelKey||p.productId;if(seen.has(k))return false;seen.add(k);return true;}).slice(0,topLimit(s)).map(p=>{const quote=root.ProductEvidence.price(p,{...s,priceBasis:'public'})||root.ProductEvidence.price(p,{...s,priceBasis:'source'});return {id:p.productId,name:root.ResearchContext.name(p),title:p.title,image:p.imageUrl,productUrl:p.platform==='amazon'?amazonProductUrl(s.country,p.productId):null,price:quote?.value??null,priceDate:quote?.date,units:null,revenue:null};});
   return {basis:'当前缺少可用于排名的销售数据，以下为同类商品资料。',period:'所选区间',ranked:false,rows};
  }
  function rankTable(rows,{kind,currency,note,title=metricName(kind)+' Top 10',price=true}){
@@ -80,12 +106,12 @@
    (rows.length?'<div class="table-scroll"><table><thead><tr><th>名次</th><th>商品 / 型号</th>'+
     (price?'<th>参考报价（'+e(currency)+'）</th>':'')+'<th>销量（台）</th>'+
     (currency?'<th>销售额（'+e(currency)+'）</th>':'')+'</tr></thead><tbody>'+
-    rows.map((row,index)=>'<tr data-ranked-product="'+e(row.parentAsin||row.id)+'"><td>'+(index+1)+'</td><th scope="row">'+e(row.name)+
+    rows.map((row,index)=>'<tr data-ranked-product="'+e(row.parentAsin||row.id)+'"><td>'+(index+1)+'</td><th scope="row">'+productName(row)+
       '<small>'+e(row.parentAsin||row.id)+'</small></th>'+(price?'<td>'+n(row.price)+(row.priceDate?'<small>'+e(row.priceDate)+'</small>':'')+'</td>':'')+
       '<td>'+n(row.units)+'</td>'+(currency?'<td>'+n(row.revenue)+'</td>':'')+'</tr>').join('')+
     '</tbody></table></div>':'<p class="market-chart-empty">当前范围暂无可用于排名的'+metricName(kind)+'数据。</p>')+'</section>';
  }
- function leaders(s,c,r){const x=leaderRows(s,c,r);return '<section class="market-leaders"><div class="market-section-heading"><div><h3>'+(x.ranked?metricName(r.kind)+' Top '+topLimit(s):'同类商品资料')+'</h3><p>'+e(x.basis)+(x.ranked&&x.rows.length<topLimit(s)?' · '+x.rows.length+' 款有数据的商品':'')+'</p></div><label class="market-top-limit">显示 <select data-overview-top aria-label="重点商品显示数量">'+[5,10,20].map(k=>'<option value="'+k+'" '+(k===topLimit(s)?'selected':'')+'>'+k+'条</option>').join('')+'</select></label><button class="rq-button" data-overview-products>查看全部商品 →</button></div>'+(x.rows.length?'<div class="table-scroll"><table><thead><tr>'+(x.ranked?'<th>名次</th>':'')+'<th>商品 / 型号</th><th>报价 · '+e(r.currency)+'</th><th>'+e(x.period)+'销量</th><th>'+e(x.period)+'销售额 · '+e(r.currency)+'</th><th></th></tr></thead><tbody>'+x.rows.map((p,i)=>'<tr>'+(x.ranked?'<td>'+(i+1)+'</td>':'')+'<td><div class="market-leader-product"><span class="market-leader-image">—'+(p.image?'<img data-overview-image loading="lazy" src="'+e(p.image)+'" alt="" referrerpolicy="no-referrer">':'')+'</span><div><strong>'+e(p.name)+'</strong><span title="'+e(p.title)+'">'+e(p.id)+(p.parentAsin?' · 同款编号 '+e(p.parentAsin):'')+'</span></div></div></td><td>'+n(p.price)+'<small>'+e(p.priceDate||'报价日期未知')+'</small></td><td>'+n(p.units)+'</td><td>'+n(p.revenue)+'</td><td><button class="rq-button" data-overview-product="'+e(p.id)+'" '+(s.platform==='ml'?'data-ml-product="'+e(p.id)+'"':'')+'>查看商品 →</button></td></tr>').join('')+'</tbody></table></div>':'<p class="market-chart-empty">当前筛选条件下暂无商品资料。可在热销商品中选择其他渠道。</p>')+'</section>';}
+ function leaders(s,c,r){const x=leaderRows(s,c,r);return '<section class="market-leaders"><div class="market-section-heading"><div><h3>'+(x.ranked?metricName(r.kind)+' Top '+topLimit(s):'同类商品资料')+'</h3><p>'+e(x.basis)+(x.ranked&&x.rows.length<topLimit(s)?' · '+x.rows.length+' 款有数据的商品':'')+'</p></div><label class="market-top-limit">显示 <select data-overview-top aria-label="重点商品显示数量">'+[5,10,20].map(k=>'<option value="'+k+'" '+(k===topLimit(s)?'selected':'')+'>'+k+'条</option>').join('')+'</select></label><button class="rq-button" data-overview-products>查看全部商品 →</button></div>'+(x.rows.length?'<div class="table-scroll"><table><thead><tr>'+(x.ranked?'<th>名次</th>':'')+'<th>商品 / 型号</th><th>报价 · '+e(r.currency)+'</th><th>'+e(x.period)+'销量</th><th>'+e(x.period)+'销售额 · '+e(r.currency)+'</th><th></th></tr></thead><tbody>'+x.rows.map((p,i)=>'<tr>'+(x.ranked?'<td>'+(i+1)+'</td>':'')+'<td><div class="market-leader-product"><span class="market-leader-image">—'+(p.image?'<img data-overview-image loading="lazy" src="'+e(p.image)+'" alt="" referrerpolicy="no-referrer">':'')+'</span><div><strong>'+productName(p)+'</strong><span title="'+e(p.title)+'">'+e(p.id)+(p.parentAsin?' · 同款编号 '+e(p.parentAsin):'')+'</span></div></div></td><td>'+n(p.price)+'<small>'+e(p.priceDate||'报价日期未知')+'</small></td><td>'+n(p.units)+'</td><td>'+n(p.revenue)+'</td><td><button class="rq-button" data-overview-product="'+e(p.id)+'" '+(s.platform==='ml'?'data-ml-product="'+e(p.id)+'"':'')+'>看板内详情</button></td></tr>').join('')+'</tbody></table></div>':'<p class="market-chart-empty">当前筛选条件下暂无商品资料。可在热销商品中选择其他渠道。</p>')+'</section>';}
  function monthlyResults(months,facts,currency){
   const rows=root.MarketSummary.monthlyBreakdown(months,facts).map(({month,units,revenue,groups,open})=>{
    const status=!groups?'暂无数据':open?'更新时该月尚未结束':'';

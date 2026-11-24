@@ -13,10 +13,14 @@ const {chromium}=require('playwright'),fs=require('fs'),path=require('path'),ass
    await p.goBack();await p.waitForFunction(()=>document.querySelector('[data-overview-top]')?.value==='10');assert.equal(await p.locator('.market-leaders tbody tr').count(),Math.min(10,available));await p.goForward();await p.waitForFunction(()=>document.querySelector('[data-overview-top]')?.value==='20');
   }
   await go({shareMetric:'revenue'});
+  const overviewLinks=await p.locator('.market-leaders .market-product-link').evaluateAll(links=>links.map(link=>link.href));
+  assert.equal(overviewLinks.length,10);
+  assert(overviewLinks.every(url=>/^https:\/\/www\.amazon\.ca\/dp\/[A-Z0-9]{10}$/.test(url)));
   const band=p.locator('[data-share-drill="price|1"]');
   await band.click();
   const amazonRank=p.locator('.sample-share-detail [data-market-ranking]');
   assert.equal(await amazonRank.locator('tbody tr').count(),7);
+  assert.equal(await amazonRank.locator('tbody .market-product-link[href^="https://www.amazon.ca/dp/"]').count(),7);
   const revenues=await amazonRank.locator('tbody tr td:last-child').allTextContents();
   const asNumbers=revenues.map(value=>Number(value.replaceAll(',','')));
   assert(asNumbers.every((value,i)=>value>0&&(!i||asNumbers[i-1]>=value)));
@@ -26,12 +30,27 @@ const {chromium}=require('playwright'),fs=require('fs'),path=require('path'),ass
   const mlRank=p.locator('[data-ml-detail] [data-market-ranking]');
   assert.equal(await mlRank.locator('tbody tr').count(),1);
   assert.equal(await mlRank.locator('[data-ranked-product]').first().getAttribute('data-ranked-product'),'MLM72234235');
+  const productLink=mlRank.getByRole('link',{name:/UWANT.*V500/i});
+  const destination=new URL(await productLink.getAttribute('href'));
+  assert.equal(destination.hostname,'www.mercadolibre.com.mx');
+  assert(destination.pathname.endsWith('/p/MLM72234235'));
+  assert.equal(destination.searchParams.get('pdp_filters'),'item_id:MLM5603603324');
+  assert.equal(destination.searchParams.has('ua'),false);
+  await p.context().route('https://www.mercadolibre.com.mx/**',route=>route.fulfill({body:'Product page destination',contentType:'text/plain'}));
+  const nextTab=p.waitForEvent('popup');
+  await productLink.click();
+  const popup=await nextTab;
+  await popup.waitForURL(destination.href);
   assert.equal(await p.locator('[data-ml-detail] .market-price-detail-all tbody tr').count(),4);
+  await popup.close();
   await go({country:'BR',platform:'ml',category:'fabric',own:'Y100S',marketPeriod:'monthly',startMonth:'2026-09',endMonth:'2026-11'});
   const monthlyRank=p.locator('[data-market-ranking]');
   assert((await monthlyRank.innerText()).includes('销量 Top 10'));
   assert.equal(await monthlyRank.getByRole('columnheader',{name:'销量（台）'}).count(),1);
   assert.equal(await monthlyRank.getByRole('columnheader',{name:/销售额|报价/}).count(),0);
+  const monthlyLinks=await monthlyRank.locator('.market-product-link').evaluateAll(links=>links.map(link=>new URL(link.href).hostname));
+  assert.equal(monthlyLinks.length,await monthlyRank.locator('tbody tr').count());
+  assert(monthlyLinks.length>0&&monthlyLinks.every(host=>host.endsWith('.mercadolivre.com.br')));
   await go({country:'BR',platform:'all',category:'fabric',own:'Y100S',marketPeriod:'monthly',startMonth:'2026-09',endMonth:'2026-11'});
   assert((await p.locator('[data-market-channel="ml"] [data-market-ranking]').innerText()).includes('销量 Top 10'));
   // Hard-coded historical expectations: model and UI changing together cannot hide a regression.
@@ -46,6 +65,6 @@ const {chromium}=require('playwright'),fs=require('fs'),path=require('path'),ass
   const pending=p.waitForEvent('download');await p.locator('[data-month-export]').click();await(await pending).saveAs(out+'/monthly-source.csv');assert(fs.readFileSync(out+'/monthly-source.csv','utf8').includes('B0HCZJV1NJ'));await p.screenshot({path:out+'/group-reference-desktop.png',fullPage:false});
   await p.setViewportSize({width:390,height:844});assert(!await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2));await p.locator('.monthly-product tbody td').last().scrollIntoViewIfNeeded();await p.screenshot({path:out+'/group-reference-mobile.png',fullPage:false});
   await go({country:'BR',platform:'ml',marketTop:'20'});assert(await p.locator('[data-overview-top]').isVisible());assert(!await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2));await p.locator('.market-leaders .market-section-heading').scrollIntoViewIfNeeded();await p.screenshot({path:out+'/top-limit-mobile.png',fullPage:false});
-  assert.deepEqual(errors,[]);fs.writeFileSync(out+'/result.json',JSON.stringify({topLimitsAcrossThreePaths:true,refreshBackForward:true,fixedHistoricalBaselineScopes:expected.length,sourceRankModulePreserved:true,noPrivateRanksPublished:true,groupReferenceWithoutDoubleCounting:true,conflictingRevenueStillExcluded:true,csv:true,mobile:true,errors},null,2));console.log('PASS final-DOM continuity: Top5/10/20 on all paths, URL/refresh/back/forward, four fixed historical totals, rank module, safe parent reference, CSV and mobile.');
+  assert.deepEqual(errors,[]);fs.writeFileSync(out+'/result.json',JSON.stringify({topLimitsAcrossThreePaths:true,marketplaceProductLinks:true,refreshBackForward:true,fixedHistoricalBaselineScopes:expected.length,sourceRankModulePreserved:true,noPrivateRanksPublished:true,groupReferenceWithoutDoubleCounting:true,conflictingRevenueStillExcluded:true,csv:true,mobile:true,errors},null,2));console.log('PASS final-DOM continuity: Top5/10/20 on all paths, direct product links, URL/refresh/back/forward, four fixed historical totals, rank module, safe parent reference, CSV and mobile.');
  }finally{await b.close();}
 })().catch(e=>{console.error(e);process.exit(1)});

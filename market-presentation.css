@@ -171,3 +171,7 @@ body[data-workspace=research] [data-backstage-only][hidden]{display:none!importa
 .market-hero>.market-ranked-list{margin:14px 22px}
 .market-price-detail-all{margin:12px 0}
 @media(max-width:700px){.market-hero>.market-ranked-list{margin-inline:16px}}
+
+.market-product-link{color:var(--market-accent);text-decoration:underline;text-underline-offset:2px}
+.market-product-link:hover{color:var(--market-ink)}
+.market-product-link:focus-visible{outline:2px solid var(--market-accent);outline-offset:3px;border-radius:2px}

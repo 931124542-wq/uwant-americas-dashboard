@@ -508,9 +508,10 @@
     "sourceRecordsUnchanged": true
   },
   "marketTopTen": {
-    "displayVersion": "11.24.16",
+    "displayVersion": "11.24.17",
     "defaultTop": 10,
     "priceBandRanking": true,
+    "marketplaceProductLinks": true,
     "sourceRecordsUnchanged": true
   }
 }
