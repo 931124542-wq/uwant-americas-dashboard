@@ -19,9 +19,9 @@ async function run() {
     await page.goto(base + exactHash, {waitUntil:'domcontentloaded'});
     const summary = page.locator('[data-ml-history-summary]');
     await summary.waitFor();
-    assert.match(await summary.innerText(), /2026-01 至 2026-10.*44 个商品链接/);
+    assert.match(await summary.innerText(), /2026-01 至 2026-10/);
     assert.match(await summary.locator('[data-ml-history-sample]').innerText(),/完整月样本 1,134 台/);
-    assert.match(await page.locator('.ml-coverage-summary').innerText(), /商品库 244 条/);
+    assert.equal(await page.locator('.ml-coverage-summary').innerText(),'其他近30天快照');
     assert.deepEqual((await page.locator('.market-kpi>strong').allTextContents()).slice(0,2), ['4,936,447','39']);
     assert(!page.url().includes('B0F84H88C1') && !page.url().includes('Shark'));
     const period=page.locator('#market-period');

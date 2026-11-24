@@ -46,7 +46,7 @@ async function run() {
     const chile = {country:'CL',platform:'ml',category:'wash'};
     await go(chile);
     await page.locator('.ml-coverage-summary').waitFor();
-    assert.match(await page.locator('.ml-coverage-summary').innerText(),/商品库 228 条.*164 个可统计销量.*8 个有销量/);
+    assert.equal(await page.locator('.ml-coverage-summary').innerText(),'其他近30天快照');
     await go({...chile,view:'products',evidenceQuery:'MLC2022458480'});
     await page.locator('.ml-workbench').waitFor();
     assert.equal(await page.locator('.ml-product').count(),0);
@@ -140,7 +140,8 @@ async function run() {
         const [total,groups]=lifetime[country][index];
         assert.equal(await cumulative.locator('[data-lifetime-units]').innerText(),value(total)+' 台');
         assert.equal(await cumulative.locator('[data-lifetime-revenue]').innerText(),'—');
-        assert.match(await cumulative.innerText(),new RegExp(value(groups)+' 个去重商品组'));
+        assert.equal(await cumulative.locator('[data-backstage-only]:visible').count(),0);
+        assert.match(await cumulative.locator('[data-backstage-only]').textContent(),new RegExp(value(groups)+' 个去重商品组'));
         const snapshots=overview.locator('[data-ml-month-revenue]');
         assert.equal(await overview.locator('[data-market-kpi="units"] strong').innerText(),value(sep+oct));
         assert.equal(await overview.locator('[data-market-kpi="revenue"] strong').innerText(),'—');
@@ -151,7 +152,8 @@ async function run() {
         const previous=snapshots.locator('[data-revenue-snapshot="2026-11-05"]');
         const [amount,count]=archived[country][index];
         assert.equal(await previous.locator('strong').innerText(),value(amount)+' '+currencies[country]);
-        assert.equal(await previous.locator('span').innerText(),value(count)+' 个金额样本');
+        assert.equal(await previous.locator('span').textContent(),value(count)+' 个金额样本');
+        assert.equal(await previous.locator('span').isVisible(),false);
         await page.getByRole('button',{name:'最近可统计月',exact:true}).click();
         assert.equal(await overview.locator('[data-market-kpi="units"] strong').innerText(),value(oct));
         assert.equal(await cumulative.locator('[data-lifetime-units]').innerText(),value(total)+' 台');
@@ -170,8 +172,7 @@ async function run() {
     assert.equal(await snapshots.locator('[data-revenue-snapshot="2026-11-05"] > strong').textContent(),'3,738,252 BRL');
     assert.equal(await snapshots.locator('[data-revenue-snapshot="2026-11-06"] > strong').textContent(),'3,562,822 BRL');
     assert.equal(await snapshots.locator('[data-revenue-snapshot="2026-11-12"] > strong').textContent(),'4,139,728 BRL');
-    assert.match(await snapshots.locator('[data-revenue-snapshot="2026-11-06"]').innerText(),/772 个金额样本/);
-    assert.match(await snapshots.locator('[data-revenue-snapshot="2026-11-12"]').innerText(),/191 个金额样本/);
+    assert.equal(await snapshots.locator('[data-backstage-only]:visible').count(),0);
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2),false);
     const revenueDownload=page.waitForEvent('download');
     await snapshots.getByRole('button',{name:'导出销售额快照'}).click();
@@ -193,7 +194,7 @@ async function run() {
     assert.equal(await page.evaluate(()=>state.startMonth+'|'+state.endMonth),'2025-09|2026-10');
     await go({country:'BR',platform:'ml',category:'mattress'});
     const archive=page.locator('.ml-archived-snapshot');
-    await archive.locator('summary').click();
+    await page.locator('.ml-coverage-summary>summary').click();
     assert.match(await archive.innerText(),/73 台 · 13,057 BRL/);
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2),false);
     const archiveDownload=page.waitForEvent('download');

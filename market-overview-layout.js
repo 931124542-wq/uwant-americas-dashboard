@@ -15,12 +15,15 @@
   return {basis:'已收录同类商品资料 · 不作销量排名，报价保留独立日期',period:'所选区间',rows};
  }
  function leaders(s,c,r){const x=leaderRows(s,c,r);return '<section class="market-leaders"><div class="market-section-heading"><div><h3>重点商品</h3><p>'+e(x.basis)+'</p></div><label class="market-top-limit">显示 <select data-overview-top aria-label="重点商品显示数量">'+[5,10,20].map(k=>'<option value="'+k+'" '+(k===topLimit(s)?'selected':'')+'>'+k+'条</option>').join('')+'</select></label><button class="rq-button" data-overview-products>查看全部商品 →</button></div>'+(x.rows.length?'<div class="table-scroll"><table><thead><tr><th>商品 / 型号</th><th>报价 · '+e(r.currency)+'</th><th>'+e(x.period)+'销量</th><th>'+e(x.period)+'销售额 · '+e(r.currency)+'</th><th></th></tr></thead><tbody>'+x.rows.map(p=>'<tr><td><div class="market-leader-product"><span class="market-leader-image">—'+(p.image?'<img data-overview-image loading="lazy" src="'+e(p.image)+'" alt="" referrerpolicy="no-referrer">':'')+'</span><div><strong>'+e(p.name)+'</strong><span title="'+e(p.title)+'">'+e(p.id)+(p.parentAsin?' · 商品组 '+e(p.parentAsin):'')+'</span></div></div></td><td>'+n(p.price)+'<small>'+e(p.priceDate||'报价日期未知')+'</small></td><td>'+n(p.units)+'</td><td>'+n(p.revenue)+'</td><td><button class="rq-button" data-overview-product="'+e(p.id)+'" '+(s.platform==='ml'?'data-ml-product="'+e(p.id)+'"':'')+'>查看商品 →</button></td></tr>').join('')+'</tbody></table></div>':'<p class="market-chart-empty">当前范围尚无商品资料，可进入商品研究检查其他有效来源。</p>')+'</section>';}
- function monthCoverage(months,facts){
+ function monthlyResults(months,facts,currency){
   const rows=root.MarketSummary.monthlyBreakdown(months,facts).map(({month,units,revenue,groups,open})=>{
-   const status=!groups?'暂无可统计数据':units!==null&&revenue!==null?'有销量和销售额':units!==null?'仅有销量':'仅有销售额';
-   return '<li data-period-month="'+month+'"><strong>'+month+'</strong> '+status+(open?' · 含采集时未结月记录':'')+'</li>';
+   const status=!groups?'暂无可统计数据':open?'含采集时未结月记录':'';
+   return '<tr data-period-month="'+e(month)+'"><th scope="row">'+e(month)+(status?'<small>'+status+'</small>':'')+
+    '</th><td>'+n(units)+'</td><td>'+n(revenue)+'</td></tr>';
   });
-  return '<ul class="market-month-status" aria-label="所选月份的数据情况">'+rows.join('')+'</ul>';
+  return '<details class="market-monthly-results"><summary>逐月销量与销售额</summary><div class="table-scroll">'+
+   '<table><thead><tr><th>月份</th><th>销量 / 台</th><th>销售额 / '+e(currency)+'</th></tr></thead><tbody>'+
+   rows.join('')+'</tbody></table></div></details>';
  }
  function mount(s,change,download){
   if(s.page!=='market'||s.view!=='overview'||!['amazon','all','ml'].includes(s.platform))return;
@@ -29,7 +32,8 @@
   const c=s.platform==='ml'?null:root.decisionCatalog(),r=root.MarketDecisionModel.report(s.platform==='ml'?s:root.decisionState(c),c);if(!r)return;
   const original=first.querySelector('[data-original-category-report]'),months=root.MonthlyRange.months(s);
   const range=s.platform!=='ml'&&s.startMonth&&s.endMonth&&months.length;
-  const period=range?months[0]+' 至 '+months.at(-1):original?'原类目 / 月度样本':r.sourceKind==='snapshot'?'近30天估算':'自然月估算';
+  const period=range?months[0]+' 至 '+months.at(-1):original?'原类目 / 月度样本':
+   r.sourceKind==='snapshot'?'近30天估算 · '+r.date:'自然月估算';
   const box=document.createElement('div');box.className='market-overview';box.dataset.marketOverviewTemplate=version;box.innerHTML=shell(period,r.currency);first.before(box);
   const slot=k=>box.querySelector('[data-overview-slot="'+k+'"]'),move=(x,k)=>{if(x)slot(k).append(x);};
 
@@ -37,7 +41,7 @@
   move(first.querySelector('[data-ml-lifetime]'),'reading');
   if(range){
    if(original)move(original.querySelector('.market-sample-heading'),'category');
-   slot('reading').insertAdjacentHTML('afterbegin',monthCoverage(months,r.facts));
+   slot('reading').insertAdjacentHTML('beforeend',monthlyResults(months,r.facts,r.currency));
    if(original){
     const oldReport=document.createElement('details');
     oldReport.className='market-original-reference';

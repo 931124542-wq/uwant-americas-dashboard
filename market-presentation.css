@@ -85,7 +85,7 @@ body[data-workspace=research] [data-backstage-only][hidden]{display:none!importa
 .market-period-fields input[aria-invalid="true"]{border-color:#b14f48}
 .market-period-apply{background:#176449;color:#fff;border-color:#176449}
 .market-period-apply:hover{background:#12543e}
-.market-period-note,.market-period-error{grid-column:1/-1;margin:0;font-size:11px;color:var(--market-muted);line-height:1.45}
+.market-period-error{grid-column:1/-1;margin:0;font-size:11px;line-height:1.45}
 .market-period-error{color:#9c332e}.market-period-error:empty{display:none}
 @media(max-width:1100px){#market-period:not([hidden]){grid-template-columns:minmax(0,1fr);gap:9px}}
 @media(max-width:540px){
@@ -97,16 +97,12 @@ body[data-workspace=research] [data-backstage-only][hidden]{display:none!importa
 }
 
 [data-overview-slot="category"]>.market-sample-heading{margin:0;padding:0 22px 8px;border:0}
-.market-month-status{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0 22px 10px;list-style:none;font-size:11px;color:var(--market-muted)}
-.market-month-status li{background:#f2f7f4;border-radius:5px;padding:5px 8px}
-.market-month-status strong{font-weight:600;color:var(--market-ink)}
 .market-original-reference{border-top:1px solid var(--market-line);padding:0 22px}
 .market-original-reference>summary{color:var(--market-ink);padding:12px 0;cursor:pointer;font-size:12px}
 .market-original-reference .market-original-context{padding:4px 0 14px}
 .market-period-detail{color:var(--market-muted);margin:0 22px 14px;font-size:12px}
 .market-period-coverage{margin:0 22px 20px}
 .market-period-coverage table{min-width:380px}
-.market-period-coverage [data-month-sample-units] small{display:block;white-space:nowrap}
 .ml-month-revenue{margin:0 22px 18px;padding:12px;border:1px solid var(--market-line);border-radius:8px;background:#f3f8f5;color:var(--market-ink)}
 .ml-month-revenue h3{margin:0;font-size:14px}
 .ml-month-revenue-values{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(132px,100%),1fr));gap:12px;margin-top:10px}
@@ -116,11 +112,10 @@ body[data-workspace=research] [data-backstage-only][hidden]{display:none!importa
 .ml-month-revenue article small{font-size:11px;white-space:nowrap}
 .ml-month-revenue p{margin:9px 0 0}
 .ml-archived-snapshot{margin-top:12px}
-.ml-archived-snapshot summary{cursor:pointer;color:var(--market-ink);font-size:12px}
 [data-market-overview-template="mercado-monthly"]{min-width:0;max-width:100%}
 [data-market-overview-template="mercado-monthly"] .ml-history-panel{min-width:0}
 @media(max-width:700px){
- [data-overview-slot="category"]>.market-sample-heading,.market-month-status{padding-left:16px;padding-right:16px}
+ [data-overview-slot="category"]>.market-sample-heading{padding-left:16px;padding-right:16px}
  .market-original-reference{padding-left:16px;padding-right:16px}
  .market-period-detail,.market-period-coverage,.ml-month-revenue{margin-left:16px;margin-right:16px}
  .ml-month-revenue article strong{font-size:16px}
@@ -138,3 +133,22 @@ body[data-workspace=research] [data-backstage-only][hidden]{display:none!importa
  .ml-month-comparison>[data-ml-month-comparison]{margin-left:16px;margin-right:16px}
 }
 .content #scope:empty{display:none}
+.market-kpi-grid--two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.market-kpi-grid--three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.market-kpi-grid--three>.market-kpi:nth-child(3){border-right:0}
+.ml-coverage-summary>summary,.market-monthly-results>summary,.ml-product-history-fold>summary{
+ cursor:pointer;color:var(--market-ink);font-size:12px;font-weight:600
+}
+.ml-snapshot-footer{margin-top:12px}
+.market-monthly-results{border-top:1px solid var(--market-line);padding:12px 22px}
+.market-monthly-results .table-scroll{margin-top:10px}
+.market-monthly-results table{font-variant-numeric:tabular-nums}
+.market-monthly-results th small{display:block;color:var(--market-muted);font-size:10px}
+.ml-product-history-fold>summary{padding:14px 22px}
+.ml-product-history-fold>.ml-history-panel{margin:0;border:0;border-top:1px solid var(--market-line);box-shadow:none}
+@media(max-width:700px){
+ .market-kpi-grid--three{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .market-kpi-grid--three>.market-kpi:nth-child(3){grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px}
+ .market-kpi-grid--three>.market-kpi:nth-child(3)>strong{font-size:20px;margin:0}
+ .market-monthly-results,.ml-product-history-fold>summary{padding-left:16px;padding-right:16px}
+}

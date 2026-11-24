@@ -6,7 +6,9 @@
   '.private-research-evidence','.coverage-monitor','.market-validation','.market-reviewed-exclusions','.ml-data-details',
   '.rq-reviewed-history','.rq-captured-history','.rq-monthly-unavailable','.rq-quarantine','.rq-new-history',
   '.rq-brand-boundaries','.rq-metric-limit','.wb-monthly>.data-gap-note','.market-chart-foot',
-  '.decision-own-position .decision-note','.scope-details','.wb-match-evidence'
+  '.decision-own-position .decision-note','.scope-details','.wb-match-evidence',
+  '.market-hero .market-kpi[data-market-kpi="parents"]','.market-hero .decision-indicator>small',
+  '.market-overview .sample-share-chart>p'
  ];
  function hideManagementDetails(s){
   if(root.ResearchDataAdmin?.isRoute(s)||document.body.dataset.workspace!=='research')return;
@@ -28,7 +30,12 @@
   const heading=document.querySelector('.heading');let context=document.getElementById('market-page-context');if(!context){context=document.createElement('p');context.id='market-page-context';heading.querySelector('div').append(context);}
   const country=root.ResearchModel.countries[s.country]?.name||s.country,category=({wash:'洗地机',vacuum:'吸尘器',fabric:'布艺清洗机',mattress:'除螨仪'})[s.category],platform=root.ResearchQuality.platforms[s.platform]||'全部已采集渠道';
   context.textContent=country+' / '+platform+' / '+category;
-  if(s.platform==='all'&&!admin){const note=document.createElement('span');note.className='market-metric-channel';note.textContent='销量统计仅含Amazon，其他渠道仅提供商品资料';document.getElementById('scope').append(note);}
+  const scope=document.getElementById('scope');
+  scope.hidden=overview&&s.platform!=='all';
+  if(s.platform==='all'&&!admin){
+   if(overview)scope.textContent='销售数据来自 Amazon。';
+   else{const note=document.createElement('span');note.className='market-metric-channel';note.textContent='销售数据来自 Amazon。';scope.append(note);}
+  }
   const ml=s.platform==='ml',period=ml&&root.MercadoHistory.isPeriodOverview(s);
   let tabs=document.getElementById('market-time-views');
   if(overview||monthly){
@@ -40,7 +47,7 @@
   }else tabs?.remove();
   if(ml&&!admin){
    const data=root.MERCADO_DATA,date=data?.researchSnapshot||data?.asOf;
-   const summary=document.querySelector('#scope-toggle small'),scope=document.getElementById('scope');
+   const summary=document.querySelector('#scope-toggle small');
    if(period&&data){
     const {start,end}=root.MercadoHistory.selection(s,root.Mercado.rows(s),data);
     scope.textContent='所选月份 '+start+' 至 '+end;
@@ -53,7 +60,11 @@
    }else if(summary)summary.textContent=s.startMonth?s.startMonth+'—'+s.endMonth:s.dataset;
   }
   const exportButton=document.getElementById('export');exportButton.textContent=period?'↓ 导出月度样本':ml&&monthly?'↓ 导出所选商品月销量':s.page==='market'&&s.view==='products'?'↓ 导出商品':!admin&&s.page==='brands'?'↓ 导出品牌':overview&&ml?'↓ 导出统计样本':overview&&['amazon','all'].includes(s.platform)&&s.startMonth?'↓ 导出所选月份':'↓ 导出数据';
-  if(overview){root.MarketOverviewLayout?.mount(s,change,download);if(s.platform!=='ml'){const dataset=document.getElementById('dataset');if(dataset)dataset.closest('label').hidden=true;}}
+  if(overview){
+   root.MarketOverviewLayout?.mount(s,change,download);
+   document.querySelector('.heading-actions a[download]').hidden=true;
+   if(s.platform!=='ml'){const dataset=document.getElementById('dataset');if(dataset)dataset.closest('label').hidden=true;}
+  }
   const footer=document.querySelector('#research-content footer'),version=document.querySelector('meta[name="uwant-release"]')?.content;if(footer&&version){let note=footer.querySelector('span');if(!note){note=document.createElement('span');footer.append(note);}note.textContent='市场销量与销售额为第三方估算 · 市场版 '+version;}
   root.MarketDecisionUI?.mount(s,change,download);
   root.UwantShipments?.mount(s,change,download);

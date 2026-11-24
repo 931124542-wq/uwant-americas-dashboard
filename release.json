@@ -479,5 +479,12 @@
     "operatingReportToolsCollapsed": true,
     "operatingAndPromotionMetricsRetained": true,
     "sourceRecordsUnchanged": true
+  },
+  "marketOverviewCleanup": {
+    "displayVersion": "11.24.11",
+    "marketCoverageCountsHiddenFromOverview": true,
+    "amazonMonthlySalesAndRevenueTable": true,
+    "mercadoRollingAndLifetimeFiguresRetained": true,
+    "sourceRecordsUnchanged": true
   }
 }

@@ -66,7 +66,6 @@
         <label><span>结束月</span><input type="month" ${limits} data-month-end aria-label="结束月份" value="${end}"></label>
         <button type="submit" class="market-period-apply" data-month-apply>应用</button>
       </form>
-      <p class="market-period-note">${mercado ? (complete?'快捷区间截至最近可统计月（'+format(latest)+'）。其他月份也可手动选择。':'应用后查看所选月份的单品历史。') : '样本按所选自然月更新。原类目报告保留原期间。'}</p>
       <p class="market-period-error" data-month-error role="status"></p>`;
 
     const update = (a,b,focus) => {

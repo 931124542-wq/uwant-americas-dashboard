@@ -64,13 +64,13 @@
    const rows=entries.map(row=>{
     const {scope,sample}=row,href=root.ResearchModel.encode(scope);
     const monthCells=showMonths?sample.months.map(m=>'<td>'+value(m.units)+'</td>').join(''):'';
-    return '<tr data-country="'+row.country+'" data-category="'+row.category+'"><th scope="row"><a href="'+esc(href)+'">'+esc(row.name+' / '+row.label)+'</a></th>'+
-     monthCells+'<td data-comparison-units>'+value(sample.total)+'</td><td>'+fmt(sample.groups)+'</td><td>'+sample.covered+' / '+months.length+'</td></tr>';
+   return '<tr data-country="'+row.country+'" data-category="'+row.category+'"><th scope="row"><a href="'+esc(href)+'">'+esc(row.name+' / '+row.label)+'</a></th>'+
+     monthCells+'<td data-comparison-units>'+value(sample.total)+'</td><td>'+sample.covered+' / '+months.length+'</td></tr>';
    }).join('');
    body.innerHTML='<p>'+esc(start)+' 至 '+esc(end)+' · 各范围按已核实的样本统计，— 表示暂无可统计的完整月样本。</p>'+
     '<div class="ml-history-actions"><button class="rq-button" data-export-month-comparison>导出五国逐月样本</button>'+
     '<button class="rq-button" data-export-lifetime-comparison>导出五国累计销量</button></div><div class="table-scroll"><table><thead><tr><th>市场 / 品类</th>'+
-    monthHeaders+'<th>区间样本 / 台</th><th>商品组</th><th>有完整样本的月份</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+    monthHeaders+'<th>样本总销量 / 台</th><th>有数据月份</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
    body.querySelector('[data-export-month-comparison]').onclick=()=>download(
     [['国家','品类','起始月','结束月','月份','完整月样本销量','统计商品组','有历史的商品链接数','记录情况'],
      ...entries.flatMap(row=>row.sample.months.map(m=>[row.name,row.label,start,end,m.month,m.units,m.groups.length,m.links,m.status]))],
@@ -105,26 +105,32 @@
    period.dataset.marketOverviewTemplate='mercado-monthly';
    period.innerHTML=root.MercadoHistory.overview(s,all,data);
    root.MercadoCoverageSummary.mountRevenue(period,s,all,data,download);
-   root.MercadoLifetime.mount(period,s,all,download,period.querySelector('[data-ml-month-revenue],.market-period-coverage'));
+   root.MercadoLifetime.mount(period.querySelector('[data-ml-period-overview]'),s,all,download,period.querySelector('[data-ml-month-revenue]'));
    period.append(monthComparison(s,data,download));
-   if(history)period.append(history);
+   if(history){
+    const products=document.createElement('details');
+    products.className='market-block ml-product-history-fold';
+    products.open=!!s.historyProduct&&history.querySelector('[data-ml-history-product]')?.value===s.historyProduct;
+    products.innerHTML='<summary>查看单品月销量</summary>';
+    products.append(history);
+    period.append(products);
+   }
    workspace.append(period);
   }else if(overview){
    const unitsReport=root.Mercado.report({...s,shareMetric:'units'}),revenueReport=root.Mercado.report({...s,shareMetric:'revenue'}),current=all.filter(r=>r.counted&&root.ResearchSnapshot.matches(r,data)),quotes=current.filter(root.ResearchSnapshot.priceEligible).map(r=>r.selling_price).sort((a,b)=>a-b),median=quotes.length?(quotes[Math.floor((quotes.length-1)/2)]+quotes[Math.floor(quotes.length/2)])/2:null;
    document.getElementById('export').onclick=()=>{const ids=new Set(current.map(r=>r.product_code)),csv=root.Mercado.csvRows({...s,marketQuick:'all',evidenceBrand:'',evidenceQuery:'',evidenceStatus:'all',mlMin:'',mlMax:''});download(csv.filter((row,i)=>i===0||ids.has(row[3])),'MercadoLibre_'+s.country+'_'+s.category+'_snapshot.csv');};
    const card=(label,value,note)=>'<article class="market-kpi"><span>'+label+'</span><strong>'+fmt(value)+'</strong><small>'+esc(note)+'</small></article>';
    const first=block('01','市场大盘','<span class="market-period-tag">近30天估算 · '+esc(currency)+'</span>');first.classList.add('market-hero');
-   first.insertAdjacentHTML('beforeend','<div class="market-kpi-grid">'+card('销售额估算 · '+esc(currency),revenueReport.total,revenueReport.all.length+'件商品参与金额统计')+card('销量估算 · 台',unitsReport.total,unitsReport.all.length+'件商品参与销量统计')+card('标价中位数 · '+esc(currency),median,quotes.length+'条可用采集时价格，非成交均价')+card('本批去重记录 · 条',current.length,'商品库共收录 '+all.length+'条资料')+'</div>');
+   first.insertAdjacentHTML('beforeend','<div class="market-kpi-grid market-kpi-grid--three">'+card('销售额估算 · '+esc(currency),revenueReport.total,revenueReport.all.length+'件商品参与金额统计')+card('销量估算 · 台',unitsReport.total,unitsReport.all.length+'件商品参与销量统计')+card('标价中位数 · '+esc(currency),median,quotes.length+'条可用采集时价格，非成交均价')+'</div>');
    const named=report.brands.filter(([brand,value])=>value>0&&root.Mercado.knownBrand(brand)),leader=named[0],peak=report.bands.filter(x=>x[0]!=='价位待归类'&&x[1]>0).slice().sort((a,b)=>b[1]-a[1])[0],metric=s.shareMetric==='units'?'销量':'销售额',percent=v=>report.total>0?(v>0&&v/report.total*100<.1?'＜0.1%':(v/report.total*100).toFixed(1)+'%'):'\u2014';
    first.insertAdjacentHTML('beforeend','<div class="market-reading"><span class="market-reading-label">市场速览</span><p>'+(leader?'<strong>'+esc(leader[0])+'</strong>占样本'+metric+'的 <strong>'+percent(leader[1])+'</strong>。':'当前数据不足以比较品牌表现。')+(peak?' 按商品标价分档，<strong>'+esc(bandName(peak[0]))+' '+esc(currency)+'</strong>价带占比最高。':'')+'</p></div>');
-   root.MercadoCoverageSummary?.mount(first,s,all,data,unitsReport,change,download);
+   root.MercadoCoverageSummary.mount(first,s,all,data,change,download);
    root.MercadoLifetime.mount(first,s,all,download);
    first.insertAdjacentHTML('beforeend',root.MercadoHistory.summary(s,all,data));
    const second=block('02','品牌与价格带','<button class="rq-button" data-ml-page="brands">全部品牌 →</button>');second.classList.add('market-competition');
    const control=document.createElement('div');control.className='market-chart-controls';const metricControl=shares?.querySelector('[data-ml-metric]');control.innerHTML='<span>观察维度</span>';if(metricControl)control.append(metricControl);second.append(control);
    const chart=(title,subtitle)=>{const el=document.createElement('section');el.className='market-analysis-chart';el.innerHTML='<div class="market-chart-heading"><h3>'+title+'</h3><p>'+subtitle+'</p></div>';return el;};
-   const catalogueBrands=new Set(all.map(root.Mercado.brandOf).filter(root.Mercado.knownBrand));
-   const brandChart=chart('样本品牌'+metric+'占比',esc(data.researchSnapshot||data.asOf)+' · '+fmt(named.length)+' 个品牌有'+metric+' · 商品库 '+fmt(catalogueBrands.size)+' 个来源品牌'),priceChart=chart('价格带分布','按采集时价格分组的'+metric+'占比，非成交价分布');
+   const brandChart=chart('品牌'+metric+'占比','已收录商品'),priceChart=chart('价格带分布','按标价分组');
    const bar=(label,value,attrs)=>'<button class="market-share-row" data-market-value="'+value+'" '+attrs+' title="'+esc(label)+' · '+fmt(value)+' · '+percent(value)+'"><span>'+esc(label)+'</span><i><b style="width:'+Math.max(0,Math.min(100,report.total>0?value/report.total*100:0))+'%"></b></i><strong>'+percent(value)+'</strong><small>'+fmt(value)+'</small></button>';
    if(report.total>0){const main=named.slice(0,5),ownBrand=report.brands.find(x=>root.MarketShareChart.isOwn(x[0]));if(ownBrand&&!main.some(x=>x[0]===ownBrand[0]))main.push(ownBrand);const rest=report.total-main.reduce((sum,x)=>sum+x[1],0);brandChart.insertAdjacentHTML('beforeend',root.MarketShareChart.render([...main.map(([name,value])=>({label:name,value,attrs:'data-ml-brand="'+esc(name)+'"'})),...(rest>0.00001?[{label:'其余 / 待核品牌',value:rest,attrs:'data-ml-page="brands"'}]:[])],report.total,{metric,unit:s.shareMetric==='units'?'台':currency})+'<p class="market-chart-foot">主要品牌和UWANT单独展示，其他品牌合并后仍计入总数。</p>');priceChart.insertAdjacentHTML('beforeend',report.bands.filter(x=>x[1]>0).map(([name,v])=>bar(bandName(name),v,'data-ml-band="'+esc(name)+'"')).join(''));}else{brandChart.insertAdjacentHTML('beforeend','<p class="market-chart-empty">暂无可计算的品牌占比</p>');priceChart.insertAdjacentHTML('beforeend','<p class="market-chart-empty">暂无可计算的价格带占比</p>');}
    const settings=shares?.querySelector('.ml-price-settings');if(settings){settings.querySelector('summary').textContent='设置价格区间';priceChart.append(settings);}

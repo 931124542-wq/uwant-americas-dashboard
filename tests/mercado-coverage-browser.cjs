@@ -19,10 +19,12 @@ async function run() {
     await page.goto(base+mexico,{waitUntil:'domcontentloaded'});
     const card = page.locator('.ml-coverage-summary');
     await card.waitFor();
-    assert.match(await card.innerText(),/商品库 294 条.*138 个可统计销量.*5 个有销量.*32 条公开商品资料/);
+    assert.equal(await card.innerText(),'其他近30天快照');
+    assert.equal(await card.locator('[data-ml-extra-snapshot]').isVisible(),false);
     assert.deepEqual((await page.locator('.market-kpi>strong').allTextContents()).slice(0,2),['117,092','8']);
+    assert.equal(await page.locator('.market-kpi:visible').count(),3);
+    await card.locator(':scope>summary').click();
     const supplement = card.locator('[data-ml-extra-snapshot]');
-    assert.match(await supplement.innerText(),/117 个统计样本.*20 个有销量/);
     assert.match(await supplement.innerText(),/499 台 · 1,091,300 MXN/);
     const pending = page.waitForEvent('download');
     await supplement.getByRole('button',{name:'导出该批'}).click();
@@ -33,8 +35,8 @@ async function run() {
     assert(!csv.includes('2026-11-06'));
     await page.screenshot({path:out+'/mexico-overview.png'});
 
-    const brandsChart=page.locator('.market-analysis-chart').filter({hasText:'样本品牌销量占比'});
-    assert.match(await brandsChart.innerText(),/2026-11-06 · 3 个品牌有销量 · 商品库 45 个来源品牌/);
+    const brandsChart=page.locator('.market-analysis-chart').filter({hasText:'品牌销量占比'});
+    assert.doesNotMatch(await brandsChart.innerText(),/商品库.*来源品牌/);
     await page.locator('[data-overview-page="brands"]').click();
     const brands=page.locator('.market-brand-performance');
     await brands.waitFor();
@@ -66,6 +68,7 @@ async function run() {
     await page.goto(base+mexico,{waitUntil:'domcontentloaded'});
     await card.waitFor();
 
+    await card.locator(':scope>summary').click();
     await card.getByRole('button',{name:'查看商品库'}).click();
     const search = page.locator('[data-ml-query]');
     await search.fill('MLM49842392');
@@ -88,12 +91,18 @@ async function run() {
     const monthly=page.locator('[data-ml-period-overview]');
     await monthly.waitFor();
     assert.match(await monthly.locator('.market-period-tag').innerText(),/2026-09 至 2026-11/);
-    assert.deepEqual(await monthly.locator('[data-month-history-links]').allTextContents(),['19','23','11']);
+    assert.equal(await monthly.locator('.market-kpi:visible').count(),2);
+    assert.doesNotMatch(await monthly.innerText(),/有记录的商品链接|个去重商品组/);
     assert.deepEqual(await monthly.locator('[data-month-sample-units] strong').allTextContents(),['314 台','253 台']);
     assert.match(await monthly.locator('[data-period-month="2026-11"]').innerText(),/采集时未结月/);
     assert.equal(await monthly.locator('[data-period-month="2026-11"] [data-month-sample-units]').innerText(),'—');
     assert.deepEqual((await monthly.locator('.market-kpi>strong').allTextContents()).slice(0,2),['567','—']);
-    assert.match(await monthly.innerText(),/9 个商品组、2 个有完整样本记录的月份/);
+    assert.match(await monthly.innerText(),/有完整销量记录 2 \/ 3 月/);
+    const productHistory=page.locator('.ml-product-history-fold');
+    assert.equal(await productHistory.locator('[data-ml-history-product]').isVisible(),false);
+    await productHistory.locator(':scope>summary').click();
+    await productHistory.locator('[data-ml-history-product]').selectOption({index:1});
+    assert.equal(await productHistory.locator('[data-ml-single-export]').isVisible(),true);
     assert.equal(await card.count(),0);
     const monthlyDownload=page.waitForEvent('download');
     await page.locator('#export').click();

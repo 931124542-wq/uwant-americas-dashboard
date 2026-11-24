@@ -33,13 +33,11 @@
   }
 
   function summary(state, products, data) {
-    const history=selection(state,products,data),{start,end,profiles,coverage}=history;
+    const history=selection(state,products,data),{start,end}=history;
     const sample=monthlySample(history);
-    const detail=sample.total===null?'所选期间暂无可统计的整月销量样本。':
-      '完整月样本 '+number.format(sample.total)+' 台 · '+number.format(sample.groups)+' 个商品组 · '+sample.covered+'/'+sample.months.length+' 个月有完整样本';
-    return '<section class="ml-history-summary" data-ml-history-summary><div><h3>商品月度历史</h3><p><strong>'+
-      esc(start)+' 至 '+esc(end)+'</strong> · '+(profiles.length?number.format(profiles.length)+' 个商品链接有月销量记录，覆盖 '+coverage.length+' 个月':'该期间暂无单品月销量')+
-      '</p><p data-ml-history-sample>'+detail+'</p></div><div class="ml-history-actions"><button class="rq-button" data-ml-range-overview>查看月度样本</button>'+
+    const detail=sample.total===null?'暂无完整月销量':'完整月样本 '+number.format(sample.total)+' 台';
+    return '<section class="ml-history-summary" data-ml-history-summary><div><h3>月度销量</h3><p data-ml-history-sample><strong>'+
+      esc(start)+' 至 '+esc(end)+'</strong> · '+detail+'</p></div><div class="ml-history-actions"><button class="rq-button" data-ml-range-overview>查看月度销量</button>'+
       '<button class="rq-button" data-ml-route="monthly">查看商品月销量</button></div></section>';
   }
 
@@ -102,22 +100,22 @@
   }
 
   function overview(state, products, data) {
-    const history=selection(state,products,data),{start,end,profiles}=history;
+    const history=selection(state,products,data),{start,end}=history;
     const sample=monthlySample(history);
     const rows=sample.months.map(m=>{
-      const units=m.units===null?'—':'<strong>'+number.format(m.units)+' 台</strong><small>'+number.format(m.groups.length)+' 个商品组</small>';
-      return '<tr data-period-month="'+m.month+'"><th>'+m.month+'</th><td data-month-sample-units>'+units+
-        '</td><td data-month-history-links>'+number.format(m.links)+'</td><td>'+m.status+'</td></tr>';
+      const units=m.units===null?'—':'<strong>'+number.format(m.units)+' 台</strong>';
+      const status=m.status.includes('未结月')?'采集时未结月':m.units===null?'暂无完整月销量':'';
+      return '<tr data-period-month="'+m.month+'"><th scope="row">'+m.month+'</th><td data-month-sample-units>'+units+
+        '</td><td>'+status+'</td></tr>';
     });
     const card = (key,label,value) => '<article class="market-kpi" data-market-kpi="'+key+'"><span>'+label+'</span><strong>'+value+'</strong></article>';
-    const basis=sample.total===null?'所选期间暂无可计入的完整月样本。':
-      '样本销量来自 '+number.format(sample.groups)+' 个商品组、'+number.format(sample.covered)+' 个有完整样本记录的月份。';
+    const basis=sample.covered===sample.months.length?'':'有完整销量记录 '+sample.covered+' / '+sample.months.length+' 月 · ';
+    const local=root.MarketIntegrity.currencies[state.country];
     return '<section class="market-block market-hero" data-ml-period-overview><div class="market-block-heading"><h2>市场大盘</h2><span class="market-period-tag">'+esc(start)+' 至 '+esc(end)+'</span></div>'+
-      '<div class="market-kpi-grid">'+card('units','所选月份样本总销量 · 台',sample.total===null?'—':number.format(sample.total))+card('revenue','所选月份样本总销售额','—')+
-      card('listings','有月销量记录的商品链接',number.format(profiles.length))+
-      card('months','有完整样本的月份',number.format(sample.covered)+' / '+sample.months.length)+'</div>'+
-      '<p class="market-period-detail">'+basis+'当前品类暂无可核实的自然月销售额。</p>'+
-      '<div class="market-period-coverage table-scroll"><table><thead><tr><th>月份</th><th>完整月样本销量</th><th>有记录的商品链接</th><th>记录情况</th></tr></thead><tbody>'+rows.join('')+'</tbody></table></div></section>';
+      '<div class="market-kpi-grid market-kpi-grid--two">'+card('units','样本总销量 · 台',sample.total===null?'—':number.format(sample.total))+
+      card('revenue','样本总销售额 · '+esc(local),'—')+'</div>'+
+      '<p class="market-period-detail">'+basis+'暂无自然月销售额</p>'+
+      '<div class="market-period-coverage table-scroll"><table><thead><tr><th>月份</th><th>样本销量</th><th>说明</th></tr></thead><tbody>'+rows.join('')+'</tbody></table></div></section>';
   }
 
   function sampleExportRows(history,state) {

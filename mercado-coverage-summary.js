@@ -66,27 +66,26 @@
     block.innerHTML = '<div class="ml-coverage-head"><h3>近30天销售额估算</h3><button class="rq-button" data-export-snapshot-revenue>导出销售额快照</button></div>'+
       '<div class="ml-month-revenue-values">'+snapshots.map(batch =>
         '<article data-revenue-snapshot="'+batch.date+'"><time datetime="'+batch.date+'">'+batch.date+' 采集</time>'+
-        '<strong>'+fmt(batch.amount)+' <small>'+currency+'</small></strong><span>'+num.format(batch.count)+' 个金额样本</span></article>'
+        '<strong>'+fmt(batch.amount)+' <small>'+currency+'</small></strong><span data-backstage-only>'+num.format(batch.count)+' 个金额样本</span></article>'
       ).join('')+'</div><p>各日为独立的近30天估算。</p>';
     block.querySelector('[data-export-snapshot-revenue]').onclick = () => download(
       [['国家','平台','品类','采集日期','统计口径','销售额估算','币种','金额样本数'],
        ...snapshots.map(batch => [state.country,'Mercado Libre',state.category,batch.date,'近30天；起止日期未提供',batch.amount,currency,batch.count])],
       'MercadoLibre_'+state.country+'_'+state.category+'_revenue_snapshots.csv'
     );
-    section.querySelector('.market-period-coverage').before(block);
+    section.querySelector('.market-period-coverage').after(block);
   }
 
-  function mount(section, state, products, data, base, change, download) {
+  function mount(section, state, products, data, change, download) {
     const extra = report(products,data);
     const archive = archiveReport(products,data);
-    const publicCount = products.filter(row => row.catalogueOnly).length;
-    const positive = base.all.filter(row => row[units] > 0).length;
-    const scope = document.createElement('section');
+    if (!extra.rows.length && !archive.rows.length) return;
+    const scope = document.createElement('details');
     scope.className = 'ml-coverage-summary';
-    scope.innerHTML = '<div class="ml-coverage-head"><div><h3>样本覆盖</h3><p>商品库 <strong>'+num.format(products.length)+'</strong> 条 · 上方快照 <strong>'+num.format(base.all.length)+'</strong> 个可统计销量 · '+num.format(positive)+' 个有销量'+(publicCount?' · 含 '+publicCount+' 条公开商品资料':'')+'</p></div><button class="rq-button" data-coverage-catalogue>查看商品库</button></div>';
+    scope.innerHTML = '<summary>其他近30天快照</summary>';
     if (extra.rows.length) {
       const currency = products[0].currency;
-      scope.insertAdjacentHTML('beforeend','<div class="ml-extra-snapshot" data-ml-extra-snapshot><div><h4>'+date+' 补采快照</h4><p>'+num.format(extra.rows.length)+' 个统计样本 · '+num.format(extra.positive)+' 个有销量</p></div><div><strong>'+fmt(extra.units)+'</strong> 台 · <strong>'+fmt(extra.revenue)+'</strong> '+currency+'</div><button class="rq-button" data-extra-export>导出该批</button><p>各日为独立的近30天估算。</p></div>');
+      scope.insertAdjacentHTML('beforeend','<div class="ml-extra-snapshot" data-ml-extra-snapshot><h4>'+date+'</h4><div><strong>'+fmt(extra.units)+'</strong> 台 · <strong>'+fmt(extra.revenue)+'</strong> '+currency+'</div><button class="rq-button" data-extra-export>导出该批</button></div>');
       scope.querySelector('[data-extra-export]').onclick = () => download(
         [['国家','品类','快照日期','商品ID','品牌','近30天销量估算','近30天销售额估算','币种'],
          ...extra.rows.map(row => [state.country,state.category,date,row.id,row.brand,row.units,row.revenue,currency])],
@@ -95,15 +94,16 @@
     }
     if (archive.rows.length) {
       const currency = root.MarketIntegrity.currencies[state.country];
-      scope.insertAdjacentHTML('beforeend','<details class="ml-archived-snapshot"><summary>查看 '+archive.date+' 历史快照</summary>'+
-        '<div class="ml-extra-snapshot"><div><strong>'+fmt(archive.units)+'</strong> 台 · <strong>'+fmt(archive.revenue)+'</strong> '+currency+'</div>'+
-        '<button class="rq-button" data-archived-export>导出该批</button><p>'+num.format(archive.rows.length)+' 个去重样本 · 第三方近30天估算</p></div></details>');
+      scope.insertAdjacentHTML('beforeend','<div class="ml-extra-snapshot ml-archived-snapshot"><h4>'+archive.date+'</h4>'+
+        '<div><strong>'+fmt(archive.units)+'</strong> 台 · <strong>'+fmt(archive.revenue)+'</strong> '+currency+'</div>'+
+        '<button class="rq-button" data-archived-export>导出该批</button></div>');
       scope.querySelector('[data-archived-export]').onclick = () => download(
         [['国家','品类','快照日期','商品ID','品牌','近30天销量估算','近30天销售额估算','币种'],
          ...archive.rows.map(row => [state.country,state.category,archive.date,row.id,row.brand,row.units,row.revenue,currency])],
         'MercadoLibre_'+state.country+'_'+state.category+'_'+archive.date+'_snapshot.csv'
       );
     }
+    scope.insertAdjacentHTML('beforeend','<div class="ml-coverage-head ml-snapshot-footer"><p>各日期的金额及销量分别统计。</p><button class="rq-button" data-coverage-catalogue>查看商品库</button></div>');
     scope.querySelector('[data-coverage-catalogue]').onclick = () => change({
       page:'market',view:'products',evidenceQuery:'',evidenceBrand:'',evidenceStatus:'all',competitionGroup:'all',
       evidencePage:'0',mlMin:'',mlMax:'',marketQuick:'all'

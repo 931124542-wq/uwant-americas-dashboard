@@ -7,7 +7,7 @@
  }
  function trend(r){
   const t=r.trend,unit=r.kind==='units'?'台':r.currency;
-  if(!t.eligible)return '<div class="decision-trend-empty"><div><strong>销售趋势</strong><p>'+e(t.reason)+'</p></div><button class="rq-button" '+(r.scope.platform==='amazon'?'data-decision-range':'data-decision-history')+'>'+(r.scope.platform==='amazon'?'查看3个月区间 →':'查看商品月度销量 →')+'</button></div>';
+  if(!t.eligible)return '';
   const max=Math.max(1,...t.points.map(p=>p.value)),step=600/Math.max(1,t.points.length-1),x=i=>45+i*step,y=v=>135-v/max*95;
   return '<section class="decision-cohort" data-cohort-count="'+t.count+'"><div class="market-section-heading"><div><h3>同一批商品 · '+(r.kind==='units'?'销量':'销售额')+'趋势</h3><p>'+t.count+'个商品组在这'+t.points.length+'个月都有数据；首月全部已统计'+t.firstCount+'组，末月'+t.lastCount+'组。</p></div><strong>'+(t.change===null?'首月为0':(t.change>=0?'+':'')+pct(t.change))+'</strong></div><svg viewBox="0 0 700 175" role="img" aria-label="同一批商品的月度销售估算"><line x1="45" y1="135" x2="645" y2="135" stroke="#e2e9e5"/><polyline points="'+t.points.map((p,i)=>x(i)+','+y(p.value)).join(' ')+'" fill="none" stroke="#13775d" stroke-width="2.5"/>'+t.points.map((p,i)=>'<g><circle cx="'+x(i)+'" cy="'+y(p.value)+'" r="4" fill="#13775d"/><text x="'+x(i)+'" y="'+(y(p.value)-10)+'" text-anchor="middle">'+n(p.value)+'</text><text x="'+x(i)+'" y="158" text-anchor="middle">'+e(p.month)+'</text></g>').join('')+'</svg><p class="decision-note">'+e(t.reason)+' 单位：'+e(unit)+'。只比较每个月都有数据的同一批商品。</p></section>';
  }
@@ -43,7 +43,7 @@
   first.querySelectorAll('.market-kpi>span').forEach(el=>{if(el.textContent.startsWith('销售额'))el.textContent='样本'+el.textContent;if(el.textContent.startsWith('销量'))el.textContent='样本'+el.textContent;});
   first.insertAdjacentHTML('beforeend',indicators(r)+(s.platform==='ml'?'':trend(r)));
   const nativeTrend=first.querySelector(':scope>.market-trend,:scope>.market-trend-compact');if(nativeTrend){const d=document.createElement('details');d.className='decision-native-trend';d.innerHTML='<summary>原报告趋势和统计范围</summary>';nativeTrend.before(d);d.append(nativeTrend);}
-  second?.insertAdjacentHTML('beforeend',opportunity(r));
+  if(r.cells.length)second?.insertAdjacentHTML('beforeend',opportunity(r));
   const shares=second?.querySelector('.sample-shares');if(shares){
    shares.classList.add('market-sample-shares');shares.querySelector('.sample-share-toolbar')?.classList.add('market-chart-controls');shares.querySelector('.sample-share-grid')?.classList.add('market-analysis-grid');
    for(const chart of shares.querySelectorAll('.sample-share-chart')){chart.classList.add('market-analysis-chart');const brand=chart.dataset.shareChart==='brand',heading=chart.querySelector('h3'),wrapper=document.createElement('div');wrapper.className='market-chart-heading';heading.before(wrapper);wrapper.append(heading);heading.textContent=brand?'品牌竞争格局':'价格带分布';wrapper.insertAdjacentHTML('beforeend','<p>'+(brand?'按历史品牌分组 · 点击查看商品和月份':'按每月有效期末价归档 · '+(r.kind==='units'?'销量':'销售额')+'占比')+'</p>');}
@@ -53,8 +53,6 @@
   fourth?.remove();
   host.querySelectorAll('[data-decision-own-brand]').forEach(b=>b.onclick=()=>change({page:'market',view:'products',evidenceBrand:'UWANT',evidenceQuery:'',marketQuick:'all',evidencePage:'0',competitionGroup:'all',productType:'all',evidenceMin:'',evidenceMax:'',priceBand:'',evidenceStatus:'',mlMin:'',mlMax:''}));host.querySelector('[data-decision-brands]').onclick=()=>change({page:'brands',view:'overview',brandQuery:'',brandOffset:'0'});
   host.querySelector('[data-decision-own]')?.addEventListener('change',ev=>change({own:ev.target.value,ownListing:''}));
-  host.querySelector('[data-decision-range]')?.addEventListener('click',()=>{const end=/^2026-(0[1-9]|1[0-2])$/.test(s.endMonth||s.dataset)?s.endMonth||s.dataset:'2026-09',start='2026-'+String(Math.max(1,Number(end.slice(5))-2)).padStart(2,'0');change({startMonth:start,endMonth:end,dataset:end});});
-  host.querySelector('[data-decision-history]')?.addEventListener('click',()=>change({page:s.platform==='ml'?'market':'brands',view:'monthly'}));
   const wireCells=()=>host.querySelectorAll('[data-decision-cell]').forEach(b=>b.onclick=()=>detail(r,r.cells[Number(b.dataset.decisionCell)],host.querySelector('[data-decision-detail]'),download));wireCells();
   host.querySelector('[data-decision-all-cells]')?.addEventListener('click',ev=>{const table=host.querySelector('.decision-opportunity tbody');table.innerHTML=r.cells.map((g,i)=>'<tr><td>'+e(g.band)+'</td><td>'+e(g.feature)+'</td><td>'+n(g.value)+'</td><td>'+pct(r.metric.total>0?g.value/r.metric.total:null)+'</td><td>'+g.facts.length+'</td><td>'+(g.models||'待核')+'</td><td>'+e(g.leader)+'</td><td><button class="rq-button" data-decision-cell="'+i+'">明细</button></td></tr>').join('');ev.target.remove();wireCells();});
 
