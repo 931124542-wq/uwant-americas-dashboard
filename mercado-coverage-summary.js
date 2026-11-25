@@ -62,14 +62,13 @@
 
   function revenueSnapshots(state, products, data) {
     const base = root.Mercado.report({...state,shareMetric:'revenue'});
-    const baseUnits = root.Mercado.report({...state,shareMetric:'units'});
     const extra = report(products,data);
     const archive = archiveReport(products,data);
     return [
-      {date:archive.date, units:archive.units, amount:archive.revenue, count:archive.rows.filter(row => row.revenue !== null).length},
-      {date:data.researchSnapshot || data.asOf, units:baseUnits.total, amount:base.total, count:base.all.length},
-      {date:extra.date, units:extra.units, amount:extra.revenue, count:extra.rows.filter(row => row.revenue !== null).length}
-    ].filter(batch => batch.units !== null || batch.amount !== null);
+      {date:archive.date, amount:archive.revenue, count:archive.rows.filter(row => row.revenue !== null).length},
+      {date:data.researchSnapshot || data.asOf, amount:base.total, count:base.all.length},
+      {date:extra.date, amount:extra.revenue, count:extra.rows.filter(row => row.revenue !== null).length}
+    ].filter(batch => batch.amount !== null);
   }
 
   function mountRevenue(section, state, products, data, download) {
@@ -80,15 +79,15 @@
     const block = document.createElement('section');
     block.className = 'ml-month-revenue';
     block.dataset.mlMonthRevenue = '';
-    block.innerHTML = '<div class="ml-coverage-head"><h3>近30天销量与销售额</h3><button class="rq-button" data-export-snapshot-revenue>导出近30天数据</button></div>'+
+    block.innerHTML = '<div class="ml-coverage-head"><h3>近30天销售额估算</h3><button class="rq-button" data-export-snapshot-revenue>导出销售额数据</button></div>'+
       '<div class="ml-month-revenue-values">'+snapshots.map(batch =>
         '<article data-revenue-snapshot="'+batch.date+'"><time datetime="'+batch.date+'">'+batch.date+' 更新</time>'+
-        '<strong>'+fmt(batch.amount)+' <small>'+currency+'</small></strong><div data-snapshot-units>销量 '+(batch.units===null?'—':fmt(batch.units)+' 台')+'</div>'+
+        '<strong>'+fmt(batch.amount)+' <small>'+currency+'</small></strong>'+
         '<span data-backstage-only>'+num.format(batch.count)+' 款商品有销售额数据</span></article>'
-      ).join('')+'</div><p>注：各日期分别显示截至当日的近30天估算。各批覆盖商品可能不同，请分开查看。</p>';
+      ).join('')+'</div><p>注：各日期分别显示截至当日的近30天销售额估算。</p>';
     block.querySelector('[data-export-snapshot-revenue]').onclick = () => download(
-      [['国家','平台','品类','采集日期','统计口径','销售额估算','币种','金额样本数','销量估算（台）'],
-       ...snapshots.map(batch => [state.country,'Mercado Libre',state.category,batch.date,'近30天；起止日期未提供',batch.amount,currency,batch.count,batch.units])],
+      [['国家','平台','品类','采集日期','统计口径','销售额估算','币种','金额样本数'],
+       ...snapshots.map(batch => [state.country,'Mercado Libre',state.category,batch.date,'近30天；起止日期未提供',batch.amount,currency,batch.count])],
       'MercadoLibre_'+state.country+'_'+state.category+'_revenue_snapshots.csv'
     );
     section.querySelector('.market-period-coverage').after(block);

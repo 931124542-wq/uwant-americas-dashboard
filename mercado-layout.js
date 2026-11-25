@@ -101,7 +101,8 @@
    period.dataset.marketOverviewTemplate='mercado-monthly';
    period.innerHTML=root.MercadoHistory.overview(s,all,data);
    root.MercadoCoverageSummary.mountRevenue(period,s,all,data,download);
-   root.MercadoLifetime.mount(period.querySelector('[data-ml-period-overview]'),s,all,download,period.querySelector('[data-ml-month-revenue]'));
+   const periodSummary=period.querySelector('[data-ml-period-overview]');
+   root.MercadoLifetime.mount(periodSummary,s,all,download,periodSummary.querySelector('.market-period-coverage'));
    const sample=root.MercadoHistory.monthlySample(root.MercadoHistory.selection(s,all,data));
    period.insertAdjacentHTML('beforeend',root.MarketOverviewLayout.rankTable(
     root.MarketOverviewLayout.rankMercadoMonths(sample),{kind:'units',price:false,

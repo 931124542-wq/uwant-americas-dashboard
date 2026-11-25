@@ -140,7 +140,7 @@
   const slot=k=>box.querySelector('[data-overview-slot="'+k+'"]'),move=(x,k)=>{if(x)slot(k).append(x);};
 
   move(first.querySelector('.market-kpi-grid'),'kpis');move(first.querySelector('.market-reading'),'reading');move(first.querySelector('.ml-coverage-summary'),'reading');move(first.querySelector('[data-ml-history-summary]'),'reading');
-  move(first.querySelector('[data-ml-lifetime]'),'reading');
+  move(first.querySelector('[data-ml-lifetime]'),'kpis');
   if(s.platform==='amazon'&&root.MarketIntegrity.applicable(s.country,'amazon')){
    const query=new URLSearchParams({platform:'amazon',country:s.country,category:s.category});
    if(s.startMonth&&s.endMonth){query.set('startMonth',s.startMonth);query.set('endMonth',s.endMonth);}

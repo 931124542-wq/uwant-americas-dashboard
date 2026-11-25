@@ -57,10 +57,10 @@
     block.className = 'ml-month-revenue ml-lifetime-totals';
     block.dataset.mlLifetime = '';
     const date = totals.start===totals.end?totals.start:totals.start+' 至 '+totals.end;
-    block.innerHTML = '<div class="ml-coverage-head"><h3>历史累计表现</h3><button class="rq-button" data-export-lifetime>导出累计数据</button></div>'+
-      '<div class="ml-month-revenue-values"><article><span>累计销量</span><strong data-lifetime-units>'+number.format(totals.total)+' <small>台</small></strong></article>'+
+    block.innerHTML = '<div class="ml-coverage-head"><h3>上架以来累计</h3><button class="rq-button" data-export-lifetime>导出累计数据</button></div>'+
+      '<div class="ml-month-revenue-values"><article><span>总销量（台）</span><strong data-lifetime-units>'+number.format(totals.total)+' <small>台</small></strong></article>'+
       '<article><span>累计销售额（'+local+'）</span><strong data-lifetime-revenue>—</strong></article></div>'+
-      '<p>数据更新时间：'+date+'</p>';
+      '<p>按有累计记录的同类商品汇总 · 数据更新时间 '+date+'</p>';
     block.querySelector('[data-export-lifetime]').onclick = () => download(
       [['国家','平台','品类','商品ID','品牌','数据日期','累计销量','累计销售额','币种'],
        ...totals.rows.map(({product,date,units})=>{

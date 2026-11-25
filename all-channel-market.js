@@ -83,7 +83,7 @@
   const mlPanel=host.firstElementChild;
   mlPanel.dataset.marketChannel='ml';
   root.MercadoCoverageSummary.mountRevenue(mlPanel,mercado,products,data,download);
-  root.MercadoLifetime.mount(mlPanel,mercado,products,download,mlPanel.querySelector('[data-ml-month-revenue]'));
+  root.MercadoLifetime.mount(mlPanel,mercado,products,download,mlPanel.querySelector('.market-period-coverage'));
   mlPanel.insertAdjacentHTML('beforeend',root.MarketOverviewLayout.rankTable(
    root.MarketOverviewLayout.rankMercadoMonths(sample),{kind:'units',price:false,
     note:'按所选月份的整月销量排序。同期商品报价和销售额暂无数据。'}
@@ -125,7 +125,7 @@
    rows.push(row('上架以来累计',ml,null,null,null,lifetime.start+' 至 '+lifetime.end,lifetime.total,null,'累计销量估算'));
   }
   for(const batch of root.MercadoCoverageSummary.revenueSnapshots(mercado,products,data)){
-   rows.push(row('近30天快照',ml,null,null,null,batch.date,batch.units,batch.amount,'每批独立估算'));
+   rows.push(row('近30天快照',ml,null,null,null,batch.date,null,batch.amount,'近30天销售额估算，每批独立'));
   }
   return rows;
  }

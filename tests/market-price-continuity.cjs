@@ -7,7 +7,7 @@ context.location = {hostname:'public.example'};
 for(const file of [
   'market-currency.js','mercado-data.js','market-insights.js','published-research-data.js',
   'research-overlay.js','research-snapshot.js','mercado-public-catalogue.js',
-  'mercado.js','mercado-history.js','mercado-coverage-summary.js'
+  'mercado.js','mercado-history.js','mercado-coverage-summary.js','mercado-lifetime-observations.js','mercado-lifetime.js'
 ]){
   vm.runInContext(fs.readFileSync(file,'utf8'),context,{filename:file});
 }
@@ -43,7 +43,17 @@ for(const country of countries)for(const category of categories){
     }
     const rolling = context.MercadoCoverageSummary.revenueSnapshots(ml,rows,MERCADO_DATA);
     const latest = rolling.find(batch=>batch.date===(MERCADO_DATA.researchSnapshot||MERCADO_DATA.asOf));
-    assert.equal(latest?.units??null,Mercado.report({...ml,shareMetric:'units'}).total);
+    assert.equal(latest?.amount??null,Mercado.report({...ml,shareMetric:'revenue'}).total);
+    const cumulative = context.MercadoLifetime.report(rows);
+    const keys = new Set(cumulative.rows.map(({product})=>product.statisticalKey));
+    assert.equal(keys.size,cumulative.rows.length);
+    const observed = cumulative.rows.map(({product,date,units})=>{
+      const raw=context.MERCADO_LIFETIME_OBSERVATIONS.rows[product.product_code];
+      assert.equal(date,raw[0]);
+      assert.equal(units,raw[1]);
+      return raw[1];
+    });
+    assert.equal(cumulative.total,observed.length?observed.reduce((total,value)=>total+value,0):null);
   }
   if(context.MarketIntegrity.applicable(country,'amazon')){
     for(const shareMetric of ['units','revenue']){
@@ -54,4 +64,4 @@ for(const country of countries)for(const category of categories){
 }
 assert.equal(Mercado.currencyFor('AR'),'USD');
 assert.equal(MarketCurrency.rate('2026-11-06'),MarketCurrency.rate('2026-11-05'));
-console.log('PASS market price continuity: 36 scopes, exact source totals, price allocation, rolling units and display currency.');
+console.log('PASS market price continuity: 36 scopes, exact source totals, price allocation, cumulative units and display currency.');

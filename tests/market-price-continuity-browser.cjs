@@ -73,25 +73,30 @@ async function main() {
     await go({platform:'all',marketPeriod:'monthly'});
     const recent=page.locator('[data-market-channel="ml"] [data-ml-month-revenue]');
     await recent.waitFor();
-    const snapshots=await page.evaluate(()=>{
-      const scope={...state,platform:'ml'};
-      return MercadoCoverageSummary.revenueSnapshots(scope,Mercado.rows(scope),MERCADO_DATA);
+    const {snapshots,cumulative}=await page.evaluate(()=>{
+      const scope={...state,platform:'ml'},products=Mercado.rows(scope);
+      return {snapshots:MercadoCoverageSummary.revenueSnapshots(scope,products,MERCADO_DATA),
+        cumulative:MercadoLifetime.report(products).total};
     });
-    assert(snapshots.some(x=>x.units>0));
-    for(const batch of snapshots){
-      const matching=recent.locator('[data-revenue-snapshot="'+batch.date+'"]');
-      assert.equal(await matching.locator('[data-snapshot-units]').innerText(),
-        '销量 '+(batch.units===null?'—':format(batch.units)+' 台'));
-    }
+    assert(cumulative>0);
+    const total=page.locator('[data-market-channel="ml"] [data-ml-lifetime]');
+    assert.match(await total.innerText(),/上架以来累计[\s\S]*总销量（台）/);
+    assert.equal(await total.locator('[data-lifetime-units]').innerText(),format(cumulative)+' 台');
+    assert.equal(await recent.locator('[data-snapshot-units]').count(),0);
     const [file]=await Promise.all([page.waitForEvent('download'),page.locator('#export').click()]);
     const csv=await fs.readFile(await file.path(),'utf8');
+    assert(csv.split('\n').some(line=>line.includes('"上架以来累计"')&&line.includes('","'+cumulative+'","","累计销量估算"')));
     for(const batch of snapshots){
       assert(csv.split('\n').some(line=>line.includes('"近30天快照"')&&
-        line.includes('"'+batch.date+'","'+(batch.units??'')+'","'+(batch.amount??'')+'"')));
+        line.includes('"'+batch.date+'","","'+batch.amount+'"')));
     }
     await page.locator('[data-channel-snapshot]').click();
     assert.deepEqual(await page.evaluate(()=>[state.platform,state.marketPeriod,state.startMonth,state.endMonth]),
       ['ml','snapshot','2026-01','2026-10']);
+    assert.equal(await page.locator('[data-overview-slot="kpis"] [data-lifetime-units]').innerText(),format(cumulative)+' 台');
+    await go({marketPeriod:'monthly'});
+    assert.equal(await page.locator('[data-ml-period-overview] [data-lifetime-units]').innerText(),format(cumulative)+' 台');
+    await go({marketPeriod:'snapshot'});
     const peak=page.locator('[data-ml-band][data-market-value]:not([disabled])').filter({hasText:/\d–\d/}).first();
     const band=await peak.getAttribute('data-ml-band');
     await peak.click();
@@ -115,7 +120,7 @@ async function main() {
     await go({country:'AR',category:'wash'});
     assert(!(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2)));
     assert.deepEqual(errors,[]);
-    console.log('PASS: 36 market routes, price boundaries, headline totals, rolling units, CSV, scope reset and quote fallback.');
+    console.log('PASS: 36 market routes, price boundaries, headline totals, cumulative units, CSV, scope reset and quote fallback.');
   } finally {
     await browser.close();
   }
