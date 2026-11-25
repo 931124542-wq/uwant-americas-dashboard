@@ -524,5 +524,11 @@
     "displayVersion": "11.24.20",
     "localFileMarketReader": true,
     "separateFromSameTypeMarket": true
+  },
+  "monthlyHistoryCoverage": {
+    "displayVersion": "11.25.1",
+    "mercadoSampleScopes": 20,
+    "amazonPublicSampleScopes": 6,
+    "localFileCompatible": true
   }
 }

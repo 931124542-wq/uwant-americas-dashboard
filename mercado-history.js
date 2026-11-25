@@ -32,15 +32,20 @@
     return { start, end, profiles, coverage: [...coverage].sort(), selected: profiles.find(p => p.product.product_code === state.historyProduct) || profiles[0] };
   }
 
-  function categoryArchiveLink(state) {
-    if(state.platform!=='ml'||state.category!=='vacuum'||!root.MarketIntegrity?.applicable(state.country,'ml'))return '';
-    const query=new URLSearchParams({platform:'ml',country:state.country});
+  function archiveLinks(state) {
+    if(state.platform!=='ml'||!root.MarketIntegrity?.applicable(state.country,'ml'))return '';
+    const query=new URLSearchParams({platform:'ml',country:state.country,category:state.category});
     if(root.ResearchModel.isCalendarMonth(state.startMonth)&&root.ResearchModel.isCalendarMonth(state.endMonth)){
       query.set('startMonth',state.startMonth);
       query.set('endMonth',state.endMonth);
     }
-    return '<a class="rq-button" data-ml-category-archive href="market-history/?'+
-      esc(query.toString())+'" target="_blank" rel="noopener noreferrer">大麦类目历史</a>';
+    const link=(mode,attribute,label)=>{
+      query.set('scope',mode);
+      return '<a class="rq-button" '+attribute+' href="market-history/?'+esc(query.toString())+
+        '" target="_blank" rel="noopener noreferrer">'+label+'</a>';
+    };
+    return link('sample','data-ml-sample-history','月度数据页')+
+      (state.category==='vacuum'?link('category','data-ml-category-archive','大麦类目历史'):'');
   }
 
   function summary(state, products, data) {
@@ -49,7 +54,7 @@
     const detail=sample.total===null?'暂无完整月销量':'完整月样本 '+number.format(sample.total)+' 台';
     return '<section class="ml-history-summary" data-ml-history-summary><div><h3>月度销量</h3><p data-ml-history-sample><strong>'+
       esc(start)+' 至 '+esc(end)+'</strong> · '+detail+'</p></div><div class="ml-history-actions"><button class="rq-button" data-ml-range-overview>查看月度销量</button>'+
-      '<button class="rq-button" data-ml-route="monthly">查看商品月销量</button>'+categoryArchiveLink(state)+'</div></section>';
+      '<button class="rq-button" data-ml-route="monthly">查看商品月销量</button>'+archiveLinks(state)+'</div></section>';
   }
 
   function continuousCoverage(source) {
@@ -122,7 +127,7 @@
     const card = (key,label,value) => '<article class="market-kpi" data-market-kpi="'+key+'"><span>'+label+'</span><strong>'+value+'</strong></article>';
     const basis=sample.covered===sample.months.length?'':'整月销量已覆盖 '+sample.covered+' / '+sample.months.length+' 个月 · ';
     const local=root.MarketIntegrity.currencies[state.country];
-    const archive=categoryArchiveLink(state);
+    const archive=archiveLinks(state);
     return '<section class="market-block market-hero" data-ml-period-overview><div class="market-block-heading"><h2>'+esc(title)+'</h2><span class="market-period-tag">'+esc(start)+' 至 '+esc(end)+'</span></div>'+
       '<div class="market-kpi-grid market-kpi-grid--two">'+card('units','期间总销量（台）',sample.total===null?'—':number.format(sample.total))+
       card('revenue','期间销售额（'+esc(local)+'）','—')+'</div>'+

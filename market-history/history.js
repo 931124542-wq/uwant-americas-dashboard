@@ -10,6 +10,7 @@
     CO:['哥伦比亚','COP',null,'MCO115340']
   };
   const categories = {wash:'洗地机',vacuum:'吸尘器',fabric:'布艺清洗机',mattress:'除螨仪'};
+  const published=window.UWANT_PUBLIC_HISTORY;
   const marketURL = 'https://931124542-wq.github.io/uwant-americas-dashboard/';
   const $ = id => document.getElementById(id);
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c =>
@@ -26,7 +27,6 @@
   const sum = values => values.some(value=>value!==null)?values.reduce((total,value)=>total+(value??0),0):null;
   let archive = null;
   let importSequence = 0;
-  let rangeChanged = false;
 
   function verify(data) {
     const fail = () => {throw Error('无法读取这份月度数据。请选择 UWANT 月度市场数据文件。');};
@@ -83,13 +83,22 @@
     element.replaceChildren(...values.map(([id,label])=>new Option(label,id,false,id===selected)));
   }
   function setMarkets(selected){
-    const p=$('platform').value, column=p==='amazon'?2:3;
+    const column=$('platform').value==='amazon'?2:3;
     options($('country'),Object.entries(countries).filter(([,value])=>value[column]).map(([id,value])=>[id,value[0]]),selected||'MX');
-    $('category-field').hidden=p==='ml';
+    syncBasis();
+  }
+  function syncBasis(){
+    $('basis-field').hidden=$('platform').value!=='ml'||$('category').value!=='vacuum';
   }
   function readScope(){
-    const platform=$('platform').value,country=$('country').value;
-    return {platform,country,category:platform==='ml'?'vacuum':$('category').value,startMonth:$('startMonth').value,endMonth:$('endMonth').value};
+    const platform=$('platform').value,country=$('country').value,category=$('category').value;
+    const scope={platform,country,category,startMonth:$('startMonth').value,endMonth:$('endMonth').value};
+    if(platform==='ml')scope.scope=!$('basis-field').hidden&&$('basis').value==='category'?'category':'sample';
+    return scope;
+  }
+  function writeScope(){
+    const params=new URLSearchParams(readScope());
+    try{history.replaceState(null,'','?'+params+location.hash);}catch{}
   }
   function downloadable(rows,name){
     const body=rows.map(row=>row.map(value=>'"'+String(value??'').replaceAll('"','""')+'"').join(',')).join('\r\n');
@@ -138,62 +147,119 @@
     return box;
   }
 
+  function mercadoRanking(months){
+    const groups=new Map();
+    for(const [, ,items] of months)for(const [key,id,units] of items){
+      const entry=groups.get(key)||{id,units:0};
+      entry.units+=units;
+      groups.set(key,entry);
+    }
+    const models=new Set(),products=published.mercado.products;
+    const ranked=[...groups.values()].filter(row=>row.units>0).sort((a,b)=>b.units-a.units||a.id.localeCompare(b.id)).filter(row=>{
+      const model=products[row.id]?.[2]||row.id;
+      if(models.has(model))return false;
+      models.add(model);
+      return true;
+    }).slice(0,10);
+    if(!ranked.length)return '';
+    return '<section class="panel" id="top10"><h2>销量 Top 10</h2><p>所选完整月有记录的同类商品。</p>'+
+      '<div class="table"><table><thead><tr><th>名次</th><th>商品</th><th>销量（台）</th></tr></thead><tbody>'+
+      ranked.map((row,i)=>{
+        const [name,link]=products[row.id]||[row.id,''];
+        const label=link?'<a href="'+esc(link)+'" target="_blank" rel="noopener noreferrer">'+esc(name)+'</a>':esc(name);
+        return '<tr><td>'+(i+1)+'</td><th scope="row" class="product">'+label+'<small>'+esc(row.id)+'</small></th><td>'+
+          qty(row.units)+'</td></tr>';
+      }).join('')+'</tbody></table></div></section>';
+  }
+
+  function reportFor(scope){
+    const {platform,country,category}=scope,local=countries[country],key=[country,category].join('|');
+    const match=row=>row[0]===country&&row[1]===category;
+    if(platform==='amazon'){
+      const own=archive?.amazon?.rows.some(match);
+      const current=own?archive.amazon:published?.amazon;
+      return {
+        rows:(current?.rows||[]).filter(match).map(([, ,period,units,revenue,groups])=>[period,units,revenue,groups]),
+        ranking:(current?.rankMonths||[]).filter(match),openMonths:own?[]:(current?.openMonths||[]).filter(match).map(row=>row[2]),
+        source:own?'卖家精灵月度估算 · 本机补充':'Amazon 已公开的同类商品月度估算',
+        date:own?current.date:current?.dates[key],divisor:1e6,extra:'有记录的商品组',
+        heading:local[0]+' Amazon · '+categories[category],
+        note:'同款商品的月度数据按商品组汇总。'
+      };
+    }
+    if(scope.scope==='category'){
+      return {
+        rows:archive?.mercado?.markets[country]||[],date:archive?.mercado?.observedDate,
+        source:'大麦平台类目估算',divisor:100,extra:'来源月均价（'+local[1]+'）',price:true,
+        heading:local[0]+'美客多 · 吸尘器类目',
+        note:'美客多吸尘器平台类目 '+local[3]+' 涵盖多种形态。无线杆式竞品样本可切换到「同类商品样本」查看。',
+        missing:archive?'所选范围暂无平台类目资料。':'请选择包含大麦类目历史的本机数据文件。'
+      };
+    }
+    const history=published?.mercado?.scopes[key]||[];
+    return {
+      rows:history.map(([period,units,groups])=>[period,units,null,groups.length]),history,
+      date:published?.mercado?.dates[key],source:'大麦同类商品月销量资料',divisor:100,extra:'有记录的商品组',
+      heading:local[0]+'美客多 · '+categories[category],
+      note:'按有完整日记录的同类商品统计月销量。同期销售额和历史报价暂无来源。'
+    };
+  }
+
   function render(){
     const scope=readScope(), {platform,country,category,startMonth:start,endMonth:end}=scope;
-    const local=countries[country], isAmazon=platform==='amazon', currency=local?.[1], container=$('report');
+    const currency=countries[country][1],container=$('report');
     const validRange=month(start)&&month(end)&&start<=end;
     const linkScope={page:'market',country,platform,category,marketPeriod:'monthly'};
     if(validRange)Object.assign(linkScope,{startMonth:start,endMonth:end});
     $('market-overview').href=marketURL+'#'+new URLSearchParams(linkScope).toString();
-    container.replaceChildren();
     if(!validRange){container.innerHTML='<p class="panel">请选择有效的起始月与结束月。</p>';return;}
-    if(!archive)return;
-    const allRows=isAmazon?archive.amazon.rows.filter(r=>r[0]===country&&r[1]===category)
-      .map(([, ,period,units,revenue,groups])=>[period,units,revenue,groups]):archive.mercado.markets[country]||[];
-    const rows=allRows.filter(r=>r[0]>=start&&r[0]<=end).sort((a,b)=>a[0].localeCompare(b[0]));
-    const divisor=isAmazon?1e6:100;
+    const report=reportFor(scope);
+    const inRange=period=>period>=start&&period<=end;
+    const rows=report.rows.filter(row=>inRange(row[0])).sort((a,b)=>a[0].localeCompare(b[0]));
     const expected=monthNumber(end)-monthNumber(start)+1;
-    const sourceDate=isAmazon?archive.amazon.date:archive.mercado.observedDate;
-    const source=isAmazon?'卖家精灵月度估算':'大麦平台类目估算';
+    const missing=report.openMonths?.filter(inRange)||[];
     const coverage=column=>rows.filter(row=>row[column]!==null).length;
-    const note=isAmazon?'同款商品的月度数据按商品组汇总。':'美客多吸尘器平台类目 '+local[3]+' 涵盖多种形态。无线杆式竞品样本在市场总览单独统计。';
-    const heading=isAmazon?local[0]+' Amazon · '+categories[category]:local[0]+'美客多 · 吸尘器类目';
     const table=rows.length?'<div class="table"><table><thead><tr><th>月份</th><th>销量（台）</th><th>销售额（'+currency+
-      '）</th><th>'+(isAmazon?'有记录的商品组':'来源月均价（'+currency+'）')+'</th></tr></thead><tbody>'+
+      '）</th><th>'+report.extra+'</th></tr></thead><tbody>'+
       rows.map(([period,units,revenue,extra])=>'<tr data-report-month="'+period+'"><th scope="row">'+period+'</th><td>'+
-        qty(units)+'</td><td>'+money(revenue,divisor)+'</td><td>'+(isAmazon?qty(extra):money(extra,divisor))+'</td></tr>').join('')+
-      '</tbody></table></div>':'<p>所选市场与月份暂无这份文件中的记录。</p>';
-    container.innerHTML='<section class="panel"><div class="row"><div><h2>'+heading+'</h2>'+
-      '<p>'+source+' · 数据日期 '+sourceDate+'</p></div>'+
-      (rows.length?'<button type="button" data-month-export>导出所选月份</button>':'')+'</div><p>'+note+'</p></section>'+
+        qty(units)+'</td><td>'+money(revenue,report.divisor)+'</td><td>'+(report.price?money(extra,report.divisor):qty(extra))+'</td></tr>').join('')+
+      '</tbody></table></div>':'<p>'+(report.missing||'所选范围暂无可用月度记录。')+'</p>';
+    container.innerHTML='<section class="panel"><div class="row"><div><h2>'+report.heading+'</h2>'+
+      '<p>'+report.source+(report.date?' · 最近来源日期 '+report.date:'')+'</p></div>'+
+      (rows.length?'<button type="button" data-month-export>导出所选月份</button>':'')+'</div><p>'+report.note+'</p></section>'+
       '<section class="metrics"><article><span>期间销量估算（台）</span><strong data-total-units>'+
       qty(sum(rows.map(r=>r[1])))+'</strong></article><article><span>期间销售额估算（'+currency+'）</span><strong data-total-revenue>'+
-      money(sum(rows.map(r=>r[2])),divisor)+'</strong></article></section><section class="panel"><div class="row"><h2>逐月数据</h2>'+
-      '<p class="subtitle">销量 '+coverage(1)+' / '+expected+' 月 · 销售额 '+coverage(2)+' / '+expected+' 月</p></div>'+table+'</section>';
-    if(isAmazon){
-      const rank=rankSection(scope,archive.amazon.rankMonths.filter(([c,k,m])=>c===country&&k===category&&m>=start&&m<=end),currency);
+      money(sum(rows.map(r=>r[2])),report.divisor)+'</strong></article></section><section class="panel"><div class="row"><h2>逐月数据</h2>'+
+      '<p class="subtitle">销量 '+coverage(1)+' / '+expected+' 月 · 销售额 '+coverage(2)+' / '+expected+' 月</p></div>'+
+      (missing.length?'<p class="subtitle">以下月份在来源更新时尚未结束，未纳入整月统计：'+missing.join('、')+'。</p>':'')+table+'</section>';
+    if(report.ranking){
+      const rank=rankSection(scope,report.ranking.filter(row=>inRange(row[2])),currency);
       if(rank)container.append(rank);
     }
+    if(report.history)container.insertAdjacentHTML('beforeend',mercadoRanking(report.history.filter(row=>inRange(row[0]))));
     const exportButton=container.querySelector('[data-month-export]');
     if(exportButton)exportButton.onclick=()=>downloadable([
-      ['国家','平台','品类或平台类目','月份','币种','销量估算','销售额估算',isAmazon?'商品组数':'来源月均价','数据日期','来源'],
-      ...rows.map(([period,units,revenue,extra])=>[country,isAmazon?'Amazon':'Mercado Libre',isAmazon?category:local[3],
-       period,currency,units,revenue===null?null:(revenue/divisor).toFixed(2),isAmazon?extra:extra===null?null:(extra/divisor).toFixed(2),sourceDate,source])
-    ],'UWANT_'+platform+'_'+country+'_'+start+'_'+end+'.csv');
+      ['国家','平台','品类或平台类目','月份','币种','销量估算','销售额估算',report.extra,'最近来源日期','来源'],
+      ...rows.map(([period,units,revenue,extra])=>[country,platform==='amazon'?'Amazon':'Mercado Libre',report.price?countries[country][3]:category,
+       period,currency,units,revenue===null?null:(revenue/report.divisor).toFixed(2),
+       report.price&&extra!==null?(extra/report.divisor).toFixed(2):extra,report.date,report.source])
+    ],'UWANT_'+platform+'_'+country+'_'+category+'_'+(scope.scope||'sample')+'_'+start+'_'+end+'.csv');
   }
 
   const query=new URLSearchParams(location.search);
+  const legacyCategory=query.get('platform')==='ml'&&!query.has('category')&&!query.has('scope');
   $('platform').value=query.get('platform')==='amazon'?'amazon':'ml';
+  $('basis').value=query.get('scope')==='category'?'category':'sample';
   options($('category'),Object.entries(categories),query.get('category')||'vacuum');
   setMarkets(query.get('country'));
   $('startMonth').value=month(query.get('startMonth'))?query.get('startMonth'):'2026-01';
   $('endMonth').value=month(query.get('endMonth'))?query.get('endMonth'):'2026-10';
   $('platform').onchange=()=>setMarkets($('country').value);
+  $('category').onchange=syncBasis;
+  $('basis').onchange=()=>{writeScope();render();};
   $('scope').onsubmit=event=>{
     event.preventDefault();
-    rangeChanged=true;
-    const params=new URLSearchParams(readScope());
-    try{history.replaceState(null,'','?'+params+location.hash);}catch{}
+    writeScope();
     render();
   };
   $('archive-file').onchange=async event=>{
@@ -205,15 +271,16 @@
       if(sequence!==importSequence)return;
       archive=verify(data);
       $('file-status').textContent='已读取本机数据文件。';
-      if(!rangeChanged&&location.hash==='#top10')requestAnimationFrame(()=>$('top10')?.scrollIntoView());
+      if(legacyCategory&&!$('basis-field').hidden&&!new URLSearchParams(location.search).has('scope'))$('basis').value='category';
       render();
+      if(location.hash==='#top10')requestAnimationFrame(()=>$('top10')?.scrollIntoView());
     }catch(error){
       if(sequence===importSequence)$('file-status').textContent=error instanceof SyntaxError?'这份文件不是有效的月度数据。':error.message;
     }finally{if(sequence===importSequence)event.target.value='';}
   };
   const embedded=$('embedded-archive');
   if(embedded){
-    try{archive=verify(JSON.parse(embedded.textContent));$('file-status').textContent='已载入本机历史资料。';}
+    try{archive=verify(JSON.parse(embedded.textContent));$('file-status').textContent='已载入本机历史资料。';if(legacyCategory)$('basis').value='category';}
     catch(error){$('file-status').textContent=error.message;}
   }
   render();

@@ -29,7 +29,7 @@ const {chromium}=require('playwright'),fs=require('fs'),path=require('path'),ass
   const categoryArchive=new URL(await p.locator('[data-ml-category-archive]').getAttribute('href'),p.url());
   assert.equal(categoryArchive.origin,new URL(p.url()).origin);
   assert(categoryArchive.pathname.endsWith('/market-history/'));
-  assert.deepEqual(Object.fromEntries(categoryArchive.searchParams),{platform:'ml',country:'MX',startMonth:'2026-01',endMonth:'2026-09'});
+  assert.deepEqual(Object.fromEntries(categoryArchive.searchParams),{platform:'ml',country:'MX',category:'vacuum',startMonth:'2026-01',endMonth:'2026-09',scope:'category'});
 
   const supplemental=p.locator('[data-ml-batch="2026-11-12"]');
   assert.match(await supplemental.innerText(),/499 台 · 1,091,300 MXN/);
@@ -65,6 +65,8 @@ const {chromium}=require('playwright'),fs=require('fs'),path=require('path'),ass
   const monthlyRank=p.locator('[data-market-ranking]');
   assert((await monthlyRank.innerText()).includes('销量 Top 10'));
   assert.equal(await p.locator('[data-ml-category-archive]').count(),0);
+  assert((await p.locator('[data-ml-sample-history]').getAttribute('href')).includes('category=fabric'));
+
   assert.equal(await monthlyRank.getByRole('columnheader',{name:'销量（台）'}).count(),1);
   assert.equal(await monthlyRank.getByRole('columnheader',{name:/销售额|报价/}).count(),0);
   const monthlyLinks=await monthlyRank.locator('.market-product-link').evaluateAll(links=>links.map(link=>new URL(link.href).hostname));
