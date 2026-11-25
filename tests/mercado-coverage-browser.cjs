@@ -81,7 +81,7 @@ async function run() {
     await search.fill('MLM2003963698');
     assert.equal(await product.count(),0,'Reviewed accessory cannot enter catalogue');
     const sources = await page.evaluate(()=>MERCADO_DATA.records.filter(r=>r.catalogueOnly).map(r=>[r.country,r.category,r.orders_last_30_days,r.revenue_last_30_days,r.counted]));
-    assert.equal(sources.length,32);
+    assert.equal(sources.length,40);
     assert(sources.every(([country,category,units,revenue,counted])=>country==='MX'&&category==='vacuum'&&units===null&&revenue===null&&counted===false));
 
     await page.goto(base+mexico,{waitUntil:'domcontentloaded'});
