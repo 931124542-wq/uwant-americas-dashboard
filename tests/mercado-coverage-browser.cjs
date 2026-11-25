@@ -19,12 +19,15 @@ async function run() {
     await page.goto(base+mexico,{waitUntil:'domcontentloaded'});
     const card = page.locator('.ml-coverage-summary');
     await card.waitFor();
-    assert.equal(await card.innerText(),'其他近30天数据');
-    assert.equal(await card.locator('[data-ml-extra-snapshot]').isVisible(),false);
+    const summary = card.locator(':scope>summary');
+    const supplement = card.locator('[data-ml-extra-snapshot]');
+    assert.equal(await summary.innerText(),'其他近30天数据');
+    assert.equal(await supplement.isVisible(),true);
     assert.deepEqual((await page.locator('.market-kpi>strong').allTextContents()).slice(0,2),['117,092','8']);
     assert.equal(await page.locator('.market-kpi:visible').count(),3);
-    await card.locator(':scope>summary').click();
-    const supplement = card.locator('[data-ml-extra-snapshot]');
+    await summary.click();
+    assert.equal(await supplement.isVisible(),false);
+    await summary.click();
     assert.match(await supplement.innerText(),/499 台 · 1,091,300 MXN/);
     const pending = page.waitForEvent('download');
     await supplement.getByRole('button',{name:'导出该批'}).click();
@@ -68,7 +71,6 @@ async function run() {
     await page.goto(base+mexico,{waitUntil:'domcontentloaded'});
     await card.waitFor();
 
-    await card.locator(':scope>summary').click();
     await card.getByRole('button',{name:'查看商品库'}).click();
     const search = page.locator('[data-ml-query]');
     await search.fill('MLM49842392');
