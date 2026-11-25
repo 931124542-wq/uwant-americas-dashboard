@@ -30,7 +30,19 @@ header span { color: #d9e9e0; font-size: .875rem; }
 }
 .back:hover { background: #235a49; }
 main { max-width: 1080px; margin: auto; padding: 24px 24px 38px; }
-h1 { margin: 0 0 18px; font-size: clamp(1.4rem, 3.2vw, 1.9rem); }
+h1 { margin: 0 0 4px; font-size: clamp(1.4rem, 3.2vw, 1.9rem); }
+.guide-intro { margin: 0 0 16px; color: #536d61; font-size: .875rem; }
+.guide-scope {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 0 16px;
+  padding: 7px 10px;
+  border: 1px solid #d5e3da;
+  border-radius: 6px;
+  background: #edf3ed;
+  color: #40594e;
+  font-size: .8rem;
+}
 .guide-map { --tree-line: #8da99a; }
 .guide-map ul { list-style: none; margin-block: 0; }
 .guide-root {
@@ -44,8 +56,6 @@ h1 { margin: 0 0 18px; font-size: clamp(1.4rem, 3.2vw, 1.9rem); }
   text-align: center;
 }
 .guide-root strong { display: block; font-size: 1.05rem; }
-.guide-root span { display: block; margin-top: 5px; color: #deeee3; font-size: .78rem; }
-.guide-root span[hidden] { display: none; }
 .guide-branches {
   position: relative;
   display: grid;
@@ -87,6 +97,13 @@ h1 { margin: 0 0 18px; font-size: clamp(1.4rem, 3.2vw, 1.9rem); }
   background: #e2efe7;
   font-size: 1rem;
   text-align: center;
+}
+.guide-branch-note {
+  display: block;
+  margin-top: 3px;
+  color: #4b6559;
+  font-size: .75rem;
+  font-weight: 400;
 }
 .guide-children { margin-inline: 12px 0; padding: 8px 0 0 20px; }
 .guide-children > li { position: relative; min-width: 0; padding-bottom: 5px; }
@@ -139,10 +156,23 @@ h1 { margin: 0 0 18px; font-size: clamp(1.4rem, 3.2vw, 1.9rem); }
 .guide-links a:hover { border-color: #a8cab8; background: #f2f8f3; }
 .guide-links span { display: block; font-size: .86rem; font-weight: 670; }
 .guide-links small { display: block; margin-top: 2px; color: #4b6559; font-size: .75rem; }
+.guide-tagged > span { padding-right: 6.4rem; }
+.guide-links .guide-badge {
+  position: absolute;
+  top: 7px;
+  right: 25px;
+  margin: 0;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: #edf0ee;
+  color: #45584f;
+  font-size: .6875rem;
+  white-space: nowrap;
+}
 @media (max-width: 680px) {
   header { gap: 10px; padding-inline: 14px; }
   main { padding: 18px 14px 28px; }
-  h1 { margin-bottom: 12px; }
+  .guide-intro, .guide-scope { margin-bottom: 12px; }
   .guide-root { margin-inline: 0; text-align: left; }
   .guide-branches { grid-template-columns: minmax(0,1fr); gap: 14px; margin-left: 8px; padding: 12px 0 0 16px; }
   .guide-branches::before, .guide-branches::after { display: none; }

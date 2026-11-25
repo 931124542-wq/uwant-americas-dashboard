@@ -1,5 +1,6 @@
 /* Shared visual hierarchy for the market research workspace. Data engines stay unchanged. */
 (function(root){
+ const categoryLabels={wash:'洗地机',vacuum:'吸尘器',fabric:'布艺清洗机',mattress:'除螨仪'};
  const managementDetails=[
   '[data-backstage-only]','.market-kpi>small','.market-overview-references','.market-catalogue-reference',
   '.market-source-reference','.sample-share-evidence','.sample-share-scope','.wb-sample-note','.wb-missing-fields',
@@ -29,7 +30,7 @@
   const own=document.querySelector('.filters [data-wb-own]');if(own)own.closest('label').hidden=admin||s.page!=='competitors';
   const monthBox=document.getElementById('month-range-controls');if(monthBox)monthBox.hidden=admin||byChannel||(s.platform==='ml'&&!monthly);
   const heading=document.querySelector('.heading');let context=document.getElementById('market-page-context');if(!context){context=document.createElement('p');context.id='market-page-context';heading.querySelector('div').append(context);}
-  const country=root.ResearchModel.countries[s.country]?.name||s.country,category=({wash:'洗地机',vacuum:'吸尘器',fabric:'布艺清洗机',mattress:'除螨仪'})[s.category],platform=root.ResearchQuality.platforms[s.platform]||'全部平台';
+  const country=root.ResearchModel.countries[s.country]?.name||s.country,category=categoryLabels[s.category],platform=root.ResearchQuality.platforms[s.platform]||'全部平台';
   context.textContent=country+' / '+platform+' / '+category;
   const scope=document.getElementById('scope');
   scope.hidden=overview&&s.platform!=='all';
@@ -76,5 +77,5 @@
   if(overview)root.SellerMonthly?.mount(s,change,download);
   document.querySelectorAll('.market-block-heading>span:first-child').forEach(x=>x.classList.add('market-section-number'));
  }
- root.MarketPresentation={sync,hideManagementDetails,managementDetails};
+ root.MarketPresentation={sync,hideManagementDetails,managementDetails,categoryLabels};
 })(window);

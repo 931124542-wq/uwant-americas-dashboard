@@ -1,8 +1,8 @@
 (function () {
   const incoming = new URLSearchParams(location.hash.slice(1));
-  const countries = {MX:'墨西哥',CA:'加拿大',US:'美国',BR:'巴西',AR:'阿根廷',CL:'智利',CO:'哥伦比亚'};
-  const platforms = {amazon:'Amazon',ml:'Mercado Libre',all:'全部渠道',bestbuy:'Best Buy',retail:'线下零售',official:'品牌官网',unknown:'其他渠道'};
-  const categories = {wash:'洗地机',vacuum:'吸尘器',fabric:'布艺清洗机',mattress:'除螨仪'};
+  const countries = ResearchModel.countries;
+  const platforms = {all:'全部平台',...ResearchQuality.platforms};
+  const categories = MarketPresentation.categoryLabels;
   const select = (options,key) => Object.hasOwn(options,incoming.get(key)) ? incoming.get(key) : '';
   const country = select(countries,'country'), platform = select(platforms,'platform'), category = select(categories,'category');
   const month = value => /^20\d{2}-(0[1-9]|1[0-2])$/.test(value||'');
@@ -15,10 +15,18 @@
   if (['monthly','snapshot'].includes(incoming.get('marketPeriod'))) scope.set('marketPeriod',incoming.get('marketPeriod'));
   const own=incoming.get('own');
   if (/^[A-Z][0-9]{3}[A-Z]?$/.test(own||'')) scope.set('own',own);
-  const period = scope.has('startMonth') ? start===end?start:start+' 至 '+end : month(dataset)?dataset:'';
-  const caption=document.querySelector('[data-guide-scope]');
-  const labels=[countries[country],platforms[platform],categories[category],period].filter(Boolean);
-  if(labels.length){caption.textContent=labels.join(' / ');caption.hidden=false;}
+  const formatMonth = value => value.slice(0,4)+'年'+Number(value.slice(5))+'月';
+  const datasetLabels = {archive:'2026年9月（月榜）',focus:'近30天（品牌数据）',curated:'历史竞品数据'};
+  const period = scope.has('startMonth')
+    ? start===end ? formatMonth(start) : formatMonth(start)+'至'+formatMonth(end)
+    : month(dataset) ? formatMonth(dataset) : Object.hasOwn(datasetLabels,dataset) ? datasetLabels[dataset] : '';
+  const labels=[countries[country]?.name,platforms[platform],categories[category],period,
+    scope.has('own')?'对标 '+own:''].filter(Boolean);
+  if(labels.length){
+    const caption=document.querySelector('[data-guide-scope]');
+    caption.textContent='当前视图范围：'+labels.join(' · ');
+    caption.hidden=false;
+  }
 
   document.querySelectorAll('.guide-links a').forEach(link => {
     const route = new URLSearchParams(link.hash.slice(1));

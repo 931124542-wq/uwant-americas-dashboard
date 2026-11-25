@@ -3,64 +3,69 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>思维导图 · UWANT</title>
-<link rel="stylesheet" href="guide.css?v=d0b4f1a92674">
-<script defer src="guide.js?v=323ceb376f89"></script>
+<title>业务分析地图 · UWANT</title>
+<link rel="stylesheet" href="guide.css?v=02c60f5fa3bf">
+<script defer src="../history-metrics.js?v=eed1ff84bc74"></script>
+<script defer src="../research-quality.js?v=49a2043333f8"></script>
+<script defer src="../model.js?v=c347e8e7a336"></script>
+<script defer src="../market-presentation.js?v=9d8ca10dc71d"></script>
+<script defer src="guide.js?v=c7ae36394c33"></script>
 </head>
 <body>
 <header>
   <a class="brand" href="../">UWANT</a>
-  <span aria-current="page">思维导图</span>
+  <span aria-current="page">业务地图</span>
   <a class="back" data-guide-return href="../#page=market">返回看板</a>
 </header>
 <main>
-  <h1>业务思维导图</h1>
+  <h1>业务分析地图</h1>
+  <p class="guide-intro">按业务问题快速进入对应模块</p>
+  <p class="guide-scope" data-guide-scope role="status" hidden></p>
   <nav class="guide-map" aria-label="美洲业务看板导航">
     <div class="guide-root">
       <strong>UWANT 美洲业务看板</strong>
-      <span data-guide-scope hidden></span>
     </div>
     <ul class="guide-branches">
       <li class="guide-branch">
-        <h2>市场研究</h2>
+        <h2>市场研究<small class="guide-branch-note">看外部机会与竞品</small></h2>
         <ul class="guide-children guide-groups">
           <li>
             <h3>市场规模与趋势</h3>
             <ul class="guide-children guide-links">
-              <li><a href="../#page=market"><span>市场大盘</span><small>销量、销售额、价格带、销量 Top 10</small></a></li>
-              <li><a href="../market-history/" data-monthly-page><span>市场月度数据</span><small>按月份查看市场销量和销售额</small></a></li>
-              <li><a href="../#page=market&amp;view=monthly"><span>商品月度销量</span><small>单品历史走势与逐月明细</small></a></li>
+              <li><a href="../#page=market"><span>市场大盘</span><small>看大盘规模、主力价格带与头部榜单</small></a></li>
+              <li><a class="guide-tagged" href="../market-history/" data-monthly-page><span>市场月度数据</span><small>看行业淡旺季与逐月增长趋势</small><small class="guide-badge">Amazon / 美客多</small></a></li>
+              <li><a class="guide-tagged" href="../#page=market&amp;view=monthly"><span>商品月度销量</span><small>追踪单款竞品的月度走势与生命周期</small><small class="guide-badge">Amazon / 美客多</small></a></li>
             </ul>
           </li>
           <li>
             <h3>品牌与竞品</h3>
             <ul class="guide-children guide-links">
-              <li><a href="../#page=brands"><span>品牌分析</span><small>品牌销量、销售额与份额</small></a></li>
-              <li><a href="../#page=market&amp;view=products"><span>热销商品</span><small>商品图片、价格与销量</small></a></li>
-              <li><a href="../#page=competitors"><span>竞品对比</span><small>UWANT 对标、价格与产品规格</small></a></li>
-              <li><a href="../#page=market&amp;view=keywords"><span>竞品关键词</span><small>商品相关搜索词</small></a></li>
+              <li><a href="../#page=brands"><span>品牌分析</span><small>看头部品牌市占率与竞争格局</small></a></li>
+              <li><a href="../#page=market&amp;view=products"><span>热销商品</span><small>查热卖单品清单，看主流形态与定价</small></a></li>
+              <li><a href="../#page=competitors"><span>竞品对比</span><small>自家机型与核心竞品的价格、参数横评</small></a></li>
+              <li><a class="guide-tagged" href="../#page=market&amp;view=keywords"><span>竞品关键词</span><small>看竞品核心流量词与买家热搜需求</small><small class="guide-badge">仅 Amazon</small></a></li>
             </ul>
           </li>
         </ul>
       </li>
       <li class="guide-branch">
-        <h2>经营管理</h2>
+        <h2>经营管理<small class="guide-branch-note">看自家销售与盘货</small></h2>
         <ul class="guide-children guide-groups">
           <li>
             <h3>销售与促销</h3>
             <ul class="guide-children guide-links">
-              <li><a href="../#module=operations&amp;page=overview"><span>经营总览</span><small>实际销售与大促表现</small></a></li>
-              <li><a href="../#module=operations&amp;page=analysis"><span>销售分析</span><small>按月份、渠道和型号查看销售</small></a></li>
-              <li><a href="../#module=operations&amp;page=products"><span>SKU 表现</span><small>各型号的销量与销售额</small></a></li>
-              <li><a href="../#module=operations&amp;page=calendar"><span>促销日历</span><small>活动日期与促销安排</small></a></li>
+              <li><a href="../#module=operations&amp;page=overview"><span>经营总览</span><small>看自家整体营收、核心指标与大促战绩</small></a></li>
+              <li><a href="../#module=operations&amp;page=analysis"><span>销售分析</span><small>按月、分渠道、分机型拆解销售明细</small></a></li>
+              <li><a href="../#module=operations&amp;page=products"><span>SKU 表现</span><small>看各 SKU 动销表现，识别爆款与滞销款</small></a></li>
+              <li><a href="../#module=operations&amp;page=calendar"><span>促销日历</span><small>查大促排期与各节点折扣节奏</small></a></li>
             </ul>
           </li>
           <li>
             <h3>库存与执行</h3>
             <ul class="guide-children guide-links">
-              <li><a href="../#module=operations&amp;page=inventory"><span>库存监控</span><small>可用库存与已分配库存</small></a></li>
-              <li><a href="../#module=operations&amp;page=profit"><span>利润与补货</span><small>成本、利润与补货情况</small></a></li>
-              <li><a href="../#module=operations&amp;page=tasks"><span>运营任务</span><small>任务与执行进度</small></a></li>
+              <li><a href="../#module=operations&amp;page=inventory"><span>库存监控</span><small>盯紧可售库存、锁定库存与断货风险</small></a></li>
+              <li><a href="../#module=operations&amp;page=profit"><span>利润与补货</span><small>核算单品毛利，评估补货量与节奏</small></a></li>
+              <li><a href="../#module=operations&amp;page=tasks"><span>运营任务</span><small>跟进团队待办与重点事项落地</small></a></li>
             </ul>
           </li>
         </ul>
