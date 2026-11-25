@@ -8,7 +8,8 @@ process.chdir(path.join(__dirname,'..'));
 const root=require('../tests/library-fixture.cjs')();
 root.location={hostname:'public.example'};
 for(const file of ['mercado-data.js','market-insights.js','published-research-data.js','research-overlay.js',
-  'research-snapshot.js','mercado-public-catalogue.js','mercado.js','mercado-history.js']){
+  'research-snapshot.js','mercado-public-catalogue.js','mercado.js','mercado-history.js',
+  'mercado-lifetime-observations.js','mercado-lifetime.js']){
   vm.runInContext(fs.readFileSync(file,'utf8'),root,{filename:file});
 }
 assert.equal(root.PRIVATE_RESEARCH.access,'public_sanitized');
@@ -17,7 +18,7 @@ const countries=['MX','CA','US','BR','AR','CL','CO'];
 const categories=['wash','vacuum','fabric','mattress'];
 const base={...root.ResearchModel.defaults,competitionGroup:'all',productType:'all',shareMetric:'revenue'};
 const amazon={rows:[],rankMonths:[],openMonths:[],dates:{}};
-const mercado={scopes:{},products:{},dates:{}};
+const mercado={scopes:{},products:{},dates:{},reviewed:{}};
 const micro=value=>Number.isFinite(value)?Math.round(value*1_000_000):null;
 const total=values=>values.some(value=>value!==null)?values.reduce((sum,value)=>sum+(value??0),0):null;
 const dates=values=>values.map(value=>String(value??'').slice(0,10)).filter(value=>/^20\d\d-\d\d-\d\d$/.test(value)).sort();
@@ -67,8 +68,11 @@ for(const country of countries)for(const category of categories){
   }
   if(root.MarketIntegrity.applicable(country,'ml')){
     const scope={...base,country,category,platform:'ml',startMonth:earliest,endMonth:'2026-10'};
-    const selection=root.MercadoHistory.selection(scope,root.Mercado.rows(scope),mercadoData);
+    const products=root.Mercado.rows(scope);
+    const selection=root.MercadoHistory.selection(scope,products,mercadoData);
     const sample=root.MercadoHistory.monthlySample(selection);
+    const conflicts=root.MercadoLifetime.archiveConflicts(root.MercadoLifetime.report(products),products,mercadoData);
+    for(const {id} of conflicts)mercado.reviewed[id]=true;
     const usedDates=[];
     mercado.scopes[key]=sample.months.filter(row=>row.units!==null).map(row=>[
       row.month,row.units,row.groups.map(({key,product,orders,source})=>{

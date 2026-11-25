@@ -73,7 +73,8 @@
 
     const update = (a,b,focus) => {
       if (a!==start || b!==end || !scope.startMonth || scope.platform==='ml'&&!root.MercadoHistory.isPeriodOverview(scope)) {
-        change({startMonth:a,endMonth:b,marketPeriod:'monthly',evidenceGroup:'',historyProduct:'',shareDrill:''});
+        const historyProduct=scope.platform==='ml'?scope.historyProduct:'';
+        change({startMonth:a,endMonth:b,marketPeriod:'monthly',evidenceGroup:'',historyProduct,shareDrill:''});
       }
       else {
         box.querySelector('[data-month-start]').value=a;

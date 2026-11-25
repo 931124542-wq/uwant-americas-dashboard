@@ -142,6 +142,8 @@
   }
   if(range){
    if(original)move(original.querySelector('.market-sample-heading'),'category');
+   const openMonths=[...new Set(r.facts.filter(row=>row.open).map(row=>row.month))].sort();
+   if(openMonths.length)slot('reading').insertAdjacentHTML('beforeend','<p class="market-period-detail" data-amazon-open-month>期间合计包含来源更新时尚未结束的月份 '+e(openMonths.join('、'))+'。</p>');
    slot('reading').insertAdjacentHTML('beforeend',monthlyResults(months,r.facts,r.currency));
    if(original){
     const oldReport=document.createElement('details');

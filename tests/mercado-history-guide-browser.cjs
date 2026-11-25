@@ -42,7 +42,8 @@ async function run() {
     const listing = await picker.locator('option').last().getAttribute('value');
     await picker.selectOption(listing);
     const expected = await page.evaluate(id => MERCADO_DATA.trends[id].monthly_order_series.filter(m => m.month >= '2026-01' && m.month <= '2026-10').map(m => m.month), listing);
-    assert.deepEqual(await page.locator('.ml-history-panel tbody tr td:first-child').allTextContents(),expected);
+    assert.deepEqual(await page.locator('.ml-history-panel tbody tr:not([data-month-state="missing"]) td:first-child').allTextContents(),expected);
+    assert.equal(await page.locator('.ml-history-panel tbody tr').count(),10);
     const download = page.waitForEvent('download');
     await page.locator('#export').click();
     const csv = await download;

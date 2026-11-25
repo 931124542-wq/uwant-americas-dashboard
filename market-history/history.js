@@ -167,7 +167,8 @@
       ranked.map((row,i)=>{
         const [name,link]=products[row.id]||[row.id,''];
         const label=link?'<a href="'+esc(link)+'" target="_blank" rel="noopener noreferrer">'+esc(name)+'</a>':esc(name);
-        return '<tr><td>'+(i+1)+'</td><th scope="row" class="product">'+label+'<small>'+esc(row.id)+'</small></th><td>'+
+        return '<tr><td>'+(i+1)+'</td><th scope="row" class="product">'+label+'<small>'+esc(row.id)+
+          (published.mercado.reviewed?.[row.id]?' · 累计数据核对中':'')+'</small></th><td>'+
           qty(row.units)+'</td></tr>';
       }).join('')+'</tbody></table></div></section>';
   }
@@ -216,6 +217,15 @@
     const report=reportFor(scope);
     const inRange=period=>period>=start&&period<=end;
     const rows=report.rows.filter(row=>inRange(row[0])).sort((a,b)=>a[0].localeCompare(b[0]));
+    const listingMonths=report.history?.filter(row=>inRange(row[0]))||[];
+    const reviewed=new Map();
+    const reviewedMonths=new Map();
+    for(const [period, ,groups] of listingMonths)for(const [,id,units] of groups){
+      if(!published.mercado.reviewed?.[id])continue;
+      reviewed.set(id,(reviewed.get(id)||0)+units);
+      reviewedMonths.set(period,(reviewedMonths.get(period)||0)+units);
+    }
+    const reviewedUnits=[...reviewed.values()].reduce((sum,units)=>sum+units,0);
     const expected=monthNumber(end)-monthNumber(start)+1;
     const missing=report.openMonths?.filter(inRange)||[];
     const coverage=column=>rows.filter(row=>row[column]!==null).length;
@@ -231,18 +241,21 @@
       qty(sum(rows.map(r=>r[1])))+'</strong></article><article><span>期间销售额估算（'+currency+'）</span><strong data-total-revenue>'+
       money(sum(rows.map(r=>r[2])),report.divisor)+'</strong></article></section><section class="panel"><div class="row"><h2>逐月数据</h2>'+
       '<p class="subtitle">销量 '+coverage(1)+' / '+expected+' 月 · 销售额 '+coverage(2)+' / '+expected+' 月</p></div>'+
+      (reviewed.size?'<p class="subtitle" data-monthly-archive-review>期间销量含 '+qty(reviewed.size)+' 款与累计记录存在差异的商品，共 '+qty(reviewedUnits)+' 台，正在核对。</p>':'')+
       (missing.length?'<p class="subtitle">以下月份在来源更新时尚未结束，未纳入整月统计：'+missing.join('、')+'。</p>':'')+table+'</section>';
     if(report.ranking){
       const rank=rankSection(scope,report.ranking.filter(row=>inRange(row[2])),currency);
       if(rank)container.append(rank);
     }
-    if(report.history)container.insertAdjacentHTML('beforeend',mercadoRanking(report.history.filter(row=>inRange(row[0]))));
+    if(report.history)container.insertAdjacentHTML('beforeend',mercadoRanking(listingMonths));
     const exportButton=container.querySelector('[data-month-export]');
     if(exportButton)exportButton.onclick=()=>downloadable([
-      ['国家','平台','品类或平台类目','月份','币种','销量估算','销售额估算',report.extra,'最近来源日期','来源'],
+      ['国家','平台','品类或平台类目','月份','币种','销量估算','销售额估算',report.extra,'最近来源日期','来源',
+       ...(report.history?['其中累计销量待核商品的销量']:[])],
       ...rows.map(([period,units,revenue,extra])=>[country,platform==='amazon'?'Amazon':'Mercado Libre',report.price?countries[country][3]:category,
        period,currency,units,revenue===null?null:(revenue/report.divisor).toFixed(2),
-       report.price&&extra!==null?(extra/report.divisor).toFixed(2):extra,report.date,report.source])
+       report.price&&extra!==null?(extra/report.divisor).toFixed(2):extra,report.date,report.source,
+       ...(report.history?[reviewedMonths.get(period)??null]:[])])
     ],'UWANT_'+platform+'_'+country+'_'+category+'_'+(scope.scope||'sample')+'_'+start+'_'+end+'.csv');
   }
 

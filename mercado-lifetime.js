@@ -49,6 +49,24 @@
     });
   }
 
+  function productConflict(product, data) {
+    const products=[product];
+    return archiveConflicts(report(products),products,data)[0];
+  }
+
+  function reviewedMonthly(sample, products, data) {
+    const conflicts=archiveConflicts(report(products),products,data);
+    const flagged=new Set(conflicts.map(row=>row.id));
+    const matched=new Set();
+    let units=0;
+    for(const month of sample.months)for(const {product,orders} of month.groups){
+      if(!flagged.has(product.product_code))continue;
+      matched.add(product.product_code);
+      units+=orders;
+    }
+    return {size:matched.size,units};
+  }
+
   function mount(section, state, products, download, before=null) {
     const totals = report(products);
     if (totals.total===null) return;
@@ -74,5 +92,5 @@
     else section.append(block);
   }
 
-  root.MercadoLifetime = {observation, report, archiveConflicts, mount};
+  root.MercadoLifetime = {observation, report, archiveConflicts, productConflict, reviewedMonthly, mount};
 })(window);

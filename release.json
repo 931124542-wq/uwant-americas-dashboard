@@ -530,5 +530,12 @@
     "mercadoSampleScopes": 20,
     "amazonPublicSampleScopes": 6,
     "localFileCompatible": true
+  },
+  "monthlyProductAudit": {
+    "displayVersion": "11.25.2",
+    "mercadoSourceSeriesChecked": 931,
+    "mercadoSourceMonthsChecked": 9347,
+    "mercadoCumulativeConflicts": 46,
+    "sourceRecordsUnchanged": true
   }
 }
