@@ -39,7 +39,7 @@ const {chromium}=require('playwright');
   await p.goto(target.href);
   assert((await p.locator('#report').innerText()).includes('请选择包含大麦类目历史的本机数据文件'));
   await upload(record);
-  await p.waitForSelector('[data-total-revenue]');
+  await p.waitForFunction(()=>document.querySelector('[data-total-revenue]')?.textContent==='1,250.00');
   assert.equal(await p.locator('[data-total-revenue]').innerText(),'1,250.00');
   assert((await p.locator('#report').innerText()).includes('MLM31572'));
   await p.selectOption('#country','BR');
