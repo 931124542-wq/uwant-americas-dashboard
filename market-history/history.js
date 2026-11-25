@@ -11,6 +11,7 @@
   };
   const categories = {wash:'洗地机',vacuum:'吸尘器',fabric:'布艺清洗机',mattress:'除螨仪'};
   const published=window.UWANT_PUBLIC_HISTORY;
+  const photos=window.RankPhotos;
   const marketURL = 'https://931124542-wq.github.io/uwant-americas-dashboard/';
   const $ = id => document.getElementById(id);
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c =>
@@ -107,6 +108,12 @@
     setTimeout(()=>URL.revokeObjectURL(url),1000);
   }
 
+  function rankedProduct({id,name,url,country}){
+    const photo=photos.markup(photos.lookup(id,country));
+    const label=url?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">'+esc(name)+'</a>':esc(name);
+    return '<div class="ranking-product">'+photo+'<div class="ranking-item-copy">'+label+'<small>'+esc(id)+'</small></div></div>';
+  }
+
   function rankSection(scope, selected, currency){
     if(!selected.length)return '';
     const step=scope.country==='MX'?1000:scope.country==='BR'?500:100;
@@ -138,9 +145,9 @@
       const rows=[...groups.values()].filter(row=>row[key]>0).sort((a,b)=>b[key]-a[key]||a.id.localeCompare(b.id)).slice(0,10);
       box.querySelector('[data-rank-table]').innerHTML=rows.length?'<div class="table"><table><thead><tr><th>名次</th><th>商品</th>'+
         '<th>参考报价（'+currency+'）</th><th>销量（台）</th><th>销售额（'+currency+'）</th></tr></thead><tbody>'+
-        rows.map((row,i)=>'<tr><td>'+(i+1)+'</td><th scope="row" class="product"><a href="https://www.'+countries[scope.country][2]+
-          '/dp/'+row.listing+'" target="_blank" rel="noopener noreferrer">'+esc(row.title||row.listing)+'</a><small>'+row.listing+
-          '</small></th><td>'+(row.quote>0?money(row.quote,1e6)+'<small>'+row.period+'</small>':'—')+
+        rows.map((row,i)=>'<tr><td>'+(i+1)+'</td><th scope="row" class="product">'+rankedProduct({
+          id:row.listing,name:row.title||row.listing,url:'https://www.'+countries[scope.country][2]+'/dp/'+row.listing,country:scope.country
+        })+'</th><td>'+(row.quote>0?money(row.quote,1e6)+'<small>'+row.period+'</small>':'—')+
           '</td><td>'+qty(row.units)+'</td><td>'+money(row.revenue,1e6)+'</td></tr>').join('')+'</tbody></table></div>':'<p>当前范围暂无用于排名的数据。</p>';
     };
     metric.onchange=renderRank;band.onchange=renderRank;renderRank();
@@ -166,8 +173,7 @@
       '<div class="table"><table><thead><tr><th>名次</th><th>商品</th><th>销量（台）</th></tr></thead><tbody>'+
       ranked.map((row,i)=>{
         const [name,link]=products[row.id]||[row.id,''];
-        const label=link?'<a href="'+esc(link)+'" target="_blank" rel="noopener noreferrer">'+esc(name)+'</a>':esc(name);
-        return '<tr><td>'+(i+1)+'</td><th scope="row" class="product">'+label+'<small>'+esc(row.id)+'</small></th><td>'+
+        return '<tr><td>'+(i+1)+'</td><th scope="row" class="product">'+rankedProduct({id:row.id,name,url:link})+'</th><td>'+
           qty(row.units)+'</td></tr>';
       }).join('')+'</tbody></table></div></section>';
   }

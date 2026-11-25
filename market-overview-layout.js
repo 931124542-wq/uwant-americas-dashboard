@@ -29,6 +29,10 @@
    '" target="_blank" rel="noopener noreferrer" title="在新标签页打开商品页">'+name+
    ' <span aria-hidden="true">↗</span></a>':name;
  }
+ function rankPhoto(row){
+  const photos=root.RankPhotos;
+  return photos?.markup(photos.source(row.image)||photos.lookup(row.id,row.parentAsin?row.country:null))||'';
+ }
  function shell(period,currency){return ['市场大盘','品牌与价格带','UWANT对标'].map((title,i)=>'<section class="market-block '+['market-hero','market-competition','market-next-card'][i]+'" data-overview-section="'+i+'"><div class="market-block-heading"><span>'+String(i+1).padStart(2,'0')+'</span><h2>'+title+'</h2>'+(i===0?'<span class="market-period-tag">'+e(period)+' · '+e(currency)+'</span>':i===1?'<button class="rq-button" data-overview-page="brands">全部品牌 →</button>':'<button class="rq-button" data-overview-page="competitors">竞品对比 →</button>')+'</div>'+(['<div data-overview-slot="category"></div><div data-overview-slot="kpis"></div><div data-overview-slot="reading"></div>','<div data-overview-slot="controls"></div><div data-overview-slot="charts"></div><div data-overview-slot="leaders"></div><details class="market-overview-references"><summary>统计说明与数据来源</summary><div data-overview-slot="references"></div></details>','<div data-overview-slot="own"></div>'][i])+'</section>').join('');}
  function rankedRows(rows,kind,limit,key=row=>row.id){
   const seen=new Set();
@@ -43,7 +47,7 @@
  function mercadoProduct(product){
   return {id:product.product_code,modelKey:product.modelGroup||product.product_code,
    name:[product.brand_label,product.model||product.product_code].filter(Boolean).join(' · '),
-   title:product.product_name,image:product.picture_link,productUrl:mercadoProductUrl(product)};
+   title:product.product_name,image:product.picture_link||root.RankPhotos?.lookup(product.product_code),productUrl:mercadoProductUrl(product)};
  }
 
  function rankMercado(items,kind,limit=10,data=root.MERCADO_DATA){
@@ -81,7 +85,8 @@
    const ids=[...group.ids],product=ids.map(id=>byId.get(id)).find(Boolean);
    const listing=product?.productId||ids[0];
    return {...group,ids,parentAsin:group.id,historicalBrand:group.brand,id:listing||group.id,
-    productUrl:amazonProductUrl(group.country,listing),name:product?root.ResearchContext.name(product):group.brand,title:product?.title,image:product?.imageUrl,priceDate:group.month};
+    productUrl:amazonProductUrl(group.country,listing),name:product?root.ResearchContext.name(product):group.brand,title:product?.title,
+    image:product?.imageUrl||root.RankPhotos?.lookup(listing,group.country),priceDate:group.month};
   });
  }
 
@@ -105,8 +110,9 @@
    (rows.length?'<div class="table-scroll"><table><thead><tr><th>名次</th><th>商品 / 型号</th>'+
     (price?'<th>参考报价（'+e(currency)+'）</th>':'')+'<th>销量（台）</th>'+
     (currency?'<th>销售额（'+e(currency)+'）</th>':'')+'</tr></thead><tbody>'+
-    rows.map((row,index)=>'<tr data-ranked-product="'+e(row.parentAsin||row.id)+'"><td>'+(index+1)+'</td><th scope="row">'+productName(row)+
-      '<small>'+e(row.parentAsin||row.id)+'</small></th>'+(price?'<td>'+n(row.price)+(row.priceDate?'<small>'+e(row.priceDate)+'</small>':'')+'</td>':'')+
+    rows.map((row,index)=>'<tr data-ranked-product="'+e(row.parentAsin||row.id)+'"><td>'+(index+1)+'</td><th scope="row">'+
+      '<div class="ranking-product">'+rankPhoto(row)+'<div class="ranking-item-copy">'+productName(row)+
+      '<small>'+e(row.parentAsin||row.id)+'</small></div></div></th>'+(price?'<td>'+n(row.price)+(row.priceDate?'<small>'+e(row.priceDate)+'</small>':'')+'</td>':'')+
       '<td>'+n(row.units)+'</td>'+(currency?'<td>'+n(row.revenue)+'</td>':'')+'</tr>').join('')+
     '</tbody></table></div>':'<p class="market-chart-empty">当前范围暂无可用于排名的'+metricName(kind)+'数据。</p>')+'</section>';
  }

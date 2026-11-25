@@ -1,0 +1,42 @@
+.ranking-product{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:0;
+}
+.ranking-item-copy{
+  min-width:0;
+  white-space:normal;
+  overflow-wrap:anywhere;
+}
+.rank-photo{
+  position:relative;
+  display:grid;
+  place-items:center;
+  box-sizing:border-box;
+  flex:0 0 54px;
+  width:54px;
+  height:54px;
+  overflow:hidden;
+  border:1px solid #dfe8e1;
+  border-radius:7px;
+  background:#f4f7f4;
+  color:#4f6258;
+  font-size:10px;
+  font-weight:400;
+  white-space:nowrap;
+}
+.rank-photo img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  background:#fff;
+  opacity:0;
+}
+.rank-photo img[data-loaded="true"]{opacity:1}
+@media(max-width:700px){
+  .ranking-product{gap:7px}
+  .rank-photo{width:46px;height:46px;flex-basis:46px}
+}
