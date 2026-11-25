@@ -9,7 +9,8 @@ h1{margin:0 0 16px;font-size:clamp(23px,5vw,32px)}
 h2{margin:0 0 8px;font-size:19px}
 p{margin:0;color:#475c53;line-height:1.55}
 .load,.filters,.panel,.metrics{background:#fff;border:1px solid #d7e4dc;border-radius:10px;padding:15px;margin-bottom:12px}
-.load{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.load summary{cursor:pointer}
+.load-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:12px}
 .filters{display:grid;grid-template-columns:1.35fr 1fr 1.15fr 1fr 1fr auto;align-items:end;gap:10px}
 label{display:grid;gap:5px;font-size:14px;min-width:0}
 select,input,button,.button{min-width:0;min-height:40px;border:1px solid #b9cfc2;border-radius:6px;font:inherit;padding:7px 10px;color:inherit;background:#fff}

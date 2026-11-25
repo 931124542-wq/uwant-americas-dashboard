@@ -167,8 +167,7 @@
       ranked.map((row,i)=>{
         const [name,link]=products[row.id]||[row.id,''];
         const label=link?'<a href="'+esc(link)+'" target="_blank" rel="noopener noreferrer">'+esc(name)+'</a>':esc(name);
-        return '<tr><td>'+(i+1)+'</td><th scope="row" class="product">'+label+'<small>'+esc(row.id)+
-          (published.mercado.reviewed?.[row.id]?' · 累计数据核对中':'')+'</small></th><td>'+
+        return '<tr><td>'+(i+1)+'</td><th scope="row" class="product">'+label+'<small>'+esc(row.id)+'</small></th><td>'+
           qty(row.units)+'</td></tr>';
       }).join('')+'</tbody></table></div></section>';
   }
@@ -182,27 +181,26 @@
       return {
         rows:(current?.rows||[]).filter(match).map(([, ,period,units,revenue,groups])=>[period,units,revenue,groups]),
         ranking:(current?.rankMonths||[]).filter(match),openMonths:own?[]:(current?.openMonths||[]).filter(match).map(row=>row[2]),
-        source:own?'卖家精灵月度估算 · 本机补充':'Amazon 已公开的同类商品月度估算',
-        date:own?current.date:current?.dates[key],divisor:1e6,extra:'有记录的商品组',
+        divisor:1e6,
         heading:local[0]+' Amazon · '+categories[category],
-        note:'同款商品的月度数据按商品组汇总。'
+        note:'同类商品的销量和销售额为估算。'
       };
     }
     if(scope.scope==='category'){
       return {
-        rows:archive?.mercado?.markets[country]||[],date:archive?.mercado?.observedDate,
-        source:'大麦平台类目估算',divisor:100,extra:'来源月均价（'+local[1]+'）',price:true,
+        rows:archive?.mercado?.markets[country]||[],
+        divisor:100,extra:'月均价（'+local[1]+'）',price:true,
         heading:local[0]+'美客多 · 吸尘器类目',
-        note:'美客多吸尘器平台类目 '+local[3]+' 涵盖多种形态。无线杆式竞品样本可切换到「同类商品样本」查看。',
-        missing:archive?'所选范围暂无平台类目资料。':'请选择包含大麦类目历史的本机数据文件。'
+        note:'平台吸尘器类目 '+local[3]+' 涵盖多种形态。',
+        missing:archive?'所选范围暂无平台类目资料。':'打开本机文件后查看平台类目数据。'
       };
     }
     const history=published?.mercado?.scopes[key]||[];
     return {
       rows:history.map(([period,units,groups])=>[period,units,null,groups.length]),history,
-      date:published?.mercado?.dates[key],source:'大麦同类商品月销量资料',divisor:100,extra:'有记录的商品组',
+      divisor:100,
       heading:local[0]+'美客多 · '+categories[category],
-      note:'按有完整日记录的同类商品统计月销量。同期销售额和历史报价暂无来源。'
+      note:'同类商品的整月销量为估算。'
     };
   }
 
@@ -215,34 +213,27 @@
     $('market-overview').href=marketURL+'#'+new URLSearchParams(linkScope).toString();
     if(!validRange){container.innerHTML='<p class="panel">请选择有效的起始月与结束月。</p>';return;}
     const report=reportFor(scope);
+    if(scope.scope==='category'&&!archive)$('local-data').open=true;
     const inRange=period=>period>=start&&period<=end;
     const rows=report.rows.filter(row=>inRange(row[0])).sort((a,b)=>a[0].localeCompare(b[0]));
     const listingMonths=report.history?.filter(row=>inRange(row[0]))||[];
-    const reviewed=new Map();
-    const reviewedMonths=new Map();
-    for(const [period, ,groups] of listingMonths)for(const [,id,units] of groups){
-      if(!published.mercado.reviewed?.[id])continue;
-      reviewed.set(id,(reviewed.get(id)||0)+units);
-      reviewedMonths.set(period,(reviewedMonths.get(period)||0)+units);
-    }
-    const reviewedUnits=[...reviewed.values()].reduce((sum,units)=>sum+units,0);
     const expected=monthNumber(end)-monthNumber(start)+1;
     const missing=report.openMonths?.filter(inRange)||[];
     const coverage=column=>rows.filter(row=>row[column]!==null).length;
     const table=rows.length?'<div class="table"><table><thead><tr><th>月份</th><th>销量（台）</th><th>销售额（'+currency+
-      '）</th><th>'+report.extra+'</th></tr></thead><tbody>'+
+      '）</th>'+(report.price?'<th>'+report.extra+'</th>':'')+'</tr></thead><tbody>'+
       rows.map(([period,units,revenue,extra])=>'<tr data-report-month="'+period+'"><th scope="row">'+period+'</th><td>'+
-        qty(units)+'</td><td>'+money(revenue,report.divisor)+'</td><td>'+(report.price?money(extra,report.divisor):qty(extra))+'</td></tr>').join('')+
+        qty(units)+'</td><td>'+money(revenue,report.divisor)+'</td>'+(report.price?'<td>'+money(extra,report.divisor)+'</td>':'')+'</tr>').join('')+
       '</tbody></table></div>':'<p>'+(report.missing||'所选范围暂无可用月度记录。')+'</p>';
     container.innerHTML='<section class="panel"><div class="row"><div><h2>'+report.heading+'</h2>'+
-      '<p>'+report.source+(report.date?' · 最近来源日期 '+report.date:'')+'</p></div>'+
-      (rows.length?'<button type="button" data-month-export>导出所选月份</button>':'')+'</div><p>'+report.note+'</p></section>'+
+      '<p>'+report.note+'</p></div>'+
+      (rows.length?'<button type="button" data-month-export>导出所选月份</button>':'')+'</div></section>'+
       '<section class="metrics"><article><span>期间销量估算（台）</span><strong data-total-units>'+
       qty(sum(rows.map(r=>r[1])))+'</strong></article><article><span>期间销售额估算（'+currency+'）</span><strong data-total-revenue>'+
       money(sum(rows.map(r=>r[2])),report.divisor)+'</strong></article></section><section class="panel"><div class="row"><h2>逐月数据</h2>'+
-      '<p class="subtitle">销量 '+coverage(1)+' / '+expected+' 月 · 销售额 '+coverage(2)+' / '+expected+' 月</p></div>'+
-      (reviewed.size?'<p class="subtitle" data-monthly-archive-review>期间销量含 '+qty(reviewed.size)+' 款与累计记录存在差异的商品，共 '+qty(reviewedUnits)+' 台，正在核对。</p>':'')+
-      (missing.length?'<p class="subtitle">以下月份在来源更新时尚未结束，未纳入整月统计：'+missing.join('、')+'。</p>':'')+table+'</section>';
+      '</div>'+
+      (coverage(1)>0&&coverage(1)<expected?'<p class="subtitle">部分月份暂无整月销量。</p>':'')+
+      (missing.length?'<p class="subtitle">'+missing.join('、')+' 未满整月。</p>':'')+table+'</section>';
     if(report.ranking){
       const rank=rankSection(scope,report.ranking.filter(row=>inRange(row[2])),currency);
       if(rank)container.append(rank);
@@ -250,12 +241,11 @@
     if(report.history)container.insertAdjacentHTML('beforeend',mercadoRanking(listingMonths));
     const exportButton=container.querySelector('[data-month-export]');
     if(exportButton)exportButton.onclick=()=>downloadable([
-      ['国家','平台','品类或平台类目','月份','币种','销量估算','销售额估算',report.extra,'最近来源日期','来源',
-       ...(report.history?['其中累计销量待核商品的销量']:[])],
+      ['国家','平台','品类或平台类目','月份','币种','销量估算（台）','销售额估算',
+       ...(report.price?[report.extra]:[])],
       ...rows.map(([period,units,revenue,extra])=>[country,platform==='amazon'?'Amazon':'Mercado Libre',report.price?countries[country][3]:category,
        period,currency,units,revenue===null?null:(revenue/report.divisor).toFixed(2),
-       report.price&&extra!==null?(extra/report.divisor).toFixed(2):extra,report.date,report.source,
-       ...(report.history?[reviewedMonths.get(period)??null]:[])])
+       ...(report.price?[extra===null?null:(extra/report.divisor).toFixed(2)]:[])])
     ],'UWANT_'+platform+'_'+country+'_'+category+'_'+(scope.scope||'sample')+'_'+start+'_'+end+'.csv');
   }
 

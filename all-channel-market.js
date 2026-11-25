@@ -119,9 +119,7 @@
   for(const m of sample.months)rows.push(row('自然月',ml,start,end,m.month,null,m.units,null,m.status));
   const lifetime=root.MercadoLifetime.report(products);
   if(lifetime.total!==null){
-   const flagged=root.MercadoLifetime.archiveConflicts(lifetime,products,data).length;
-   const note=flagged?'样本累计销量，'+flagged+' 个商品组的销量档案待核':'样本累计销量';
-   rows.push(row('上架以来累计',ml,null,null,null,lifetime.start+' 至 '+lifetime.end,lifetime.total,null,note));
+   rows.push(row('上架以来累计',ml,null,null,null,lifetime.start+' 至 '+lifetime.end,lifetime.total,null,'累计销量估算'));
   }
   for(const batch of root.MercadoCoverageSummary.revenueSnapshots(mercado,products,data)){
    rows.push(row('近30天快照',ml,null,null,null,batch.date,null,batch.amount,'每批独立估算'));
