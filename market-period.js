@@ -7,6 +7,67 @@
     return date.toISOString().slice(0,7);
   }
 
+  function amazonAvailability(scope, history) {
+    if (!['amazon','all'].includes(scope.platform) || !root.MarketIntegrity.applicable(scope.country,'amazon')) return null;
+    const range = root.SampleSalesShares.report(history, {
+      ...scope, platform:'amazon', startMonth:'2026-01', endMonth:'2026-12', dataset:'2026-12'
+    });
+    const available = root.MarketSummary.monthlyBreakdown(range.months,range.facts).filter(row => row.groups>0);
+    const latest = available.at(-1);
+    return {available, latest, preferred:available.filter(row=>!row.open).at(-1)||latest};
+  }
+
+  function amazonMonthNotice(host, scope, history, change) {
+    const availability = amazonAvailability(scope,history);
+    if (!availability) return;
+    const months = root.MonthlyRange.months(scope);
+    if (availability.available.some(row=>months.includes(row.month))) return;
+    const unfiltered = scope.productType&&scope.productType!=='all'
+      ?amazonAvailability({...scope,productType:'all'},history):null;
+    const canClearType = unfiltered?.available.some(row=>months.includes(row.month));
+    const card = document.createElement('section');
+    card.className = 'market-reading';
+    card.dataset.amazonMonthNotice = '';
+    const label = document.createElement('strong');
+    label.className = 'market-reading-label';
+    const body = document.createElement('div');
+    const description = document.createElement('p');
+    body.append(description);
+    const action = (title,patch) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'rq-button';
+      button.textContent = title;
+      button.onclick = () => change({...patch,shareDrill:'',historyProduct:''});
+      body.append(button);
+      return button;
+    };
+    const preferred = availability.preferred;
+    if (canClearType) {
+      label.textContent = '产品类型筛选';
+      description.textContent = '所选月份有该品类的公开销售数据，当前产品类型暂无记录。';
+      action('查看全部产品类型 →',{productType:'all'}).dataset.amazonClearType = '';
+    } else if (preferred) {
+      label.textContent = preferred.open?'最近有记录的月份':'最近完整月';
+      const number = new Intl.NumberFormat('zh-CN',{maximumFractionDigits:2});
+      const currency = root.MarketIntegrity.currencies[scope.country];
+      const estimates = [
+        preferred.units===null?'':'销量 '+number.format(preferred.units)+' 台',
+        preferred.revenue===null?'':'销售额 '+number.format(preferred.revenue)+' '+currency
+      ].filter(Boolean);
+      description.textContent = '所选月份暂无公开月度销售数据。'+format(preferred.month)+(preferred.open?'（未满整月）':'')+'估算 · '+estimates.join(' · ');
+      action('查看'+format(preferred.month)+' →',{
+        dataset:preferred.month,startMonth:preferred.month,endMonth:preferred.month
+      }).dataset.amazonLatestMonth = preferred.month;
+    } else {
+      label.textContent = '月度数据';
+      description.textContent = '当前品类和筛选范围暂无公开的月度销量与销售额。可在热销商品查看已有报价。';
+    }
+    card.append(label,body);
+    host.append(card);
+    return card;
+  }
+
   function recentMonth(scope, history) {
     if (root.ResearchModel.usesMercadoMonths(scope) && root.MERCADO_DATA?.records) {
       const data = root.MERCADO_DATA;
@@ -21,13 +82,11 @@
         complete:complete.length>0
       };
     }
-    const facts = root.SampleSalesShares.report(history, {
-      ...scope, startMonth:'2026-01', endMonth:'2026-12', dataset:'2026-12'
-    }).facts;
-    const months = facts.filter(fact => fact.units !== null || fact.revenue !== null).map(fact => fact.month);
+    const availability = amazonAvailability(scope,history);
     const sellerMonth = root.SellerMonthly?.latestMonth(scope);
-    if (sellerMonth) months.push(sellerMonth);
-    return {month:months.sort().at(-1),complete:false};
+    const preferred = availability?.preferred;
+    if (sellerMonth && (!preferred || sellerMonth>preferred.month)) return {month:sellerMonth,complete:true};
+    return {month:preferred?.month,first:availability?.available[0]?.month,complete:!preferred?.open};
   }
 
   function mount(scope, history, change) {
@@ -106,5 +165,5 @@
     };
   }
 
-  root.MarketPeriod = {mount};
+  root.MarketPeriod = {mount,amazonMonthNotice};
 })(window);

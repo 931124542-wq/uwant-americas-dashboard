@@ -197,7 +197,8 @@
         ranking:(current?.rankMonths||[]).filter(match),openMonths:own?[]:(current?.openMonths||[]).filter(match).map(row=>row[2]),
         divisor:1e6,
         heading:local[0]+' Amazon · '+categories[category],
-        note:'同类商品的销量和销售额为估算。'
+        note:'同类商品的销量和销售额为估算。',
+        missing:'所选范围暂无公开整月销量与销售额。'
       };
     }
     if(scope.scope==='category'){
@@ -237,6 +238,9 @@
     const expected=monthNumber(end)-monthNumber(start)+1;
     const missing=report.openMonths?.filter(inRange)||[];
     const coverage=column=>rows.filter(row=>row[column]!==null).length;
+    const latest=report.rows.map(row=>row[0]).sort().at(-1);
+    const shortcut=platform==='amazon'&&!rows.length&&latest?'<div class="row"><p>最近有整月数据 '+esc(latest)+'</p>'+
+      '<button type="button" data-history-latest>查看该月 →</button></div>':'';
     const table=rows.length?'<div class="table"><table><thead><tr><th>月份</th><th>销量（台）</th><th>销售额（'+currency+
       '）</th>'+(report.price?'<th>'+report.extra+'</th>':'')+'</tr></thead><tbody>'+
       rows.map(([period,units,revenue,extra])=>'<tr data-report-month="'+period+'"><th scope="row">'+period+'</th><td>'+
@@ -250,7 +254,13 @@
       money(sum(rows.map(r=>r[2])),report.divisor)+'</strong></article></section><section class="panel"><div class="row"><h2>逐月数据</h2>'+
       '</div>'+
       (coverage(1)>0&&coverage(1)<expected?'<p class="subtitle">部分月份暂无整月销量。</p>':'')+
-      (missing.length?'<p class="subtitle">'+missing.join('、')+' 未满整月。</p>':'')+table+'</section>';
+      (missing.length?'<p class="subtitle">'+missing.join('、')+' 未满整月，可回主看板查看当月已有估算。</p>':'')+table+shortcut+'</section>';
+    const latestButton=container.querySelector('[data-history-latest]');
+    if(latestButton)latestButton.onclick=()=>{
+      $('startMonth').value=$('endMonth').value=latest;
+      writeScope();
+      render();
+    };
     if(report.ranking){
       const rank=rankSection(scope,report.ranking.filter(row=>inRange(row[2])),currency);
       if(rank)container.append(rank);

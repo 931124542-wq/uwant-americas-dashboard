@@ -37,8 +37,7 @@
   const panel=document.createElement('section');
   panel.className='market-block market-hero';
   panel.dataset.marketChannel='amazon';
-  const note=!amazon.facts.length?'所选月份暂无销量和销售额数据。':
-   amazon.includesOpenMonth?'估算包含更新时尚未结束的月份。':'';
+  const note=amazon.includesOpenMonth?'估算包含更新时尚未结束的月份。':'';
   const card=(key,label,value)=>'<article class="market-kpi" data-market-kpi="'+key+'"><span>'+label+
    '</span><strong>'+number(value)+'</strong></article>';
   panel.innerHTML='<div class="market-block-heading"><h2>Amazon</h2><span class="market-period-tag">'+esc(start)+' 至 '+esc(end)+'</span></div>'+
@@ -47,6 +46,7 @@
    (note?'<p class="market-period-detail">'+note+'</p>':'')+
    root.MarketOverviewLayout.monthlyResults(months,amazon.facts,currency);
   panel.querySelector('.market-monthly-results').open=amazon.facts.length>0&&months.length<=12;
+  if(!amazon.facts.length)root.MarketPeriod?.amazonMonthNotice(panel,amazon.scope,root.REVIEW_DATA.history,change);
   if(amazon.facts.length){
    const kind=amazon.scope.shareMetric==='units'?'units':'revenue';
    const products=root.decisionCatalog().observed.filter(row=>row.platform==='amazon');

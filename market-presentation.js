@@ -81,6 +81,11 @@
    if(s.platform!=='ml'){const dataset=document.getElementById('dataset');if(dataset)dataset.closest('label').hidden=true;}
   }
   const footer=document.querySelector('#research-content footer'),version=document.querySelector('meta[name="uwant-release"]')?.content;if(footer&&version){let note=footer.querySelector('span');if(!note){note=document.createElement('span');footer.append(note);}note.textContent='注：市场销量及销售额为第三方估算数据 · v'+version;}
+  if(!admin&&s.page==='brands'&&!monthly){
+   const host=document.getElementById('research-evidence');
+   const notice=root.MarketPeriod?.amazonMonthNotice(host,s,root.REVIEW_DATA.history,change);
+   if(notice)host.prepend(notice);
+  }
   root.MarketDecisionUI?.mount(s,change,download);
   root.UwantShipments?.mount(s,change,download);
   root.LocalOperating?.mount(s,change,download);

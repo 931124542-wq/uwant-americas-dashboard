@@ -141,10 +141,14 @@
 
   move(first.querySelector('.market-kpi-grid'),'kpis');move(first.querySelector('.market-reading'),'reading');move(first.querySelector('.ml-coverage-summary'),'reading');move(first.querySelector('[data-ml-history-summary]'),'reading');
   move(first.querySelector('[data-ml-lifetime]'),'kpis');
-  if(s.platform==='amazon'&&root.MarketIntegrity.applicable(s.country,'amazon')){
+  if(s.platform!=='ml'){
+   const notice=root.MarketPeriod?.amazonMonthNotice(slot('reading'),s,root.REVIEW_DATA.history,change);
+   if(notice)slot('reading').querySelector('.market-reading:not([data-amazon-month-notice])')?.remove();
+  }
+  if(['amazon','all'].includes(s.platform)&&root.MarketIntegrity.applicable(s.country,'amazon')){
    const query=new URLSearchParams({platform:'amazon',country:s.country,category:s.category});
    if(s.startMonth&&s.endMonth){query.set('startMonth',s.startMonth);query.set('endMonth',s.endMonth);}
-   slot('reading').insertAdjacentHTML('beforeend','<div class="ml-archive-reference"><a class="rq-button" data-amazon-history href="market-history/?'+e(query.toString())+'" target="_blank" rel="noopener noreferrer">Amazon 月度研究文件</a></div>');
+   slot('reading').insertAdjacentHTML('beforeend','<div class="ml-archive-reference"><a class="rq-button" data-amazon-history href="market-history/?'+e(query.toString())+'" target="_blank" rel="noopener noreferrer">查看 Amazon 月度数据 →</a></div>');
   }
   if(range){
    if(original)move(original.querySelector('.market-sample-heading'),'category');
@@ -163,7 +167,7 @@
   const shares=second.querySelector('.sample-shares');
   if(shares){const controls=shares.querySelector('.sample-share-toolbar');if(controls){controls.classList.add('market-chart-controls');move(controls,'controls');}for(const x of shares.querySelectorAll(':scope>.sample-share-scope,:scope>.sample-share-evidence'))move(x,'references');shares.querySelector('.sample-share-empty')?.remove();move(shares,'charts');}
   else{move(second.querySelector('.market-chart-controls'),'controls');move(second.querySelector('.market-analysis-grid'),'charts');move(second.querySelector('[data-ml-detail]'),'charts');}
-  if(!slot('references').children.length)slot('references').innerHTML='<p>Mercado Libre 近30天估算数据，更新日期 '+e(r.date)+'。商品月度销量在详情页查看。</p>';
+  if(!slot('references').children.length&&s.platform==='ml')slot('references').innerHTML='<p>Mercado Libre 近30天估算数据，更新日期 '+e(r.date)+'。商品月度销量在详情页查看。</p>';
   slot('leaders').innerHTML=leaders(s,c,r);
   // Business modules must survive the final DOM rebuild, not only the HTML renderer.
   for(const block of old)for(const x of block.querySelectorAll('[data-overview-preserve]')){const target=x.dataset.overviewPreserve;if(['category','leaders'].includes(target))move(x,target);}

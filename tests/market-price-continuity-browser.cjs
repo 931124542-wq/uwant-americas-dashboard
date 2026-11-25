@@ -116,11 +116,54 @@ async function main() {
     await go({country:'US',platform:'amazon',category:'fabric'});
     await page.locator('[data-quote-price-bands] [data-wb-band]').first().waitFor();
     assert.match(await page.locator('[data-quote-price-bands]').innerText(),/商品数分布/);
+    const noNovember={dataset:'2026-11',startMonth:'2026-11',endMonth:'2026-11',marketPeriod:'monthly'};
+    const amazonScopes=[['CA','vacuum'],['CA','wash'],['CA','fabric'],['US','vacuum'],['US','wash'],['MX','wash']];
+    for(const [country,category] of amazonScopes){
+      await go({country,category,platform:'amazon',...noNovember});
+      assert.deepEqual((await headline()).slice(0,2),['—','—']);
+      const shortcut=page.locator('[data-amazon-latest-month]');
+      const month=await shortcut.getAttribute('data-amazon-latest-month');
+      assert(month<'2026-11',country+'/'+category);
+      await shortcut.click();
+      assert.equal(await page.evaluate(()=>state.startMonth+'|'+state.endMonth),month+'|'+month);
+      assert((await headline()).slice(0,2).every(value=>value!=='—'),country+'/'+category);
+      assert.equal(await page.locator('[data-amazon-month-notice]').count(),0);
+    }
+    await go({country:'CA',category:'fabric',platform:'amazon',...noNovember});
+    await page.locator('[data-amazon-latest-month]').click();
+    await page.reload({waitUntil:'domcontentloaded'});
+    assert.notEqual((await headline())[0],'—');
+    await page.goBack();
+    assert.equal(await page.evaluate(()=>state.dataset),'2026-11');
+    assert.deepEqual((await headline()).slice(0,2),['—','—']);
+    assert.equal(await page.locator('[data-amazon-latest-month]').count(),1);
+
+    await go({country:'MX',category:'wash',platform:'all',...noNovember});
+    const amazonPanel=page.locator('[data-market-channel="amazon"]');
+    await amazonPanel.locator('[data-amazon-latest-month]').click();
+    assert.equal(await page.evaluate(()=>state.platform),'all');
+    assert.notEqual(await amazonPanel.locator('[data-market-kpi="units"] strong').innerText(),'—');
+
+    await go({country:'CA',category:'fabric',platform:'amazon',productType:'steam',
+      dataset:'2026-09',startMonth:'2026-09',endMonth:'2026-09'});
+    await page.locator('[data-amazon-clear-type]').click();
+    assert.equal(await page.evaluate(()=>state.productType+'|'+state.dataset),'all|2026-09');
+    assert.notEqual((await headline())[0],'—');
+
+    await go({country:'CA',category:'mattress',platform:'amazon',...noNovember});
+    assert.equal(await page.locator('[data-amazon-latest-month]').count(),0);
+    assert.match(await page.locator('[data-amazon-month-notice]').innerText(),/暂无公开/);
+
     await page.setViewportSize({width:390,height:844});
+    const monthlyPage=new URL('market-history/?platform=amazon&country=CA&category=fabric&startMonth=2026-11&endMonth=2026-11',base);
+    await page.goto(monthlyPage.href);
+    await page.locator('[data-history-latest]').click();
+    assert.notEqual(await page.locator('[data-total-revenue]').innerText(),'—');
+    assert(!(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2)));
     await go({country:'AR',category:'wash'});
     assert(!(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2)));
     assert.deepEqual(errors,[]);
-    console.log('PASS: 36 market routes, price boundaries, headline totals, cumulative units, CSV, scope reset and quote fallback.');
+    console.log('PASS: 36 market routes, price boundaries, headline totals, cumulative units, CSV, scope reset, quote fallback and Amazon month recovery.');
   } finally {
     await browser.close();
   }
