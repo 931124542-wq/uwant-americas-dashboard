@@ -20,18 +20,33 @@
   const labels=[countries[country],platforms[platform],categories[category],period].filter(Boolean);
   if(labels.length){caption.textContent=labels.join(' / ');caption.hidden=false;}
 
-  document.querySelectorAll('.destinations a').forEach(link => {
+  document.querySelectorAll('.guide-links a').forEach(link => {
     const route = new URLSearchParams(link.hash.slice(1));
     if (!route.has('page') || route.has('module')) return;
     const target = new URLSearchParams(scope);
     for (const [key,value] of route) target.set(key,value);
     link.href='../#'+target;
   });
+
+  const mercadoCountries=['MX','BR','AR','CL','CO'], amazonCountries=['MX','CA','US','BR'];
+  const readerPlatform=['amazon','ml'].includes(platform)?platform:amazonCountries.includes(country)&&!mercadoCountries.includes(country)?'amazon':'ml';
+  const readerCountries=readerPlatform==='amazon'?amazonCountries:mercadoCountries;
+  const reader=new URLSearchParams({platform:readerPlatform});
+  if(readerCountries.includes(country))reader.set('country',country);
+  if(category)reader.set('category',category);
+  if(readerPlatform==='ml')reader.set('scope','sample');
+  for(const key of ['startMonth','endMonth']){
+    const value=scope.get(key)||(month(dataset)?dataset:null);
+    if(value)reader.set(key,value);
+  }
+  document.querySelector('[data-monthly-page]').href='../market-history/?'+reader;
+
   const isOperations = incoming.get('module') === 'operations';
   const page=incoming.get('page'), view=incoming.get('view');
   const back = isOperations ? new URLSearchParams({module:'operations',page:'overview'}) : new URLSearchParams(scope);
   const pages = isOperations ? ['overview','analysis','products','inventory','profit','calendar','tasks','access'] : ['market','brands','competitors'];
   back.set('page',pages.includes(page)?page:isOperations?'overview':'market');
+  if(isOperations&&country&&!['CL','CO'].includes(country))back.set('country',country);
   if(!isOperations && ['overview','products','monthly','keywords','data','pricing','macro'].includes(view)) back.set('view',view);
   document.querySelector('[data-guide-return]').href='../#'+back;
 })();
