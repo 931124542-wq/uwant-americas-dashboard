@@ -11,6 +11,7 @@
  const admissible=r=>!['candidate','quarantined_estimate','model_reference'].includes(r.dataNature)&&r.origin!=='candidate'&&!r.quarantinedHistory&&asin(r)!=='B0DGRZFHQ6';
  function boundaries(s){
   const currency=currencies[s.country],step={MX:1000,CA:100,US:100,BR:500,AR:50000,CL:30000,CO:100000}[s.country]||100;
+  if(root.ResearchModel?.priceBandRule(s))return {fixed:true,custom:false,currency};
   const defaults=Array.from({length:11},(_,i)=>i*step),[code,raw]=String(s.shareBands||'').split(':');
   if(code!==currency||!raw)return {edges:defaults,custom:false,currency};
   const values=raw.split(',').map(Number),valid=values.length>=2&&values.length<=31&&values[0]===0&&values.every((x,i)=>finite(x)&&(!i||x>values[i-1]));
@@ -46,10 +47,11 @@
    const byAsin=new Map();for(const x of members){if(!byAsin.has(asin(x)))byAsin.set(asin(x),[]);byAsin.get(asin(x)).push(x);}
    const prices=[],priceIssues=[];
    for(const [a,rs] of byAsin){const vals=[...new Set(rs.filter(x=>finite(x.price)&&x.fieldEvidence?.price!==false).map(x=>x.price))];if(vals.length!==1)priceIssues.push(a+(vals.length?'：同月价格冲突':'：月度价格缺失'));else prices.push(vals[0]);}
-   const indexes=new Set(prices.map(p=>bandIndex(p,bands.edges)));
+   const indexes=new Set(prices.map(p=>bands.fixed?root.ResearchModel.categoryPriceBand(s,p).index:bandIndex(p,bands.edges)));
    if(indexes.size>1)priceIssues.push('同父体商品分属不同价位段，不分摊父体金额');
    const index=!priceIssues.length&&indexes.size===1?[...indexes][0]:null;
-   facts.push({id,country:s.country,platform:'amazon',category:s.category,currency,month:r.month,parentAsin:parent(r),asins:[...byAsin.keys()].sort(),brand,brandReason:brand===UNKNOWN_BRAND?'品牌缺失、待核或同父体跨品牌':'历史记录品牌一致',units,revenue,priceIndex:index,priceBand:index===null?UNKNOWN_PRICE:bandLabel(index,bands.edges),prices,priceReason:priceIssues.join('；')||'按月度期末价分档，非成交均价；区间左闭右开',priceKind:'month_end',sources:[...new Set(members.map(x=>x.source||'SellerSprite月度历史'))],sourceDates:[...new Set(members.map(x=>x.retrievedAt||'').filter(Boolean))].sort(),open:members.some(x=>/未结/.test(x.monthState||'')||x.retrievedAt?.slice(0,7)===x.month),evidence:members.map(x=>({asin:asin(x),month:x.month,parentAsin:parent(x),parentBasis:x.parentBasis,source:x.source,sourceDate:x.retrievedAt,price:finite(x.price)?x.price:null,dataset:x.dataset||x.origin||'monthly'}))});
+   const label=index===null?UNKNOWN_PRICE:bands.fixed?root.ResearchModel.categoryPriceBand(s,prices[0]).label:bandLabel(index,bands.edges);
+   facts.push({id,country:s.country,platform:'amazon',category:s.category,currency,month:r.month,parentAsin:parent(r),asins:[...byAsin.keys()].sort(),brand,brandReason:brand===UNKNOWN_BRAND?'品牌缺失、待核或同父体跨品牌':'历史记录品牌一致',units,revenue,priceIndex:index,priceBand:label,prices,priceReason:priceIssues.join('；')||'按月度期末价分档，非成交均价；区间左闭右开',priceKind:'month_end',sources:[...new Set(members.map(x=>x.source||'SellerSprite月度历史'))],sourceDates:[...new Set(members.map(x=>x.retrievedAt||'').filter(Boolean))].sort(),open:members.some(x=>/未结/.test(x.monthState||'')||x.retrievedAt?.slice(0,7)===x.month),evidence:members.map(x=>({asin:asin(x),month:x.month,parentAsin:parent(x),parentBasis:x.parentBasis,source:x.source,sourceDate:x.retrievedAt,price:finite(x.price)?x.price:null,dataset:x.dataset||x.origin||'monthly'}))});
   }
   const metric=s.shareMetric==='units'?'units':'revenue',selected=facts.filter(f=>f[metric]!==null),total=selected.length?selected.reduce((n,f)=>n+f[metric],0):null;
   function aggregate(dimension){const map=new Map();for(const f of selected){const label=dimension==='brand'?f.brand:f.priceBand,k=dimension==='brand'?label:f.priceIndex===null?'unknown':String(f.priceIndex);if(!map.has(k))map.set(k,{key:k,label,value:0,units:null,revenue:null,facts:[],asins:new Set(),parents:new Set()});const g=map.get(k);g.value+=f[metric];g.facts.push(f.id);f.asins.forEach(x=>g.asins.add(x));g.parents.add(f.parentAsin);if(f.units!==null)g.units=(g.units??0)+f.units;if(f.revenue!==null)g.revenue=(g.revenue??0)+f.revenue;}
