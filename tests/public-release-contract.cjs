@@ -7,4 +7,5 @@ for(const f of ['competition-model.js','competition-evidence-data.js','capture.j
 for(const m of fs.readFileSync('index.html','utf8').matchAll(/(?:src|href)="([^"#?]+\.(?:js|css))(?:\?v=([^"]+))?"/g)){assert(fs.existsSync(m[1]),m[1]);if(m[2])assert.equal(m[2],crypto.createHash('sha256').update(fs.readFileSync(m[1])).digest('hex').slice(0,12),m[1]);}
 const A=require('../amazon-research-model');for(const country of ['CA','MX','US','BR'])for(const platform of ['ml','bestbuy','official','retail','unknown']){const scope={country,platform,category:'fabric',dataset:'2026-02'},base={observed:[],candidates:[]},out=A.integrate(base,{scope,data:c.window.AMAZON_RESEARCH,Q:{}});assert.deepEqual(out.scope,scope);assert.deepEqual(out.observed,[]);}
 cp.execFileSync(process.execPath,['scripts/build-public-market-history.cjs','--check']);
+require('./market-price-continuity.cjs');
 console.log('PASS: restricted source files excluded; original production files unchanged; drafts excluded; resource hashes match; non-Amazon country/platform scope preserved.');

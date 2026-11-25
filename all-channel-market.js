@@ -88,8 +88,11 @@
    root.MarketOverviewLayout.rankMercadoMonths(sample),{kind:'units',price:false,
     note:'按所选月份的整月销量排序。同期商品报价和销售额暂无数据。'}
   ));
-  mlPanel.insertAdjacentHTML('beforeend','<div class="market-channel-footer"><button class="rq-button">查看美客多大盘 →</button></div>');
-  mlPanel.querySelector('.market-channel-footer button').onclick=()=>change({
+  mlPanel.insertAdjacentHTML('beforeend','<div class="market-channel-footer"><button class="rq-button" data-channel-snapshot>查看近30天与价格带 →</button> <button class="rq-button" data-channel-monthly>查看美客多月度数据 →</button></div>');
+  mlPanel.querySelector('[data-channel-snapshot]').onclick=()=>change({
+   platform:'ml',marketPeriod:'snapshot',startMonth:start,endMonth:end
+  });
+  mlPanel.querySelector('[data-channel-monthly]').onclick=()=>change({
    platform:'ml',marketPeriod:'monthly',startMonth:start,endMonth:end
   });
   if(amazon){
@@ -122,7 +125,7 @@
    rows.push(row('上架以来累计',ml,null,null,null,lifetime.start+' 至 '+lifetime.end,lifetime.total,null,'累计销量估算'));
   }
   for(const batch of root.MercadoCoverageSummary.revenueSnapshots(mercado,products,data)){
-   rows.push(row('近30天快照',ml,null,null,null,batch.date,null,batch.amount,'每批独立估算'));
+   rows.push(row('近30天快照',ml,null,null,null,batch.date,batch.units,batch.amount,'每批独立估算'));
   }
   return rows;
  }
