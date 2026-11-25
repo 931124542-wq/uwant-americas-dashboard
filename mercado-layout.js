@@ -7,7 +7,7 @@
  function brandPage(section,s,all,report,data,metricControl,currency,change,download){
   const extra=root.MercadoCoverageSummary.report(all,data);
   const archive=root.MercadoCoverageSummary.archiveReport(all,data);
-  const kind=s.shareMetric==='units'?'units':'revenue',metric=kind==='units'?'销量估算 / 台':'销售额估算 / '+currency;
+  const kind=s.shareMetric==='units'?'units':'revenue',metric=kind==='units'?'销量（台）':'销售额（'+currency+'）';
   const baseDate=data.researchSnapshot||data.asOf,showExtra=extra[kind]!==null,showArchive=archive[kind]!==null;
   const directory=root.Mercado.brandDirectory(all,report,extra,kind,archive);
   const query=String(s.brandQuery||'').trim().toLowerCase();
@@ -18,22 +18,18 @@
   const display=value=>value===null?'—':fmt(value);
   const pct=(value,total)=>{const ratio=share(value,total);return ratio===null?'—':ratio>0&&ratio<.001?'＜0.1%':(ratio*100).toFixed(1)+'%';};
   const tools=document.createElement('div');tools.className='market-brand-tools';
-  tools.innerHTML='<input type="search" data-market-brand-query aria-label="搜索品牌" placeholder="搜索品牌" value="'+esc(s.brandQuery||'')+'"><span>统计指标</span>';
+  tools.innerHTML='<input type="search" data-market-brand-query aria-label="搜索品牌" placeholder="搜索品牌" value="'+esc(s.brandQuery||'')+'">';
   if(metricControl)tools.append(metricControl);
-  tools.insertAdjacentHTML('beforeend','<small data-ml-brand-catalogue>商品库 '+fmt(directory.named)+' 个来源品牌'+(query?' · 搜索到 '+fmt(filtered.length)+' 组':'')+'</small>');
   section.append(tools);
-  const valueLabel=kind==='units'?'有销量':'有销售额';
-  const statNote=baseDate+' 有 '+fmt(directory.basePositive)+' 个具名品牌'+valueLabel+
-   (showExtra?' · '+extra.date+' 有 '+fmt(directory.extraPositive)+' 个具名品牌'+valueLabel:'')+
-   (showArchive?' · '+archive.date+' 有 '+fmt(directory.archivePositive)+' 个具名品牌'+valueLabel:'');
-  const extraHead=showExtra?'<th>'+extra.date+'<small>'+esc(metric)+' · 该批占比</small></th>':'';
-  const archiveHead=showArchive?'<th data-ml-brand-archive>'+archive.date+'<small>'+esc(metric)+' · 该批占比</small></th>':'';
-  const rows=filtered.slice(page*20,page*20+20).map(row=>'<tr><th>'+esc(row.name)+'</th><td>'+fmt(row.products)+'</td><td>'+display(row.baseValue)+'<small>'+pct(row.baseValue,report.total)+' · '+fmt(row.baseRecords)+' 个统计样本</small></td>'+(
-   showExtra?'<td>'+display(row.extraValue)+'<small>'+pct(row.extraValue,extra[kind])+' · '+fmt(row.extraRecords)+' 个统计样本</small></td>':''
-  )+(showArchive?'<td>'+display(row.archiveValue)+'<small>'+pct(row.archiveValue,archive[kind])+' · '+fmt(row.archiveRecords)+' 个统计样本</small></td>':'')+
-  '<td data-ml-brand-lifetime>'+display(row.lifetimeValue)+'<small>'+fmt(row.lifetimeRecords)+' 个去重商品组</small></td>'+
+  const extraHead=showExtra?'<th>'+extra.date+'<small>'+esc(metric)+' · 占比</small></th>':'';
+  const archiveHead=showArchive?'<th data-ml-brand-archive>'+archive.date+'<small>'+esc(metric)+' · 占比</small></th>':'';
+  const cell=(value,total)=>'<td>'+display(value)+(value===null?'':'<small>'+pct(value,total)+'</small>')+'</td>';
+  const rows=filtered.slice(page*20,page*20+20).map(row=>'<tr><th>'+esc(/^(未识别品牌|品牌待核)$/.test(row.name)?'未知品牌':row.name)+'</th>'+
+  cell(row.baseValue,report.total)+(showExtra?cell(row.extraValue,extra[kind]):'')+
+  (showArchive?cell(row.archiveValue,archive[kind]):'')+
+  '<td data-ml-brand-lifetime>'+display(row.lifetimeValue)+'</td>'+
   '<td><button class="rq-button" data-ml-brand="'+esc(row.name)+'">查看商品 →</button></td></tr>').join('');
-  section.insertAdjacentHTML('beforeend','<p class="market-brand-sample">'+esc(statNote)+'。各批为近30天估算，独立计算。累计销量按每组最近一次有效档案计入。</p><div class="table-scroll"><table class="market-brand-performance"><thead><tr><th>品牌</th><th>收录商品</th><th>'+baseDate+'<small>'+esc(metric)+' · 该批占比</small></th>'+extraHead+archiveHead+'<th>累计总销量 / 台</th><th></th></tr></thead><tbody>'+(rows||'<tr><td colspan="'+(5+Number(showExtra)+Number(showArchive))+'">当前搜索没有匹配的品牌。</td></tr>')+'</tbody></table></div><div class="market-brand-footer"><span>第'+(page+1)+' / '+pages+'页</span><div><button class="rq-button" data-market-brand-prev '+(page===0?'disabled':'')+'>上一页</button><button class="rq-button" data-market-brand-next '+(page===pages-1?'disabled':'')+'>下一页</button></div></div>');
+  section.insertAdjacentHTML('beforeend','<p class="market-brand-sample">近30天销量和销售额为估算，按日期分别展示。</p><div class="table-scroll"><table class="market-brand-performance"><thead><tr><th>品牌</th><th>'+baseDate+'<small>'+esc(metric)+' · 占比</small></th>'+extraHead+archiveHead+'<th>累计销量（台）</th><th></th></tr></thead><tbody>'+(rows||'<tr><td colspan="'+(4+Number(showExtra)+Number(showArchive))+'">当前搜索没有匹配的品牌。</td></tr>')+'</tbody></table></div><div class="market-brand-footer"><span>第'+(page+1)+' / '+pages+'页</span><div><button class="rq-button" data-market-brand-prev '+(page===0?'disabled':'')+'>上一页</button><button class="rq-button" data-market-brand-next '+(page===pages-1?'disabled':'')+'>下一页</button></div></div>');
   tools.querySelector('[data-market-brand-query]').oninput=e=>{const value=e.target.value,pos=e.target.selectionStart;change({brandQuery:value,brandOffset:'0'},{replace:true});const field=document.querySelector('[data-market-brand-query]');field?.focus();field?.setSelectionRange(pos,pos);};
   section.querySelector('[data-market-brand-prev]').onclick=()=>change({brandOffset:String(page-1)});
   section.querySelector('[data-market-brand-next]').onclick=()=>change({brandOffset:String(page+1)});
