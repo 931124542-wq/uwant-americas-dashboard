@@ -117,15 +117,23 @@
   function rankSection(scope, selected, currency){
     if(!selected.length)return '';
     const step=scope.country==='MX'?1000:scope.country==='BR'?500:100;
-    const bandFor=price=>price>0?String(Math.min(9,Math.floor(price/(step*1e6)))):'';
-    const bands=[...new Set(selected.flatMap(([, , ,items])=>items.map(row=>bandFor(row[4]))).filter(Boolean))].sort();
-    const bandName=i=>i==='9'?int.format(9*step)+' 及以上':int.format(Number(i)*step)+' 至低于 '+int.format((Number(i)+1)*step);
+    const labels=new Map();
+    const bandFor=price=>{
+      if(!(price>0))return '';
+      const value=price/1e6,band=window.ResearchModel.categoryPriceBand(scope,value);
+      const index=String(band?.index??Math.min(9,Math.floor(value/step)));
+      const lower=Number(index)*step;
+      if(!labels.has(index))labels.set(index,band?.label??(index==='9'?int.format(lower)+' 及以上':int.format(lower)+' 至低于 '+int.format(lower+step)));
+      return index;
+    };
+    for(const [, , ,items] of selected)for(const row of items)bandFor(row[4]);
+    const bands=[...labels.keys()].sort((a,b)=>Number(a)-Number(b));
     const box=document.createElement('section');
     box.className='panel';box.id='top10';
     box.innerHTML='<h2 data-rank-heading>销量 Top 10</h2><p>价格带按对应月份的归档报价划分。</p>'+
       '<div class="rank-controls"><label>排名依据<select data-rank-metric><option value="units">销量</option><option value="revenue">销售额</option></select></label>'+
       '<label>价格带（'+currency+'）<select data-rank-band><option value="">全部</option>'+
-      bands.map(i=>'<option value="'+i+'">'+bandName(i)+'</option>').join('')+'</select></label></div><div data-rank-table></div>';
+      bands.map(i=>'<option value="'+i+'">'+labels.get(i)+'</option>').join('')+'</select></label></div><div data-rank-table></div>';
     const metric=box.querySelector('[data-rank-metric]'), band=box.querySelector('[data-rank-band]');
     if(new URLSearchParams(location.search).get('rankMetric')==='revenue')metric.value='revenue';
     const previousBand=new URLSearchParams(location.search).get('rankBand');
@@ -195,7 +203,7 @@
     if(scope.scope==='category'){
       return {
         rows:archive?.mercado?.markets[country]||[],
-        divisor:100,extra:'月均价（'+local[1]+'）',price:true,
+        divisor:100,extra:'月均价（'+window.MarketCurrency.code(country,local[1])+'）',price:true,
         heading:local[0]+'美客多 · 吸尘器类目',
         note:'平台吸尘器类目 '+local[3]+' 涵盖多种形态。',
         missing:archive?'所选范围暂无平台类目资料。':'打开本机文件后查看平台类目数据。'
@@ -212,7 +220,7 @@
 
   function render(){
     const scope=readScope(), {platform,country,category,startMonth:start,endMonth:end}=scope;
-    const currency=countries[country][1],container=$('report');
+    const localCurrency=countries[country][1],currency=window.MarketCurrency.code(country,localCurrency),container=$('report');
     const validRange=month(start)&&month(end)&&start<=end;
     const linkScope={page:'market',country,platform,category,marketPeriod:'monthly'};
     if(validRange)Object.assign(linkScope,{startMonth:start,endMonth:end});
@@ -221,7 +229,10 @@
     const report=reportFor(scope);
     if(scope.scope==='category'&&!archive)$('local-data').open=true;
     const inRange=period=>period>=start&&period<=end;
-    const rows=report.rows.filter(row=>inRange(row[0])).sort((a,b)=>a[0].localeCompare(b[0]));
+    const rows=report.rows.filter(row=>inRange(row[0])).sort((a,b)=>a[0].localeCompare(b[0])).map(([period,units,revenue,extra])=>[
+      period,units,window.MarketCurrency.amount(revenue,country,localCurrency,period),
+      report.price?window.MarketCurrency.amount(extra,country,localCurrency,period):extra
+    ]);
     const listingMonths=report.history?.filter(row=>inRange(row[0]))||[];
     const expected=monthNumber(end)-monthNumber(start)+1;
     const missing=report.openMonths?.filter(inRange)||[];
@@ -232,7 +243,7 @@
         qty(units)+'</td><td>'+money(revenue,report.divisor)+'</td>'+(report.price?'<td>'+money(extra,report.divisor)+'</td>':'')+'</tr>').join('')+
       '</tbody></table></div>':'<p>'+(report.missing||'所选范围暂无可用月度记录。')+'</p>';
     container.innerHTML='<section class="panel"><div class="row"><div><h2>'+report.heading+'</h2>'+
-      '<p>'+report.note+'</p></div>'+
+      '<p>'+report.note+'</p>'+(country==='AR'?'<p>金额以美元（USD）展示，按<a href="'+esc(window.MarketCurrency.source)+'" target="_blank" rel="noopener noreferrer">阿根廷央行</a>月均汇率折算。</p>':'')+'</div>'+
       (rows.length?'<button type="button" data-month-export>导出所选月份</button>':'')+'</div></section>'+
       '<section class="metrics"><article><span>期间销量估算（台）</span><strong data-total-units>'+
       qty(sum(rows.map(r=>r[1])))+'</strong></article><article><span>期间销售额估算（'+currency+'）</span><strong data-total-revenue>'+

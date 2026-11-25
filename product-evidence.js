@@ -28,7 +28,9 @@
   if(s.country&&s.country.toUpperCase()!==country||s.platform&&!['all',r.platform||'amazon'].includes(s.platform))return null;
   const month=s.endMonth||s.dataset,requestedPublic=s.priceBasis==='public'||s.evidencePriceBasis==='current'&&!/^2026-\d\d$/.test(month||'');
   let q;
-  if(s.priceBasis==='source'){
+  if(s.priceBasis==='source'&&r.platform==='ml'&&r.priceKind==='source_snapshot'&&finite(r.price)&&r.price>0&&r.sourceDate){
+   q={value:r.price,currency:r.currency,date:r.sourceDate,sourceDate:r.sourceDate,kind:r.priceKind,source:r.source,sourceUrl:r.sourceUrl};
+  }else if(s.priceBasis==='source'){
    const observations=(r.sourceObservations||[]).filter(o=>o.kind==='source_snapshot'&&finite(o.value)&&o.currency===expected&&/^\d{4}-\d{2}-\d{2}$/.test(o.observedDate||'')),latest=observations.map(o=>o.observedDate).sort().at(-1),dated=observations.filter(o=>o.observedDate===latest),details=dated.filter(o=>o.sourceQuery==='asin.detail'||!o.sourceQuery&&o.recordUpdatedAt),lists=dated.filter(o=>o.sourceQuery==='asin.list'),selected=details.length?details:lists.length?lists:dated.filter(o=>o.sourceQuery==='asin.sales.trend:profile');
    if(!selected.length||new Set(selected.map(o=>o.value)).size!==1)return null;const o=selected.at(-1);q={value:Math.round((o.value+Number.EPSILON)*100)/100,sourceValue:o.value,currency:o.currency,date:o.observedDate,month:null,kind:'source_snapshot',sourceDate:o.observedDate,source:o.source||'SellerSprite 商品详情档案',sourceUrl:o.sourceUrl||r.sourceUrl,sourceQuery:o.sourceQuery||(o.recordUpdatedAt?'asin.detail':'asin.list'),sourceUpdatedAt:o.recordUpdatedAt||null,seller:o.seller||null,promotion:o.coupon||null,currencyStatus:o.currencyStatus||'source_field',currencyBasis:o.currencyBasis||'来源返回币种',referenceOnly:true};
   }else if(/^2026-\d\d$/.test(month||'')&&!requestedPublic){
@@ -38,7 +40,10 @@
   }else if(r.priceKind==='observation'&&finite(r.price)&&r.sourceDate){q={value:r.price,currency:r.currency,date:r.sourceDate,month:null,kind:'observation',sourceDate:r.priceObservationEvidence?.sourceDate||r.sourceDate,source:r.priceObservationEvidence?.source||r.source,sourceUrl:r.priceObservationEvidence?.sourceUrl||r.sourceUrl,promotion:r.promotion||null,availability:r.availability||r.availabilityStatus||null};}
   else if(!/^2026-\d\d$/.test(month||'')&&['snapshot','archive_mean'].includes(r.priceKind)&&finite(r.price)){q={value:r.price,currency:r.currency,date:r.period||r.sourceDate||null,month:r.period||null,kind:r.priceKind,sourceDate:r.sourceDate||null,source:r.source,sourceUrl:r.sourceUrl};}
   if(!q||q.currency!==expected)return null;
-  return {...q,country,platform:r.platform||'amazon',productId:r.productId||r.asin,productType:r.productType,recordId:[country,r.platform||'amazon',r.productId||r.asin,q.kind,q.date,q.currency,q.value,q.sourceDate||'',...(q.kind==='source_snapshot'?[q.sourceQuery]:[])].join('|')};
+  const value=root.MarketCurrency?root.MarketCurrency.price(q.value,country,q.currency,q.date):q.value;
+  if(value===null)return null;
+  const displayCurrency=root.MarketCurrency?.code(country,q.currency)||q.currency;
+  return {...q,value,currency:displayCurrency,country,platform:r.platform||'amazon',productId:r.productId||r.asin,productType:r.productType,recordId:[country,r.platform||'amazon',r.productId||r.asin,q.kind,q.date,q.currency,q.value,q.sourceDate||'',...(q.kind==='source_snapshot'?[q.sourceQuery]:[])].join('|')};
  }
  function extract(r){
   const claims=[],issues=[],title=decode(r.title||''),sources=[{text:title,locator:'来源原标题',basis:'来源标题标称',date:r.titleEvidence?.sourceDate||r.sourceDate},...(r.sourceFeatures||[]).filter(x=>typeof x==='string').map((text,i)=>({text:decode(text),locator:'来源五点 '+(i+1),basis:'来源五点标称',date:r.sourceDate})),...(r.featureEvidence||[]).map(x=>({text:decode(x.text),locator:x.locator,basis:x.basis||'来源五点标称',date:x.sourceDate}))];

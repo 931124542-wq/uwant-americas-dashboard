@@ -136,7 +136,7 @@
     });
     const card = (key,label,value) => '<article class="market-kpi" data-market-kpi="'+key+'"><span>'+label+'</span><strong>'+value+'</strong></article>';
     const basis=sample.covered===sample.months.length?'':'整月销量已覆盖 '+sample.covered+' / '+sample.months.length+' 个月 · ';
-    const local=root.MarketIntegrity.currencies[state.country];
+    const local=(root.MarketCurrency?.code(state.country,root.MarketIntegrity.currencies[state.country])||root.MarketIntegrity.currencies[state.country]);
     const archive=archiveLinks(state);
     return '<section class="market-block market-hero" data-ml-period-overview><div class="market-block-heading"><h2>'+esc(title)+'</h2><span class="market-period-tag">'+esc(start)+' 至 '+esc(end)+'</span></div>'+
       '<div class="market-kpi-grid market-kpi-grid--two">'+card('units','期间总销量（台）',sample.total===null?'—':number.format(sample.total))+

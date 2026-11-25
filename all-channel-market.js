@@ -14,7 +14,7 @@
   const {start,end}=selection;
   const sample=root.MercadoHistory.monthlySample(selection);
   const months=sample.months.map(row=>row.month);
-  const currency=root.MarketIntegrity.currencies[state.country];
+  const currency=(root.MarketCurrency?.code(state.country,root.MarketIntegrity.currencies[state.country])||root.MarketIntegrity.currencies[state.country]);
   let amazon=null;
   if(root.MarketIntegrity.applicable(state.country,'amazon')){
    const first=start<'2026-01'?'2026-01':start;

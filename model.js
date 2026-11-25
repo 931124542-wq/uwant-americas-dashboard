@@ -6,8 +6,20 @@
  const priceSteps={US:100,CA:100,MX:1000,BR:100,AR:50000,CL:30000,CO:100000};
  const priceStep=country=>priceSteps[country]||100;
  const bandLabel=(index,country)=>{const step=priceStep(country),lo=Number(index)*step;return `${lo}–${lo+step-1}`;};
- const brazilPriceBands={wash:{starts:[0,1000,1500,2000,3000,4000,5000]},mattress:{step:50}};
- const priceBandRule=s=>s.country==='BR'?brazilPriceBands[s.category]:undefined;
+ const washPriceStarts={
+  US:[0,200,300,400,600,800,1000],
+  CA:[0,250,375,500,750,1000,1250],
+  MX:[0,3500,5000,7000,10000,14000,17500],
+  BR:[0,1000,1500,2000,3000,4000,5000],
+  AR:[0,200,300,400,600,800,1000],
+  CL:[0,180000,270000,360000,540000,720000,900000],
+  CO:[0,750000,1100000,1500000,2250000,3000000,3750000]
+ };
+ const mattressPriceSteps={US:10,CA:15,MX:200,BR:50,AR:10,CL:10000,CO:40000};
+ function priceBandRule({country,category}){
+  if(category==='wash'&&washPriceStarts[country])return {starts:washPriceStarts[country]};
+  if(category==='mattress'&&mattressPriceSteps[country])return {step:mattressPriceSteps[country]};
+ }
  const formatBandPrice=new Intl.NumberFormat('zh-CN');
  function categoryPriceBand(s,price){
   const rule=priceBandRule(s);

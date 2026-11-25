@@ -32,6 +32,19 @@
   const heading=document.querySelector('.heading');let context=document.getElementById('market-page-context');if(!context){context=document.createElement('p');context.id='market-page-context';heading.querySelector('div').append(context);}
   const country=root.ResearchModel.countries[s.country]?.name||s.country,category=categoryLabels[s.category],platform=root.ResearchQuality.platforms[s.platform]||'全部平台';
   context.textContent=country+' / '+platform+' / '+category;
+  document.getElementById('market-currency-note')?.remove();
+  if(!admin&&s.country==='AR'&&root.MarketCurrency){
+   const note=document.createElement('p');
+   note.id='market-currency-note';
+   note.className='market-small-note';
+   const link=document.createElement('a');
+   link.href=root.MarketCurrency.source;
+   link.target='_blank';
+   link.rel='noopener noreferrer';
+   link.textContent='阿根廷央行参考汇率';
+   note.append('金额以美元（USD）展示，按对应日期的',link,'折算。');
+   context.after(note);
+  }
   const scope=document.getElementById('scope');
   scope.hidden=overview&&s.platform!=='all';
   if(s.platform==='all'&&!admin){

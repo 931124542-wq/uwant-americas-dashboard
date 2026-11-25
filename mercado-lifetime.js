@@ -1,7 +1,7 @@
 /* Listing-lifetime counts stay independent of rolling snapshots and calendar months. */
 (function (root) {
   const number = new Intl.NumberFormat('zh-CN');
-  const currency = country => root.MarketIntegrity.currencies[country];
+  const currency = country => root.MarketCurrency?.code(country,root.MarketIntegrity.currencies[country])||root.MarketIntegrity.currencies[country];
 
   function observation(product) {
     const raw = root.MERCADO_LIFETIME_OBSERVATIONS?.rows[product.product_code];

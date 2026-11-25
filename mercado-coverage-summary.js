@@ -32,7 +32,10 @@
         });
       }
     }
-    const rows = [...groups.values()].filter(row => !row.conflict);
+    const rows = [...groups.values()].filter(row => !row.conflict).map(row => ({
+      ...row,
+      revenue:row.revenue===null?null:root.Mercado.valueFor(row.listing,revenue)
+    })).filter(row => row.units!==null || row.revenue!==null);
     function total(field) {
       const values = rows.map(row => row[field]).filter(qualified);
       return values.length ? values.reduce((sum,value) => sum+value,0) : null;
@@ -69,7 +72,7 @@
   }
 
   function mountRevenue(section, state, products, data, download) {
-    const currency = root.MarketIntegrity.currencies[state.country];
+    const currency = (root.MarketCurrency?.code(state.country,root.MarketIntegrity.currencies[state.country])||root.MarketIntegrity.currencies[state.country]);
     const snapshots = revenueSnapshots(state,products,data);
     if (!snapshots.length) return;
 
@@ -90,14 +93,20 @@
   }
 
   function mountBatch(card, batch, state, data, download) {
-    const currency = root.MarketIntegrity.currencies[state.country];
-    const cuts = root.Mercado.report(state).cuts;
-    const edges = [0,...cuts];
-    const priceOf = row => root.ResearchSnapshot.priceEligible(row.listing) ? row.listing.selling_price : null;
-    const bands = edges.map((low,i) => ({low,high:edges[i+1] ?? Infinity})).map(({low,high}) => ({
-      label:high===Infinity ? fmt(low)+' 及以上' : (low ? fmt(low)+' 至低于 '+fmt(high) : '低于 '+fmt(high)),
-      rows:batch.rows.filter(row => {const price=priceOf(row);return price!==null && price>=low && price<high;})
-    })).filter(band => band.rows.some(row => row.units>0 || row.revenue>0));
+    const currency = (root.MarketCurrency?.code(state.country,root.MarketIntegrity.currencies[state.country])||root.MarketIntegrity.currencies[state.country]);
+    const scope = root.Mercado.report(state);
+    const priceOf = row => root.Mercado.quotedPrice(row.listing);
+    const groups = new Map();
+    for(const row of batch.rows){
+      const key=scope.bandFor(row.listing);
+      if(key==='价位待归类')continue;
+      if(!groups.has(key))groups.set(key,[]);
+      groups.get(key).push(row);
+    }
+    const start=key=>Number.parseFloat(key.replace('>= ',''));
+    const bands=[...groups].sort(([a],[b])=>start(a)-start(b)).map(([key,rows])=>({
+      label:scope.labelFor(key),rows
+    })).filter(band=>band.rows.some(row=>row.units>0||row.revenue>0));
     const detail = card.querySelector('[data-ml-batch-detail]');
     const reveal = card.querySelector('[data-ml-batch-open]');
     reveal.onclick = () => {
@@ -133,7 +142,7 @@
   function mount(section, state, products, data, change, download) {
     const batches = [report(products,data),archiveReport(products,data)].filter(batch=>batch.rows.length);
     if (!batches.length) return;
-    const currency = root.MarketIntegrity.currencies[state.country];
+    const currency = (root.MarketCurrency?.code(state.country,root.MarketIntegrity.currencies[state.country])||root.MarketIntegrity.currencies[state.country]);
     const scope = document.createElement('details');
     scope.className = 'ml-coverage-summary';
     scope.open = state.country==='MX' && state.category==='vacuum';

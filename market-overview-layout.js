@@ -51,9 +51,9 @@
  }
 
  function rankMercado(items,kind,limit=10,data=root.MERCADO_DATA){
-  const value=(product,field)=>root.ResearchSnapshot.eligible(product,data,field)?product[field]:null;
+  const value=(product,field)=>root.ResearchSnapshot.eligible(product,data,field)?root.Mercado.valueFor(product,field):null;
   const rows=items.map(product=>({...mercadoProduct(product),
-   price:root.ResearchSnapshot.priceEligible(product)?product.selling_price:null,priceDate:product.sourceDate,
+   price:root.Mercado.quotedPrice(product),priceDate:product.sourceDate,
    units:value(product,'orders_last_30_days'),revenue:value(product,'revenue_last_30_days')}));
   return rankedRows(rows,kind,limit,row=>row.modelKey);
  }
