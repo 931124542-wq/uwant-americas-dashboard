@@ -20,12 +20,30 @@
   if(hero&&historical.length){const d=document.createElement('details');d.className='decision-native-trend';d.innerHTML='<summary>月度走势与历史价格</summary>';for(const chart of historical)d.append(chart);hero.append(d);}
   for(const node of host.querySelectorAll(managementDetails.join(','))){node.hidden=true;node.dataset.backstageOnly='';}
  }
+ function platformNavigation(s,available){
+  const nav=document.getElementById('market-platform-nav');
+  nav.hidden=!available;
+  if(!available)return;
+  const model=root.ResearchModel;
+  const links=[['amazon','Amazon 市场大盘'],['ml','美客多市场大盘'],['all','全部平台']].map(([platform,label])=>{
+   const target=model.platformOverview(s,platform);
+   const link=document.createElement('a');
+   link.className='rq-button';
+   link.dataset.overviewPlatform=platform;
+   link.href='#'+new URLSearchParams(target);
+   link.textContent=label+(target.country===s.country?'':' · '+model.countries[target.country].name);
+   if(s.page==='market'&&s.view==='overview'&&s.platform===platform)link.setAttribute('aria-current','page');
+   return link;
+  });
+  nav.replaceChildren(...links);
+ }
  function sync(s,change,download){
   const operations=document.body.classList.contains('operations-open'),admin=root.ResearchDataAdmin?.isRoute(s),overview=!admin&&s.page==='market'&&s.view==='overview',monthly=s.view==='monthly';
   const byChannel=overview&&root.AllChannelMarket?.applies(s);
   document.body.dataset.workspace=operations?'operations':admin?'data':'research';document.body.dataset.researchView=overview?'overview':monthly?'monthly':s.page==='market'?s.view:s.page;
   const operationMenu=document.getElementById('operations-navigation');if(operationMenu)operationMenu.hidden=false;
   const managementMenu=document.getElementById('management-navigation');if(managementMenu)managementMenu.open=admin;
+  platformNavigation(s,!operations&&!admin);
   if(operations){root.OperatingWorkbook?.mount(s,change);return;}
   const own=document.querySelector('.filters [data-wb-own]');if(own)own.closest('label').hidden=admin||s.page!=='competitors';
   const monthBox=document.getElementById('month-range-controls');if(monthBox)monthBox.hidden=admin||byChannel||(s.platform==='ml'&&!monthly);

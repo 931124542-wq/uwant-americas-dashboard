@@ -59,6 +59,7 @@
   if(original){
    const details=document.createElement('details');
    details.className='market-original-reference';
+   details.open=amazon.units===null&&amazon.revenue===null;
    details.innerHTML='<summary>查看原类目报告（原统计期间）</summary>'+original;
    details.querySelector('.market-sample-heading')?.remove();
    details.querySelector('[data-original-report-export]').onclick=()=>download(

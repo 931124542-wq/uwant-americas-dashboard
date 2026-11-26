@@ -158,6 +158,7 @@
    if(original){
     const oldReport=document.createElement('details');
     oldReport.className='market-original-reference';
+    oldReport.open=r.units.total===null&&r.revenue.total===null;
     oldReport.innerHTML='<summary>查看原类目报告（原统计期间）</summary>';
     oldReport.append(original);
     slot('reading').append(oldReport);

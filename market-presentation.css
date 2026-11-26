@@ -183,3 +183,6 @@ body[data-workspace=research] [data-backstage-only][hidden]{display:none!importa
 
 .ml-archive-reference{display:flex;flex-wrap:wrap;gap:8px;margin:0 22px 14px}
 @media(max-width:700px){.ml-archive-reference{margin-inline:16px}}
+#market-platform-nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+#market-platform-nav a{text-decoration:none}
+#market-platform-nav a[aria-current="page"]{border-color:var(--market-accent);color:var(--market-accent);font-weight:650}

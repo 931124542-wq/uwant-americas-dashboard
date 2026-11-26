@@ -196,8 +196,46 @@ async function main() {
 
     await go({country:'AR',category:'wash'});
     assert(!(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2)));
+    assert.match(await page.locator('[data-overview-platform="amazon"]').innerText(),/墨西哥/);
+
+    const mercadoHistory=new URL('market-history/?platform=ml&country=MX&category=vacuum&scope=sample&startMonth=2026-01&endMonth=2026-10',base);
+    await page.goto(mercadoHistory.href);
+    const alternate=page.getByRole('link',{name:'Amazon 市场大盘',exact:true});
+    assert(await alternate.isVisible());
+    await alternate.click();
+    await page.waitForFunction(()=>typeof state!=='undefined'&&state.platform==='amazon'&&state.page==='market');
+    assert.deepEqual(await page.evaluate(()=>[state.country,state.category,state.startMonth,state.endMonth]),
+      ['MX','vacuum','2026-01','2026-10']);
+    const original=page.locator('[data-original-category-report]');
+    assert(await original.isVisible());
+    assert.equal((await headline())[0],'—');
+    assert(await original.locator('[data-original-revenue]').isVisible());
+
+    await page.locator('[data-overview-platform="all"]').click();
+    const amazonOriginal=page.locator('[data-market-channel="amazon"] [data-original-category-report]');
+    await amazonOriginal.waitFor();
+    assert(await amazonOriginal.isVisible());
+    await page.locator('[data-overview-platform="ml"]').click();
+    await page.waitForFunction(()=>state.platform==='ml');
+    assert(await page.locator('[data-overview-platform="amazon"]').isVisible());
+    await page.locator('[data-overview-platform="amazon"]').click();
+    await page.waitForFunction(()=>state.platform==='amazon');
+    assert.equal(await page.locator('[data-overview-platform="amazon"]').getAttribute('aria-current'),'page');
+    assert(!(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2)));
+
+    const guide=new URL('business-guide/#country=CA&platform=amazon&category=fabric&startMonth=2026-01&endMonth=2026-09',base);
+    await page.goto(guide.href);
+    await page.getByRole('link',{name:/商品月度销量/}).click();
+    await page.locator('.wb-monthly').waitFor();
+    assert.equal(await page.locator('body').getAttribute('data-workspace'),'research');
+    assert.deepEqual(await page.evaluate(()=>[state.country,state.platform,state.category,state.view]),
+      ['CA','amazon','fabric','monthly']);
+    assert(await page.locator('[data-overview-platform="amazon"]').isVisible());
+    await page.locator('[data-overview-platform="amazon"]').click();
+    await page.waitForFunction(()=>state.view==='overview');
+    assert((await headline()).slice(0,2).every(value=>value!=='—'));
     assert.deepEqual(errors,[]);
-    console.log('PASS: 36 market routes, price boundaries, occupied bands, headline totals, cumulative units, CSV, scope reset, quote fallback and Amazon month recovery.');
+    console.log('PASS: 36 market routes, price boundaries, occupied bands, headline totals, cumulative units, CSV, scope reset, quote fallback, Amazon month recovery and platform navigation.');
   } finally {
     await browser.close();
   }

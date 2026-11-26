@@ -12,7 +12,8 @@
   const categories = {wash:'洗地机',vacuum:'吸尘器',fabric:'布艺清洗机',mattress:'除螨仪'};
   const published=window.UWANT_PUBLIC_HISTORY;
   const photos=window.RankPhotos;
-  const marketURL = 'https://931124542-wq.github.io/uwant-americas-dashboard/';
+  const marketURL = location.protocol==='file:'?'https://931124542-wq.github.io/uwant-americas-dashboard/':
+    new URL('../',location.href).href;
   const $ = id => document.getElementById(id);
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c =>
     ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -236,9 +237,13 @@
     const scope=readScope(), {platform,country,category,startMonth:start,endMonth:end}=scope;
     const localCurrency=countries[country][1],currency=window.MarketCurrency.code(country,localCurrency),container=$('report');
     const validRange=month(start)&&month(end)&&start<=end;
-    const linkScope={page:'market',country,platform,category,marketPeriod:'monthly'};
-    if(validRange)Object.assign(linkScope,{startMonth:start,endMonth:end});
-    $('market-overview').href=marketURL+'#'+new URLSearchParams(linkScope).toString();
+    const alternate=platform==='amazon'?'ml':'amazon';
+    for(const [id,target] of [['market-overview',platform],['other-market-overview',alternate]]){
+      const link=$(id),to=window.ResearchModel.platformOverview({...scope,marketPeriod:'monthly'},target);
+      const label=target==='amazon'?'Amazon 市场大盘':'美客多市场大盘';
+      link.href=marketURL+'#'+new URLSearchParams(to);
+      link.textContent=(target===platform?'返回 ':'')+label+(to.country===country?'':' · '+countries[to.country][0]);
+    }
     if(!validRange){container.innerHTML='<p class="panel">请选择有效的起始月与结束月。</p>';return;}
     const report=reportFor(scope);
     if(scope.scope==='category'&&!archive)$('local-data').open=true;
