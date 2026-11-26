@@ -107,7 +107,7 @@
     const start=key=>Number.parseFloat(key.replace('>= ',''));
     const bands=[...groups].sort(([a],[b])=>start(a)-start(b)).map(([key,rows])=>({
       label:scope.labelFor(key),rows
-    })).filter(band=>band.rows.some(row=>row.units>0||row.revenue>0));
+    }));
     const detail = card.querySelector('[data-ml-batch-detail]');
     const reveal = card.querySelector('[data-ml-batch-open]');
     reveal.onclick = () => {
@@ -116,7 +116,6 @@
       if (detail.hidden || detail.childElementCount) return;
       detail.innerHTML = '<div class="ml-batch-controls"><label>排序<select data-ml-batch-metric><option value="revenue">销售额</option>'+
         '<option value="units">销量</option></select></label><label>价格带（'+esc(currency)+'）<select data-ml-batch-band>'+
-        '<option value="">全部价格带</option>'+bands.map((band,i) => '<option value="'+i+'">'+esc(band.label)+'</option>').join('')+
         '</select></label></div><div data-ml-batch-ranking></div>';
       const metric = detail.querySelector('[data-ml-batch-metric]');
       const band = detail.querySelector('[data-ml-batch-band]');
@@ -129,9 +128,17 @@
           kind:metric.value,currency,note:batch.date+' · 近30天估算 · 仅查看该次有记录的商品'
         });
       };
-      metric.onchange=render;
+      const updateBands=()=>{
+        const previous=band.value;
+        band.innerHTML='<option value="">全部价格带</option>'+bands.map((range,i)=>
+          range.rows.some(row=>row[metric.value]>0)?'<option value="'+i+'">'+esc(range.label)+'</option>':''
+        ).join('');
+        band.value=[...band.options].some(option=>option.value===previous)?previous:'';
+        render();
+      };
+      metric.onchange=updateBands;
       band.onchange=render;
-      render();
+      updateBands();
     };
     card.querySelector('[data-ml-batch-export]').onclick = () => download(
       [['国家','品类','数据日期','商品ID','品牌','近30天销量估算','近30天销售额估算','币种','当时报价','商品页'],

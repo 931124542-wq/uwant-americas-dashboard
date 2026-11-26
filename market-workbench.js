@@ -46,16 +46,14 @@
    if(!byBand.has(index))byBand.set(index,[]);
    byBand.get(index).push(row);
   }
-  const used=[...byBand.keys()].sort((a,b)=>a-b);
-  const bins=rule
-   ?(rule.starts||used.map(index=>index*rule.step)).map(price=>{
-     const {index,lower,upper,label}=root.ResearchModel.categoryPriceBand(s,price);
-     return {index,lo:lower,hi:upper===null?null:upper-1,label,rows:byBand.get(index)||[]};
-    })
-   :Array.from({length:used.at(-1)-used[0]+1},(_,i)=>{
-     const index=used[0]+i,lo=index*step,hi=(index+1)*step-1;
-     return {index,lo,hi,label:lo+'–'+hi,rows:byBand.get(index)||[]};
-    });
+  const bins=[...byBand].sort(([a],[b])=>a-b).map(([index,items])=>{
+   const range=root.ResearchModel.categoryPriceBand(s,items[0].p.value);
+   if(range){
+    return {index,lo:range.lower,hi:range.upper===null?null:range.upper-1,label:range.label,rows:items};
+   }
+   const lo=index*step,hi=(index+1)*step-1;
+   return {index,lo,hi,label:lo+'–'+hi,rows:items};
+  });
   const bandDescription=rule?.starts?'按洗地机价格区间':`每档${rule?.step||step}`;
   const ceiling=Math.max(1,...bins.map(b=>b.rows.length)),w=Math.max(480,bins.length*62),h=250,left=48,bottom=190,slot=(w-left-25)/bins.length,active=s.priceBand===''?null:bins.find(b=>b.index===Number(s.priceBand));
   return `<section class="wb-section wb-pricing"><div class="wb-section-title"><div><h2>价格带分布</h2><p>商品数分布 · ${g.currency} · ${bandDescription}；按同类型、同期间和同条件分组。</p></div>${market?priceControl(s):''}</div><label class="wb-group">有报价的商品<select data-wb-price-group aria-label="可比价格组">${gs.map(x=>`<option value="${e(x.key)}" ${x.key===g.key?'selected':''}>${e(Q.platforms[x.platform]||x.platform)} · ${e(C.typeLabels[x.type]||x.type)}${x.shape?' · '+e(x.shape):''} · ${e(x.date)} · ${x.currency} · ${x.rows.length}件${x.currencyStatus==='inferred_from_marketplace'?'（币种按站点映射）':''}</option>`).join('')}</select></label><div class="price-band-chart rq-table-scroll"><svg viewBox="0 0 ${w} ${h}" style="min-width:${w}px;width:100%;height:auto" role="group" aria-label="价格带商品数量柱状图"><text x="${left}" y="18">商品数</text>${[0,1,2,3,4].map(i=>{const value=ceiling*i/4,y=bottom-value/ceiling*140;return `<line x1="${left}" x2="${w-20}" y1="${y}" y2="${y}" class="price-band-grid"/><text x="${left-9}" y="${y+4}" text-anchor="end">${Number.isInteger(value)?value:''}</text>`;}).join('')}${bins.map((b,i)=>{const x=left+i*slot+slot*.15,bw=slot*.7,bh=b.rows.length/ceiling*140;return `<g tabindex="0" role="button" data-wb-band="${b.index}" data-wb-band-group="${e(g.key)}" aria-label="${b.label} ${g.currency}，${b.rows.length}件商品" aria-pressed="${active?.index===b.index}"><title>${b.label} ${g.currency}：${b.rows.length}件</title><rect x="${x}" y="${bottom-bh}" width="${bw}" height="${bh}" rx="3" class="price-band-bar ${active?.index===b.index?'selected':''}"/><rect x="${left+i*slot}" y="35" width="${slot}" height="${bottom-35}" fill="transparent"/><text x="${x+bw/2}" y="${bottom-bh-8}" text-anchor="middle">${b.rows.length||''}</text><text x="${x+bw/2}" y="${bottom+23}" text-anchor="middle"><tspan x="${x+bw/2}">${b.lo}${b.hi===null?'':'–'}</tspan><tspan x="${x+bw/2}" dy="12">${b.hi??'及以上'}</tspan></text></g>`;}).join('')}<text x="${w-22}" y="${h-10}" text-anchor="end">价格 / ${g.currency}</text></svg></div><details class="wb-foot"><summary>${g.rows.length}件有报价的商品 · 统计方式与分档说明</summary><p>${g.rows.length}件有价格商品；缺价不进入分布。每档含起始价格，不含下一档起始价格。${rule?'':step===1000?'999.99仍属0–999档':'99.99仍属0–99档'}。${g.kind==='month_end'?'所选月份期末价，不是成交均价。':g.kind==='source_snapshot'?'商品资料参考价，非实时价格；记录更新各自标注。':'带日期公开报价，不保证当前到手价。'}${g.currencyStatus==='inferred_from_marketplace'?'币种按站点映射；不计算价差。':''}</p></details>${active?`<div class="price-band-detail"><strong>${active.label} ${g.currency} · ${active.rows.length}件</strong><p>${e(active.rows.map(x=>C.name(x.r)).join('、')||'当前样本在该档没有有效商品。')}</p><button class="rq-button" data-wb-band-products>查看该价格段商品 →</button><button class="rq-button" data-wb-band-clear>清除价格段</button></div>`:''}</section>`;

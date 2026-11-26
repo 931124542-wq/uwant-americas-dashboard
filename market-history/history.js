@@ -126,18 +126,21 @@
       if(!labels.has(index))labels.set(index,band?.label??(index==='9'?int.format(lower)+' 及以上':int.format(lower)+' 至低于 '+int.format(lower+step)));
       return index;
     };
-    for(const [, , ,items] of selected)for(const row of items)bandFor(row[4]);
-    const bands=[...labels.keys()].sort((a,b)=>Number(a)-Number(b));
+    const occupied={units:new Set(),revenue:new Set()};
+    for(const [, , ,items] of selected)for(const row of items){
+      const index=bandFor(row[4]);
+      if(!index)continue;
+      if(row[2]>0)occupied.units.add(index);
+      if(row[3]>0)occupied.revenue.add(index);
+    }
     const box=document.createElement('section');
     box.className='panel';box.id='top10';
     box.innerHTML='<h2 data-rank-heading>销量 Top 10</h2><p>价格带按对应月份的归档报价划分。</p>'+
       '<div class="rank-controls"><label>排名依据<select data-rank-metric><option value="units">销量</option><option value="revenue">销售额</option></select></label>'+
-      '<label>价格带（'+currency+'）<select data-rank-band><option value="">全部</option>'+
-      bands.map(i=>'<option value="'+i+'">'+labels.get(i)+'</option>').join('')+'</select></label></div><div data-rank-table></div>';
+      '<label>价格带（'+currency+'）<select data-rank-band></select></label></div><div data-rank-table></div>';
     const metric=box.querySelector('[data-rank-metric]'), band=box.querySelector('[data-rank-band]');
     if(new URLSearchParams(location.search).get('rankMetric')==='revenue')metric.value='revenue';
-    const previousBand=new URLSearchParams(location.search).get('rankBand');
-    if(bands.includes(previousBand))band.value=previousBand;
+    const requestedBand=new URLSearchParams(location.search).get('rankBand')||'';
     const renderRank=()=>{
       const groups=new Map();
       for(const [, ,period,items] of selected)for(const [id,listing,units,revenue,quote,title] of items){
@@ -158,7 +161,17 @@
         })+'</th><td>'+(row.quote>0?money(row.quote,1e6)+'<small>'+row.period+'</small>':'—')+
           '</td><td>'+qty(row.units)+'</td><td>'+money(row.revenue,1e6)+'</td></tr>').join('')+'</tbody></table></div>':'<p>当前范围暂无用于排名的数据。</p>';
     };
-    metric.onchange=renderRank;band.onchange=renderRank;renderRank();
+    const updateBands=previous=>{
+      const available=[...occupied[metric.value]].sort((a,b)=>Number(a)-Number(b));
+      band.innerHTML='<option value="">全部</option>'+available.map(index=>
+        '<option value="'+index+'">'+labels.get(index)+'</option>'
+      ).join('');
+      band.value=available.includes(previous)?previous:'';
+      renderRank();
+    };
+    metric.onchange=()=>updateBands(band.value);
+    band.onchange=renderRank;
+    updateBands(requestedBand);
     return box;
   }
 

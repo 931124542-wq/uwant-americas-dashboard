@@ -49,10 +49,12 @@ async function main() {
             return {bands,revenue:revenue.total,units:units.total,
               expectedRevenue:safe('revenue_last_30_days',r=>MarketCurrency.amount(r.revenue_last_30_days,country,r.currency,r.sourceDate)),
               expectedUnits:safe('orders_last_30_days',r=>r.orders_last_30_days),
+              visibleBands:units.bands.filter(([,value])=>value>0).map(([key])=>key),
               priceSum:units.total===null?null:units.bands.reduce((sum,[,value])=>sum+(value??0),0)};
           }
           const stats=MarketSummary.overviewStats(decisionCatalog(),state);
           return {bands,revenue:stats.revenue.total,units:stats.units.total,
+            visibleBands:stats.units.prices.filter(group=>group.value>0).map(group=>'price|'+group.key),
             priceSum:stats.units.total===null?null:stats.units.prices.reduce((sum,group)=>sum+group.value,0)};
         });
         const scope=country+'/'+platform+'/'+category;
@@ -67,6 +69,10 @@ async function main() {
         }
         const shown=await headline();
         assert.deepEqual(shown.slice(0,2),[format(stats.revenue),format(stats.units)],scope);
+        const selector=platform==='ml'?'[data-ml-band]':'[data-share-chart="price"] [data-share-drill]';
+        const field=platform==='ml'?'data-ml-band':'data-share-drill';
+        const shownBands=await page.locator(selector).evaluateAll((nodes,attr)=>nodes.map(node=>node.getAttribute(attr)),field);
+        assert.deepEqual(shownBands,stats.visibleBands,scope+' price distribution');
       }
     }
 
@@ -116,6 +122,10 @@ async function main() {
     await go({country:'US',platform:'amazon',category:'fabric'});
     await page.locator('[data-quote-price-bands] [data-wb-band]').first().waitFor();
     assert.match(await page.locator('[data-quote-price-bands]').innerText(),/商品数分布/);
+    const counts=await page.locator('[data-quote-price-bands] [data-wb-band]').evaluateAll(nodes=>
+      nodes.map(node=>Number(node.getAttribute('aria-label')?.match(/(\d+)件商品/)?.[1])));
+    assert(counts.every(count=>count>0));
+    assert.equal(await page.locator('[data-share-chart="price"][data-share-state]').count(),0);
     const noNovember={dataset:'2026-11',startMonth:'2026-11',endMonth:'2026-11',marketPeriod:'monthly'};
     const amazonScopes=[['CA','vacuum'],['CA','wash'],['CA','fabric'],['US','vacuum'],['US','wash'],['MX','wash']];
     for(const [country,category] of amazonScopes){
@@ -160,10 +170,34 @@ async function main() {
     await page.locator('[data-history-latest]').click();
     assert.notEqual(await page.locator('[data-total-revenue]').innerText(),'—');
     assert(!(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2)));
+
+    // A price band with no rankable values in the new metric must not stay selectable.
+    const archivePage=new URL('market-history/?platform=amazon&country=MX&category=vacuum&startMonth=2026-09&endMonth=2026-09',base);
+    await page.goto(archivePage.href);
+    const localArchive={format:'uwant-market-archive-v1',
+      amazon:{date:'2026-10-15',rows:[['MX','vacuum','2026-09',10,2000000000,3]],
+        rankMonths:[['MX','vacuum','2026-09',[
+          ['B000000001','B000000001',10,null,1500000000,'Unit sales'],
+          ['B000000002','B000000002',null,2000000000,2500000000,'Revenue'],
+          ['B000000003','B000000003',0,0,3500000000,'No sales']
+        ]]]},
+      mercado:{observedDate:'2026-11-05',markets:{}}};
+    await page.locator('#archive-file').setInputFiles({
+      name:'fake-monthly-archive.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(localArchive))
+    });
+    await page.waitForFunction(()=>document.querySelector('#file-status').textContent.includes('已读取'));
+    const bandOptions=page.locator('[data-rank-band] option');
+    assert.deepEqual(await bandOptions.evaluateAll(options=>options.map(option=>option.value)),['','1']);
+    await page.selectOption('[data-rank-band]','1');
+    await page.selectOption('[data-rank-metric]','revenue');
+    assert.deepEqual(await bandOptions.evaluateAll(options=>options.map(option=>option.value)),['','2']);
+    assert.equal(await page.locator('[data-rank-band]').inputValue(),'');
+    assert.equal(await page.locator('[data-rank-table] tbody tr').count(),1);
+
     await go({country:'AR',category:'wash'});
     assert(!(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2)));
     assert.deepEqual(errors,[]);
-    console.log('PASS: 36 market routes, price boundaries, headline totals, cumulative units, CSV, scope reset, quote fallback and Amazon month recovery.');
+    console.log('PASS: 36 market routes, price boundaries, occupied bands, headline totals, cumulative units, CSV, scope reset, quote fallback and Amazon month recovery.');
   } finally {
     await browser.close();
   }
