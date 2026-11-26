@@ -21,7 +21,7 @@ const {chromium}=require('playwright'),fs=require('fs'),path=require('path'),ass
    if(page==='competitors')assert(await p.locator(platform==='ml'?'.ml-comparison':'.wb-own').isVisible());
   }
   await go({country:'BR',platform:'ml',category:'mattress',own:'M600'});await hidden();await p.screenshot({path:out+'/br-mattress-desktop.png',fullPage:false});
-  for(const country of ['MX','CA','US']){await go({country});await hidden();await p.locator('.market-original-reference summary').click();assert(await p.locator('[data-original-category-report]').isVisible());assert(await p.locator('[data-original-report-export]').isVisible());}
+  for(const country of ['MX','CA','US']){await go({country});await hidden();const archive=p.locator('.market-original-reference');if(!await archive.evaluate(x=>x.open))await archive.locator('summary').click();assert(await p.locator('[data-original-category-report]').isVisible());assert(await p.locator('[data-original-report-export]').isVisible());}
   await go({country:'MX',category:'fabric',view:'products',evidenceDetail:'amazon:mx:B0D11TKT2Z'});
   const dialog=p.locator('#rq-dialog[open]');
   await dialog.waitFor();

@@ -83,7 +83,9 @@
   for(const country of countries)for(const platform of ['amazon','ml'])for(const category of categories){
    const s=rangeScope(scope,country,platform,category);
    if(platform==='amazon')Object.assign(s,root.ResearchModel.normalizeMarketScope(s));
-   const base={country,platform,category,currency:root.MarketIntegrity.currencies[country],marketDenominator:null};
+   const nativeCurrency=root.MarketIntegrity.currencies[country];
+   const currency=root.MarketCurrency?.code(country,nativeCurrency)||nativeCurrency;
+   const base={country,platform,category,currency,marketDenominator:null};
    if(!root.MarketIntegrity.applicable(country,platform)){rows.push({...base,applicable:false,products:null,units:null,revenue:null,period:null,issues:[],status:'not_applicable'});continue;}
    const catalog=platform==='amazon'?makeCatalog(s):null,r=root.MarketDecisionModel.report(s,catalog),issues=[];
    for(const kind of ['units','revenue']){const m=r[kind],sum=m.brands.reduce((n,b)=>n+b.value,0);if(m.total!==null&&(!finite(m.total)||Math.abs(sum-m.total)>.01))issues.push('brand_sum_'+kind);if(m.total===null&&m.count)issues.push('missing_total_'+kind);}
@@ -92,10 +94,16 @@
    if(platform==='ml'){
     const data=root.MERCADO_DATA,products=root.Mercado.rows(s),source=products.filter(p=>p.counted&&root.ResearchSnapshot.matches(p,data)),seen=new Set();
     for(const p of source){const key=p.statisticalKey||p.product_code;if(seen.has(key))issues.push('duplicate_statistical_key');seen.add(key);const invalid=root.MarketIntegrity.snapshotIssue(p,p.sourceDate||root.MERCADO_DATA.asOf);if(invalid)issues.push(invalid);}
-    for(const [metric,field]of [['units','orders_last_30_days'],['revenue','revenue_last_30_days']]){const valid=source.filter(p=>finite(p[field])&&!root.MarketIntegrity.snapshotIssue(p,p.sourceDate||data.asOf)),sum=valid.length?valid.reduce((n,p)=>n+p[field],0):null;if((sum===null)!==(r[metric].total===null)||sum!==null&&Math.abs(sum-r[metric].total)>.01)issues.push('source_sum_'+metric);}
+    for(const [metric,field]of [['units','orders_last_30_days'],['revenue','revenue_last_30_days']]){
+     const amounts=source.filter(p=>finite(p[field])&&!root.MarketIntegrity.snapshotIssue(p,p.sourceDate||data.asOf))
+      .map(p=>metric==='revenue'&&root.MarketCurrency?root.MarketCurrency.amount(p[field],p.country,p.currency,p.sourceDate):p[field])
+      .filter(finite);
+     const sum=amounts.length?amounts.reduce((n,value)=>n+value,0):null;
+     if((sum===null)!==(r[metric].total===null)||sum!==null&&Math.abs(sum-r[metric].total)>.01)issues.push('source_sum_'+metric);
+    }
     details=mlDetails(s,products,data);
    }else{
-    const seen=new Set();for(const f of r.facts){if(seen.has(f.id))issues.push('duplicate_family_month');seen.add(f.id);if(f.country!==country||f.category!==category||f.currency!==base.currency||f.platform!=='amazon')issues.push('fact_scope');}
+    const seen=new Set();for(const f of r.facts){if(seen.has(f.id))issues.push('duplicate_family_month');seen.add(f.id);if(f.country!==country||f.category!==category||f.currency!==nativeCurrency||f.platform!=='amazon')issues.push('fact_scope');}
     details=amazonDetails(catalog,r);
    }
    const original=root.MarketSummary.snapshot(s),provider=root.MarketSourceData?.report(s),categoryReport=provider?{units:provider.units,revenue:provider.revenue,periodStart:provider.range.start,periodEnd:provider.range.end,currency:provider.source.currency}:original?{units:original.stat.totalSales??null,revenue:original.stat.totalRevenue??null,periodStart:original.start,periodEnd:original.end,currency:original.stat.currency}:null;

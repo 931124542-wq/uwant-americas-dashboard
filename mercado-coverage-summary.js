@@ -157,7 +157,7 @@
     scope.innerHTML = '<summary>其他近30天数据</summary>'+batches.map(batch =>
       '<section '+(batch.date===date?'data-ml-extra-snapshot ':'')+'data-ml-batch="'+batch.date+'" class="ml-extra-snapshot '+(batch.date===date?'':'ml-archived-snapshot')+'">'+
       '<div><h4>'+batch.date+'</h4><div><strong>'+fmt(batch.units)+'</strong> 台 · <strong>'+fmt(batch.revenue)+'</strong> '+esc(currency)+'</div>'+
-      '<p>'+fmt(batch.positive)+' 款有销量 · '+fmt(batch.rows.filter(row=>row.revenue>0).length)+' 款有销售额</p></div>'+
+      '<p data-backstage-only>'+fmt(batch.positive)+' 款有销量 · '+fmt(batch.rows.filter(row=>row.revenue>0).length)+' 款有销售额</p></div>'+
       '<div class="ml-batch-actions"><button class="rq-button" data-ml-batch-open aria-expanded="false">查看该日榜单</button>'+
       '<button class="rq-button" data-ml-batch-export '+(batch.date===date?'data-extra-export':'data-archived-export')+'>导出该批</button></div>'+
       '<div class="ml-batch-detail" data-ml-batch-detail hidden></div></section>'

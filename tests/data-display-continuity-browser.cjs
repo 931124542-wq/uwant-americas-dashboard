@@ -19,12 +19,12 @@ const {chromium}=require('playwright'),fs=require('fs'),path=require('path'),ass
   const band=p.locator('[data-share-drill="price|1"]');
   await band.click();
   const amazonRank=p.locator('.sample-share-detail [data-market-ranking]');
-  assert.equal(await amazonRank.locator('tbody tr').count(),7);
-  assert.equal(await amazonRank.locator('tbody .market-product-link[href^="https://www.amazon.ca/dp/"]').count(),7);
+  assert.equal(await amazonRank.locator('tbody tr').count(),5);
+  assert.equal(await amazonRank.locator('tbody .market-product-link[href^="https://www.amazon.ca/dp/"]').count(),5);
   const revenues=await amazonRank.locator('tbody tr td:last-child').allTextContents();
   const asNumbers=revenues.map(value=>Number(value.replaceAll(',','')));
   assert(asNumbers.every((value,i)=>value>0&&(!i||asNumbers[i-1]>=value)));
-  assert.equal(new Set(await amazonRank.locator('[data-ranked-product]').evaluateAll(rows=>rows.map(row=>row.dataset.rankedProduct))).size,7);
+  assert.equal(new Set(await amazonRank.locator('[data-ranked-product]').evaluateAll(rows=>rows.map(row=>row.dataset.rankedProduct))).size,5);
   await go({country:'MX',platform:'ml',shareMetric:'revenue'});
   const categoryArchive=new URL(await p.locator('[data-ml-category-archive]').getAttribute('href'),p.url());
   assert.equal(categoryArchive.origin,new URL(p.url()).origin);
@@ -33,7 +33,7 @@ const {chromium}=require('playwright'),fs=require('fs'),path=require('path'),ass
 
   const supplemental=p.locator('[data-ml-batch="2026-11-12"]');
   assert.match(await supplemental.innerText(),/499 台 · 1,091,300 MXN/);
-  assert.match(await supplemental.innerText(),/20 款有销量 · 20 款有销售额/);
+  assert.doesNotMatch(await supplemental.innerText(),/款有销量|款有销售额/);
   await supplemental.getByRole('button',{name:'查看该日榜单'}).click();
   assert.equal(await supplemental.locator('[data-market-ranking] tbody tr').count(),10);
   assert.equal(await supplemental.locator('[data-market-ranking] tbody .market-product-link').count(),10);
@@ -44,7 +44,9 @@ const {chromium}=require('playwright'),fs=require('fs'),path=require('path'),ass
   assert(reviewed.every(r=>JSON.stringify(r)===JSON.stringify(['stick',false,null,null,null])));
   assert.equal(await p.locator('.market-kpi>strong').first().innerText(),'117,092');
 
-  await p.locator('[data-ml-band="4000 – < 8000"]').click();
+  const uwantBand=await p.evaluate(()=>{const report=Mercado.report(state);return report.bandFor(report.all.find(row=>row.product_code==='MLM72234235'));});
+  assert.equal(uwantBand,'6000 – < 7000');
+  await p.locator('[data-ml-band="'+uwantBand+'"]').click();
   const mlRank=p.locator('[data-ml-detail] [data-market-ranking]');
   assert.equal(await mlRank.locator('tbody tr').count(),1);
   assert.equal(await mlRank.locator('[data-ranked-product]').first().getAttribute('data-ranked-product'),'MLM72234235');
@@ -59,7 +61,7 @@ const {chromium}=require('playwright'),fs=require('fs'),path=require('path'),ass
   await productLink.click();
   const popup=await nextTab;
   await popup.waitForURL(destination.href);
-  assert.equal(await p.locator('[data-ml-detail] .market-price-detail-all tbody tr').count(),4);
+  assert.equal(await p.locator('[data-ml-detail] .market-price-detail-all tbody tr').count(),3);
   await popup.close();
   await go({country:'BR',platform:'ml',category:'fabric',own:'Y100S',marketPeriod:'monthly',startMonth:'2026-09',endMonth:'2026-11'});
   const monthlyRank=p.locator('[data-market-ranking]');

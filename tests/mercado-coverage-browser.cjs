@@ -43,7 +43,8 @@ async function run() {
     await page.locator('[data-overview-page="brands"]').click();
     const brands=page.locator('.market-brand-performance');
     await brands.waitFor();
-    assert.match(await page.locator('.market-brand-sample').innerText(),/2026-11-06 有 3 个.*2026-11-12 有 13 个/);
+    assert.doesNotMatch(await page.locator('.market-brand-sample').innerText(),/个品牌|[0-9]+ 个/);
+    assert.match(await brands.locator('thead').innerText(),/2026-11-06.*占比.*2026-11-12.*占比/s);
     assert.equal(await brands.locator('tbody tr').count(),20);
     await page.locator('[data-market-brand-next]').click();
     assert.match(await page.locator('.market-brand-footer').innerText(),/第2 \/ 3页/);
@@ -53,7 +54,7 @@ async function run() {
     assert.equal(await rowenta.count(),1);
     assert.equal((await rowenta.locator('td').allTextContents()).slice(1,3).filter(x=>x.startsWith('—')).length,2);
     assert.match(await brands.locator('thead [data-ml-brand-archive]').innerText(),/2026-11-05/);
-    assert.match(await brands.locator('thead').innerText(),/累计总销量/);
+    assert.match(await brands.locator('thead').innerText(),/累计销量（台）/);
     const brandDownload=page.waitForEvent('download');
     await page.locator('#export').click();
     const brandCsv=await brandDownload;
@@ -64,7 +65,8 @@ async function run() {
     await brandSearch.fill('Shark');
     const shark=brands.getByRole('row').filter({hasText:'SHARK'});
     assert.equal(await shark.count(),1);
-    assert.match(await shark.innerText(),/16\s+—.*34/s);
+    assert.match(await shark.innerText(),/SHARK\s+—\s+34.*402/s);
+    assert.equal(await shark.locator('td').count(),5,'Only sales and the product action belong in the brand table');
     await shark.getByRole('button',{name:'查看商品'}).click();
     assert.equal(await page.locator('[data-ml-filter]').inputValue(),'SHARK');
     assert.equal(await page.locator('.ml-product').count(),16);

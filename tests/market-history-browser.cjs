@@ -8,7 +8,7 @@ const {chromium}=require('playwright');
  try{
   const p=await b.newPage({viewport:{width:390,height:844},acceptDownloads:true}),errors=[],network=[];
   p.on('pageerror',error=>errors.push(error.message));
-  p.on('request',request=>network.push(request.url()));
+  p.on('request',request=>network.push({url:new URL(request.url()),method:request.method(),type:request.resourceType()}));
   const fixture={format:'uwant-market-archive-v1',mercado:{observedDate:'2026-11-05',markets:{
    MX:[['2026-10',50,125000,2500]],BR:[['2026-10',20,85000,null]]}},
    amazon:{date:'2026-11-24',rows:[['MX','vacuum','2026-10',9,3560000000,2]],
@@ -20,7 +20,8 @@ const {chromium}=require('playwright');
   target.search=new URLSearchParams({platform:'ml',country:'BR',category:'fabric',scope:'sample',startMonth:'2026-01',endMonth:'2026-10'});
   await p.goto(target.href);
   assert.equal(await p.locator('[data-total-units]').innerText(),'65,204');
-  assert.match(await p.locator('[data-monthly-archive-review]').innerText(),/4 款.*24,622 台/);
+  assert.doesNotMatch(await p.locator('#report').innerText(),/累计记录存在差异|累计数据核对中|商品组|最近来源日期/);
+  assert.equal(await p.locator('#local-data').getAttribute('open'),null);
   assert.equal(await p.locator('[data-total-revenue]').innerText(),'—');
   assert.equal(await p.locator('[data-report-month]').count(),10);
   assert.equal(await p.locator('#top10 a[href*="mercadolivre.com.br"]').count(),10);
@@ -35,10 +36,10 @@ const {chromium}=require('playwright');
   assert.equal(await p.locator('[data-total-units]').innerText(),'63,676');
   assert.equal(await p.locator('[data-total-revenue]').innerText(),'7,251,035.25');
   assert.equal(await p.locator('[data-report-month]').count(),9);
-  assert.match(await p.locator('#report').innerText(),/来源更新时尚未结束.*2026-10/);
+  assert.match(await p.locator('#report').innerText(),/2026-10 未满整月/);
   target.search=new URLSearchParams({platform:'ml',country:'MX',category:'vacuum',scope:'category',startMonth:'2026-10',endMonth:'2026-10'});
   await p.goto(target.href);
-  assert((await p.locator('#report').innerText()).includes('请选择包含大麦类目历史的本机数据文件'));
+  assert((await p.locator('#report').innerText()).includes('打开本机文件后查看平台类目数据'));
   await upload(record);
   await p.waitForFunction(()=>document.querySelector('[data-total-revenue]')?.textContent==='1,250.00');
   assert.equal(await p.locator('[data-total-revenue]').innerText(),'1,250.00');
@@ -64,12 +65,17 @@ const {chromium}=require('playwright');
   assert.equal(await p.locator('[data-total-units]').innerText(),'9');
   assert(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
   assert.deepEqual(errors,[]);
-  assert(network.every(url=>new URL(url).pathname.includes('/market-history/')));
+  const sharedAssets=['model.js','market-currency.js','rank-photos.js','rank-photos.css'].map(file=>new URL(file,base).pathname);
+  const photoHosts=['http2.mlstatic.com','m.media-amazon.com','images-na.ssl-images-amazon.com'];
+  const unexpected=network.filter(({url,method,type})=>method!=='GET'||!(url.origin===target.origin
+    ? url.pathname.startsWith(new URL('market-history/',base).pathname)||sharedAssets.includes(url.pathname)
+    : type==='image'&&url.protocol==='https:'&&photoHosts.includes(url.hostname)));
+  assert.deepEqual(unexpected,[],'Local archive reads must never send business data over the network');
   await p.goto(base+'#country=BR&platform=ml&category=fabric&dataset=2026-11&startMonth=2026-09&endMonth=2026-11&historyProduct=MLB22511802&marketPeriod=monthly&page=market');
   const product=p.locator('.ml-history-panel');
   assert.equal(await product.locator('[data-ml-history-product]').inputValue(),'MLB22511802');
-  assert.match(await product.locator('[data-ml-product-archive-review]').innerText(),/33,640 台.*16,353 台/);
-  assert.match(await product.locator('[data-history-month="2026-11"]').innerText(),/9\s+更新时尚未结束/);
+  assert.doesNotMatch(await product.innerText(),/来源记录跨度|累计销量|数据正在核对/);
+  assert.match(await product.locator('[data-history-month="2026-11"]').innerText(),/9\s+未满整月/);
   assert.equal(await product.locator('.ml-trend i').count(),2);
   const period=p.locator('#market-period');
   await period.getByLabel('起始月份').fill('2026-12');
@@ -79,7 +85,7 @@ const {chromium}=require('playwright');
   assert.match(await product.locator('[data-history-month="2026-12"]').innerText(),/—\s+暂无记录/);
   const missingDownload=p.waitForEvent('download');
   await product.getByRole('button',{name:'导出该商品月度数据'}).click();
-  assert.match(await fs.readFile(await (await missingDownload).path(),'utf8'),/"MLB22511802","2026-12","","","","","","","missing","暂无记录"/);
+  assert.match(await fs.readFile(await (await missingDownload).path(),'utf8'),/"MLB22511802","2026-12","","暂无记录"/);
   assert.deepEqual(errors,[]);
   console.log('PASS account-free history: browser file validation, two sources, local currency, rank, links, CSV, mobile and no data uploads.');
  }finally{await b.close();}

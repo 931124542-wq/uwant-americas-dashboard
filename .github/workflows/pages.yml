@@ -93,6 +93,7 @@ jobs:
           node tests/mercado-coverage-browser.cjs "$RUNNER_TEMP/uwant-browser-results/mercado-coverage"
           node tests/all-market-coverage-browser.cjs "$RUNNER_TEMP/uwant-browser-results/all-market-coverage"
           node tests/market-history-browser.cjs
+          node tests/market-price-continuity-browser.cjs
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:

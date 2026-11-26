@@ -62,23 +62,26 @@ assert.equal(c.MercadoLifetime.report([]).total,null);
 const brFabric={...scope,category:'fabric',startMonth:'2026-01',endMonth:'2026-10',historyProduct:'MLB22511802'};
 const brProducts=c.Mercado.rows(brFabric);
 const brSample=c.MercadoHistory.monthlySample(c.MercadoHistory.selection(brFabric,brProducts,data));
-const reviewed=c.MercadoLifetime.reviewedMonthly(brSample,brProducts,data);
-assert.deepEqual([brSample.total,reviewed.size,reviewed.units],[65204,4,24622]);
+const reviewed=c.MercadoLifetime.archiveConflicts(totals,brProducts,data);
+const reviewedIds=new Set(reviewed.map(row=>row.id));
+const reviewedUnits=brSample.months.flatMap(row=>row.groups)
+ .filter(row=>reviewedIds.has(row.product.product_code)).reduce((sum,row)=>sum+row.orders,0);
+assert.deepEqual([brSample.total,reviewed.length,reviewedUnits],[65204,4,24622]);
 const brHistory=s=>c.MercadoHistory.selection({...brFabric,...s},brProducts,data);
-const brCSV=c.MercadoHistory.exportRows(brHistory({endMonth:'2026-12'}),data);
-assert.deepEqual(Array.from(brCSV.slice(-2),row=>[row[0],row[1],row[2],row[8]]),
- [['MLB22511802','2026-11',9,'open_at_collection'],['MLB22511802','2026-12',null,'missing']]);
-assert.match(brCSV.at(-1)[10],/完整月销量合计高于累计值/);
+const brCSV=c.MercadoHistory.exportRows(brHistory({endMonth:'2026-12'}));
+assert.deepEqual(Array.from(brCSV.slice(-2),row=>Array.from(row)),
+ [['MLB22511802','2026-11',9,'未满整月'],['MLB22511802','2026-12',null,'暂无记录']]);
+assert.deepEqual(Array.from(brCSV[0]),['商品ID','月份','月销量估算（台）','数据完整度']);
 const missingSelection=brHistory({startMonth:'2026-12',endMonth:'2026-12'});
 assert.equal(missingSelection.selected.product.product_code,'MLB22511802');
 assert.equal(missingSelection.selected.months.length,0);
-assert.equal(c.MercadoHistory.exportRows(missingSelection,data)[1][2],null);
+assert.equal(c.MercadoHistory.exportRows(missingSelection)[1][2],null);
 const baseSingle=brHistory({startMonth:'2026-10',endMonth:'2026-10'});
 const one=baseSingle.selected;
-const October=(...months)=>c.MercadoHistory.exportRows({...baseSingle,selected:{...one,months}},data)[1];
-assert.deepEqual([October({month:'2026-10',orders:0})[2],October({month:'2026-10',orders:0})[8]],[0,'complete']);
+const October=(...months)=>c.MercadoHistory.exportRows({...baseSingle,selected:{...one,months}})[1];
+assert.deepEqual(Array.from(October({month:'2026-10',orders:0}).slice(2)),[0,'整月']);
 const conflicting=October({month:'2026-10',orders:3},{month:'2026-10',orders:4});
-assert.deepEqual([conflicting[2],conflicting[8]],[null,'conflict']);
+assert.deepEqual(Array.from(conflicting.slice(2)),[null,'暂无可用数据']);
 const wrongSource={...data,trends:{...data.trends,MLB22511802:{...one.source,market_code:'MLM'}}};
 assert.equal(c.MercadoHistory.selection(brFabric,brProducts,wrongSource).selected.months.length,0);
 for(const country of ['MX','BR','AR','CL','CO'])for(const category of ['wash','vacuum','fabric','mattress']){
